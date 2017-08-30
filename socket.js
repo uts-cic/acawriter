@@ -18,7 +18,9 @@ http.listen(3000,function(){
 
 // subscribe to various channels here
 
-    //redis.subscribe();
+    redis.subscribe('operational-log',function(){
+
+    });
 
 
 redis.on('message', function(channel, message){

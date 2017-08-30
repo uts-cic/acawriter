@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -9,6 +10,9 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use JWT\Authentication\JWT;
 use Illuminate\Support\Facades\Auth;
+use App\Events\OperationLog;
+
+
 
 class RegisterController extends Controller
 {
@@ -58,7 +62,8 @@ class RegisterController extends Controller
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
-                Event::fire(new OperationLog($user));
+                $message = "User login";
+                event(new OperationLog($user, $message));
 
                 return redirect()->intended('/home');
             } else {

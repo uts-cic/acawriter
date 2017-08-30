@@ -22,13 +22,14 @@ class OperationLog implements ShouldBroadcast
      * @return void
      */
 
-    public $userDetails;
+    public $details;
 
-    public function __construct(User $user){
-        $this->userDetails = array(
-            "id"=> $user->id,
-            "name"=>$user->name,
-            "time" =>time()
+    public function __construct(User $user, $message=""){
+        $status = $message!=="" ? $message :"";
+        $this->details = array(
+            "status"=> $status,
+            "info"  => array("user" => $user),
+            "time"  =>time()
         );
     }
 
