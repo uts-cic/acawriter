@@ -51,3 +51,4 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+//window.io= require('socket.io-client');
