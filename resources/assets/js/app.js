@@ -18,6 +18,7 @@ window.Vue = require('vue');
 
 //Vue.component('example', require('./components/Example.vue'));
 Vue.component('log-status', require('./components/lstatus.vue'));
+Vue.component('doc-editor', require('./components/TextEditor.vue'));
 
 
 var socket = io.connect('http://localhost:3000');
@@ -29,7 +30,7 @@ const app = new Vue({
         slogs: []
     },
     mounted: function() {
-        
+
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
             this.slogs.push(data.details);
         }.bind(this));

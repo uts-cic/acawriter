@@ -27,3 +27,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/auth/jwt', 'Auth\RegisterController@awt');
+
+Route::get('/analyse', function(){
+   return view('analyse');
+});
