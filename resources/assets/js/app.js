@@ -8,6 +8,25 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+//import Vue from 'vue';
+import { ApolloClient, createNetworkInterface } from 'apollo-client';
+import VueApollo from 'vue-apollo';
+
+// Create the apollo client
+const apolloClient = new ApolloClient({
+    networkInterface: createNetworkInterface({
+        //uri: 'http://localhost:3020/graphql',
+        uri: 'https://graphql-compose.herokuapp.com/northwind/',
+    }),
+    connectToDevTools: true,
+})
+
+// Install the vue plugin
+Vue.use(VueApollo)
+
+const apolloProvider = new VueApollo({
+    defaultClient: apolloClient,
+})
 
 
 /**
@@ -26,6 +45,7 @@ var socket = io.connect('http://localhost:3000');
 
 const app = new Vue({
     el: '#app',
+    apolloProvider,
     data: {
         slogs: []
     },
@@ -34,5 +54,10 @@ const app = new Vue({
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
             this.slogs.push(data.details);
         }.bind(this));
+    },
+    methods: {
+        processLog (txt) {
+            console.log(txt);
+        }
     }
 });
