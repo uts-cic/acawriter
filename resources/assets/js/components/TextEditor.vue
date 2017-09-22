@@ -76,7 +76,9 @@
             editorContent () {
                 console.log("from the watch");
                 this.editLog.push(this.editorContent);
-                axios.post('/processor', {'txt': this.editLog});
+                //axios.post('/processor', {'txt': this.editLog});
+                axios.post('http://athanor.utscic.edu.au/v2/analyse/text/rhetorical', {'data': this.editorContent})
+                     .then(r => console.log('r:', JSON.stringify(r,null,2)));
             }
     }
 
