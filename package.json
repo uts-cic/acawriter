@@ -21,7 +21,9 @@
   "dependencies": {
     "apollo-client": "^1.9.2",
     "express": "^4.15.4",
+    "font-awesome": "^4.7.0",
     "ioredis": "^3.1.4",
+    "moment": "^2.18.1",
     "socket.io": "^2.0.3",
     "vue-apollo": "^2.1.0-rc.4",
     "vue-froala-wysiwyg": "^2.0.0",

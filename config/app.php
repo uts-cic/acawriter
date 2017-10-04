@@ -174,10 +174,10 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Folklore\GraphQL\ServiceProvider::class,
+       // Folklore\GraphQL\ServiceProvider::class,
 
     ],
 
@@ -230,7 +230,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Input' => Illuminate\Support\Facades\Input::class,
-        'GraphQL' => Folklore\GraphQL\Support\Facades\GraphQL::class,
+       // 'GraphQL' => Folklore\GraphQL\Support\Facades\GraphQL::class,
 
     ],
 

@@ -1,7 +1,9 @@
 <template>
-    <div>
-
-        <li class="list-group-item" v-for="d in slogs" v-bind:slogs="slogs">{{d.status}}</li>
+    <div v-bind:slogs="slogs">
+        <strong>Online users <span class="badge">{{slogs.length}}</span></strong><br />
+        <ul>
+        <li class="list-group-item" v-for="d in slogs" >{{d.status}}</li>
+        </ul>
     </div>
 
 </template>

@@ -38,22 +38,31 @@ const apolloProvider = new VueApollo({
 //Vue.component('example', require('./components/Example.vue'));
 Vue.component('log-status', require('./components/lstatus.vue'));
 Vue.component('doc-editor', require('./components/TextEditor.vue'));
+Vue.component('internet-connection', require('./components/InternetConnection.vue'));
+
 
 
 var socket = io.connect('http://localhost:3000');
-
+import moment from 'moment';
 
 const app = new Vue({
     el: '#app',
     apolloProvider,
     data: {
-        slogs: []
+        slogs: [],
+        lastHeartBeatReceivedAt: moment(),
     },
     mounted: function() {
 
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
             this.slogs.push(data.details);
         }.bind(this));
+
+        socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {
+            console.log("ok yes listened");
+;            return this.lastHeartBeatReceivedAt = moment();
+        }.bind(this));
+
     },
     methods: {
         processLog (txt) {

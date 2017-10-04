@@ -63,3 +63,16 @@ require('froala-editor/css/froala_style.min.css');
 
 // Import and use Vue Froala lib.
 import VueFroala from 'vue-froala-wysiwyg';
+
+import moment from 'moment';
+
+moment.updateLocale('en', {
+    calendar: {
+        lastDay: '[Yesterday]',
+        sameDay: '[Today]',
+        nextDay: '[Tomorrow]',
+        lastWeek: '[last] dddd',
+        nextWeek: 'dddd',
+        sameElse: 'L',
+    },
+});

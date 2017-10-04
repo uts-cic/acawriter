@@ -12,6 +12,7 @@
 */
 
 use App\Events\OperationLog;
+use Illuminate\Support\Facades\Artisan;
 
 
 Route::get('/', function () {
@@ -33,3 +34,7 @@ Route::get('/analyse', function(){
 });
 
 Route::post('/processor', 'StringTokenizer@process');
+
+Route::get('/hb', function(){
+    dd(Artisan::call('dashboard:send-heartbeat'));
+});
