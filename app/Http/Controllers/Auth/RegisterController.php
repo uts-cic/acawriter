@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 
+use App\Events\UserRegistered;
+use App\Role;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -47,9 +49,12 @@ class RegisterController extends Controller
     }
 
     public function awt(Request $request){
+        $whatRole = 'demo';
         $jws = $request->assertion;
 
         $jwt = JWT::decode($jws, env('JWT_SECRET', ''));
+
+
         # In a complete app we'd also store and validate the jti value to ensure there is no reply on this unique token ID
         $now = strtotime("now");
 
@@ -59,6 +64,8 @@ class RegisterController extends Controller
         if($jwt->aud == "http://localhost:8000") {
             $attr = $jwt->{$attr};
             $credentials = array('email' => $attr->mail, 'name' => $attr->displayname, 'password' => ' ');
+            $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'student';
+
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
@@ -67,7 +74,14 @@ class RegisterController extends Controller
 
                 return redirect()->intended('/home');
             } else {
-                $this->create($credentials);
+                $user = $this->create($credentials);
+                //$user = Auth::user();
+                $message = "New user created";
+                event(new OperationLog($user, $message));
+                event(new UserRegistered($user,$whatRole));
+
+                //create role for the user
+
                 return redirect()->intended('/home');
             }
         } else {
@@ -120,10 +134,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        return $user;
     }
 }
