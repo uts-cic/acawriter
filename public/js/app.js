@@ -72525,6 +72525,28 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg___default.a);
@@ -72549,8 +72571,12 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             loading: 0,
             tap: [],
             errors: [],
-            tapCall: true
-
+            tapCalls: {
+                'athanor': false,
+                'vocab': false
+            },
+            vocab: '',
+            counter: 0
         };
     },
 
@@ -72566,21 +72592,37 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
     },
 
     watch: {
-        editorContent: function editorContent() {
+        editorContent: function editorContent(newVal, oldVal) {
+            this.$data.counter++;
+            if (this.$data.counter >= 10) {
+                this.editLog.push(this.editorContent);
+                this.fetchAnalysis();
+            }
+            //axios.post('http://athanor.utscic.edu.au/v2/analyse/text/rhetorical', {'data': this.editorContent})
+            //                     .then(r => console.log('r:', JSON.stringify(r,null,2)));
+        }
+    },
+    methods: {
+        fetchAnalysis: function fetchAnalysis() {
             var _this = this;
 
-            this.editLog.push(this.editorContent);
+            console.log("into fetch");
             this.$data.tap = '';
-            this.$data.tapCall = true;
-            axios.post('/processor', { 'txt': this.editLog }).then(function (response) {
-                _this.$data.tap = response.data.responseTxt;
-                _this.$data.tapCall = false;
+            this.$data.tapCalls.athanor = true;
+            this.$data.counter = 0;
+            axios.post('/processor', { 'txt': this.editLog, 'action': 'athanor' }).then(function (response) {
+                _this.$data.tap = response.data.athanor.responseTxt;
+                _this.$data.tapCalls.athanor = false;
             }).catch(function (e) {
                 _this.$data.errors.push(e);
             });
-
-            //axios.post('http://athanor.utscic.edu.au/v2/analyse/text/rhetorical', {'data': this.editorContent})
-            //                     .then(r => console.log('r:', JSON.stringify(r,null,2)));
+            this.$data.tapCalls.vacab = true;
+            axios.post('/processor', { 'txt': this.editLog, 'action': 'vocab' }).then(function (response) {
+                _this.$data.tapCalls.vocab = false;
+                _this.$data.vocab = response.data.vocab.unique;
+            }).catch(function (e) {
+                _this.$data.errors.push(e);
+            });
         }
     }
 
@@ -72592,6 +72634,18 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
+    staticClass: "container"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-heading"
+  }, [_vm._v("Text Analyser")]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
     attrs: {
       "id": "editor"
     }
@@ -72615,27 +72669,47 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "preview"
     }
-  }, [_vm._v(_vm._s(_vm.preview))]), _vm._v(" "), _c('br'), _vm._v(" "), _c('hr'), _vm._v(" "), _c('h4', [_vm._v("GraphQl data")]), _vm._v(" "), (_vm.loading) ? _c('div', {
-    staticClass: "loading"
-  }, [_vm._v("Loading .....")]) : _vm._e(), _vm._v(" "), (_vm.errors && _vm.errors.length) ? _c('ul', _vm._l((_vm.errors), function(error) {
+  }, [_vm._v(_vm._s(_vm.preview))]), _vm._v(" "), _c('br'), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.errors && _vm.errors.length) ? _c('ul', _vm._l((_vm.errors), function(error) {
     return _c('li', [_vm._v(_vm._s(error.message))])
-  })) : _vm._e(), _vm._v(" "), _c('h4', [_vm._v("TAP Preview")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('span', {
+  })) : _vm._e(), _vm._v(" "), _c('span', {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: (_vm.tapCall),
-      expression: "tapCall"
+      value: (_vm.tapCalls.vocab),
+      expression: "tapCalls.vocab"
+    }],
+    staticClass: "fa fa-spinner fa-spin"
+  }), _vm._v(" "), _c('h4', [_vm._v("TAP Preview: ")]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('h5', [_vm._v("Athanor Output")]), _vm._v(" "), _c('span', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.tapCalls.athanor),
+      expression: "tapCalls.athanor"
     }],
     staticClass: "fa fa-spinner fa-spin"
   }), _vm._v(" "), _vm._l((_vm.tap), function(feed) {
     return _c('div', {
       staticClass: "col-md-12"
-    }, [_c('div', {
-      staticClass: "bg-danger"
-    }, [_vm._v("[" + _vm._s(feed.tags) + "]")]), _vm._v("\n             " + _vm._s(feed.str) + "\n        ")])
-  })], 2)], 1)
+    }, [_vm._v("\n                                ["), _c('span', {
+      staticClass: "badge bg-primary"
+    }, [_vm._v(_vm._s(feed.tags))]), _vm._v("]\n                                " + _vm._s(feed.str) + "\n                            ")])
+  })], 2)], 1)])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-heading"
+  }, [_vm._v("Your specs")]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_c('ul', [_c('li', {
+    staticClass: "list-item-group"
+  }, [_vm._v("Vocabulary: "), _c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.vocab) + " ")])]), _vm._v(" "), _c('li', {
+    staticClass: "list-item-group"
+  }, [_vm._v("Athanor")])])])])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

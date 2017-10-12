@@ -14,6 +14,50 @@ class StringTokenizer extends Controller
     public $graphQLURL = "http://tap-test.utscic.edu.au/graphql";
     public $client;
 
+    protected $query = "query 
+                    CleanText(\$input: String!) {
+                        clean(text:\$input) {
+                                analytics
+                                timestamp
+                        }
+                        cleanPreserve(text:\$input) {
+                            analytics
+                        }
+                        cleanMinimal(text:\$input) {
+                                analytics
+                        }
+                        cleanAscii(text:\$input) {
+                                analytics
+                        }
+                }";
+
+    protected $queryOne = "query Athanor(\$input: String!) {
+                          moves(text:\$input) {
+                            analytics
+                          }
+                    }";
+
+    protected $qm       = "query Metrics(\$input: String!) {
+                            metrics(text:\$input) {
+                                analytics {
+                                    wordCount
+                    }
+                    timestamp
+                  }
+                }";
+
+    protected $queryTwo = "query Vocab(\$input: String!) {
+                        vocabulary(text:\$input){
+                                analytics {
+                                    unique
+                                        terms {
+                                            term
+                                            count
+                                        }
+                                }
+                                timestamp
+                            }
+                        }";
 
     //
     public function __construct()
@@ -34,70 +78,79 @@ class StringTokenizer extends Controller
     }
 
 
-    public function process(Request $request) {
+    public function process(Request $request)
+    {
 
+        $results = new \stdClass();
+
+        if ($request["action"] == 'athanor') {
+            $results->athanor = $this->analyseAthanor($request);
+        }
+
+        if ($request["action"] == 'vocab') {
+            $results->vocab = $this->analyseVocab($request);
+        }
+
+
+        return response()->json($results);
+
+    }
+
+    protected function analyseAthanor(Request $request) {
+        $apiResponse = new \StdClass();
         $collection = collect($request['txt']);
         $unique = $collection->unique();
         $unique->values()->all();
         $queryTxt = strip_tags($unique->last());
         $variables = new \stdClass();
-        $variables->input =  $queryTxt;
-        $split  = preg_split('/[.]/',$queryTxt);
+        $variables->input = $queryTxt;
+        $split = preg_split('/[.]/', $queryTxt);
 
-        $query = "query 
-                    CleanText(\$input: String!) {
-                        clean(text:\$input) {
-                                analytics
-                                timestamp
-                        }
-                        cleanPreserve(text:\$input) {
-                            analytics
-                        }
-                        cleanMinimal(text:\$input) {
-                                analytics
-                        }
-                        cleanAscii(text:\$input) {
-                                analytics
-                        }
-                }";
+        $originalHash = Hash::make($queryTxt);
+        $responseHash = '';
 
-        $queryOne = "query Athanor(\$input: String!) {
-                          moves(text:\$input) {
-                            analytics
-                          }
-                    }";
+        if ($originalHash != $responseHash) {
+            //get athanor
+            $this->gResponse = $this->client->response($this->queryOne, $variables);
+            if ($this->gResponse->hasErrors()) {
+                dd($this->gResponse->errors());
+            } else {
+                $res = $this->gResponse->moves->analytics;
+                $apiResponse = $this->aggregateData($split, $res);
+            }
 
-        $qm       = "query Metrics(\$input: String!) {
-                            metrics(text:\$input) {
-                                analytics {
-                                    wordCount
-                    }
-                    timestamp
-                  }
-                }";
+        }
+        return $apiResponse;
+    }
 
+    protected function analyseVocab(Request $request) {
+        $apiResponse = new \StdClass();
+        $collection = collect($request['txt']);
+        $unique = $collection->unique();
+        $unique->values()->all();
+        $queryTxt = strip_tags($unique->last());
+        $variables = new \stdClass();
+        $variables->input = $queryTxt;
+        $split = preg_split('/[.]/', $queryTxt);
 
+        $originalHash = Hash::make($queryTxt);
+        $responseHash = '';
 
-                $originalHash = Hash::make($queryTxt);
-                $responseHash = '';
-
-                if($originalHash != $responseHash) {
-                    $this->gResponse = $this->client->response($queryOne, $variables);
-                    if($this->gResponse->hasErrors()) {
-                        dd($this->gResponse->errors());
-                    } else {
-                        $res = $this->gResponse->moves->analytics;
-
-                        $value = $this->aggregateData($split, $res);
-                        return response()->json($value);
-                    }
-
-                }
+        if ($originalHash != $responseHash) {
+            //get vocabulary
+            $this->gResponse = $this->client->response($this->queryTwo, $variables);
+            if($this->gResponse->hasErrors()) {
+                dd($this->gResponse->errors());
+            } else {
+                $apiResponse = $this->gResponse->vocabulary->analytics;
+            }
+        }
+        return $apiResponse;
 
     }
 
 
-    public function aggregateData(array $original, array $res) {
+    protected function aggregateData(array $original, array $res) {
         $result = new \stdClass();
         $result->responseTxt = [];
         $result->status = false;
