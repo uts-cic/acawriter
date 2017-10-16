@@ -7,9 +7,7 @@
                     <div class="panel-body">
                         <div id="editor">
                             <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala>
-                            <br />
-                            <div v-model="preview">{{preview}}</div>
-                            <br />
+
                             <hr />
                             <!--<h4>GraphQl data</h4>
                             <div v-if="loading" class="loading">Loading .....</div>
@@ -26,9 +24,9 @@
                                 <li v-for="error in errors">{{error.message}}</li>
                             </ul>
                             <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                            <h4>TAP Preview: </h4>
+                            <h4>TAP Preview: Athanor <small>Next updated once : {{counter}} of 10 changes.</small></h4>
                             <div class="row">
-                                <h5>Athanor Output</h5>
+
                                 <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                 <div class="col-md-12" v-for="feed in tap">
                                     [<span class="badge bg-primary">{{feed.tags}}</span>]
@@ -87,7 +85,6 @@
                config: {
                    events: {
                        'froalaEditor.contentChanged': function (e, editor) {
-
                        }
                    }
                },
@@ -96,13 +93,15 @@
                viewer : {},
                loading: 0,
                tap:[],
+               qtap:[],
                errors:[],
                tapCalls:{
                    'athanor': false,
                    'vocab'  :false
                },
                vocab:'',
-               counter:0
+               counter:0,
+               tempIds:[]
            }
        },
        apollo:{
@@ -113,14 +112,26 @@
        },
        mounted () {
            console.log("mounted editor");
+           console.log("lets prepopulate the first call" );
+           this.editLog.push(this.editorContent);
+           this.fetchAnalysis();
            //console.log(this.editorContent);
        },
        watch :{
-           editorContent: function (newVal, oldVal) {
+           editorContent: function (newVal) {
                this.$data.counter++;
                if(this.$data.counter >= 10 ) {
-                   this.editLog.push(this.editorContent);
-                   this.fetchAnalysis();
+                   newVal.replace(/<[^>]*>/g, '');
+                    this.checkEligibility(newVal.split("."), this.$data.tap);
+
+                    this.editLog.push(this.editorContent);
+                    //this.fetchAnalysis();
+                    //var t = newVal.split(".");
+                    //console.log(t);
+
+                  //  if(typeof id!== 'undefined') {
+                   //     if(t[id] !== 'undefined') this.quickAnalyse(t[id]);
+                 //   }
                }
                //axios.post('http://athanor.utscic.edu.au/v2/analyse/text/rhetorical', {'data': this.editorContent})
 //                     .then(r => console.log('r:', JSON.stringify(r,null,2)));
@@ -129,7 +140,7 @@
        methods: {
            fetchAnalysis() {
                console.log("into fetch");
-               this.$data.tap='';
+              // this.$data.tap='';
                this.$data.tapCalls.athanor =true;
                this.$data.counter = 0;
                axios.post('/processor', {'txt': this.editLog, 'action': 'athanor'})
@@ -151,7 +162,47 @@
                    });
 
 
-           }
+           },
+           checkEligibility: function(nv, ov) {
+
+               var changedIds =[];
+               var changedText='';
+               var self = this;
+               nv.forEach(function(item, idx) {
+                   console.log(item);
+                   if(typeof ov[idx]!=='undefined') {
+                       if(ov[idx].str!= item) {
+                           changedText = item;
+                           //changedIds.push(idx);
+                       } else {changedText = '';}
+                   } else {
+                        //changedIds.push(idx);
+                       changedText = item;
+                   }
+                   if(changedText!=='' && changedText!=='<p>' && changedText!=='</p>') {
+                       self.quickAnalyse(changedText, idx);
+                   }
+               });
+
+
+               //console.log(this.parent.$data.tempIds);
+
+
+           },
+           quickAnalyse(changedText, idx) {
+
+               this.$data.counter = 0;
+               axios.post('/processor', {'txt': changedText, 'action': 'qathanor'})
+                   .then(response => {
+                       this.$data.tap[idx] = response.data.athanor;
+                   })
+                   .catch(e => {
+                       this.$data.errors.push(e)
+                   });
+
+           },
+
+
        }
 
 
