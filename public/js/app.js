@@ -72545,8 +72545,6 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 //
 //
 //
-//
-//
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg___default.a);
@@ -72570,13 +72568,15 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             viewer: {},
             loading: 0,
             tap: [],
+            qtap: [],
             errors: [],
             tapCalls: {
                 'athanor': false,
                 'vocab': false
             },
             vocab: '',
-            counter: 0
+            counter: 0,
+            tempIds: []
         };
     },
 
@@ -72588,15 +72588,27 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
     },
     mounted: function mounted() {
         console.log("mounted editor");
+        console.log("lets prepopulate the first call");
+        this.editLog.push(this.editorContent);
+        this.fetchAnalysis();
         //console.log(this.editorContent);
     },
 
     watch: {
-        editorContent: function editorContent(newVal, oldVal) {
+        editorContent: function editorContent(newVal) {
             this.$data.counter++;
             if (this.$data.counter >= 10) {
+                newVal.replace(/<[^>]*>/g, '');
+                this.checkEligibility(newVal.split("."), this.$data.tap);
+
                 this.editLog.push(this.editorContent);
-                this.fetchAnalysis();
+                //this.fetchAnalysis();
+                //var t = newVal.split(".");
+                //console.log(t);
+
+                //  if(typeof id!== 'undefined') {
+                //     if(t[id] !== 'undefined') this.quickAnalyse(t[id]);
+                //   }
             }
             //axios.post('http://athanor.utscic.edu.au/v2/analyse/text/rhetorical', {'data': this.editorContent})
             //                     .then(r => console.log('r:', JSON.stringify(r,null,2)));
@@ -72607,7 +72619,7 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             var _this = this;
 
             console.log("into fetch");
-            this.$data.tap = '';
+            // this.$data.tap='';
             this.$data.tapCalls.athanor = true;
             this.$data.counter = 0;
             axios.post('/processor', { 'txt': this.editLog, 'action': 'athanor' }).then(function (response) {
@@ -72622,6 +72634,43 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
                 _this.$data.vocab = response.data.vocab.unique;
             }).catch(function (e) {
                 _this.$data.errors.push(e);
+            });
+        },
+
+        checkEligibility: function checkEligibility(nv, ov) {
+
+            var changedIds = [];
+            var changedText = '';
+            var self = this;
+            nv.forEach(function (item, idx) {
+                console.log(item);
+                if (typeof ov[idx] !== 'undefined') {
+                    if (ov[idx].str != item) {
+                        changedText = item;
+                        //changedIds.push(idx);
+                    } else {
+                        changedText = '';
+                    }
+                } else {
+                    //changedIds.push(idx);
+                    changedText = item;
+                }
+                if (changedText !== '' && changedText !== '<p>' && changedText !== '</p>') {
+                    self.quickAnalyse(changedText, idx);
+                }
+            });
+
+            //console.log(this.parent.$data.tempIds);
+
+        },
+        quickAnalyse: function quickAnalyse(changedText, idx) {
+            var _this2 = this;
+
+            this.$data.counter = 0;
+            axios.post('/processor', { 'txt': changedText, 'action': 'qathanor' }).then(function (response) {
+                _this2.$data.tap[idx] = response.data.athanor;
+            }).catch(function (e) {
+                _this2.$data.errors.push(e);
             });
         }
     }
@@ -72661,15 +72710,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "editorContent"
     }
-  }), _vm._v(" "), _c('br'), _vm._v(" "), _c('div', {
-    model: {
-      value: (_vm.preview),
-      callback: function($$v) {
-        _vm.preview = $$v
-      },
-      expression: "preview"
-    }
-  }, [_vm._v(_vm._s(_vm.preview))]), _vm._v(" "), _c('br'), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.errors && _vm.errors.length) ? _c('ul', _vm._l((_vm.errors), function(error) {
+  }), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.errors && _vm.errors.length) ? _c('ul', _vm._l((_vm.errors), function(error) {
     return _c('li', [_vm._v(_vm._s(error.message))])
   })) : _vm._e(), _vm._v(" "), _c('span', {
     directives: [{
@@ -72679,9 +72720,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "tapCalls.vocab"
     }],
     staticClass: "fa fa-spinner fa-spin"
-  }), _vm._v(" "), _c('h4', [_vm._v("TAP Preview: ")]), _vm._v(" "), _c('div', {
+  }), _vm._v(" "), _c('h4', [_vm._v("TAP Preview: Athanor "), _c('small', [_vm._v("Next updated once : " + _vm._s(_vm.counter) + " of 10 changes.")])]), _vm._v(" "), _c('div', {
     staticClass: "row"
-  }, [_c('h5', [_vm._v("Athanor Output")]), _vm._v(" "), _c('span', {
+  }, [_c('span', {
     directives: [{
       name: "show",
       rawName: "v-show",

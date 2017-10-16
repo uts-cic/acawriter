@@ -91,11 +91,17 @@ class StringTokenizer extends Controller
             $results->vocab = $this->analyseVocab($request);
         }
 
+        if ($request["action"] == 'qathanor') {
+            $results->athanor = $this->qanalyseAthanor($request);
+        }
+
 
         return response()->json($results);
 
     }
 
+
+    //full text analysis
     protected function analyseAthanor(Request $request) {
         $apiResponse = new \StdClass();
         $collection = collect($request['txt']);
@@ -150,6 +156,29 @@ class StringTokenizer extends Controller
     }
 
 
+    //quick sentence by sentence
+    protected function qanalyseAthanor(Request $request) {
+        $apiResponse = new \StdClass();
+        $queryTxt = strip_tags($request['txt']);
+        $variables = new \stdClass();
+        $variables->input = $queryTxt;
+
+            //get athanor
+            $this->gResponse = $this->client->response($this->queryOne, $variables);
+            if ($this->gResponse->hasErrors()) {
+                dd($this->gResponse->errors());
+            } else {
+                $res = $this->gResponse->moves->analytics;
+                foreach($res as $rest) {
+                    $apiResponse->str = $queryTxt;
+                    $apiResponse->tags = implode(", ", $rest);
+                }
+            }
+        return $apiResponse;
+    }
+
+
+
     protected function aggregateData(array $original, array $res) {
         $result = new \stdClass();
         $result->responseTxt = [];
@@ -167,7 +196,7 @@ class StringTokenizer extends Controller
                     $tempTxt->str = $txt;
                     $tempTxt->tags= "";
                     if(isset($res[$key]) ){
-                        $tempTxt->tags = $res[$key]!= "" ? ( implode(",", $res[$key])) : "";
+                        $tempTxt->tags = $res[$key]!= "" ? ( implode(", ", $res[$key])) : "";
                     }
                     $result->responseTxt[] = $tempTxt;
                     $result->status = true;
