@@ -2,9 +2,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Text Analyser</div>
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-header">Text Analyser</div>
+                    <div class="card-body">
                         <div id="editor">
                             <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala>
 
@@ -39,11 +39,11 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Your specs</div>
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-header">Selections</div>
+                    <div class="card-body">
                         <ul>
-                            <li class="list-item-group">Vocabulary: <span class="badge">{{vocab}} </span></li>
+                            <li class="list-item-group">Vocabulary: <span class="badge badge-info">{{vocab}} </span></li>
                             <li class="list-item-group">Athanor</li>
                         </ul>
                     </div>
@@ -165,7 +165,6 @@
            },
            checkEligibility: function(nv, ov) {
 
-               var changedIds =[];
                var changedText='';
                var self = this;
                nv.forEach(function(item, idx) {
@@ -183,11 +182,7 @@
                        self.quickAnalyse(changedText, idx);
                    }
                });
-
-
                //console.log(this.parent.$data.tempIds);
-
-
            },
            quickAnalyse(changedText, idx) {
 

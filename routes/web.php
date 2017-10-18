@@ -38,3 +38,11 @@ Route::post('/processor', 'StringTokenizer@process');
 Route::get('/hb', function(){
     dd(Artisan::call('dashboard:send-heartbeat'));
 });
+
+
+//staff only pages
+
+Route::get('/assignment', 'AssignmentController@index');
+
+
+Route::post('/assignment', 'AssignmentController@store');
