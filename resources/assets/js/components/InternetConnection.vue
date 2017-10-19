@@ -1,13 +1,12 @@
 <template>
     <section v-if="offline" class="internet-connection">
-        <div class="bg-danger">
-            <span class="fa fa-warning"></span>
-            <span>Internet connection lost</span>
+        <div class="alert alert-danger">
+            <i class="fa fa-warning"></i> Internet connection lost
         </div>
     </section>
     <section v-else>
-        <div class="bg-default">
-            <span class="fa fa-signal"></span> Last connection: {{lastHeartBeatReceivedAt}}
+        <div class="alert alert-success">
+            <i class="fa fa-signal"></i> Last connection: {{lastHeartBeatReceivedAt}}
 
         </div>
     </section>

@@ -11,12 +11,14 @@ use App\Assignment;
 class AssignmentController extends Controller
 {
 
+    //this page has to be restricted to user_schema 'role' only
     public function __construct() {
         $this->middleware('auth');
     }
 
     public function index(){
-        $assignments = Assignment::all();
+        //get all assignments belonging to the user
+        $assignments = User::find(Auth::user()->id)->assignments;
         return view('assignment', ['assignments' => $assignments]);
     }
 

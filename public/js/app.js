@@ -35160,12 +35160,12 @@ var app = new Vue({
     mounted: function mounted() {
 
         socket.on('operational-log:App\\Events\\OperationLog', function (data) {
-            this.slogs.push(data.details);
+            return this.slogs.push(data.details);
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {
             console.log("ok yes listened");
-            ;return this.lastHeartBeatReceivedAt = __WEBPACK_IMPORTED_MODULE_2_moment___default()();
+            ;return this.lastHeartBeatReceivedAt = __WEBPACK_IMPORTED_MODULE_2_moment___default()().format('LLL');
         }.bind(this));
     },
     methods: {
@@ -77752,7 +77752,6 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             });
         }
     }
-
 });
 
 /***/ }),
@@ -77959,7 +77958,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -77997,8 +77995,8 @@ var render = function() {
   return _vm.offline
     ? _c("section", { staticClass: "internet-connection" }, [_vm._m(0)])
     : _c("section", [
-        _c("div", { staticClass: "bg-default" }, [
-          _c("span", { staticClass: "fa fa-signal" }),
+        _c("div", { staticClass: "alert alert-success" }, [
+          _c("i", { staticClass: "fa fa-signal" }),
           _vm._v(
             " Last connection: " +
               _vm._s(_vm.lastHeartBeatReceivedAt) +
@@ -78012,10 +78010,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-danger" }, [
-      _c("span", { staticClass: "fa fa-warning" }),
-      _vm._v(" "),
-      _c("span", [_vm._v("Internet connection lost")])
+    return _c("div", { staticClass: "alert alert-danger" }, [
+      _c("i", { staticClass: "fa fa-warning" }),
+      _vm._v(" Internet connection lost\n    ")
     ])
   }
 ]

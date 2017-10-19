@@ -55,12 +55,12 @@ const app = new Vue({
     mounted: function() {
 
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
-            this.slogs.push(data.details);
+            return this.slogs.push(data.details);
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {
             console.log("ok yes listened");
-;            return this.lastHeartBeatReceivedAt = moment();
+;            return this.lastHeartBeatReceivedAt = moment().format('LLL');
         }.bind(this));
 
     },

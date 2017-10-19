@@ -121,7 +121,7 @@
            editorContent: function (newVal) {
                this.$data.counter++;
                if(this.$data.counter >= 10 ) {
-                   newVal.replace(/<[^>]*>/g, '');
+                    newVal.replace(/<[^>]*>/g, '');
                     this.checkEligibility(newVal.split("."), this.$data.tap);
 
                     this.editLog.push(this.editorContent);
@@ -196,10 +196,6 @@
                    });
 
            },
-
-
        }
-
-
    }
 </script>

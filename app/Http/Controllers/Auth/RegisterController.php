@@ -75,12 +75,10 @@ class RegisterController extends Controller
                 return redirect()->intended('/home');
             } else {
                 $user = $this->create($credentials);
-                //$user = Auth::user();
+                Auth::login($user);
                 $message = "New user created";
                 event(new OperationLog($user, $message));
                 event(new UserRegistered($user,$whatRole));
-
-                //create role for the user
 
                 return redirect()->intended('/home');
             }
