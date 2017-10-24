@@ -77626,6 +77626,7 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 //
 //
 //
+//
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg___default.a);
@@ -77657,7 +77658,8 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             },
             vocab: '',
             counter: 0,
-            tempIds: []
+            tempIds: [],
+            auto: ''
         };
     },
 
@@ -77673,6 +77675,10 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
         this.editLog.push(this.editorContent);
         this.fetchAnalysis();
         //console.log(this.editorContent);
+    },
+    created: function created() {
+        this.auto = 'Will auto store every 5m';
+        setInterval(this.storeAnalysedDrafts, 50000);
     },
 
     watch: {
@@ -77750,6 +77756,29 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             }).catch(function (e) {
                 _this2.$data.errors.push(e);
             });
+        },
+        storeAnalysedDrafts: function storeAnalysedDrafts() {
+            var _this3 = this;
+
+            console.log("into auto store");
+            // this.$data.tap='';
+            this.$data.auto = 'processing....';
+
+            axios.post('/processor', { 'txt': this.editorContent, 'action': 'auto' }).then(function (response) {
+                _this3.$data.auto = 'complete';
+            }).catch(function (e) {
+                _this3.$data.errors.push(e);
+            });
+            /*this.$data.tapCalls.vacab =true;
+            axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
+                .then(response => {
+                    this.$data.tapCalls.vocab=false;
+                    this.$data.vocab = response.data.vocab.unique;
+                })
+                .catch(e => {
+                    this.$data.errors.push(e)
+                });
+            */
         }
     }
 });
@@ -77863,6 +77892,10 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("ul", [
+              _c("li", { staticClass: "list-item-group" }, [
+                _vm._v("Auto Store: " + _vm._s(_vm.auto) + " ")
+              ]),
+              _vm._v(" "),
               _c("li", { staticClass: "list-item-group" }, [
                 _vm._v("Vocabulary: "),
                 _c("span", { staticClass: "badge badge-info" }, [

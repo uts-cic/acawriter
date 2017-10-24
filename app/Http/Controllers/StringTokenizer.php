@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\StoreDrafts;
 use Illuminate\Http\Request;
 use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
+use Auth;
+use App\User;
 
 
 class StringTokenizer extends Controller
@@ -82,6 +85,7 @@ class StringTokenizer extends Controller
     {
 
         $results = new \stdClass();
+        $draft = new \stdClass;
 
         if ($request["action"] == 'athanor') {
             $results->athanor = $this->analyseAthanor($request);
@@ -93,6 +97,18 @@ class StringTokenizer extends Controller
 
         if ($request["action"] == 'qathanor') {
             $results->athanor = $this->qanalyseAthanor($request);
+        }
+
+        if ($request["action"] == 'auto') {
+            $results->auto = $this->analyseAuto($request);
+
+            $draft->response= $results->auto;
+            $draft->original_text= $request["txt"];
+            $draft->feature = '1';
+            $draft->assignment_id = 1;
+            $draft->user_id = Auth::user()->id;
+
+            StoreDrafts::dispatch($draft)->onConnection('redis');
         }
 
 
@@ -128,6 +144,28 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
+
+
+    protected function analyseAuto(Request $request) {
+        $apiResponse = new \StdClass();
+
+        $queryTxt = strip_tags($request['txt']);
+        $variables = new \stdClass();
+        $variables->input = $queryTxt;
+            //get athanor
+            $this->gResponse = $this->client->response($this->queryOne, $variables);
+            if ($this->gResponse->hasErrors()) {
+                dd($this->gResponse->errors());
+            } else {
+
+                $apiResponse = $this->gResponse->moves->analytics;
+            }
+
+        return $apiResponse;
+    }
+
+
+
 
     protected function analyseVocab(Request $request) {
         $apiResponse = new \StdClass();
