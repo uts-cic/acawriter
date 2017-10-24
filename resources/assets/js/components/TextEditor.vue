@@ -43,6 +43,7 @@
                     <div class="card-header">Selections</div>
                     <div class="card-body">
                         <ul>
+                            <li class="list-item-group">Auto Store: {{auto}} </li>
                             <li class="list-item-group">Vocabulary: <span class="badge badge-info">{{vocab}} </span></li>
                             <li class="list-item-group">Athanor</li>
                         </ul>
@@ -85,6 +86,7 @@
                config: {
                    events: {
                        'froalaEditor.contentChanged': function (e, editor) {
+
                        }
                    }
                },
@@ -101,7 +103,8 @@
                },
                vocab:'',
                counter:0,
-               tempIds:[]
+               tempIds:[],
+               auto:''
            }
        },
        apollo:{
@@ -116,6 +119,10 @@
            this.editLog.push(this.editorContent);
            this.fetchAnalysis();
            //console.log(this.editorContent);
+       },
+       created() {
+           this.auto = 'Will auto store every 5m';
+           setInterval(this.storeAnalysedDrafts, 50000);
        },
        watch :{
            editorContent: function (newVal) {
@@ -160,8 +167,6 @@
                    .catch(e => {
                        this.$data.errors.push(e)
                    });
-
-
            },
            checkEligibility: function(nv, ov) {
 
@@ -196,6 +201,30 @@
                    });
 
            },
+           storeAnalysedDrafts() {
+               console.log("into auto store");
+               // this.$data.tap='';
+               this.$data.auto='processing....';
+
+               axios.post('/processor', {'txt': this.editorContent, 'action': 'auto'})
+                   .then(response => {
+                       this.$data.auto = 'complete';
+
+                   })
+                   .catch(e => {
+                       this.$data.errors.push(e)
+                   });
+               /*this.$data.tapCalls.vacab =true;
+               axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
+                   .then(response => {
+                       this.$data.tapCalls.vocab=false;
+                       this.$data.vocab = response.data.vocab.unique;
+                   })
+                   .catch(e => {
+                       this.$data.errors.push(e)
+                   });
+               */
+           }
        }
    }
 </script>
