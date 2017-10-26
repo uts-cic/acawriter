@@ -77482,9 +77482,9 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { slogs: _vm.slogs } }, [
-    _c("strong", [
-      _vm._v("Online users "),
-      _c("span", { staticClass: "badge" }, [_vm._v(_vm._s(_vm.slogs.length))])
+    _vm._v("\n    Online users "),
+    _c("span", { staticClass: "badge badge-pill badge-primary" }, [
+      _vm._v(_vm._s(_vm.slogs.length))
     ]),
     _c("br"),
     _vm._v(" "),
@@ -77627,6 +77627,14 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg___default.a);
@@ -77642,7 +77650,10 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             editLog: [],
             config: {
                 events: {
-                    'froalaEditor.contentChanged': function froalaEditorContentChanged(e, editor) {}
+                    'froalaEditor.contentChanged': function froalaEditorContentChanged(e, editor) {
+                        var t = editor.html.get();
+                        console.log(t.replace(/<[^>]*>/g, ''));
+                    }
                 }
             },
             editorContent: 'Edit Your Content Here!',
@@ -77677,7 +77688,7 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
         //console.log(this.editorContent);
     },
     created: function created() {
-        this.auto = 'Will auto store every 5m';
+        this.auto = 'every 5m';
         setInterval(this.storeAnalysedDrafts, 50000);
     },
 
@@ -77765,7 +77776,7 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             this.$data.auto = 'processing....';
 
             axios.post('/processor', { 'txt': this.editorContent, 'action': 'auto' }).then(function (response) {
-                _this3.$data.auto = 'complete';
+                _this3.$data.auto = 'Done';
             }).catch(function (e) {
                 _this3.$data.errors.push(e);
             });
@@ -77836,16 +77847,7 @@ var render = function() {
                   staticClass: "fa fa-spinner fa-spin"
                 }),
                 _vm._v(" "),
-                _c("h4", [
-                  _vm._v("TAP Preview: Athanor "),
-                  _c("small", [
-                    _vm._v(
-                      "Next updated once : " +
-                        _vm._s(_vm.counter) +
-                        " of 10 changes."
-                    )
-                  ])
-                ]),
+                _c("h4", [_vm._v("TAP Preview:")]),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -77888,14 +77890,37 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-md-4" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Selections")]),
+          _c("div", { staticClass: "card-header" }, [_vm._v("Features")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "alert alert-success" }, [
+              _c("i", { staticClass: "fa fa-globe" }),
+              _vm._v(" TAP "),
+              _c("small", [
+                _vm._v(
+                  "next updated after : " +
+                    _vm._s(10 - _vm.counter) +
+                    " changes."
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "alert alert-success" }, [
+              _c("i", {
+                staticClass: "fa fa-database",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" "),
+              _c("small", [_vm._v("Save: " + _vm._s(_vm.auto) + " ")])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Features")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("ul", [
-              _c("li", { staticClass: "list-item-group" }, [
-                _vm._v("Auto Store: " + _vm._s(_vm.auto) + " ")
-              ]),
-              _vm._v(" "),
               _c("li", { staticClass: "list-item-group" }, [
                 _vm._v("Vocabulary: "),
                 _c("span", { staticClass: "badge badge-info" }, [

@@ -1,6 +1,6 @@
 <template>
     <div v-bind:slogs="slogs">
-        <strong>Online users <span class="badge">{{slogs.length}}</span></strong><br />
+        Online users <span class="badge badge-pill badge-primary">{{slogs.length}}</span><br />
         <ul>
         <li class="list-group-item" v-for="d in slogs" >{{d.status}}</li>
         </ul>

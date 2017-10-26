@@ -39,10 +39,10 @@ class StoreDrafts implements ShouldQueue
         $draftNew->assignment_id = $this->draft->assignment_id;
         $draftNew->user_id = $this->draft->user_id;
 
-       
+
         $draftNew->save();
 
-        Log::info('Store draft into db',['draft' => $draftNew]);
+        Log::info('Stored draft into db',['draft' => $draftNew]);
 
     }
 }
