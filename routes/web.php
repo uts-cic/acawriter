@@ -46,3 +46,9 @@ Route::get('/assignment', 'AssignmentController@index');
 
 
 Route::post('/assignment', 'AssignmentController@store');
+
+
+//admin only pages
+Route::get('/admin/users', 'AdminController@showUsers');
+
+Route::post('/admin/users', 'AdminController@updateUserRoles');

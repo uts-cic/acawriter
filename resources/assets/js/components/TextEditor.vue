@@ -24,7 +24,7 @@
                                 <li v-for="error in errors">{{error.message}}</li>
                             </ul>
                             <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                            <h4>TAP Preview: Athanor <small>Next updated once : {{counter}} of 10 changes.</small></h4>
+                            <h4>TAP Preview:</h4>
                             <div class="row">
 
                                 <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
@@ -40,10 +40,18 @@
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Selections</div>
+                    <div class="card-header">Features</div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small>
+                        </div>
+                        <div class="alert alert-success"><i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Features</div>
                     <div class="card-body">
                         <ul>
-                            <li class="list-item-group">Auto Store: {{auto}} </li>
                             <li class="list-item-group">Vocabulary: <span class="badge badge-info">{{vocab}} </span></li>
                             <li class="list-item-group">Athanor</li>
                         </ul>
@@ -86,7 +94,8 @@
                config: {
                    events: {
                        'froalaEditor.contentChanged': function (e, editor) {
-
+                           var t =  editor.html.get();
+                           console.log(t.replace(/<[^>]*>/g, ''));
                        }
                    }
                },
@@ -121,7 +130,7 @@
            //console.log(this.editorContent);
        },
        created() {
-           this.auto = 'Will auto store every 5m';
+           this.auto = 'every 5m';
            setInterval(this.storeAnalysedDrafts, 50000);
        },
        watch :{
@@ -208,8 +217,7 @@
 
                axios.post('/processor', {'txt': this.editorContent, 'action': 'auto'})
                    .then(response => {
-                       this.$data.auto = 'complete';
-
+                       this.$data.auto = 'Done';
                    })
                    .catch(e => {
                        this.$data.errors.push(e)

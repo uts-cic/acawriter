@@ -49,7 +49,7 @@ class RegisterController extends Controller
     }
 
     public function awt(Request $request){
-        $whatRole = 'demo';
+        $whatRole = 'student';
         $jws = $request->assertion;
 
         $jwt = JWT::decode($jws, env('JWT_SECRET', ''));
