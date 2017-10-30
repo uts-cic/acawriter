@@ -25,4 +25,15 @@ class AdminController extends Controller
         return view('admin.user', ['data' => $data]);
     }
 
+    public function updateUserRoles(Request $request){
+        $roles = array();
+        if(isset($request["roles"])) {
+            $roles = $request["roles"];
+        }
+        $user = User::find($request["user_id"]);
+        $user->roles()->sync($roles);
+
+        return redirect()->back()->with('success','Roles updated successfully!');;
+    }
+
 }
