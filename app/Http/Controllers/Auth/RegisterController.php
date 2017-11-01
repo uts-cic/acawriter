@@ -107,8 +107,6 @@ class RegisterController extends Controller
 
 
 
-
-
     /**
      * Get a validator for an incoming registration request.
      *
