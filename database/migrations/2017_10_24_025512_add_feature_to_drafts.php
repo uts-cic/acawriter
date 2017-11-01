@@ -28,7 +28,7 @@ class AddFeatureToDrafts extends Migration
     {
         Schema::table('drafts', function (Blueprint $table) {
             //
-            $table->integer('feature_id');
+            $table->dropColumn('feature_id');
         });
     }
 }
