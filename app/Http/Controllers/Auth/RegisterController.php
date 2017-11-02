@@ -64,7 +64,7 @@ class RegisterController extends Controller
         if($jwt->aud == "http://localhost:8000") {
             $attr = $jwt->{$attr};
             $credentials = array('email' => $attr->mail, 'name' => $attr->displayname, 'password' => ' ');
-            $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'student';
+            $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';
 
 
             if (Auth::attempt($credentials)) {
@@ -103,8 +103,6 @@ class RegisterController extends Controller
             dd("error");
         }
     }
-
-
 
 
 

@@ -39,6 +39,7 @@ const apolloProvider = new VueApollo({
 Vue.component('log-status', require('./components/lstatus.vue'));
 Vue.component('doc-editor', require('./components/TextEditor.vue'));
 Vue.component('internet-connection', require('./components/InternetConnection.vue'));
+Vue.component('tap-health', require('./components/TapHealth.vue'));
 
 
 
@@ -51,6 +52,7 @@ const app = new Vue({
     data: {
         slogs: [],
         lastHeartBeatReceivedAt: moment(),
+        tapHealth: ''
     },
     mounted: function() {
 
@@ -60,7 +62,12 @@ const app = new Vue({
 
         socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {
             console.log("ok yes listened");
-;            return this.lastHeartBeatReceivedAt = moment().format('LLL');
+            return this.lastHeartBeatReceivedAt = moment().format('LLL');
+        }.bind(this));
+
+        socket.on('private-dashboard:App\\Events\\Tap\\Health', function (data) {
+            console.log("ok yes listened tap health");
+            return this.tapHealth=data.health.message;
         }.bind(this));
 
     },

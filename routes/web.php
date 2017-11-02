@@ -40,7 +40,7 @@ Route::get('/hb', function(){
 });
 
 
-//staff only pages
+//staff & admin only pages
 
 Route::get('/assignment', 'AssignmentController@index');
 
@@ -52,3 +52,5 @@ Route::post('/assignment', 'AssignmentController@store');
 Route::get('/admin/users', 'AdminController@showUsers');
 
 Route::post('/admin/users', 'AdminController@updateUserRoles');
+
+Route::post('/admin/addUser', 'AdminController@addUser');
