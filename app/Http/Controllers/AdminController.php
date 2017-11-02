@@ -49,7 +49,7 @@ class AdminController extends Controller
                     'name' => $request["new_name"],
                     'password' => $request["new_password"]
         );
-        $whatRole = 'student';
+        $whatRole = 'user';
         $userAdded = $this->create($credentials);
         event(new UserRegistered($userAdded,$whatRole));
 

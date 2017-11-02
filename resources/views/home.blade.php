@@ -27,7 +27,7 @@
                         <log-status :slogs="slogs"></log-status>
                     </div>
                     <div class="alert alert-info" role="alert">
-                        TAP Status:
+                        TAP Status: <tap-health :tap-health="tapHealth"></tap-health>
                     </div>
                 </div>
             </div>
