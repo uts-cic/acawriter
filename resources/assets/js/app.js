@@ -39,7 +39,7 @@ const apolloProvider = new VueApollo({
 Vue.component('log-status', require('./components/lstatus.vue'));
 Vue.component('doc-editor', require('./components/TextEditor.vue'));
 Vue.component('internet-connection', require('./components/InternetConnection.vue'));
-Vue.component('tap-health', require('./components/TapHealth.vue'));
+Vue.component('tap-status', require('./components/TapHealth.vue'));
 
 
 
@@ -52,7 +52,7 @@ const app = new Vue({
     data: {
         slogs: [],
         lastHeartBeatReceivedAt: moment(),
-        tapHealth: ''
+        tapHealth: 'failed'
     },
     mounted: function() {
 
