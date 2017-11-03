@@ -1,5 +1,5 @@
 <template>
-    <section v-if="offline" class="tap-health">
+    <section v-if="tapStatus=='failed'" class="tap-health">
         <div class="alert alert-danger">
             <i class="fa fa-warning"></i> Tap problem
         </div>
@@ -21,19 +21,20 @@
         props: ['tapHealth'],
         data() {
             return{
-                offline:false,
+                tapStatus:'failed',
             };
         },
         created() {
-            setInterval(this.determineConnectionStatus, 1000);
+            setInterval(this.checkTapStatus, 1000);
         },
         methods: {
-            determineConnectionStatus() {
+            checkTapStatus() {
                 console.log("called:" + this.tapHealth);
                 if(this.tapHealth == 'Ok') {
-                    this.offline = true;
+                    console.log("true");
+                    this.tapStatus = 'ok';
                 } else {
-                    this.offline=false;
+                    this.tapStatus='failed';
                 }
             }
         },

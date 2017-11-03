@@ -126,7 +126,8 @@ class StringTokenizer extends Controller
         $queryTxt = strip_tags($unique->last());
         $variables = new \stdClass();
         $variables->input = $queryTxt;
-        $split = preg_split('/[.]/', $queryTxt);
+        //$split = preg_split('/$\R?^/m', $queryTxt);
+        $split = explode('\n', $queryTxt);
 
         $originalHash = Hash::make($queryTxt);
         $responseHash = '';
@@ -201,16 +202,21 @@ class StringTokenizer extends Controller
         $variables = new \stdClass();
         $variables->input = $queryTxt;
 
+
+
             //get athanor
             $this->gResponse = $this->client->response($this->queryOne, $variables);
+
             if ($this->gResponse->hasErrors()) {
                 dd($this->gResponse->errors());
             } else {
-                $res = $this->gResponse->moves->analytics;
-                foreach($res as $rest) {
-                    $apiResponse->str = $queryTxt;
-                    $apiResponse->tags = implode(", ", $rest);
-                }
+
+                    $res = $this->gResponse->moves->analytics;
+                    foreach ($res as $rest) {
+                        $apiResponse->str = $queryTxt;
+                        $apiResponse->tags = implode(", ", $rest);
+                    }
+
             }
         return $apiResponse;
     }

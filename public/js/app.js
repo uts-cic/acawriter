@@ -35146,7 +35146,7 @@ var apolloProvider = new __WEBPACK_IMPORTED_MODULE_1_vue_apollo__["a" /* default
 Vue.component('log-status', __webpack_require__(264));
 Vue.component('doc-editor', __webpack_require__(267));
 Vue.component('internet-connection', __webpack_require__(270));
-Vue.component('tap-health', __webpack_require__(273));
+Vue.component('tap-status', __webpack_require__(273));
 
 var socket = io.connect('http://localhost:3000');
 
@@ -35157,7 +35157,7 @@ var app = new Vue({
     data: {
         slogs: [],
         lastHeartBeatReceivedAt: __WEBPACK_IMPORTED_MODULE_2_moment___default()(),
-        tapHealth: ''
+        tapHealth: 'failed'
     },
     mounted: function mounted() {
 
@@ -77569,11 +77569,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_graphql_tag__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_graphql_tag__);
-var _templateObject = _taggedTemplateLiteral(['\n   {\n       viewer {\n           employeeList {\n               employeeID,\n               firstName,\n               lastName,\n               birthDate\n           },\n           productList {\n               name,\n               unitPrice\n           }\n       }\n   }\n   '], ['\n   {\n       viewer {\n           employeeList {\n               employeeID,\n               firstName,\n               lastName,\n               birthDate\n           },\n           productList {\n               name,\n               unitPrice\n           }\n       }\n   }\n   ']);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_graphql_tag__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_graphql_tag__);
+var _templateObject = _taggedTemplateLiteral(['\n{\n    viewer {\n        employeeList {\n            employeeID,\n            firstName,\n            lastName,\n            birthDate\n        },\n        productList {\n            name,\n            unitPrice\n        }\n    }\n}\n'], ['\n{\n    viewer {\n        employeeList {\n            employeeID,\n            firstName,\n            lastName,\n            birthDate\n        },\n        productList {\n            name,\n            unitPrice\n        }\n    }\n}\n']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -77629,25 +77627,10 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg___default.a);
 
-
-var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateObject);
+var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default()(_templateObject);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'editor',
@@ -77655,14 +77638,6 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
         return {
             preview: '',
             editLog: [],
-            config: {
-                events: {
-                    'froalaEditor.contentChanged': function froalaEditorContentChanged(e, editor) {
-                        var t = editor.html.get();
-                        console.log(t.replace(/<[^>]*>/g, ''));
-                    }
-                }
-            },
             editorContent: 'Edit Your Content Here!',
             tmp: 'More text',
             viewer: {},
@@ -77696,7 +77671,7 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
     },
     created: function created() {
         this.auto = 'every 5m';
-        setInterval(this.storeAnalysedDrafts, 50000);
+        //setInterval(this.storeAnalysedDrafts, 900000);
     },
 
     watch: {
@@ -77704,19 +77679,17 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             this.$data.counter++;
             if (this.$data.counter >= 10) {
                 newVal.replace(/<[^>]*>/g, '');
-                this.checkEligibility(newVal.split("."), this.$data.tap);
+                //console.log(newVal.split(/[\n\r]/g), this.$data.tap);
+                var temp = newVal.split(/[\n\r]/g);
+                temp = temp.filter(function (entry) {
+                    return entry.trim() != '';
+                });
+                console.log(temp);
+                //this.checkEligibility(newVal.split(/[\n\r]/g), this.$data.tap);
+                this.checkEligibility(temp, this.$data.tap);
 
                 this.editLog.push(this.editorContent);
-                //this.fetchAnalysis();
-                //var t = newVal.split(".");
-                //console.log(t);
-
-                //  if(typeof id!== 'undefined') {
-                //     if(t[id] !== 'undefined') this.quickAnalyse(t[id]);
-                //   }
             }
-            //axios.post('http://athanor.utscic.edu.au/v2/analyse/text/rhetorical', {'data': this.editorContent})
-            //                     .then(r => console.log('r:', JSON.stringify(r,null,2)));
         }
     },
     methods: {
@@ -77747,7 +77720,7 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             var changedText = '';
             var self = this;
             nv.forEach(function (item, idx) {
-                console.log(item);
+                //console.log(item);
                 if (typeof ov[idx] !== 'undefined') {
                     if (ov[idx].str != item) {
                         changedText = item;
@@ -77759,18 +77732,20 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
                     //changedIds.push(idx);
                     changedText = item;
                 }
-                if (changedText !== '' && changedText !== '<p>' && changedText !== '</p>') {
+
+                if (changedText !== '') {
                     self.quickAnalyse(changedText, idx);
                 }
             });
-            //console.log(this.parent.$data.tempIds);
         },
         quickAnalyse: function quickAnalyse(changedText, idx) {
             var _this2 = this;
 
             this.$data.counter = 0;
             axios.post('/processor', { 'txt': changedText, 'action': 'qathanor' }).then(function (response) {
-                _this2.$data.tap[idx] = response.data.athanor;
+                if (response.data) {
+                    _this2.$data.tap[idx] = response.data.athanor;
+                }
             }).catch(function (e) {
                 _this2.$data.errors.push(e);
             });
@@ -77787,16 +77762,6 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_1_graphql_tag___default()(_templateO
             }).catch(function (e) {
                 _this3.$data.errors.push(e);
             });
-            /*this.$data.tapCalls.vacab =true;
-            axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
-                .then(response => {
-                    this.$data.tapCalls.vocab=false;
-                    this.$data.vocab = response.data.vocab.unique;
-                })
-                .catch(e => {
-                    this.$data.errors.push(e)
-                });
-            */
         }
     }
 });
@@ -77816,81 +77781,86 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [_vm._v("Text Analyser")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c(
-              "div",
-              { attrs: { id: "editor" } },
-              [
-                _c("froala", {
-                  attrs: { tag: "textarea", config: _vm.config },
-                  model: {
+            _c("div", { attrs: { id: "editor" } }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
                     value: _vm.editorContent,
-                    callback: function($$v) {
-                      _vm.editorContent = $$v
-                    },
                     expression: "editorContent"
                   }
-                }),
-                _vm._v(" "),
-                _c("hr"),
-                _vm._v(" "),
-                _vm.errors && _vm.errors.length
-                  ? _c(
-                      "ul",
-                      _vm._l(_vm.errors, function(error) {
-                        return _c("li", [_vm._v(_vm._s(error.message))])
-                      })
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("span", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.tapCalls.vocab,
-                      expression: "tapCalls.vocab"
+                ],
+                staticClass: "form-control",
+                domProps: { value: _vm.editorContent },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
                     }
-                  ],
-                  staticClass: "fa fa-spinner fa-spin"
-                }),
-                _vm._v(" "),
-                _c("h4", [_vm._v("TAP Preview:")]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "row" },
-                  [
-                    _c("span", {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.tapCalls.athanor,
-                          expression: "tapCalls.athanor"
-                        }
-                      ],
-                      staticClass: "fa fa-spinner fa-spin"
-                    }),
-                    _vm._v(" "),
-                    _vm._l(_vm.tap, function(feed) {
-                      return _c("div", { staticClass: "col-md-12" }, [
-                        _vm._v("\n                                ["),
-                        _c("span", { staticClass: "badge bg-primary" }, [
-                          _vm._v(_vm._s(feed.tags))
-                        ]),
-                        _vm._v(
-                          "]\n                                " +
-                            _vm._s(feed.str) +
-                            "\n                            "
-                        )
-                      ])
+                    _vm.editorContent = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _vm.errors && _vm.errors.length
+                ? _c(
+                    "ul",
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error.message))])
                     })
-                  ],
-                  2
-                )
-              ],
-              1
-            )
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("span", {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.tapCalls.vocab,
+                    expression: "tapCalls.vocab"
+                  }
+                ],
+                staticClass: "fa fa-spinner fa-spin"
+              }),
+              _vm._v(" "),
+              _c("h4", [_vm._v("TAP Preview:")]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "row" },
+                [
+                  _c("span", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.tapCalls.athanor,
+                        expression: "tapCalls.athanor"
+                      }
+                    ],
+                    staticClass: "fa fa-spinner fa-spin"
+                  }),
+                  _vm._v(" "),
+                  _vm._l(_vm.tap, function(feed) {
+                    return _c("div", { staticClass: "col-md-12" }, [
+                      _vm._v("\n                                ["),
+                      _c("span", { staticClass: "badge bg-primary" }, [
+                        _vm._v(_vm._s(feed.tags))
+                      ]),
+                      _vm._v(
+                        "]\n                                " +
+                          _vm._s(feed.str) +
+                          "\n                            "
+                      )
+                    ])
+                  })
+                ],
+                2
+              )
+            ])
           ])
         ])
       ]),
@@ -78169,20 +78139,21 @@ var socket = io.connect('http://localhost:3000');
     props: ['tapHealth'],
     data: function data() {
         return {
-            offline: false
+            tapStatus: 'failed'
         };
     },
     created: function created() {
-        setInterval(this.determineConnectionStatus, 1000);
+        setInterval(this.checkTapStatus, 1000);
     },
 
     methods: {
-        determineConnectionStatus: function determineConnectionStatus() {
+        checkTapStatus: function checkTapStatus() {
             console.log("called:" + this.tapHealth);
             if (this.tapHealth == 'Ok') {
-                this.offline = true;
+                console.log("true");
+                this.tapStatus = 'ok';
             } else {
-                this.offline = false;
+                this.tapStatus = 'failed';
             }
         }
     },
@@ -78197,7 +78168,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.offline
+  return _vm.tapStatus == "failed"
     ? _c("section", { staticClass: "tap-health" }, [_vm._m(0)])
     : _c("section", [_vm._m(1)])
 }

@@ -6,27 +6,14 @@
                     <div class="card-header">Text Analyser</div>
                     <div class="card-body">
                         <div id="editor">
-                            <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala>
-
+                            <textarea v-model="editorContent"  class="form-control"></textarea>
                             <hr />
-                            <!--<h4>GraphQl data</h4>
-                            <div v-if="loading" class="loading">Loading .....</div>
-                             <article v-for="employee in viewer.employeeList">
-                                 {{employee.firstName}} {{employee.lastName}}  ({{employee.birthDate}})
-                            </article>
-                            <h3>Products</h3>
-                            <ul>
-                                <li v-for="product in viewer.productList" class="list-item-group">
-                                    {{product.name}} : ${{product.unitPrice}}
-                                </li>
-                            </ul>-->
                             <ul v-if="errors && errors.length">
                                 <li v-for="error in errors">{{error.message}}</li>
                             </ul>
                             <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
                             <h4>TAP Preview:</h4>
                             <div class="row">
-
                                 <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                 <div class="col-md-12" v-for="feed in tap">
                                     [<span class="badge bg-primary">{{feed.tags}}</span>]
@@ -64,8 +51,6 @@
 </template>
 
 <script>
-   import VueFroala from 'vue-froala-wysiwyg';
-   Vue.use(VueFroala);
 
    import gql from 'graphql-tag';
    const POSTS_QUERY = gql`
@@ -91,14 +76,6 @@
            return {
                preview: '',
                editLog : [],
-               config: {
-                   events: {
-                       'froalaEditor.contentChanged': function (e, editor) {
-                           var t =  editor.html.get();
-                           console.log(t.replace(/<[^>]*>/g, ''));
-                       }
-                   }
-               },
                editorContent: 'Edit Your Content Here!',
                tmp: 'More text',
                viewer : {},
@@ -131,26 +108,22 @@
        },
        created() {
            this.auto = 'every 5m';
-           setInterval(this.storeAnalysedDrafts, 50000);
+           //setInterval(this.storeAnalysedDrafts, 900000);
        },
        watch :{
            editorContent: function (newVal) {
                this.$data.counter++;
                if(this.$data.counter >= 10 ) {
                     newVal.replace(/<[^>]*>/g, '');
-                    this.checkEligibility(newVal.split("."), this.$data.tap);
+                    //console.log(newVal.split(/[\n\r]/g), this.$data.tap);
+                    var temp =  newVal.split(/[\n\r]/g);
+                    temp = temp.filter(entry => entry.trim() != '');
+                    console.log(temp);
+                    //this.checkEligibility(newVal.split(/[\n\r]/g), this.$data.tap);
+                   this.checkEligibility(temp, this.$data.tap);
 
                     this.editLog.push(this.editorContent);
-                    //this.fetchAnalysis();
-                    //var t = newVal.split(".");
-                    //console.log(t);
-
-                  //  if(typeof id!== 'undefined') {
-                   //     if(t[id] !== 'undefined') this.quickAnalyse(t[id]);
-                 //   }
                }
-               //axios.post('http://athanor.utscic.edu.au/v2/analyse/text/rhetorical', {'data': this.editorContent})
-//                     .then(r => console.log('r:', JSON.stringify(r,null,2)));
            }
         },
        methods: {
@@ -182,7 +155,7 @@
                var changedText='';
                var self = this;
                nv.forEach(function(item, idx) {
-                   console.log(item);
+                   //console.log(item);
                    if(typeof ov[idx]!=='undefined') {
                        if(ov[idx].str!= item) {
                            changedText = item;
@@ -192,18 +165,20 @@
                         //changedIds.push(idx);
                        changedText = item;
                    }
-                   if(changedText!=='' && changedText!=='<p>' && changedText!=='</p>') {
+
+                   if(changedText!=='') {
                        self.quickAnalyse(changedText, idx);
                    }
                });
-               //console.log(this.parent.$data.tempIds);
            },
            quickAnalyse(changedText, idx) {
 
                this.$data.counter = 0;
                axios.post('/processor', {'txt': changedText, 'action': 'qathanor'})
                    .then(response => {
-                       this.$data.tap[idx] = response.data.athanor;
+                       if(response.data) {
+                           this.$data.tap[idx] = response.data.athanor;
+                       }
                    })
                    .catch(e => {
                        this.$data.errors.push(e)
@@ -222,16 +197,6 @@
                    .catch(e => {
                        this.$data.errors.push(e)
                    });
-               /*this.$data.tapCalls.vacab =true;
-               axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
-                   .then(response => {
-                       this.$data.tapCalls.vocab=false;
-                       this.$data.vocab = response.data.vocab.unique;
-                   })
-                   .catch(e => {
-                       this.$data.errors.push(e)
-                   });
-               */
            }
        }
    }
