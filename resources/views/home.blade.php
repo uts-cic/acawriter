@@ -21,17 +21,19 @@
         </div>
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header">Status</div>
+                <div class="card-header card-inverse card-primary">Status</div>
                 <div class="card-body">
                     <div class="alert alert-info" role="alert">
                         <log-status :slogs="slogs"></log-status>
                     </div>
-                    <div class="alert alert-info" role="alert">
-                        TAP Status: <tap-status :tap-health="tapHealth"></tap-status>
-                    </div>
+
+                        <tap-status :tap-health="tapHealth"></tap-status>
+
                 </div>
             </div>
         </div>
+
+        @if(in_array('admin', $data->roles))
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">System Admin</div>
@@ -42,6 +44,33 @@
                 </div>
             </div>
         </div>
+        @endif
+
     </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">My assignments</div>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Reports</div>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Notifications</div>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection

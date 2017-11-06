@@ -32,11 +32,15 @@
                                     <button href="#" class="btn btn-default" type="submit"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
                                 </div>
                                 {{ csrf_field() }}
+
                             </div>
                         </form>
                     </div>
+                    <div class="card-footer bg-transparent"><small>Applicable to non UTS logins only.</small></div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">Manage Users</div>
@@ -57,12 +61,15 @@
                                 <div class="col-md-4">{{$user->email}}</div>
                                 <div class="col-md-4">
                                     @foreach($data->roles as $role)
-                                    {{$role->name}}
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
                                     @if ($user->hasRole($role->name))
-                                    <input type="checkbox" name="roles[]" checked value="{{$role->id}}" />
+                                    <input type="checkbox" name="roles[]" checked value="{{$role->id}}" class="form-check-input" />
                                     @else
-                                    <input type="checkbox" name="roles[]" value="{{$role->id}}" />
+                                    <input type="checkbox" name="roles[]" value="{{$role->id}}" class="form-check-input" />
                                     @endif
+                                            {{$role->name}} </label>
+                                    </div>
                                     @endforeach
                                 </div>
                                 {{ csrf_field() }}

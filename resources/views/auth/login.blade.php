@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-xs-12 align-self-center">
             <div class="card">
                 <div class="card-header">Login</div>
 
@@ -65,7 +65,7 @@
 
                                 <a class="btn btn-lg btn-warning"
                                    href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/mzKIw5MNef57xlBZzJoepA"
-                                   class="btn btn-large btn-info">LOGIN VIA THE AUSTRALIAN ACCESS FEDERATION</a>
+                                   class="btn btn-large btn-info">LOGIN VIA UTS</a>
                             </div>
                         </div>
                     </form>
