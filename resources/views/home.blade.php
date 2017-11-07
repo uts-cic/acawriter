@@ -49,23 +49,27 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header">My assignments</div>
-                <div class="card-body">
+                <div class="card-body"><autocomplete></autocomplete>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Reports</div>
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
+
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">Notifications</div>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Reports</div>
                 <div class="card-body">
                 </div>
             </div>

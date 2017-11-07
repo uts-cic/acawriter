@@ -40,6 +40,13 @@ Route::get('/hb', function(){
 });
 
 
+//users (students) access
+
+Route::get('/assignment/search', 'AssignmentController@search');
+
+Route::post('assignments/toUser', 'AssignmentController@subscribeUserToAssignment');
+
+
 //staff & admin only pages
 
 Route::get('/assignment', 'AssignmentController@index');
