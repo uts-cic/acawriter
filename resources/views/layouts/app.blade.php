@@ -37,6 +37,7 @@
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                         @else
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/home') }}">Dashboard</a></li>
                             <li class="nav-item"><a class="nav-link" href="/analyse">Analyse</a></li>
                             <li class="nav-item"><a class="nav-link" href="/assignment">Assignment</a></li>
                             <li class="nav-item dropdown">
