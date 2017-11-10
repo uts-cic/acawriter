@@ -62,7 +62,6 @@ class AssignmentController extends Controller
         ]);
 
 
-
         $user_id = Auth::user()->id;
         if(count($request["list"]) > 0) {
             foreach($request["list"] as $a ) {
@@ -102,6 +101,8 @@ class AssignmentController extends Controller
 
         return response()->json($status, $code);
     }
+
+
 
 
 }
