@@ -64,7 +64,7 @@
                             <div class="col-md-8 col-md-offset-2">
 
                                 <a class="btn btn-lg btn-warning"
-                                   href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/mzKIw5MNef57xlBZzJoepA"
+                                   href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw"
                                    class="btn btn-large btn-info">LOGIN VIA UTS</a>
                             </div>
                         </div>

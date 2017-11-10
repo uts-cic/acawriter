@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 bg-info text-white">
+        <div class="col-md-6">
             Selected Assignments: {{operation}}
             <div v-if="selectedAssignments.length">
                 <div  v-for="(a, i) in selectedAssignments">

@@ -3,31 +3,21 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Text Analyser</div>
+                    <div class="card-header">Text Analyser
+                        <button type="button" class="btn btn-outline-primary pull-right" v-on:click="fetchAnalysis()">Get Feedback</button>
+
+                    </div>
                     <div class="card-body">
                         <div id="editor">
                             <textarea v-model="editorContent"  class="form-control"></textarea>
                             <hr />
-                            <ul v-if="errors && errors.length">
-                                <li v-for="error in errors">{{error.message}}</li>
-                            </ul>
-                            <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                            <h4>TAP Preview:</h4>
-                            <div class="row">
-                                <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12" v-for="feed in tap">
-                                    [<span class="badge bg-primary">{{feed.tags}}</span>]
-                                    {{feed.str}}
-                                </div>
-
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Features</div>
+                    <div class="card-header">Operations</div>
                     <div class="card-body">
                         <div class="alert alert-success">
                             <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small>
@@ -45,6 +35,22 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <ul v-if="errors && errors.length">
+                <li v-for="error in errors">{{error.message}}</li>
+            </ul>
+            <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
+            <div class="col-md-12"><h4>TAP Raw output:</h4></div>
+            <div class="col-md-10">
+                <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
+                <span v-for="feed in tap">
+                    [<span class="badge bg-primary">{{feed.tags}}</span>]
+                    {{feed.str}}
+                </span>
+
+            </div>
+            <div class="col-md-2"></div>
         </div>
     </div>
 
@@ -72,6 +78,7 @@
 
    export default {
        name: 'editor',
+       props:['assignment'],
        data () {
            return {
                preview: '',
@@ -104,6 +111,7 @@
            console.log("lets prepopulate the first call" );
            this.editLog.push(this.editorContent);
            this.fetchAnalysis();
+            console.log(this.assignment);
            //console.log(this.editorContent);
        },
        created() {
@@ -121,8 +129,8 @@
                     console.log(temp);
                     //this.checkEligibility(newVal.split(/[\n\r]/g), this.$data.tap);
                    this.checkEligibility(temp, this.$data.tap);
-
-                    this.editLog.push(this.editorContent);
+                   this.editLog.push(this.editorContent);
+                   this.$data.counter = 0;
                }
            }
         },
@@ -132,9 +140,9 @@
               // this.$data.tap='';
                this.$data.tapCalls.athanor =true;
                this.$data.counter = 0;
-               axios.post('/processor', {'txt': this.editLog, 'action': 'athanor'})
+               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor'})
                    .then(response => {
-                       this.$data.tap = response.data.athanor.responseTxt;
+                       this.$data.tap = response.data.athanor;
                        this.$data.tapCalls.athanor=false;
                    })
                    .catch(e => {
@@ -189,8 +197,10 @@
                console.log("into auto store");
                // this.$data.tap='';
                this.$data.auto='processing....';
+               var assignment_id=0;
+               if(this.assignment!=="") {assignment_id= this.assignment;}
 
-               axios.post('/processor', {'txt': this.editorContent, 'action': 'auto'})
+               axios.post('/processor', {'txt': this.editorContent, 'action': 'auto', 'assignment_id':assignment_id})
                    .then(response => {
                        this.$data.auto = 'Done';
                    })

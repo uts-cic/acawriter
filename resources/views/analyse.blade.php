@@ -2,7 +2,7 @@
 
 @section('content')
 <div id="app">
-    <doc-editor></doc-editor>
+    <doc-editor assignment="{{$data->assignment_id[0]}}"></doc-editor>
 </div>
 @endsection
 

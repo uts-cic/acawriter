@@ -29,9 +29,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/auth/jwt', 'Auth\RegisterController@awt');
 
-Route::get('/analyse', function(){
-   return view('analyse');
-});
+
+Route::get('/analyse', 'AnalyseController@index');
+
+Route::get('/analyse/{code}', 'AnalyseController@index');
+
+
+
 
 Route::post('/processor', 'StringTokenizer@process');
 

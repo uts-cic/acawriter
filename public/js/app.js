@@ -77628,6 +77628,12 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -77635,6 +77641,7 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default()(_templateO
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'editor',
+    props: ['assignment'],
     data: function data() {
         return {
             preview: '',
@@ -77668,6 +77675,7 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default()(_templateO
         console.log("lets prepopulate the first call");
         this.editLog.push(this.editorContent);
         this.fetchAnalysis();
+        console.log(this.assignment);
         //console.log(this.editorContent);
     },
     created: function created() {
@@ -77688,8 +77696,8 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default()(_templateO
                 console.log(temp);
                 //this.checkEligibility(newVal.split(/[\n\r]/g), this.$data.tap);
                 this.checkEligibility(temp, this.$data.tap);
-
                 this.editLog.push(this.editorContent);
+                this.$data.counter = 0;
             }
         }
     },
@@ -77701,8 +77709,8 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default()(_templateO
             // this.$data.tap='';
             this.$data.tapCalls.athanor = true;
             this.$data.counter = 0;
-            axios.post('/processor', { 'txt': this.editLog, 'action': 'athanor' }).then(function (response) {
-                _this.$data.tap = response.data.athanor.responseTxt;
+            axios.post('/processor', { 'txt': this.editorContent, 'action': 'athanor' }).then(function (response) {
+                _this.$data.tap = response.data.athanor;
                 _this.$data.tapCalls.athanor = false;
             }).catch(function (e) {
                 _this.$data.errors.push(e);
@@ -77757,8 +77765,12 @@ var POSTS_QUERY = __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default()(_templateO
             console.log("into auto store");
             // this.$data.tap='';
             this.$data.auto = 'processing....';
+            var assignment_id = 0;
+            if (this.assignment !== "") {
+                assignment_id = this.assignment;
+            }
 
-            axios.post('/processor', { 'txt': this.editorContent, 'action': 'auto' }).then(function (response) {
+            axios.post('/processor', { 'txt': this.editorContent, 'action': 'auto', 'assignment_id': assignment_id }).then(function (response) {
                 _this3.$data.auto = 'Done';
             }).catch(function (e) {
                 _this3.$data.errors.push(e);
@@ -77779,7 +77791,22 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Text Analyser")]),
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("Text Analyser\n                    "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary pull-right",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.fetchAnalysis()
+                  }
+                }
+              },
+              [_vm._v("Get Feedback")]
+            )
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", { attrs: { id: "editor" } }, [
@@ -77804,63 +77831,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("hr"),
-              _vm._v(" "),
-              _vm.errors && _vm.errors.length
-                ? _c(
-                    "ul",
-                    _vm._l(_vm.errors, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error.message))])
-                    })
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("span", {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.tapCalls.vocab,
-                    expression: "tapCalls.vocab"
-                  }
-                ],
-                staticClass: "fa fa-spinner fa-spin"
-              }),
-              _vm._v(" "),
-              _c("h4", [_vm._v("TAP Preview:")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row" },
-                [
-                  _c("span", {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.tapCalls.athanor,
-                        expression: "tapCalls.athanor"
-                      }
-                    ],
-                    staticClass: "fa fa-spinner fa-spin"
-                  }),
-                  _vm._v(" "),
-                  _vm._l(_vm.tap, function(feed) {
-                    return _c("div", { staticClass: "col-md-12" }, [
-                      _vm._v("\n                                ["),
-                      _c("span", { staticClass: "badge bg-primary" }, [
-                        _vm._v(_vm._s(feed.tags))
-                      ]),
-                      _vm._v(
-                        "]\n                                " +
-                          _vm._s(feed.str) +
-                          "\n                            "
-                      )
-                    ])
-                  })
-                ],
-                2
-              )
+              _c("hr")
             ])
           ])
         ])
@@ -77868,7 +77839,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-md-4" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Features")]),
+          _c("div", { staticClass: "card-header" }, [_vm._v("Operations")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "alert alert-success" }, [
@@ -77911,10 +77882,77 @@ var render = function() {
           ])
         ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm.errors && _vm.errors.length
+        ? _c(
+            "ul",
+            _vm._l(_vm.errors, function(error) {
+              return _c("li", [_vm._v(_vm._s(error.message))])
+            })
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("span", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.tapCalls.vocab,
+            expression: "tapCalls.vocab"
+          }
+        ],
+        staticClass: "fa fa-spinner fa-spin"
+      }),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-md-10" },
+        [
+          _c("span", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.tapCalls.athanor,
+                expression: "tapCalls.athanor"
+              }
+            ],
+            staticClass: "fa fa-spinner fa-spin"
+          }),
+          _vm._v(" "),
+          _vm._l(_vm.tap, function(feed) {
+            return _c("span", [
+              _vm._v("\n                ["),
+              _c("span", { staticClass: "badge bg-primary" }, [
+                _vm._v(_vm._s(feed.tags))
+              ]),
+              _vm._v(
+                "]\n                " + _vm._s(feed.str) + "\n            "
+              )
+            ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-2" })
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-12" }, [
+      _c("h4", [_vm._v("TAP Raw output:")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -78408,7 +78446,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-md-6 bg-info text-white" }, [
+    _c("div", { staticClass: "col-md-6" }, [
       _vm._v(
         "\n        Selected Assignments: " +
           _vm._s(_vm.operation) +

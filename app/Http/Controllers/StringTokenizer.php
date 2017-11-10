@@ -34,11 +34,14 @@ class StringTokenizer extends Controller
                         }
                 }";
 
-    protected $queryOne = "query Athanor(\$input: String!) {
-                          moves(text:\$input) {
+    protected $queryOne = "query RhetoricalMoves(\$input: String!) {
+                          moves(text:\$input,grammar:\"analytic\") {
                             analytics
+                            message
+                            timestamp
+                            querytime
                           }
-                    }";
+                        }";
 
     protected $qm       = "query Metrics(\$input: String!) {
                             metrics(text:\$input) {
@@ -61,6 +64,24 @@ class StringTokenizer extends Controller
                                 timestamp
                             }
                         }";
+
+    protected $queryTokenise = "query Tokenise(\$input: String!) {
+                                    annotations(text:\$input) {
+                                        analytics {
+                                            original
+                                            idx
+                                            start
+                                            end
+                                            length
+                                            tokens {
+                                                idx
+                                                term
+                                                lemma
+                                                postag
+                                            }
+                                        }
+                                    }
+                                }";
 
     //
     public function __construct()
@@ -88,7 +109,24 @@ class StringTokenizer extends Controller
         $draft = new \stdClass;
 
         if ($request["action"] == 'athanor') {
-            $results->athanor = $this->analyseAthanor($request);
+            $results->athanor = array();
+            //$results->athanor = $this->analyseAthanor($request);
+            $tokenisedText = $this->tapTokeniser($request);
+
+            if(count($tokenisedText) >0 ) {
+                //now go through each text and analyse
+                foreach($tokenisedText as $txt) {
+                    $responseTxt = new \stdClass;
+                    $responseTxt->str= $txt->original;
+
+                    $tags = $this->rethoMoves($txt->original);
+
+                    $responseTxt->raw_tags = $tags;
+                    $responseTxt->tags= implode(', ',$tags);
+
+                    $results->athanor[]=$responseTxt;
+                }
+            }
         }
 
         if ($request["action"] == 'vocab') {
@@ -105,7 +143,7 @@ class StringTokenizer extends Controller
             $draft->response= $results->auto;
             $draft->original_text= $request["txt"];
             $draft->feature = '1';
-            $draft->assignment_id = 1;
+            $draft->assignment_id = $request["assignment_id"]==0?999999:$request["assignment_id"];
             $draft->user_id = Auth::user()->id;
 
             StoreDrafts::dispatch($draft)->onConnection('redis');
@@ -202,20 +240,17 @@ class StringTokenizer extends Controller
         $variables = new \stdClass();
         $variables->input = $queryTxt;
 
-
-
             //get athanor
             $this->gResponse = $this->client->response($this->queryOne, $variables);
 
             if ($this->gResponse->hasErrors()) {
                 dd($this->gResponse->errors());
             } else {
-
-                    $res = $this->gResponse->moves->analytics;
-                    foreach ($res as $rest) {
-                        $apiResponse->str = $queryTxt;
-                        $apiResponse->tags = implode(", ", $rest);
-                    }
+                $res = $this->gResponse->moves->analytics;
+                foreach ($res as $rest) {
+                    $apiResponse->str = $queryTxt;
+                    $apiResponse->tags = implode(", ", $rest);
+                }
 
             }
         return $apiResponse;
@@ -249,6 +284,48 @@ class StringTokenizer extends Controller
             return $result;
         }
     }
+
+
+    //full text analyer based on tap tokening and then send it via analyser
+    protected function tapTokeniser(Request $request) {
+
+        $splitTxt = array();
+        $variables = new \stdClass();
+        $variables->input = strip_tags($request['txt']);
+        $this->gResponse = $this->client->response($this->queryTokenise, $variables);
+        if ($this->gResponse->hasErrors()) {
+            dd($this->gResponse->errors());
+        } else {
+            $splitTxt = $this->gResponse->annotations->analytics;
+        }
+
+        return $splitTxt;
+
+    }
+
+
+
+     //modified sentence level based on updated tokeniser query
+
+    protected function rethoMoves($text) {
+
+        $apiResponse = new \StdClass();
+        $variables = new \stdClass();
+        $variables->input = strip_tags($text);
+        $tags = array();
+
+        //get athanor rethmoves
+        $this->gResponse = $this->client->response($this->queryOne, $variables);
+
+        if ($this->gResponse->hasErrors()) {
+            dd($this->gResponse->errors());
+        } else {
+            $raw_tags = $this->gResponse->moves->analytics;
+            foreach($raw_tags as $tag) {$tags = $tag;}
+        }
+        return $tags;
+    }
+
 
 
 

@@ -61,7 +61,7 @@ class RegisterController extends Controller
         $attr = 'https://aaf.edu.au/attributes';
 
         //if($jwt->aud == "http://localhost:8000" && strtotime($jwt->exp) < $now && $now > strtotime($jwt->nbf)) {
-        if($jwt->aud == "http://localhost:8000") {
+        if($jwt->aud == env('JWT_AUD', '')) {
             $attr = $jwt->{$attr};
             $credentials = array('email' => $attr->mail, 'name' => $attr->displayname, 'password' => ' ');
             $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';

@@ -49,10 +49,35 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header"> <h5>Assignments</h5></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <autocomplete></autocomplete>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>My Assignments</h5>
+                            <ul class="list-group">
+                                @foreach($data->assignments as $list)
+                                <a href="/analyse/{{$list->code}}" class="list-group-item list-group-item-action">{{$list->name}}</a>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">My assignments</div>
-                <div class="card-body"><autocomplete></autocomplete>
+                <div class="card-header">Reports</div>
+                <div class="card-body">
                 </div>
             </div>
         </div>
@@ -60,16 +85,6 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">Notifications</div>
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Reports</div>
                 <div class="card-body">
                 </div>
             </div>
