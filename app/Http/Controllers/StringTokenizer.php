@@ -129,6 +129,14 @@ class StringTokenizer extends Controller
             }
         }
 
+        if ($request["action"] == 'tokenise') {
+            $tokenisedText = $this->tapTokeniser($request);
+            foreach($tokenisedText as $txt) {
+                $results->tokenised[]=$txt->original;
+            }
+
+        }
+
         if ($request["action"] == 'vocab') {
             $results->vocab = $this->analyseVocab($request);
         }
@@ -249,6 +257,7 @@ class StringTokenizer extends Controller
                 $res = $this->gResponse->moves->analytics;
                 foreach ($res as $rest) {
                     $apiResponse->str = $queryTxt;
+                    $apiResponse->raw_tags =$rest;
                     $apiResponse->tags = implode(", ", $rest);
                 }
 
