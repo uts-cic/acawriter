@@ -97,7 +97,9 @@
                vocab:'',
                counter:0,
                tempIds:[],
-               auto:''
+               auto:'',
+               splitText:[],
+               quickTags:''
            }
        },
        apollo:{
@@ -122,13 +124,15 @@
            editorContent: function (newVal) {
                this.$data.counter++;
                if(this.$data.counter >= 10 ) {
-                    newVal.replace(/<[^>]*>/g, '');
+                    this.tokeniseTextInput();
+
+                    //newVal.replace(/<[^>]*>/g, '');
                     //console.log(newVal.split(/[\n\r]/g), this.$data.tap);
-                    var temp =  newVal.split(/[\n\r]/g);
-                    temp = temp.filter(entry => entry.trim() != '');
-                    console.log(temp);
+                    //var temp =  newVal.split(/[\n\r]/g);
+                    //temp = temp.filter(entry => entry.trim() != '');
+                    //console.log(temp);
                     //this.checkEligibility(newVal.split(/[\n\r]/g), this.$data.tap);
-                   this.checkEligibility(temp, this.$data.tap);
+                   this.computeText(this.splitText, this.$data.tap);
                    this.editLog.push(this.editorContent);
                    this.$data.counter = 0;
                }
@@ -158,7 +162,7 @@
                        this.$data.errors.push(e)
                    });
            },
-           checkEligibility: function(nv, ov) {
+           /*checkEligibility: function(nv, ov) {
 
                var changedText='';
                var self = this;
@@ -178,10 +182,62 @@
                        self.quickAnalyse(changedText, idx);
                    }
                });
+           },*/
+           computeText: function(nv, ov) {
+
+               var changedText='';
+               var self = this;
+               var newTap = [];
+
+               nv.forEach(function(item, idx) {
+                   //console.log(item);
+                   var temp = {};
+                   var qt={};
+                   if(typeof ov[idx]!=='undefined') {
+                       if(ov[idx].str!= item) {
+                           changedText = item;
+                           temp['str'] = changedText;
+                           self.quickAnalyse(changedText, idx)
+                               .then(response => {
+                                   if(response.data) {
+                                       temp['str'] = response.data.athanor.str;
+                                       temp['tags'] = response.data.athanor.tags;
+                                   }
+                               })
+                               .catch(e => {
+                                   this.$data.errors.push(e)
+                               });
+
+                       } else if(ov[idx].str == item) {
+                           temp['str'] = ov[idx].str;
+                           temp['tags'] = ov[idx].tags;
+                       }
+                   } else {
+                       //changedIds.push(idx);
+                       changedText = item;
+                       //qt = self.quickAnalyse(changedText, idx);
+                       self.quickAnalyse(changedText, idx)
+                           .then(response => {
+                               if(response.data) {
+                                   temp['str'] = response.data.athanor.str;
+                                   temp['tags'] = response.data.athanor.tags;
+                               }
+                           })
+                           .catch(e => {
+                               this.$data.errors.push(e)
+                           });
+
+
+                   }
+                   newTap.push(temp);
+               });
+               self.tap = newTap;
+
            },
-           quickAnalyse(changedText, idx) {
+           /*quickAnalyse(changedText, idx) {
 
                this.$data.counter = 0;
+               var tags = '';
                axios.post('/processor', {'txt': changedText, 'action': 'qathanor'})
                    .then(response => {
                        if(response.data) {
@@ -192,6 +248,12 @@
                        this.$data.errors.push(e)
                    });
 
+           },*/
+           quickAnalyse(changedText, idx) {
+
+               this.$data.counter = 0;
+               var quickTags = {};
+               return axios.post('/processor', {'txt': changedText, 'action': 'qathanor'});
            },
            storeAnalysedDrafts() {
                console.log("into auto store");
@@ -203,6 +265,19 @@
                axios.post('/processor', {'txt': this.editorContent, 'action': 'auto', 'assignment_id':assignment_id})
                    .then(response => {
                        this.$data.auto = 'Done';
+                   })
+                   .catch(e => {
+                       this.$data.errors.push(e)
+                   });
+           },
+           tokeniseTextInput() {
+               console.log("into tokenise");
+               this.$data.tapCalls.athanor =true;
+               this.$data.counter = 0;
+               axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
+                   .then(response => {
+                       this.splitText = response.data.tokenised;
+                       this.$data.tapCalls.athanor=false;
                    })
                    .catch(e => {
                        this.$data.errors.push(e)
