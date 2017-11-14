@@ -257,7 +257,7 @@ class StringTokenizer extends Controller
                 $res = $this->gResponse->moves->analytics;
                 foreach ($res as $rest) {
                     $apiResponse->str = $queryTxt;
-                    $apiResponse->raw_tags =$rest;
+                    $apiResponse->raw_tags =count($rest) > 0? $rest:array();
                     $apiResponse->tags = implode(", ", $rest);
                 }
 

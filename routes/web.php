@@ -38,6 +38,9 @@ Route::get('/analyse/{code}', 'AnalyseController@index');
 
 
 Route::post('/processor', 'StringTokenizer@process');
+Route::post('/feedback', 'FeedbackController@generateFeedback');
+
+
 
 Route::get('/hb', function(){
     dd(Artisan::call('dashboard:send-heartbeat'));

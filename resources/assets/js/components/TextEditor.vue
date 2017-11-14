@@ -5,11 +5,13 @@
                 <div class="card">
                     <div class="card-header">Text Analyser
                         <button type="button" class="btn btn-outline-primary pull-right" v-on:click="fetchAnalysis()">Get Feedback</button>
+                        <button type="button" class="btn btn-outline-primary pull-right" v-on:click="fetchFeedback()">Get Custom</button>
 
                     </div>
                     <div class="card-body">
                         <div id="editor">
-                            <textarea v-model="editorContent"  class="form-control"></textarea>
+                            <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala>
+
                             <hr />
                         </div>
                     </div>
@@ -50,17 +52,22 @@
                 </span>
 
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-md-2 bg-info text-white">
+                <h4>Feedback</h4>
+                <span v-for="msg in feedback"><small>{{msg.message}}</small></span>
+            </div>
         </div>
     </div>
 
 </template>
 
 <script>
+    import VueFroala from 'vue-froala-wysiwyg';
+    Vue.use(VueFroala);
 
-   import gql from 'graphql-tag';
-   const POSTS_QUERY = gql`
-   {
+    import gql from 'graphql-tag';
+    const POSTS_QUERY = gql`
+    {
        viewer {
            employeeList {
                employeeID,
@@ -73,7 +80,7 @@
                unitPrice
            }
        }
-   }
+    }
    `;
 
    export default {
@@ -83,6 +90,13 @@
            return {
                preview: '',
                editLog : [],
+               config: {
+                   events: {
+                       'froalaEditor.contentChanged': function (e, editor) {
+
+                       }
+                   }
+               },
                editorContent: 'Edit Your Content Here!',
                tmp: 'More text',
                viewer : {},
@@ -99,7 +113,10 @@
                tempIds:[],
                auto:'',
                splitText:[],
-               quickTags:''
+               quickTags:'',
+               feedback:[]
+
+
            }
        },
        apollo:{
@@ -202,6 +219,7 @@
                                    if(response.data) {
                                        temp['str'] = response.data.athanor.str;
                                        temp['tags'] = response.data.athanor.tags;
+                                       temp['raw_tags'] = response.data.athanor.raw_tags;
                                    }
                                })
                                .catch(e => {
@@ -211,6 +229,7 @@
                        } else if(ov[idx].str == item) {
                            temp['str'] = ov[idx].str;
                            temp['tags'] = ov[idx].tags;
+                           temp['raw_tags'] = ov[idx].raw_tags;
                        }
                    } else {
                        //changedIds.push(idx);
@@ -221,6 +240,7 @@
                                if(response.data) {
                                    temp['str'] = response.data.athanor.str;
                                    temp['tags'] = response.data.athanor.tags;
+                                   temp['raw_tags'] = response.data.athanor.raw_tags;
                                }
                            })
                            .catch(e => {
@@ -278,6 +298,16 @@
                    .then(response => {
                        this.splitText = response.data.tokenised;
                        this.$data.tapCalls.athanor=false;
+                   })
+                   .catch(e => {
+                       this.$data.errors.push(e)
+                   });
+           },
+           fetchFeedback() {
+
+               axios.post('/feedback', {'tap': this.tap, 'action': 'fetch'})
+                   .then(response => {
+                       this.feedback = response.data
                    })
                    .catch(e => {
                        this.$data.errors.push(e)
