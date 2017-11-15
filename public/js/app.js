@@ -77721,6 +77721,33 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_froala_wysiwyg___default.a);
@@ -78045,21 +78072,53 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Features")]),
+        _c("div", { staticClass: "card text-white bg-info" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Feedback")]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("ul", [
-              _c("li", { staticClass: "list-item-group" }, [
-                _vm._v("Vocabulary: "),
-                _c("span", { staticClass: "badge badge-info" }, [
-                  _vm._v(_vm._s(_vm.vocab) + " ")
-                ])
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _vm._l(_vm.feedback.temporality, function(msg) {
+                return _c("span", [_c("small", [_vm._v(_vm._s(msg.message))])])
+              }),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("h6", { staticClass: "card-subtitle mb-2" }, [
+                _vm._v("Metrics:")
               ]),
               _vm._v(" "),
-              _c("li", { staticClass: "list-item-group" }, [_vm._v("Athanor")])
-            ])
-          ])
+              _c("i", {
+                staticClass: "fa fa-exclamation-triangle",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" "),
+              _c("small", [
+                _vm._v(
+                  "- Sentence is too long and may disengage reader. Break into smaller sentences."
+                )
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("h6", { staticClass: "card-subtitle mb-2" }, [
+                _vm._v("Rhetorical Moves:")
+              ]),
+              _vm._v(" "),
+              _c("i", {
+                staticClass: "fa fa-comments",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" "),
+              _c("small", [
+                _vm._v(
+                  "- Athanor raw feedback, hover over the icon to see the tags"
+                )
+              ])
+            ],
+            2
+          )
         ])
       ])
     ]),
@@ -78090,7 +78149,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "col-md-10" },
+        { staticClass: "col-md-8" },
         [
           _c("span", {
             directives: [
@@ -78104,29 +78163,55 @@ var render = function() {
             staticClass: "fa fa-spinner fa-spin"
           }),
           _vm._v(" "),
-          _vm._l(_vm.tap, function(feed) {
+          _vm._l(_vm.tap, function(feed, idx) {
             return _c("span", [
               _vm._v("\n                ["),
-              _c("span", { staticClass: "badge bg-primary" }, [
-                _vm._v(_vm._s(feed.tags))
-              ]),
-              _vm._v(
-                "]\n                " + _vm._s(feed.str) + "\n            "
-              )
+              _c(
+                "span",
+                {
+                  staticClass: "badge bg-default",
+                  attrs: {
+                    "data-toggle": "tooltip",
+                    "data-placement": "left",
+                    title: feed.tags
+                  }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fa fa-comments",
+                    attrs: { "aria-hidden": "true" }
+                  })
+                ]
+              ),
+              _vm._v("]\n                "),
+              !_vm.feedback.metrics
+                ? _c("span", [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(feed.str) +
+                        "\n                "
+                    )
+                  ])
+                : _c("span", [
+                    _vm.feedback.metrics[idx].message !== ""
+                      ? _c("span", [
+                          _c("i", {
+                            staticClass: "fa fa-exclamation-triangle",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(
+                            " " + _vm._s(feed.str) + "\n                    "
+                          )
+                        ])
+                      : _c("span", [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(feed.str) +
+                              "\n                    "
+                          )
+                        ])
+                  ])
             ])
-          })
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-md-2 bg-info text-white" },
-        [
-          _c("h4", [_vm._v("Feedback")]),
-          _vm._v(" "),
-          _vm._l(_vm.feedback, function(msg) {
-            return _c("span", [_c("small", [_vm._v(_vm._s(msg.message))])])
           })
         ],
         2

@@ -27,13 +27,31 @@
                         <div class="alert alert-success"><i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small></div>
                     </div>
                 </div>
-                <div class="card">
+                <!--<div class="card">
                     <div class="card-header">Features</div>
                     <div class="card-body">
                         <ul>
                             <li class="list-item-group">Vocabulary: <span class="badge badge-info">{{vocab}} </span></li>
                             <li class="list-item-group">Athanor</li>
                         </ul>
+                    </div>
+                </div> -->
+                <div class="card text-white bg-info">
+                    <div class="card-header">Feedback</div>
+                    <div class="card-body">
+                        <span v-for="msg in feedback.temporality"><small>{{msg.message}}</small></span>
+                        <hr />
+                        <h6 class="card-subtitle mb-2">Metrics:</h6>
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        <small>- Sentence is too long and may disengage reader. Break into smaller sentences.</small>
+                        <!-- <span v-for="d in feedback.metrics">
+                            <span v-if="d.message!==''" ><small>{{d.message}}</small></span>
+                        </span> -->
+                        <hr />
+                        <h6 class="card-subtitle mb-2">Rhetorical Moves:</h6>
+                        <i class="fa fa-comments" aria-hidden="true"></i>
+                        <small>- Athanor raw feedback, hover over the icon to see the tags</small>
+
                     </div>
                 </div>
             </div>
@@ -44,17 +62,26 @@
             </ul>
             <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
             <div class="col-md-12"><h4>TAP Raw output:</h4></div>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
-                <span v-for="feed in tap">
-                    [<span class="badge bg-primary">{{feed.tags}}</span>]
-                    {{feed.str}}
+                <span v-for="(feed,idx) in tap">
+                    [<span class="badge bg-default" data-toggle="tooltip" data-placement="left" v-bind:title="feed.tags"><i class="fa fa-comments" aria-hidden="true"></i></span>]
+                    <span v-if="!feedback.metrics">
+                        {{feed.str}}
+                    </span>
+                    <span v-else>
+                        <span v-if="feedback.metrics[idx].message!==''">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{feed.str}}
+                        </span>
+                        <span v-else>
+                            {{feed.str}}
+                        </span>
+                    </span>
+
+
                 </span>
 
-            </div>
-            <div class="col-md-2 bg-info text-white">
-                <h4>Feedback</h4>
-                <span v-for="msg in feedback"><small>{{msg.message}}</small></span>
+
             </div>
         </div>
     </div>
@@ -307,7 +334,7 @@
 
                axios.post('/feedback', {'tap': this.tap, 'action': 'fetch'})
                    .then(response => {
-                       this.feedback = response.data
+                       this.feedback = response.data;
                    })
                    .catch(e => {
                        this.$data.errors.push(e)
