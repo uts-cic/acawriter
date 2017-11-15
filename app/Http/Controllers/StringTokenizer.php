@@ -83,6 +83,25 @@ class StringTokenizer extends Controller
                                     }
                                 }";
 
+    protected $queryMetrics = "query Metrics(\$input: String!) {
+                                  metrics(text:\$input) {
+                                      analytics {
+                                            sentences
+                                            tokens
+                                            words
+                                            characters
+                                            punctuation
+                                            whitespace
+                                            sentWordCounts
+                                            averageSentWordCount
+                                            wordLengths
+                                            averageWordLength
+                                            averageSentWordLength
+                                      }
+                                      timestamp
+                                  }
+                                }";
+
     //
     public function __construct()
     {
@@ -333,6 +352,33 @@ class StringTokenizer extends Controller
             foreach($raw_tags as $tag) {$tags = $tag;}
         }
         return $tags;
+    }
+
+
+
+
+    /*
+     * Used to retrive sentence level metrics
+     * input: string single sentence
+     */
+
+
+    public function metrics($string) {
+
+        $apiResponse = new \StdClass();
+        $variables = new \stdClass();
+        $variables->input = strip_tags($string);
+        $apiResponse = new \stdClass();
+
+        //get  metrics
+        $this->gResponse = $this->client->response($this->queryMetrics, $variables);
+
+        if ($this->gResponse->hasErrors()) {
+            $apiResponse = $this->gResponse->errors();
+        } else {
+            $apiResponse = $this->gResponse->metrics->analytics;
+        }
+        return $apiResponse;
     }
 
 
