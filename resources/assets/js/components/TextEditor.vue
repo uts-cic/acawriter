@@ -10,8 +10,8 @@
                     </div>
                     <div class="card-body">
                         <div id="editor">
-                            <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala>
-
+                           <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
+                            <vue-editor v-model="editorContent"></vue-editor>
                             <hr />
                         </div>
                     </div>
@@ -89,8 +89,13 @@
 </template>
 
 <script>
-    import VueFroala from 'vue-froala-wysiwyg';
-    Vue.use(VueFroala);
+    /**
+     commented out - license needed
+                import VueFroala from 'vue-froala-wysiwyg';
+                Vue.use(VueFroala);
+     *
+     */
+    import {VueEditor} from 'vue2-editor';
 
     import gql from 'graphql-tag';
     const POSTS_QUERY = gql`
@@ -111,6 +116,9 @@
    `;
 
    export default {
+       components: {
+           VueEditor
+       },
        name: 'editor',
        props:['assignment'],
        data () {
