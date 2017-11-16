@@ -1,0 +1,34 @@
+{
+  "feedback": {
+    "rules": [
+      {
+        "name": "background",
+        "check": {
+          "paragraph": "3"
+        },
+        "message": "Background information missing in first paragraph",
+        "css": "temporality"
+      },
+      {
+        "name": "vocab",
+        "check": {
+          "words": [
+            "deal",
+            "check",
+            "force"
+          ]
+        },
+        "message": "Background information missing in first paragraph",
+        "css": "vocab"
+      },
+      {
+        "name": "metrics",
+        "check": {
+          "sentenceWordCount": "25"
+        },
+        "message": "Sentence too long, might disengage the reader. Try breaking it into smaller sentences",
+        "css": "metrics"
+      }
+    ]
+  }
+}

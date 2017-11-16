@@ -1,6 +1,33 @@
 <template>
     <div class="container">
         <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
+                            Status
+                        </button>&nbsp;<button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
+                        Feedback
+                        </button>
+                    </div>
+
+                    <div class="card-block collapse" id="a">
+                        <p class="card-text">
+                        <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
+                        <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
+                        </p>
+                    </div>
+                    <div class="collapse" id="b">
+                    <div class="card card-block">
+                        <select>
+                            <option value="feedback.json">Default</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Text Analyser
@@ -19,12 +46,9 @@
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Operations</div>
+                    <div class="card-header">Load Feedback</div>
                     <div class="card-body">
-                        <div class="alert alert-success">
-                            <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small>
-                        </div>
-                        <div class="alert alert-success"><i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small></div>
+
                     </div>
                 </div>
                 <!--<div class="card">
@@ -97,24 +121,6 @@
      */
     import {VueEditor} from 'vue2-editor';
 
-    import gql from 'graphql-tag';
-    const POSTS_QUERY = gql`
-    {
-       viewer {
-           employeeList {
-               employeeID,
-               firstName,
-               lastName,
-               birthDate
-           },
-           productList {
-               name,
-               unitPrice
-           }
-       }
-    }
-   `;
-
    export default {
        components: {
            VueEditor
@@ -154,19 +160,15 @@
 
            }
        },
-       apollo:{
+      /* apollo:{
            viewer: {
                query: POSTS_QUERY,
                loadingKey: 'loading'
            }
-       },
+       },*/
        mounted () {
-           console.log("mounted editor");
-           console.log("lets prepopulate the first call" );
            this.editLog.push(this.editorContent);
            this.fetchAnalysis();
-            console.log(this.assignment);
-           //console.log(this.editorContent);
        },
        created() {
            this.auto = 'every 5m';
@@ -177,13 +179,6 @@
                this.$data.counter++;
                if(this.$data.counter >= 10 ) {
                     this.tokeniseTextInput();
-
-                    //newVal.replace(/<[^>]*>/g, '');
-                    //console.log(newVal.split(/[\n\r]/g), this.$data.tap);
-                    //var temp =  newVal.split(/[\n\r]/g);
-                    //temp = temp.filter(entry => entry.trim() != '');
-                    //console.log(temp);
-                    //this.checkEligibility(newVal.split(/[\n\r]/g), this.$data.tap);
                    this.computeText(this.splitText, this.$data.tap);
                    this.editLog.push(this.editorContent);
                    this.$data.counter = 0;
@@ -192,8 +187,6 @@
         },
        methods: {
            fetchAnalysis() {
-               console.log("into fetch");
-              // this.$data.tap='';
                this.$data.tapCalls.athanor =true;
                this.$data.counter = 0;
                axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor'})
@@ -281,31 +274,13 @@
                            .catch(e => {
                                this.$data.errors.push(e)
                            });
-
-
                    }
                    newTap.push(temp);
                });
                self.tap = newTap;
 
            },
-           /*quickAnalyse(changedText, idx) {
-
-               this.$data.counter = 0;
-               var tags = '';
-               axios.post('/processor', {'txt': changedText, 'action': 'qathanor'})
-                   .then(response => {
-                       if(response.data) {
-                           this.$data.tap[idx] = response.data.athanor;
-                       }
-                   })
-                   .catch(e => {
-                       this.$data.errors.push(e)
-                   });
-
-           },*/
            quickAnalyse(changedText, idx) {
-
                this.$data.counter = 0;
                var quickTags = {};
                return axios.post('/processor', {'txt': changedText, 'action': 'qathanor'});
@@ -339,7 +314,6 @@
                    });
            },
            fetchFeedback() {
-
                axios.post('/feedback', {'tap': this.tap, 'action': 'fetch'})
                    .then(response => {
                        this.feedback = response.data;
