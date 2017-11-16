@@ -27,7 +27,6 @@ class FeedbackController extends Controller
     {
         $this->middleware('auth');
         $this->client = new Client($this->graphQLURL);
-
         $this->stringTokeniser = new StringTokenizer();
     }
 
@@ -76,9 +75,13 @@ class FeedbackController extends Controller
             }
 
         }
-
         return response()->json($result);
 
     }
+
+
+
+
+
 
 }
