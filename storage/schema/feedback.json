@@ -1,10 +1,10 @@
 {
-  "feedback": {
     "rules": [
       {
         "name": "background",
         "check": {
-          "paragraph": "3"
+          "paragraph": "3",
+          "tag":"temporality"
         },
         "message": "Background information missing in first paragraph",
         "css": "temporality"
@@ -13,12 +13,12 @@
         "name": "vocab",
         "check": {
           "words": [
-            "deal",
-            "check",
+            "server",
+            "study",
             "force"
           ]
         },
-        "message": "Background information missing in first paragraph",
+        "message": "Missing keywords",
         "css": "vocab"
       },
       {
@@ -30,5 +30,4 @@
         "css": "metrics"
       }
     ]
-  }
 }

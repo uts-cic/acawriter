@@ -4,23 +4,24 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
                             Status
-                        </button>&nbsp;<button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
+                        </button>&nbsp;<button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
                         Feedback
                         </button>
                     </div>
 
-                    <div class="card-block collapse" id="a">
+                    <div class="card-body collapse" id="a">
                         <p class="card-text">
                         <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
                         <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
                         </p>
                     </div>
                     <div class="collapse" id="b">
-                    <div class="card card-block">
-                        <select>
-                            <option value="feedback.json">Default</option>
+                    <div class="card card-body">
+                        <label for="feedbackOpt">Feedback Options</label>
+                        <select class="form-control" id="feedbackOpt" v-model="feedbackOpt">
+                            <option value="feedback">Default</option>
                         </select>
                     </div>
                 </div>
@@ -45,13 +46,13 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
+                <!-- <div class="card">
                     <div class="card-header">Load Feedback</div>
                     <div class="card-body">
 
                     </div>
                 </div>
-                <!--<div class="card">
+                <div class="card">
                     <div class="card-header">Features</div>
                     <div class="card-body">
                         <ul>
@@ -63,7 +64,8 @@
                 <div class="card text-white bg-info">
                     <div class="card-header">Feedback</div>
                     <div class="card-body">
-                        <span v-for="msg in feedback.temporality"><small>{{msg.message}}</small></span>
+                        <h6 class="card-subtitle mb-2">Background:</h6>
+                        <span v-for="msg in feedback.background"><small>{{msg.message}}</small></span>
                         <hr />
                         <h6 class="card-subtitle mb-2">Metrics:</h6>
                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
@@ -81,9 +83,11 @@
             </div>
         </div>
         <div class="row">
-            <ul v-if="errors && errors.length">
-                <li v-for="error in errors">{{error.message}}</li>
-            </ul>
+            <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                <ul>
+                    <li v-for="error in errors">{{error.message}}</li>
+                </ul>
+            </div>
             <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
             <div class="col-md-12"><h4>TAP Raw output:</h4></div>
             <div class="col-md-8">
@@ -155,9 +159,8 @@
                auto:'',
                splitText:[],
                quickTags:'',
-               feedback:[]
-
-
+               feedback:[],
+               feedbackOpt:'feedback'
            }
        },
       /* apollo:{
@@ -207,27 +210,6 @@
                        this.$data.errors.push(e)
                    });
            },
-           /*checkEligibility: function(nv, ov) {
-
-               var changedText='';
-               var self = this;
-               nv.forEach(function(item, idx) {
-                   //console.log(item);
-                   if(typeof ov[idx]!=='undefined') {
-                       if(ov[idx].str!= item) {
-                           changedText = item;
-                           //changedIds.push(idx);
-                       } else {changedText = '';}
-                   } else {
-                        //changedIds.push(idx);
-                       changedText = item;
-                   }
-
-                   if(changedText!=='') {
-                       self.quickAnalyse(changedText, idx);
-                   }
-               });
-           },*/
            computeText: function(nv, ov) {
 
                var changedText='';
@@ -314,13 +296,17 @@
                    });
            },
            fetchFeedback() {
-               axios.post('/feedback', {'tap': this.tap, 'action': 'fetch'})
-                   .then(response => {
-                       this.feedback = response.data;
-                   })
-                   .catch(e => {
-                       this.$data.errors.push(e)
-                   });
+               if(this.feedbackOpt!=='') {
+                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'feedbackOpt': this.feedbackOpt})
+                       .then(response => {
+                           this.feedback = response.data;
+                       })
+                       .catch(e => {
+                           this.$data.errors.push(e)
+                       });
+               } else {
+                   this.$data.errors.push({'message':'Please select feedback type'});
+               }
            }
        }
    }
