@@ -18,7 +18,7 @@
             "force"
           ]
         },
-        "message": "Missing keywords",
+        "message": "One or more keywords missing",
         "css": "vocab"
       },
       {

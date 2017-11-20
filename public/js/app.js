@@ -77759,20 +77759,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /**
  commented out - license needed
@@ -77843,6 +77829,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.editLog.push(this.editorContent);
                 this.$data.counter = 0;
             }
+        },
+        tap: function tap() {
+            console.log(this.tap);
         }
     },
     methods: {
@@ -77979,10 +77968,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
+  return _c("div", { staticClass: "container-fluid" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card card-outline-info" }, [
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "card-body collapse", attrs: { id: "a" } }, [
@@ -78055,14 +78044,14 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-8" }, [
+      _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
+          _c("div", { staticClass: "card-header bg-info text-white" }, [
             _vm._v("Text Analyser\n                    "),
             _c(
               "button",
               {
-                staticClass: "btn btn-outline-primary pull-right",
+                staticClass: "btn btn-info pull-right text-white",
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
@@ -78076,7 +78065,7 @@ var render = function() {
             _c(
               "button",
               {
-                staticClass: "btn btn-outline-primary pull-right",
+                staticClass: "btn btn-info pull-right text-white",
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
@@ -78089,186 +78078,186 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c(
-              "div",
-              { attrs: { id: "editor" } },
-              [
-                _c("vue-editor", {
-                  model: {
-                    value: _vm.editorContent,
-                    callback: function($$v) {
-                      _vm.editorContent = $$v
-                    },
-                    expression: "editorContent"
-                  }
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-6" }, [
+                _c(
+                  "div",
+                  { attrs: { id: "editor" } },
+                  [
+                    _c("vue-editor", {
+                      model: {
+                        value: _vm.editorContent,
+                        callback: function($$v) {
+                          _vm.editorContent = $$v
+                        },
+                        expression: "editorContent"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-6" }, [
+                _vm.errors && _vm.errors.length
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "col-md-12 alert alert-danger",
+                        attrs: { role: "alert" }
+                      },
+                      [
+                        _c(
+                          "ul",
+                          _vm._l(_vm.errors, function(error) {
+                            return _c("li", [_vm._v(_vm._s(error.message))])
+                          })
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("span", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.tapCalls.vocab,
+                      expression: "tapCalls.vocab"
+                    }
+                  ],
+                  staticClass: "fa fa-spinner fa-spin"
                 }),
                 _vm._v(" "),
-                _c("hr")
-              ],
-              1
-            )
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-4" }, [
-        _c("div", { staticClass: "card text-white bg-info" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Feedback")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "card-body" },
-            [
-              _c("h6", { staticClass: "card-subtitle mb-2" }, [
-                _vm._v("Background:")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.feedback.background, function(msg) {
-                return _c("span", [_c("small", [_vm._v(_vm._s(msg.message))])])
-              }),
-              _vm._v(" "),
-              _c("hr"),
-              _vm._v(" "),
-              _c("h6", { staticClass: "card-subtitle mb-2" }, [
-                _vm._v("Metrics:")
-              ]),
-              _vm._v(" "),
-              _c("i", {
-                staticClass: "fa fa-exclamation-triangle",
-                attrs: { "aria-hidden": "true" }
-              }),
-              _vm._v(" "),
-              _c("small", [
-                _vm._v(
-                  "- Sentence is too long and may disengage reader. Break into smaller sentences."
-                )
-              ]),
-              _vm._v(" "),
-              _c("hr"),
-              _vm._v(" "),
-              _c("h6", { staticClass: "card-subtitle mb-2" }, [
-                _vm._v("Rhetorical Moves:")
-              ]),
-              _vm._v(" "),
-              _c("i", {
-                staticClass: "fa fa-comments",
-                attrs: { "aria-hidden": "true" }
-              }),
-              _vm._v(" "),
-              _c("small", [
-                _vm._v(
-                  "- Athanor raw feedback, hover over the icon to see the tags"
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-md-12 wrapper" },
+                  [
+                    _c("span", {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.tapCalls.athanor,
+                          expression: "tapCalls.athanor"
+                        }
+                      ],
+                      staticClass: "fa fa-spinner fa-spin"
+                    }),
+                    _vm._v(" "),
+                    _vm._l(_vm.tap, function(feed, idx) {
+                      return _c("span", [
+                        _vm._v("\n                                    ["),
+                        _c(
+                          "span",
+                          {
+                            staticClass: "badge bg-default",
+                            attrs: {
+                              "data-toggle": "tooltip",
+                              "data-placement": "left",
+                              title: feed.tags
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-comments",
+                              attrs: { "aria-hidden": "true" }
+                            })
+                          ]
+                        ),
+                        _vm._v("]\n                                    "),
+                        !_vm.feedback.metrics
+                          ? _c("span", [
+                              _vm._v(
+                                "\n                                        " +
+                                  _vm._s(feed.str) +
+                                  "\n                                    "
+                              )
+                            ])
+                          : _c("span", [
+                              _vm.feedback.metrics[idx].message !== ""
+                                ? _c("span", { staticClass: "text-danger" }, [
+                                    _c("i", {
+                                      staticClass: "fa fa-exclamation-triangle",
+                                      attrs: { "aria-hidden": "true" }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("mark", [_vm._v(_vm._s(feed.str))])
+                                  ])
+                                : _c("span", [
+                                    _vm._v(
+                                      "\n                                            " +
+                                        _vm._s(feed.str) +
+                                        "\n                                        "
+                                    )
+                                  ])
+                            ])
+                      ])
+                    })
+                  ],
+                  2
                 )
               ])
-            ],
-            2
-          )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-footer bg-info text-white" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c(
+                "div",
+                { staticClass: "col-md-3" },
+                [
+                  _c("h6", { staticClass: "card-subtitle mb-2" }, [
+                    _vm._v("Background:")
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.feedback.background, function(msg) {
+                    return _c("span", [
+                      _c("i", {
+                        staticClass: "fa fa-anchor",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(" - "),
+                      _c("small", [_vm._v(_vm._s(msg.message))])
+                    ])
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _vm._m(3),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-md-3" },
+                [
+                  _c("h6", { staticClass: "card-subtitle mb-2" }, [
+                    _vm._v("Vocab:")
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.feedback.vocab, function(msg) {
+                    return _c("span", [
+                      _c("i", {
+                        staticClass: "fa fa-exclamation-circle",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(" - "),
+                      _c("small", [_vm._v(_vm._s(msg.message))])
+                    ])
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _vm._m(4)
+            ])
+          ])
         ])
       ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _vm.errors && _vm.errors.length
-        ? _c(
-            "div",
-            {
-              staticClass: "col-md-12 alert alert-danger",
-              attrs: { role: "alert" }
-            },
-            [
-              _c(
-                "ul",
-                _vm._l(_vm.errors, function(error) {
-                  return _c("li", [_vm._v(_vm._s(error.message))])
-                })
-              )
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("span", {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.tapCalls.vocab,
-            expression: "tapCalls.vocab"
-          }
-        ],
-        staticClass: "fa fa-spinner fa-spin"
-      }),
-      _vm._v(" "),
-      _vm._m(1),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-md-8" },
-        [
-          _c("span", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.tapCalls.athanor,
-                expression: "tapCalls.athanor"
-              }
-            ],
-            staticClass: "fa fa-spinner fa-spin"
-          }),
-          _vm._v(" "),
-          _vm._l(_vm.tap, function(feed, idx) {
-            return _c("span", [
-              _vm._v("\n                ["),
-              _c(
-                "span",
-                {
-                  staticClass: "badge bg-default",
-                  attrs: {
-                    "data-toggle": "tooltip",
-                    "data-placement": "left",
-                    title: feed.tags
-                  }
-                },
-                [
-                  _c("i", {
-                    staticClass: "fa fa-comments",
-                    attrs: { "aria-hidden": "true" }
-                  })
-                ]
-              ),
-              _vm._v("]\n                "),
-              !_vm.feedback.metrics
-                ? _c("span", [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(feed.str) +
-                        "\n                "
-                    )
-                  ])
-                : _c("span", [
-                    _vm.feedback.metrics[idx].message !== ""
-                      ? _c("span", [
-                          _c("i", {
-                            staticClass: "fa fa-exclamation-triangle",
-                            attrs: { "aria-hidden": "true" }
-                          }),
-                          _vm._v(
-                            " " + _vm._s(feed.str) + "\n                    "
-                          )
-                        ])
-                      : _c("span", [
-                          _vm._v(
-                            "\n                        " +
-                              _vm._s(feed.str) +
-                              "\n                    "
-                          )
-                        ])
-                  ])
-            ])
-          })
-        ],
-        2
-      )
     ])
   ])
 }
@@ -78315,6 +78304,55 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-md-12" }, [
       _c("h4", [_vm._v("TAP Raw output:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _vm._v("\n                            Feedback "),
+        _c("hr")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-3" }, [
+      _c("h6", { staticClass: "card-subtitle mb-2" }, [_vm._v("Metrics:")]),
+      _vm._v(" "),
+      _c("i", {
+        staticClass: "fa fa-exclamation-triangle",
+        attrs: { "aria-hidden": "true" }
+      }),
+      _vm._v(" "),
+      _c("small", [
+        _vm._v(
+          "- Sentence is too long and may disengage reader. Break into smaller sentences."
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-3" }, [
+      _c("h6", { staticClass: "card-subtitle mb-2" }, [
+        _vm._v("Rhetorical Moves:")
+      ]),
+      _vm._v(" "),
+      _c("i", {
+        staticClass: "fa fa-comments",
+        attrs: { "aria-hidden": "true" }
+      }),
+      _vm._v(" "),
+      _c("small", [
+        _vm._v("- Athanor raw feedback, hover over the icon to see the tags")
+      ])
     ])
   }
 ]

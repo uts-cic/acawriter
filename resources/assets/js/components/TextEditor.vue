@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card card-outline-info">
                     <div class="card-header">
                         <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
                             Status
@@ -29,89 +29,75 @@
         </div>
         </div>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Text Analyser
-                        <button type="button" class="btn btn-outline-primary pull-right" v-on:click="fetchAnalysis()">Get Feedback</button>
-                        <button type="button" class="btn btn-outline-primary pull-right" v-on:click="fetchFeedback()">Get Custom</button>
+                    <div class="card-header bg-info text-white">Text Analyser
+                        <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchAnalysis()">Get Feedback</button>
+                        <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchFeedback()">Get Custom</button>
 
                     </div>
                     <div class="card-body">
-                        <div id="editor">
-                           <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
-                            <vue-editor v-model="editorContent"></vue-editor>
-                            <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="editor">
+                               <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
+                                    <vue-editor v-model="editorContent"></vue-editor>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                                    <ul>
+                                        <li v-for="error in errors">{{error.message}}</li>
+                                    </ul>
+                                </div>
+                                <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
+                                <div class="col-md-12"><h4>TAP Raw output:</h4></div>
+                                <div class="col-md-12 wrapper">
+                                    <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
+                                    <span v-for="(feed,idx) in tap">
+                                        [<span class="badge bg-default" data-toggle="tooltip" data-placement="left" v-bind:title="feed.tags"><i class="fa fa-comments" aria-hidden="true"></i></span>]
+                                        <span v-if="!feedback.metrics">
+                                            {{feed.str}}
+                                        </span>
+                                        <span v-else>
+                                            <span v-if="feedback.metrics[idx].message!==''" class="text-danger">
+                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <mark>{{feed.str}}</mark>
+                                            </span>
+                                            <span v-else>
+                                                {{feed.str}}
+                                            </span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-info text-white">
+                        <div class="row">
+                            <div class="col-md-12">
+                                Feedback <hr />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><h6 class="card-subtitle mb-2">Background:</h6>
+                                <span v-for="msg in feedback.background"><i class="fa fa-anchor" aria-hidden="true"></i> - <small>{{msg.message}}</small></span>
+                            </div>
+                            <div class="col-md-3"><h6 class="card-subtitle mb-2">Metrics:</h6>
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                <small>- Sentence is too long and may disengage reader. Break into smaller sentences.</small>
+                            </div>
+                            <div class="col-md-3"><h6 class="card-subtitle mb-2">Vocab:</h6>
+                                <span v-for="msg in feedback.vocab"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> - <small>{{msg.message}}</small></span>
+                            </div>
+                            <div class="col-md-3"><h6 class="card-subtitle mb-2">Rhetorical Moves:</h6>
+                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                <small>- Athanor raw feedback, hover over the icon to see the tags</small></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <!-- <div class="card">
-                    <div class="card-header">Load Feedback</div>
-                    <div class="card-body">
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">Features</div>
-                    <div class="card-body">
-                        <ul>
-                            <li class="list-item-group">Vocabulary: <span class="badge badge-info">{{vocab}} </span></li>
-                            <li class="list-item-group">Athanor</li>
-                        </ul>
-                    </div>
-                </div> -->
-                <div class="card text-white bg-info">
-                    <div class="card-header">Feedback</div>
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2">Background:</h6>
-                        <span v-for="msg in feedback.background"><small>{{msg.message}}</small></span>
-                        <hr />
-                        <h6 class="card-subtitle mb-2">Metrics:</h6>
-                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                        <small>- Sentence is too long and may disengage reader. Break into smaller sentences.</small>
-                        <!-- <span v-for="d in feedback.metrics">
-                            <span v-if="d.message!==''" ><small>{{d.message}}</small></span>
-                        </span> -->
-                        <hr />
-                        <h6 class="card-subtitle mb-2">Rhetorical Moves:</h6>
-                        <i class="fa fa-comments" aria-hidden="true"></i>
-                        <small>- Athanor raw feedback, hover over the icon to see the tags</small>
-
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="row">
-            <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
-                <ul>
-                    <li v-for="error in errors">{{error.message}}</li>
-                </ul>
-            </div>
-            <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-            <div class="col-md-12"><h4>TAP Raw output:</h4></div>
-            <div class="col-md-8">
-                <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
-                <span v-for="(feed,idx) in tap">
-                    [<span class="badge bg-default" data-toggle="tooltip" data-placement="left" v-bind:title="feed.tags"><i class="fa fa-comments" aria-hidden="true"></i></span>]
-                    <span v-if="!feedback.metrics">
-                        {{feed.str}}
-                    </span>
-                    <span v-else>
-                        <span v-if="feedback.metrics[idx].message!==''">
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{feed.str}}
-                        </span>
-                        <span v-else>
-                            {{feed.str}}
-                        </span>
-                    </span>
 
-
-                </span>
-
-
-            </div>
-        </div>
     </div>
 
 </template>
@@ -186,6 +172,9 @@
                    this.editLog.push(this.editorContent);
                    this.$data.counter = 0;
                }
+           },
+           tap: function() {
+               console.log(this.tap);
            }
         },
        methods: {
