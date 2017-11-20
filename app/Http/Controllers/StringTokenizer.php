@@ -231,8 +231,6 @@ class StringTokenizer extends Controller
     }
 
 
-
-
     protected function analyseVocab(Request $request) {
         $apiResponse = new \StdClass();
         $collection = collect($request['txt']);
@@ -377,6 +375,31 @@ class StringTokenizer extends Controller
             $apiResponse = $this->gResponse->errors();
         } else {
             $apiResponse = $this->gResponse->metrics->analytics;
+        }
+        return $apiResponse;
+    }
+
+
+    /*
+     * Used to retrive sentence level metrics
+     * input: string single sentence
+     */
+
+
+    public function vocab($string) {
+
+        $apiResponse = new \StdClass();
+        $variables = new \stdClass();
+        $variables->input = strip_tags($string);
+        $apiResponse = new \stdClass();
+
+        //get  metrics
+        $this->gResponse = $this->client->response($this->queryTwo, $variables);
+
+        if ($this->gResponse->hasErrors()) {
+            $apiResponse = $this->gResponse->errors();
+        } else {
+            $apiResponse = $this->gResponse->vocabulary->analytics;
         }
         return $apiResponse;
     }

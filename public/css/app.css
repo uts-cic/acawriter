@@ -12772,3 +12772,13 @@ a.text-dark:hover {
   clip: auto;
 }
 
+.wrapper {
+  max-height: 40rem;
+  overflow-y: scroll;
+}
+
+.ql-container {
+  max-height: 40rem;
+  overflow-y: scroll;
+}
+
