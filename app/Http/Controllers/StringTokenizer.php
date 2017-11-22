@@ -35,7 +35,7 @@ class StringTokenizer extends Controller
                 }";
 
     protected $queryOne = "query RhetoricalMoves(\$input: String!) {
-                          moves(text:\$input,grammar:\"analytic\") {
+                          moves(text:\$input,grammar:\"reflective\") {
                             analytics
                             message
                             timestamp

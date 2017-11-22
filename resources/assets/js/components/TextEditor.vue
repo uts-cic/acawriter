@@ -146,7 +146,8 @@
                splitText:[],
                quickTags:'',
                feedback:[],
-               feedbackOpt:'feedback'
+               feedbackOpt:'feedback',
+               grammar:'reflective'
            }
        },
       /* apollo:{
@@ -181,7 +182,7 @@
            fetchAnalysis() {
                this.$data.tapCalls.athanor =true;
                this.$data.counter = 0;
-               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor'})
+               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.grammar})
                    .then(response => {
                        this.$data.tap = response.data.athanor;
                        this.$data.tapCalls.athanor=false;

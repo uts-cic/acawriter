@@ -40,7 +40,7 @@
                 <div class="card-body">
                     <a href="/admin/users" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>  Manage Users</a>
                     <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-cog"></i>  Manage Features</a>
-                    <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-clone"></i>  Manage Assignments</a>
+                    <a href="/assignment" class="list-group-item list-group-item-action"><i class="fa fa-clone"></i>  Manage Assignments</a>
                 </div>
             </div>
         </div>
