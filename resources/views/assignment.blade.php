@@ -11,11 +11,32 @@
                         <form class="form" method="POST" action="/assignment">
                             {{ csrf_field() }}
                             <div class="row">
-                                <div class="form-group col-md-10">
-                                    <label for="staticEmail2" class="sr-only">Assignment</label>
+                                <div class="form-group col-md-4">
+                                    <label for="assignment-name">Name</label>
                                     <input type="text"  class="form-control" id="assignment-name" name="name" placeholder="assignment name"/>
                                 </div>
                                 <div class="col-md-2">
+                                    <label for="feedbackOpt">Feedback</label>
+                                    <select class="form-control" id="feedbackOpt" v-model="feedbackOpt">
+                                        <option value="">--Select--</option>
+                                        <option value="feedback">Default</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="feedbackOpt">Grammar</label>
+                                    <select class="form-control" id="grammar" v-model="grammar">
+                                        <option value="">--Select--</option>
+                                        <option value="reflective">Reflective</option>
+                                        <option value="analytics">Analytics</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="keywords">Keywords(comma separated)</label>
+                                    <input class="form-control" id="keywords" v-model="keywords" placeholder="server, place"/>
+                                </div>
+                                <div class="col-md-2"> <br />
                                     <button type="submit" class="btn btn-primary">Add</button>
                                 </div>
                             </div>

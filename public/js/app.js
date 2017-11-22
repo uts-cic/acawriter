@@ -77801,7 +77801,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             splitText: [],
             quickTags: '',
             feedback: [],
-            feedbackOpt: 'feedback'
+            feedbackOpt: 'feedback',
+            grammar: 'reflective'
         };
     },
 
@@ -77840,7 +77841,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$data.tapCalls.athanor = true;
             this.$data.counter = 0;
-            axios.post('/processor', { 'txt': this.editorContent, 'action': 'athanor' }).then(function (response) {
+            axios.post('/processor', { 'txt': this.editorContent, 'action': 'athanor', 'grammar': this.grammar }).then(function (response) {
                 _this.$data.tap = response.data.athanor;
                 _this.$data.tapCalls.athanor = false;
             }).catch(function (e) {

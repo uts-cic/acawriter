@@ -103,12 +103,13 @@ class FeedbackController extends Controller
                     $tempo++;
                 }
             }
-
-            if ($tempo == 0 && $key == $this->para - 1) {
-                $setFeed->message = $rule['message'];
-                $result[] = $setFeed;
-            }
         }
+
+        if ($tempo == 0 && $key == $this->para - 1) {
+            $setFeed->message = $rule['message'];
+            $result[] = $setFeed;
+        }
+
         return $result;
 
 
