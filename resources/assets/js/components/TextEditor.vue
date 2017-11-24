@@ -1,12 +1,12 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="card card-outline-info">
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
                     <div class="card-header">
-                        <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
                             Status
-                        </button>&nbsp;<button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
+                        </button>&nbsp;<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
                         Feedback
                         </button>
                     </div>
@@ -19,10 +19,22 @@
                     </div>
                     <div class="collapse" id="b">
                     <div class="card card-body">
-                        <label for="feedbackOpt">Feedback Options</label>
-                        <select class="form-control" id="feedbackOpt" v-model="feedbackOpt">
-                            <option value="feedback">Default</option>
-                        </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="feedbackOpt">Feedback Options</label>
+                                <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
+                                    <option value="feedback">Default</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="feedbackOpt">Grammar</label>
+                                <select class="form-control" id="feedbackOpt" v-model="attributes.grammar">
+                                    <option value="">Select</option>
+                                    <option value="reflective">Reflective</option>
+                                    <option value="analytic">Analytic</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,7 +43,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-info text-white">Text Analyser
+                    <div class="card-header bg-default">Text Analyser
                         <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchAnalysis()">Get Feedback</button>
                         <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchFeedback()">Get Custom</button>
 
@@ -54,32 +66,41 @@
                                 <div class="col-md-12"><h4>TAP Raw output:</h4></div>
                                 <div class="col-md-12 wrapper">
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
-                                    <span v-for="(feed,idx) in tap">
-                                        [<span class="badge bg-default" data-toggle="tooltip" data-placement="left" v-bind:title="feed.tags"><i class="fa fa-comments" aria-hidden="true"></i></span>]
-                                        <span v-if="!feedback.metrics">
-                                            {{feed.str}}
+                                    <span v-for="(feed,idx) in feedback.final">
+                                        <span v-for="(expression, exp) in feed.expression.message">
+                                            <span v-bind:class="exp"></span>&nbsp;
                                         </span>
-                                        <span v-else>
-                                            <span v-if="feedback.metrics[idx].message!==''" class="text-danger">
-                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <mark>{{feed.str}}</mark>
-                                            </span>
-                                            <span v-else>
-                                                {{feed.str}}
-                                            </span>
+                                        <span v-if="feedback.metrics.message!==''">
+                                           <span class="wordcount"></span>
                                         </span>
+                                        <span v-for="(rmoves, mv) in feed.moves.message">
+                                            <span v-bind:class="mv"></span>
+                                        </span>
+                                        {{feed.str}}
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-info text-white">
+                    <div class="card-footer">
                         <div class="row">
                             <div class="col-md-12">
                                 Feedback <hr />
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3"><h6 class="card-subtitle mb-2">Background:</h6>
+                            <div class="col-md-3" v-for="rule in feedback.rules">
+                                <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
+                                <span v-for="msg in rule.message">
+                                    <span v-for="(m,id) in msg">
+                                        <span v-bind:class="id"></span> - <small>{{m}}</small><br />
+                                    </span>
+                                </span>
+                            </div>
+
+
+
+                           <!-- <div class="col-md-3"><h6 class="card-subtitle mb-2">Background:</h6>
                                 <span v-for="msg in feedback.background"><i class="fa fa-anchor" aria-hidden="true"></i> - <small>{{msg.message}}</small></span>
                             </div>
                             <div class="col-md-3"><h6 class="card-subtitle mb-2">Metrics:</h6>
@@ -91,7 +112,8 @@
                             </div>
                             <div class="col-md-3"><h6 class="card-subtitle mb-2">Rhetorical Moves:</h6>
                                 <i class="fa fa-comments" aria-hidden="true"></i>
-                                <small>- Athanor raw feedback, hover over the icon to see the tags</small></div>
+                                <small>- Athanor raw feedback, hover over the icon to see the tags</small>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -146,8 +168,12 @@
                splitText:[],
                quickTags:'',
                feedback:[],
-               feedbackOpt:'feedback',
-               grammar:'reflective'
+               attributes:{
+                   feedbackOpt:'feedback',
+                   grammar:'reflective'
+               },
+
+
            }
        },
       /* apollo:{
@@ -286,8 +312,9 @@
                    });
            },
            fetchFeedback() {
+               this.errors=[];
                if(this.feedbackOpt!=='') {
-                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'feedbackOpt': this.feedbackOpt})
+                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
                        .then(response => {
                            this.feedback = response.data;
                        })

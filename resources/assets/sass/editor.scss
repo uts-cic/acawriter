@@ -1,10 +1,75 @@
 .wrapper {
-  max-height:40rem;
+  max-height:30rem;
   overflow-y: scroll;
 }
 
 
 .ql-container {
-  max-height:40rem;
+  max-height:30rem;
   overflow-y: scroll;
+}
+
+.affect, .epistemic, .modal, .context, .challenge .wordcount .link2me {
+  position:relative;
+  margin-right:15px;
+}
+
+.affect:before {
+  content: "\f02e";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  font-family: FontAwesome;
+  left:-5px;
+  position:absolute;
+  top:0;
+  color:deeppink;
+}
+
+.epistemic:before {
+  content: "\f13d";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  font-family: FontAwesome;
+  left:-5px;
+  position:absolute;
+  top:0;
+  color:darkgreen;
+}
+
+.modal:before {
+  content: "\f05b";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  font-family: FontAwesome;
+  left:-5px;
+  position:absolute;
+  top:0;
+}
+
+.link2me:before {
+  content: "\f2b0";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  font-family: FontAwesome;
+  left:-5px;
+  position:absolute;
+  top:0;
+  color:darkblue;
+}
+
+.challenge:before {
+  content: "\f2da";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  font-family: FontAwesome;
+  left:-5px;
+  position:absolute;
+  top:0;
+  color:orangered;
+}
+
+.context:before {
+   content: "\f08e";  /* this is your text. You can also use UTF-8 character codes as I do here */
+   font-family: FontAwesome;
+   left:-5px;
+   position:absolute;
+   top:0;
+ }
+
+.wordcount:before {
+  content: "\f071";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  font-family: FontAwesome;
+  left:-5px;
+  position:absolute;
+  top:0;
 }
