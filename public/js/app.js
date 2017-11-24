@@ -77759,6 +77759,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /**
  commented out - license needed
@@ -77801,8 +77823,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             splitText: [],
             quickTags: '',
             feedback: [],
-            feedbackOpt: 'feedback',
-            grammar: 'reflective'
+            attributes: {
+                feedbackOpt: 'feedback',
+                grammar: 'reflective'
+            }
+
         };
     },
 
@@ -77942,8 +77967,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchFeedback: function fetchFeedback() {
             var _this5 = this;
 
+            this.errors = [];
             if (this.feedbackOpt !== '') {
-                axios.post('/feedback', { 'tap': this.tap, 'action': 'fetch', 'feedbackOpt': this.feedbackOpt }).then(function (response) {
+                axios.post('/feedback', { 'tap': this.tap, 'action': 'fetch', 'extra': this.attributes }).then(function (response) {
                     _this5.feedback = response.data;
                 }).catch(function (e) {
                     _this5.$data.errors.push(e);
@@ -77971,8 +77997,8 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card card-outline-info" }, [
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("div", { staticClass: "card bg-info text-white" }, [
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "card-body collapse", attrs: { id: "a" } }, [
@@ -77999,45 +78025,107 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "collapse", attrs: { id: "b" } }, [
             _c("div", { staticClass: "card card-body" }, [
-              _c("label", { attrs: { for: "feedbackOpt" } }, [
-                _vm._v("Feedback Options")
-              ]),
-              _vm._v(" "),
-              _c(
-                "select",
-                {
-                  directives: [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c("label", { attrs: { for: "feedbackOpt" } }, [
+                    _vm._v("Feedback Options")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
                     {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.feedbackOpt,
-                      expression: "feedbackOpt"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { id: "feedbackOpt" },
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.feedbackOpt = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    }
-                  }
-                },
-                [
-                  _c("option", { attrs: { value: "feedback" } }, [
-                    _vm._v("Default")
-                  ])
-                ]
-              )
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.attributes.feedbackOpt,
+                          expression: "attributes.feedbackOpt"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "feedbackOpt" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.attributes,
+                            "feedbackOpt",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "feedback" } }, [
+                        _vm._v("Default")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c("label", { attrs: { for: "feedbackOpt" } }, [
+                    _vm._v("Grammar")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.attributes.grammar,
+                          expression: "attributes.grammar"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "feedbackOpt" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.attributes,
+                            "grammar",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "" } }, [
+                        _vm._v("Select")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "reflective" } }, [
+                        _vm._v("Reflective")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "analytic" } }, [
+                        _vm._v("Analytic")
+                      ])
+                    ]
+                  )
+                ])
+              ])
             ])
           ])
         ])
@@ -78047,7 +78135,7 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header bg-info text-white" }, [
+          _c("div", { staticClass: "card-header bg-default" }, [
             _vm._v("Text Analyser\n                    "),
             _c(
               "button",
@@ -78148,54 +78236,37 @@ var render = function() {
                       staticClass: "fa fa-spinner fa-spin"
                     }),
                     _vm._v(" "),
-                    _vm._l(_vm.tap, function(feed, idx) {
-                      return _c("span", [
-                        _vm._v("\n                                    ["),
-                        _c(
-                          "span",
-                          {
-                            staticClass: "badge bg-default",
-                            attrs: {
-                              "data-toggle": "tooltip",
-                              "data-placement": "left",
-                              title: feed.tags
-                            }
-                          },
-                          [
-                            _c("i", {
-                              staticClass: "fa fa-comments",
-                              attrs: { "aria-hidden": "true" }
-                            })
-                          ]
-                        ),
-                        _vm._v("]\n                                    "),
-                        !_vm.feedback.metrics
-                          ? _c("span", [
-                              _vm._v(
-                                "\n                                        " +
-                                  _vm._s(feed.str) +
-                                  "\n                                    "
-                              )
+                    _vm._l(_vm.feedback.final, function(feed, idx) {
+                      return _c(
+                        "span",
+                        [
+                          _vm._l(feed.expression.message, function(
+                            expression,
+                            exp
+                          ) {
+                            return _c("span", [
+                              _c("span", { class: exp }),
+                              _vm._v(" \n                                    ")
                             ])
-                          : _c("span", [
-                              _vm.feedback.metrics[idx].message !== ""
-                                ? _c("span", { staticClass: "text-danger" }, [
-                                    _c("i", {
-                                      staticClass: "fa fa-exclamation-triangle",
-                                      attrs: { "aria-hidden": "true" }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("mark", [_vm._v(_vm._s(feed.str))])
-                                  ])
-                                : _c("span", [
-                                    _vm._v(
-                                      "\n                                            " +
-                                        _vm._s(feed.str) +
-                                        "\n                                        "
-                                    )
-                                  ])
-                            ])
-                      ])
+                          }),
+                          _vm._v(" "),
+                          _vm.feedback.metrics.message !== ""
+                            ? _c("span", [
+                                _c("span", { staticClass: "wordcount" })
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm._l(feed.moves.message, function(rmoves, mv) {
+                            return _c("span", [_c("span", { class: mv })])
+                          }),
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(feed.str) +
+                              "\n                                "
+                          )
+                        ],
+                        2
+                      )
                     })
                   ],
                   2
@@ -78204,58 +78275,39 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-footer bg-info text-white" }, [
+          _c("div", { staticClass: "card-footer" }, [
             _vm._m(2),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c(
-                "div",
-                { staticClass: "col-md-3" },
-                [
-                  _c("h6", { staticClass: "card-subtitle mb-2" }, [
-                    _vm._v("Background:")
-                  ]),
-                  _vm._v(" "),
-                  _vm._l(_vm.feedback.background, function(msg) {
-                    return _c("span", [
-                      _c("i", {
-                        staticClass: "fa fa-anchor",
-                        attrs: { "aria-hidden": "true" }
-                      }),
-                      _vm._v(" - "),
-                      _c("small", [_vm._v(_vm._s(msg.message))])
-                    ])
-                  })
-                ],
-                2
-              ),
-              _vm._v(" "),
-              _vm._m(3),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-md-3" },
-                [
-                  _c("h6", { staticClass: "card-subtitle mb-2" }, [
-                    _vm._v("Vocab:")
-                  ]),
-                  _vm._v(" "),
-                  _vm._l(_vm.feedback.vocab, function(msg) {
-                    return _c("span", [
-                      _c("i", {
-                        staticClass: "fa fa-exclamation-circle",
-                        attrs: { "aria-hidden": "true" }
-                      }),
-                      _vm._v(" - "),
-                      _c("small", [_vm._v(_vm._s(msg.message))])
-                    ])
-                  })
-                ],
-                2
-              ),
-              _vm._v(" "),
-              _vm._m(4)
-            ])
+            _c(
+              "div",
+              { staticClass: "row" },
+              _vm._l(_vm.feedback.rules, function(rule) {
+                return _c(
+                  "div",
+                  { staticClass: "col-md-3" },
+                  [
+                    _c("h6", { staticClass: "card-subtitle mb-2" }, [
+                      _vm._v(_vm._s(rule.name))
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(rule.message, function(msg) {
+                      return _c(
+                        "span",
+                        _vm._l(msg, function(m, id) {
+                          return _c("span", [
+                            _c("span", { class: id }),
+                            _vm._v(" - "),
+                            _c("small", [_vm._v(_vm._s(m))]),
+                            _c("br")
+                          ])
+                        })
+                      )
+                    })
+                  ],
+                  2
+                )
+              })
+            )
           ])
         ])
       ])
@@ -78271,7 +78323,7 @@ var staticRenderFns = [
       _c(
         "button",
         {
-          staticClass: "btn btn-secondary btn-sm",
+          staticClass: "btn btn-info btn-sm",
           attrs: {
             type: "button",
             "data-toggle": "collapse",
@@ -78286,7 +78338,7 @@ var staticRenderFns = [
       _c(
         "button",
         {
-          staticClass: "btn btn-secondary btn-sm",
+          staticClass: "btn btn-info btn-sm",
           attrs: {
             type: "button",
             "data-toggle": "collapse",
@@ -78315,44 +78367,6 @@ var staticRenderFns = [
       _c("div", { staticClass: "col-md-12" }, [
         _vm._v("\n                            Feedback "),
         _c("hr")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c("h6", { staticClass: "card-subtitle mb-2" }, [_vm._v("Metrics:")]),
-      _vm._v(" "),
-      _c("i", {
-        staticClass: "fa fa-exclamation-triangle",
-        attrs: { "aria-hidden": "true" }
-      }),
-      _vm._v(" "),
-      _c("small", [
-        _vm._v(
-          "- Sentence is too long and may disengage reader. Break into smaller sentences."
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c("h6", { staticClass: "card-subtitle mb-2" }, [
-        _vm._v("Rhetorical Moves:")
-      ]),
-      _vm._v(" "),
-      _c("i", {
-        staticClass: "fa fa-comments",
-        attrs: { "aria-hidden": "true" }
-      }),
-      _vm._v(" "),
-      _c("small", [
-        _vm._v("- Athanor raw feedback, hover over the icon to see the tags")
       ])
     ])
   }
