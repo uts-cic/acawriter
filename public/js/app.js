@@ -77779,6 +77779,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /**
  commented out - license needed
@@ -78026,52 +78027,6 @@ var render = function() {
               _c("div", { staticClass: "row" }, [
                 _c("div", { staticClass: "col-md-6" }, [
                   _c("label", { attrs: { for: "feedbackOpt" } }, [
-                    _vm._v("Feedback Options")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.attributes.feedbackOpt,
-                          expression: "attributes.feedbackOpt"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { id: "feedbackOpt" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            _vm.attributes,
-                            "feedbackOpt",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "feedback" } }, [
-                        _vm._v("Default")
-                      ])
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-6" }, [
-                  _c("label", { attrs: { for: "feedbackOpt" } }, [
                     _vm._v("Grammar")
                   ]),
                   _vm._v(" "),
@@ -78119,6 +78074,56 @@ var render = function() {
                       _vm._v(" "),
                       _c("option", { attrs: { value: "analytic" } }, [
                         _vm._v("Analytic")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c("label", { attrs: { for: "feedbackOpt" } }, [
+                    _vm._v("Feedback Options")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.attributes.feedbackOpt,
+                          expression: "attributes.feedbackOpt"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "feedbackOpt" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.attributes,
+                            "feedbackOpt",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "feedback" } }, [
+                        _vm._v("Reflective01")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "feedback" } }, [
+                        _vm._v("Analytic01")
                       ])
                     ]
                   )

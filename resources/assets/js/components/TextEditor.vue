@@ -21,17 +21,18 @@
                     <div class="card card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="feedbackOpt">Feedback Options</label>
-                                <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
-                                    <option value="feedback">Default</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
                                 <label for="feedbackOpt">Grammar</label>
                                 <select class="form-control" id="grammar" v-model="attributes.grammar">
                                     <option value="">Select</option>
                                     <option value="reflective">Reflective</option>
                                     <option value="analytic">Analytic</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="feedbackOpt">Feedback Options</label>
+                                <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
+                                    <option value="feedback">Reflective01</option>
+                                    <option value="feedback">Analytic01</option>
                                 </select>
                             </div>
                         </div>
