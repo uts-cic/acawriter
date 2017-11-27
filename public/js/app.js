@@ -77779,8 +77779,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /**
  commented out - license needed
@@ -77857,7 +77855,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         tap: function tap() {
-            console.log(this.tap);
+            this.fetchFeedback();
         }
     },
     methods: {
@@ -78089,7 +78087,7 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control",
-                      attrs: { id: "feedbackOpt" },
+                      attrs: { id: "grammar" },
                       on: {
                         change: function($event) {
                           var $$selectedVal = Array.prototype.filter
@@ -78137,10 +78135,11 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header bg-default" }, [
             _vm._v("Text Analyser\n                    "),
+            _vm._v(" "),
             _c(
               "button",
               {
-                staticClass: "btn btn-info pull-right text-white",
+                staticClass: "btn btn-outline-info btn-sm pull-right",
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
@@ -78149,20 +78148,6 @@ var render = function() {
                 }
               },
               [_vm._v("Get Feedback")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-info pull-right text-white",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.fetchFeedback()
-                  }
-                }
-              },
-              [_vm._v("Get Custom")]
             )
           ]),
           _vm._v(" "),
@@ -78245,19 +78230,20 @@ var render = function() {
                             exp
                           ) {
                             return _c("span", [
-                              _c("span", { class: exp }),
-                              _vm._v(" \n                                    ")
+                              _c("span", { class: exp }, [_vm._v(" ")])
                             ])
                           }),
                           _vm._v(" "),
-                          _vm.feedback.metrics.message !== ""
-                            ? _c("span", [
-                                _c("span", { staticClass: "wordcount" })
-                              ])
-                            : _vm._e(),
+                          feed.metrics.message.length == 0
+                            ? _c("span")
+                            : _c("span", { staticClass: "metrics" }, [
+                                _vm._v(" ")
+                              ]),
                           _vm._v(" "),
                           _vm._l(feed.moves.message, function(rmoves, mv) {
-                            return _c("span", [_c("span", { class: mv })])
+                            return _c("span", [
+                              _c("span", { class: mv }, [_vm._v(" ")])
+                            ])
                           }),
                           _vm._v(
                             "\n                                    " +
@@ -78292,7 +78278,7 @@ var render = function() {
                     _vm._v(" "),
                     _vm._l(rule.message, function(msg) {
                       return _c(
-                        "span",
+                        "div",
                         _vm._l(msg, function(m, id) {
                           return _c("span", [
                             _c("span", { class: id }),
@@ -78356,7 +78342,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-md-12" }, [
-      _c("h4", [_vm._v("TAP Raw output:")])
+      _c("h4", [_vm._v("Feedback")])
     ])
   },
   function() {
