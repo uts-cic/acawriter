@@ -67,11 +67,10 @@
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-for="(expression, exp) in feed.expression.message">
-                                            <span v-bind:class="exp">&nbsp;</span>&nbsp;
+                                            <span v-bind:class="exp">&nbsp;</span>
                                         </span>
-                                        <span v-if="feedback.metrics.message!==''">
-                                           <span class="wordcount">&nbsp;</span>
-                                        </span>
+                                        <span v-if="feed.metrics.message.length==0"></span>
+                                        <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span v-bind:class="mv">&nbsp;</span>
                                         </span>
@@ -200,9 +199,7 @@
                }
            },
            tap: function() {
-               console.log(this.tap);
                this.fetchFeedback();
-
            }
         },
        methods: {

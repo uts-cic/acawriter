@@ -159,7 +159,7 @@ class StringTokenizer extends Controller
 
                     $tags = $this->rethoMoves($txt->original);
 
-                    $responseTxt->raw_tags = $tags;
+                    $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
                     $responseTxt->tags= implode(', ',$tags);
 
                     $results->athanor[]=$responseTxt;

@@ -77779,7 +77779,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /**
  commented out - license needed
@@ -77856,7 +77855,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         tap: function tap() {
-            console.log(this.tap);
             this.fetchFeedback();
         }
     },
@@ -78232,18 +78230,15 @@ var render = function() {
                             exp
                           ) {
                             return _c("span", [
-                              _c("span", { class: exp }, [_vm._v(" ")]),
-                              _vm._v(" \n                                    ")
+                              _c("span", { class: exp }, [_vm._v(" ")])
                             ])
                           }),
                           _vm._v(" "),
-                          _vm.feedback.metrics.message !== ""
-                            ? _c("span", [
-                                _c("span", { staticClass: "wordcount" }, [
-                                  _vm._v(" ")
-                                ])
-                              ])
-                            : _vm._e(),
+                          feed.metrics.message.length == 0
+                            ? _c("span")
+                            : _c("span", { staticClass: "metrics" }, [
+                                _vm._v(" ")
+                              ]),
                           _vm._v(" "),
                           _vm._l(feed.moves.message, function(rmoves, mv) {
                             return _c("span", [

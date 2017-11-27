@@ -9,20 +9,18 @@
   overflow-y: scroll;
 }
 
-.affect, .epistemic, .modal, .context, .challenge .wordcount .link2me {
-  font-family: FontAwesome;
-  padding-right: 6px;
-  vertical-align: middle;
-
+.affect, .epistemic, .vocab , .context, .challenge, .wordcount, .link2me, .metrics{
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .affect:before {
-  content: "\f02e";  /* this is your text. You can also use UTF-8 character codes as I do here */
-  font-family: FontAwesome;
-  left:-5px;
-  position:absolute;
-  top:0;
-  color:deeppink;
+  content: "\f043";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:goldenrod;
 }
 
 .epistemic:before {
@@ -30,7 +28,7 @@
   color:darkgreen;
 }
 
-.modal:before {
+.vocab:before {
   content: "\f05b";  /* this is your text. You can also use UTF-8 character codes as I do here */
 }
 
@@ -46,10 +44,14 @@
 
 .context:before {
    content: "\f086";  /* this is your text. You can also use UTF-8 character codes as I do here */
-   font-family: FontAwesome;
+
  }
 
 .wordcount:before {
-  content: "\f0c8";  /* this is your text. You can also use UTF-8 character codes as I do here */
-  font-family: FontAwesome;
+  content: "\f096";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color: #721c24;
+}
+
+.metrics:before {
+  content: "\f0e7";
 }
