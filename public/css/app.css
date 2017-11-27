@@ -12787,8 +12787,9 @@ a.text-dark:hover {
 .modal,
 .context,
 .challenge .wordcount .link2me {
-  position: relative;
-  margin-right: 15px;
+  font-family: FontAwesome;
+  padding-right: 6px;
+  vertical-align: middle;
 }
 
 .affect:before {
@@ -12804,57 +12805,35 @@ a.text-dark:hover {
 .epistemic:before {
   content: "\F13D";
   /* this is your text. You can also use UTF-8 character codes as I do here */
-  font-family: FontAwesome;
-  left: -5px;
-  position: absolute;
-  top: 0;
   color: darkgreen;
 }
 
 .modal:before {
   content: "\F05B";
   /* this is your text. You can also use UTF-8 character codes as I do here */
-  font-family: FontAwesome;
-  left: -5px;
-  position: absolute;
-  top: 0;
 }
 
 .link2me:before {
-  content: "\F2B0";
+  content: "\F211";
   /* this is your text. You can also use UTF-8 character codes as I do here */
-  font-family: FontAwesome;
-  left: -5px;
-  position: absolute;
-  top: 0;
   color: darkblue;
 }
 
 .challenge:before {
   content: "\F2DA";
   /* this is your text. You can also use UTF-8 character codes as I do here */
-  font-family: FontAwesome;
-  left: -5px;
-  position: absolute;
-  top: 0;
   color: orangered;
 }
 
 .context:before {
-  content: "\F08E";
+  content: "\F086";
   /* this is your text. You can also use UTF-8 character codes as I do here */
   font-family: FontAwesome;
-  left: -5px;
-  position: absolute;
-  top: 0;
 }
 
 .wordcount:before {
-  content: "\F071";
+  content: "\F0C8";
   /* this is your text. You can also use UTF-8 character codes as I do here */
   font-family: FontAwesome;
-  left: -5px;
-  position: absolute;
-  top: 0;
 }
 

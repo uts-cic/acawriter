@@ -28,7 +28,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="feedbackOpt">Grammar</label>
-                                <select class="form-control" id="feedbackOpt" v-model="attributes.grammar">
+                                <select class="form-control" id="grammar" v-model="attributes.grammar">
                                     <option value="">Select</option>
                                     <option value="reflective">Reflective</option>
                                     <option value="analytic">Analytic</option>
@@ -44,9 +44,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-default">Text Analyser
-                        <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchAnalysis()">Get Feedback</button>
-                        <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchFeedback()">Get Custom</button>
-
+                        <!--<button type="button" class="btn btn-outline-info pull-right" v-on:click="fetchFeedback()">Step 2. Get Custom</button>&nbsp;-->
+                        <button type="button" class="btn btn-outline-info btn-sm pull-right" v-on:click="fetchAnalysis()">Get Feedback</button>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -63,18 +62,18 @@
                                     </ul>
                                 </div>
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>TAP Raw output:</h4></div>
+                                <div class="col-md-12"><h4>Feedback</h4></div>
                                 <div class="col-md-12 wrapper">
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-for="(expression, exp) in feed.expression.message">
-                                            <span v-bind:class="exp"></span>&nbsp;
+                                            <span v-bind:class="exp">&nbsp;</span>&nbsp;
                                         </span>
                                         <span v-if="feedback.metrics.message!==''">
-                                           <span class="wordcount"></span>
+                                           <span class="wordcount">&nbsp;</span>
                                         </span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span v-bind:class="mv"></span>
+                                            <span v-bind:class="mv">&nbsp;</span>
                                         </span>
                                         {{feed.str}}
                                     </span>
@@ -91,11 +90,11 @@
                         <div class="row">
                             <div class="col-md-3" v-for="rule in feedback.rules">
                                 <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
-                                <span v-for="msg in rule.message">
+                                <div v-for="msg in rule.message">
                                     <span v-for="(m,id) in msg">
                                         <span v-bind:class="id"></span> - <small>{{m}}</small><br />
                                     </span>
-                                </span>
+                                </div>
                             </div>
 
 
@@ -194,7 +193,7 @@
            editorContent: function (newVal) {
                this.$data.counter++;
                if(this.$data.counter >= 10 ) {
-                    this.tokeniseTextInput();
+                   this.tokeniseTextInput();
                    this.computeText(this.splitText, this.$data.tap);
                    this.editLog.push(this.editorContent);
                    this.$data.counter = 0;
@@ -202,6 +201,8 @@
            },
            tap: function() {
                console.log(this.tap);
+               this.fetchFeedback();
+
            }
         },
        methods: {
@@ -276,7 +277,6 @@
                    newTap.push(temp);
                });
                self.tap = newTap;
-
            },
            quickAnalyse(changedText, idx) {
                this.$data.counter = 0;

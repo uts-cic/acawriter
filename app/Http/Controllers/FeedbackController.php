@@ -125,12 +125,15 @@ class FeedbackController extends Controller
         foreach($tap as $key => $data) {
             $tempStore = new \stdClass();
             $tempStore->str = $data['str'];
-            $tempStore->message = '';
+            $tempStore->message = array();
             $returnData = $this->stringTokeniser->metrics($data['str']);
             if(isset($returnData->sentWordCounts)) {
                 //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
                 if($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
-                    $tempStore->message = $rule['message'];
+                    //$tempStore->message = $rule['message'];
+                    foreach($rule['message'] as $msg) {
+                        if(isset($msg['metrics'])) $tempStore->message['metrics'] = $msg['metrics'];
+                    }
                 }
             }
             $result[] = $tempStore;
@@ -169,7 +172,9 @@ class FeedbackController extends Controller
                 }
 
                 if($termCount > 0 ) {
-                    $tempStore->message = $rule['message'];
+                    foreach($rule['message'] as $msg) {
+                        if(isset($msg['metrics'])) $tempStore->message['metrics'] = $msg['vocab'];
+                    }
                     $result[] = $tempStore;
                 }
             }
