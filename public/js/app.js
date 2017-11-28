@@ -77779,6 +77779,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /**
  commented out - license needed
@@ -77976,7 +78004,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.$data.errors.push({ 'message': 'Please select feedback type' });
             }
         }
+    },
+    computed: {
+        reflective: function reflective() {
+            return this.attributes.feedbackOpt == 'reflective' ? 'display:inline' : '';
+        },
+        analytic: function analytic() {
+            return this.attributes.feedbackOpt == 'analytic' ? 'display:inline' : '';
+        }
     }
+
 });
 
 /***/ }),
@@ -78025,53 +78062,7 @@ var render = function() {
             _c("div", { staticClass: "card card-body" }, [
               _c("div", { staticClass: "row" }, [
                 _c("div", { staticClass: "col-md-6" }, [
-                  _c("label", { attrs: { for: "feedbackOpt" } }, [
-                    _vm._v("Feedback Options")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.attributes.feedbackOpt,
-                          expression: "attributes.feedbackOpt"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { id: "feedbackOpt" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            _vm.attributes,
-                            "feedbackOpt",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "feedback" } }, [
-                        _vm._v("Default")
-                      ])
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-6" }, [
-                  _c("label", { attrs: { for: "feedbackOpt" } }, [
+                  _c("label", { attrs: { for: "grammar" } }, [
                     _vm._v("Grammar")
                   ]),
                   _vm._v(" "),
@@ -78119,6 +78110,56 @@ var render = function() {
                       _vm._v(" "),
                       _c("option", { attrs: { value: "analytic" } }, [
                         _vm._v("Analytic")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c("label", { attrs: { for: "feedbackOpt" } }, [
+                    _vm._v("Feedback Options")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.attributes.feedbackOpt,
+                          expression: "attributes.feedbackOpt"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "feedbackOpt" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.attributes,
+                            "feedbackOpt",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "feedback" } }, [
+                        _vm._v("Reflective01")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "feedback" } }, [
+                        _vm._v("Analytic01")
                       ])
                     ]
                   )
@@ -78172,97 +78213,195 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-md-6" }, [
-                _vm.errors && _vm.errors.length
-                  ? _c(
-                      "div",
-                      {
-                        staticClass: "col-md-12 alert alert-danger",
-                        attrs: { role: "alert" }
-                      },
-                      [
-                        _c(
-                          "ul",
-                          _vm._l(_vm.errors, function(error) {
-                            return _c("li", [_vm._v(_vm._s(error.message))])
-                          })
-                        )
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("span", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.tapCalls.vocab,
-                      expression: "tapCalls.vocab"
-                    }
-                  ],
-                  staticClass: "fa fa-spinner fa-spin"
-                }),
-                _vm._v(" "),
-                _vm._m(1),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "col-md-12 wrapper" },
-                  [
-                    _c("span", {
-                      directives: [
+              _c(
+                "div",
+                {
+                  staticClass: "col-md-6 bg-light",
+                  class:
+                    this.attributes.grammar == "reflective"
+                      ? "activeClass"
+                      : "nonactive"
+                },
+                [
+                  _vm.errors && _vm.errors.length
+                    ? _c(
+                        "div",
                         {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.tapCalls.athanor,
-                          expression: "tapCalls.athanor"
-                        }
-                      ],
-                      staticClass: "fa fa-spinner fa-spin"
-                    }),
-                    _vm._v(" "),
-                    _vm._l(_vm.feedback.final, function(feed, idx) {
-                      return _c(
-                        "span",
+                          staticClass: "col-md-12 alert alert-danger",
+                          attrs: { role: "alert" }
+                        },
                         [
-                          _vm._l(feed.expression.message, function(
-                            expression,
-                            exp
-                          ) {
-                            return _c("span", [
-                              _c("span", { class: exp }, [_vm._v(" ")])
-                            ])
-                          }),
-                          _vm._v(" "),
-                          feed.metrics.message.length == 0
-                            ? _c("span")
-                            : _c("span", { staticClass: "metrics" }, [
-                                _vm._v(" ")
-                              ]),
-                          _vm._v(" "),
-                          _vm._l(feed.moves.message, function(rmoves, mv) {
-                            return _c("span", [
-                              _c("span", { class: mv }, [_vm._v(" ")])
-                            ])
-                          }),
-                          _vm._v(
-                            "\n                                    " +
-                              _vm._s(feed.str) +
-                              "\n                                "
+                          _c(
+                            "ul",
+                            _vm._l(_vm.errors, function(error) {
+                              return _c("li", [_vm._v(_vm._s(error.message))])
+                            })
                           )
-                        ],
-                        2
+                        ]
                       )
-                    })
-                  ],
-                  2
-                )
-              ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("span", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.tapCalls.vocab,
+                        expression: "tapCalls.vocab"
+                      }
+                    ],
+                    staticClass: "fa fa-spinner fa-spin"
+                  }),
+                  _vm._v(" "),
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-md-12 wrapper" },
+                    [
+                      _c("span", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.tapCalls.athanor,
+                            expression: "tapCalls.athanor"
+                          }
+                        ],
+                        staticClass: "fa fa-spinner fa-spin"
+                      }),
+                      _vm._v(" "),
+                      _vm._l(_vm.feedback.final, function(feed, idx) {
+                        return _c(
+                          "span",
+                          [
+                            _vm._l(feed.expression.message, function(
+                              expression,
+                              exp
+                            ) {
+                              return _c("span", [
+                                _c("span", { class: exp }, [_vm._v(" ")])
+                              ])
+                            }),
+                            _vm._v(" "),
+                            feed.metrics.message.length == 0
+                              ? _c("span")
+                              : _c("span", { staticClass: "metrics" }, [
+                                  _vm._v(" ")
+                                ]),
+                            _vm._v(" "),
+                            _vm._l(feed.moves.message, function(rmoves, mv) {
+                              return _c("span", [
+                                _c("span", { class: mv }, [_vm._v(" ")])
+                              ])
+                            }),
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(feed.str) +
+                                "\n                                "
+                            )
+                          ],
+                          2
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "col-md-6 bg-light",
+                  class:
+                    this.attributes.grammar == "analytic"
+                      ? "activeClass"
+                      : "nonactive"
+                },
+                [
+                  _vm.errors && _vm.errors.length
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "col-md-12 alert alert-danger",
+                          attrs: { role: "alert" }
+                        },
+                        [
+                          _c(
+                            "ul",
+                            _vm._l(_vm.errors, function(error) {
+                              return _c("li", [_vm._v(_vm._s(error.message))])
+                            })
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("span", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.tapCalls.vocab,
+                        expression: "tapCalls.vocab"
+                      }
+                    ],
+                    staticClass: "fa fa-spinner fa-spin"
+                  }),
+                  _vm._v(" "),
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-md-12 wrapper" },
+                    [
+                      _c("span", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.tapCalls.athanor,
+                            expression: "tapCalls.athanor"
+                          }
+                        ],
+                        staticClass: "fa fa-spinner fa-spin"
+                      }),
+                      _vm._v(" "),
+                      _vm._l(_vm.feedback.final, function(feed, idx) {
+                        return _c(
+                          "span",
+                          [
+                            feed.metrics.message.length == 0
+                              ? _c("span")
+                              : _c("span", { staticClass: "metrics" }, [
+                                  _vm._v(" ")
+                                ]),
+                            _vm._v(" "),
+                            _vm._l(feed.moves.message, function(rmoves, mv) {
+                              return _c("span", [
+                                _c("span", { class: mv }, [_vm._v(" ")])
+                              ])
+                            }),
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(feed.str) +
+                                "\n                                "
+                            )
+                          ],
+                          2
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ]
+              )
             ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-footer" }, [
-            _vm._m(2),
+            _vm._m(3),
             _vm._v(" "),
             _c(
               "div",
@@ -78335,6 +78474,14 @@ var staticRenderFns = [
         },
         [_vm._v("\n                    Feedback\n                    ")]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-12" }, [
+      _c("h4", [_vm._v("Feedback")])
     ])
   },
   function() {

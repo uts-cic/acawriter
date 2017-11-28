@@ -12842,3 +12842,11 @@ a.text-dark:hover {
   content: "\F0E7";
 }
 
+.activeClass {
+  display: inline;
+}
+
+.nonactive {
+  display: none;
+}
+

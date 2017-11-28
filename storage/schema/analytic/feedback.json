@@ -6,7 +6,9 @@
           "paragraph": "3",
           "tag":"temporality"
         },
-        "message": "Background information missing in first paragraph",
+        "message": [
+          {"background" : "Background information missing in first paragraph"}
+        ],
         "css": "temporality"
       },
       {
@@ -18,16 +20,42 @@
             "force"
           ]
         },
-        "message": "One or more keywords missing",
+        "message": [
+          {"vocab" :"One or more keywords missing"}
+        ],
         "css": "vocab"
       },
       {
         "name": "metrics",
         "check": {
-          "sentenceWordCount": "25"
+          "sentenceWordCount": "35"
         },
-        "message": "Sentence too long, might disengage the reader. Try breaking it into smaller sentences",
+        "message": [
+          {"metrics" :"Sentence too long, might disengage the reader. Try breaking it into smaller sentences"}
+        ],
         "css": "metrics"
+      },
+      {
+        "name": "moves",
+        "check": {
+          "tags": [
+            "attitude",
+            "emph",
+            "vis",
+            "contribution",
+            "novstat",
+            "contrast"
+          ]
+        },
+        "message": [
+          {"attitude" : "position"},
+          {"emph" : "emphasis"},
+          {"vis" : "trend"},
+          {"contribution" : "summary"},
+          {"novstat" : "novelty"},
+          {"contrast" : "contrast"}
+        ],
+        "css": ["attitude","emph","vis", "contribution","novstat", "contrast"]
       }
     ]
 }

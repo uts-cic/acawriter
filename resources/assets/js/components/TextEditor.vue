@@ -21,17 +21,18 @@
                     <div class="card card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="feedbackOpt">Feedback Options</label>
-                                <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
-                                    <option value="feedback">Default</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="feedbackOpt">Grammar</label>
+                                <label for="grammar">Grammar</label>
                                 <select class="form-control" id="grammar" v-model="attributes.grammar">
                                     <option value="">Select</option>
                                     <option value="reflective">Reflective</option>
                                     <option value="analytic">Analytic</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="feedbackOpt">Feedback Options</label>
+                                <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
+                                    <option value="feedback">Reflective01</option>
+                                    <option value="feedback">Analytic01</option>
                                 </select>
                             </div>
                         </div>
@@ -55,7 +56,8 @@
                                     <vue-editor v-model="editorContent"></vue-editor>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!--- Reflective feedback --->
+                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'">
                                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                                     <ul>
                                         <li v-for="error in errors">{{error.message}}</li>
@@ -78,6 +80,32 @@
                                     </span>
                                 </div>
                             </div>
+                            <!-- end of reflective -->
+
+
+                            <!--- Analytic feedback --->
+                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'">
+                                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                                    <ul>
+                                        <li v-for="error in errors">{{error.message}}</li>
+                                    </ul>
+                                </div>
+                                <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
+                                <div class="col-md-12"><h4>Feedback</h4></div>
+                                <div class="col-md-12 wrapper">
+                                    <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
+                                    <span v-for="(feed,idx) in feedback.final">
+                                        <span v-if="feed.metrics.message.length==0"></span>
+                                        <span v-else class="metrics">&nbsp;</span>
+                                        <span v-for="(rmoves, mv) in feed.moves.message">
+                                            <span v-bind:class="mv">&nbsp;</span>
+                                        </span>
+                                        {{feed.str}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- end of reflective -->
+
                         </div>
                     </div>
                     <div class="card-footer">
@@ -169,8 +197,7 @@
                attributes:{
                    feedbackOpt:'feedback',
                    grammar:'reflective'
-               },
-
+               }
 
            }
        },
@@ -322,6 +349,15 @@
                    this.$data.errors.push({'message':'Please select feedback type'});
                }
            }
+       },
+       computed: {
+           reflective: function() {
+              return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
+           },
+           analytic: function() {
+               return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
+           },
        }
+
    }
 </script>
