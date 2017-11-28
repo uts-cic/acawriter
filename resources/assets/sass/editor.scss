@@ -55,3 +55,10 @@
 .metrics:before {
   content: "\f0e7";
 }
+
+.activeClass{
+  display: inline;
+}
+.nonactive {
+  display:none;
+}

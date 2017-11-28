@@ -55,7 +55,7 @@
           {"novstat" : "novelty"},
           {"contrast" : "contrast"}
         ],
-        "css": ["context","challenge","link2me"]
+        "css": ["attitude","emph","vis", "contribution","novstat", "contrast"]
       }
     ]
 }
