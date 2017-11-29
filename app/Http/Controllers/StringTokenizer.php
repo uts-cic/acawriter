@@ -35,7 +35,7 @@ class StringTokenizer extends Controller
                 }";
 
     protected $queryOne = "query RhetoricalMoves(\$input: String!) {
-                          moves(text:\$input,grammar:\"analytic\") {
+                          moves(text:\$input,grammar:\"reflective\") {
                             analytics
                             message
                             timestamp
@@ -102,6 +102,25 @@ class StringTokenizer extends Controller
                                   }
                                 }";
 
+    protected $queryExpressions= "query Expressions(\$input: String!) {
+                                    expressions(text:\$input) {
+                                        analytics {
+                                            sentIdx
+                                            affect {
+                                                text
+                                            }
+                                            epistemic {
+                                                text
+                                                startIdx
+                                                endIdx
+                                            }
+                                            modal {
+                                                text
+                                            }
+                                        }
+                                    }                                
+                                }";
+
     //
     public function __construct()
     {
@@ -140,7 +159,7 @@ class StringTokenizer extends Controller
 
                     $tags = $this->rethoMoves($txt->original);
 
-                    $responseTxt->raw_tags = $tags;
+                    $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
                     $responseTxt->tags= implode(', ',$tags);
 
                     $results->athanor[]=$responseTxt;
@@ -391,7 +410,7 @@ class StringTokenizer extends Controller
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
         $variables->input = strip_tags($string);
-        $apiResponse = new \stdClass();
+
 
         //get  metrics
         $this->gResponse = $this->client->response($this->queryTwo, $variables);
@@ -404,6 +423,33 @@ class StringTokenizer extends Controller
         return $apiResponse;
     }
 
+
+    /*
+    * Used retrive expressions
+    * input: string single sentence
+     * normally only used for reflective feedback
+     * output is an array
+    */
+
+
+    public function expression($string) {
+
+        $apiResponse = new \StdClass();
+        $variables = new \stdClass();
+        $variables->input = strip_tags($string);
+
+
+        //get  metrics
+        $this->gResponse = $this->client->response($this->queryExpressions, $variables);
+
+        if ($this->gResponse->hasErrors()) {
+            $apiResponse = $this->gResponse->errors();
+        } else {
+            $apiResponse = $this->gResponse->expressions->analytics;
+        }
+
+        return $apiResponse;
+    }
 
 
 

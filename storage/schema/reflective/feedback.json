@@ -1,0 +1,61 @@
+{
+"rules": [
+  {
+    "name": "expression",
+      "check": {
+        "all": [
+          "affect",
+          "epistemic",
+          "modal"
+        ]
+      },
+      "message": [
+          {"affect" : "Some feedback for affect"},
+          {"epistemic" : "Expressions indicating belief, learning, or knowledge."},
+          {"modal" : "Some feedback for modal"}
+      ],
+      "css": ["epistemic","affect","modal"]
+  },
+    {
+      "name": "vocab",
+      "check": {
+        "words": [
+          "server",
+          "study",
+          "force"
+        ]
+      },
+      "message": [
+        {"vocab" :"One or more keywords missing"}
+      ],
+      "css": "vocab"
+    },
+    {
+      "name": "metrics",
+      "check": {
+        "sentenceWordCount": "35"
+      },
+      "message": [
+        {"metrics" :"Sentence too long, might disengage the reader. Try breaking it into smaller sentences"}
+      ],
+      "css": "metrics"
+    },
+  {
+    "name": "moves",
+    "check": {
+      "tags": [
+        "context",
+        "challenge",
+        "link2me"
+      ]
+    },
+    "message": [
+      {"context" : "Initial thoughts and feelings about a significant experience."},
+      {"challenge" : "The challenge of new surprising or unfamiliar ideas, problems or learning experiences."},
+      {"link2me" : "Deeper reflection, personally applied."}
+    ],
+    "css": ["context","challenge","link2me"]
+  }
+
+  ]
+}

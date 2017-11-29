@@ -1,10 +1,64 @@
 .wrapper {
-  max-height:40rem;
+  max-height:30rem;
   overflow-y: scroll;
 }
 
 
 .ql-container {
-  max-height:40rem;
+  max-height:30rem;
   overflow-y: scroll;
+}
+
+.affect, .epistemic, .vocab , .context, .challenge, .wordcount, .link2me, .metrics{
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.affect:before {
+  content: "\f043";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:goldenrod;
+}
+
+.epistemic:before {
+  content: "\f13d";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:darkgreen;
+}
+
+.vocab:before {
+  content: "\f05b";  /* this is your text. You can also use UTF-8 character codes as I do here */
+}
+
+.link2me:before {
+  content: "\f211";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:darkblue;
+}
+
+.challenge:before {
+  content: "\f2da";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:orangered;
+}
+
+.context:before {
+   content: "\f086";  /* this is your text. You can also use UTF-8 character codes as I do here */
+
+ }
+
+.wordcount:before {
+  content: "\f096";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color: #721c24;
+}
+
+.metrics:before {
+  content: "\f0e7";
+}
+
+.activeClass{
+  display: inline;
+}
+.nonactive {
+  display:none;
 }

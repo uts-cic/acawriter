@@ -43,8 +43,9 @@ class FeedbackController extends Controller
     public function generateFeedback(Request $request) {
         $tap = $request["tap"];
         $result = new \stdClass();
+        $extra = $request["extra"];
         $result->status = array('message' => 'Success', 'code' => 200  );
-        $path = storage_path().'/schema/'.$request["feedbackOpt"].'.json';
+        $path = storage_path().'/schema/'.$extra['grammar'].'/'.$extra['feedbackOpt'].'.json';
         $result->rules = array();
         $feedbackSchema = $this->getFeedbackSchema($path);
         $result->rules= $this->rules = $feedbackSchema['rules'];
@@ -64,13 +65,17 @@ class FeedbackController extends Controller
         }
 
 
-        //go through and call each rule if the rule is defianed
+        //go through and call each rule if the rule is defined
         foreach($this->rules as $rule) {
             $method = $rule['name'];
             if(method_exists($this, $method)) {
                $result->{$method} = $this->{$method}($tap, $rule);
             }
         }
+
+        $final = $this->formatFeedback($tap, $result);
+        $result->final = $final;
+
         return response()->json($result);
 
     }
@@ -103,15 +108,14 @@ class FeedbackController extends Controller
                     $tempo++;
                 }
             }
-
-            if ($tempo == 0 && $key == $this->para - 1) {
-                $setFeed->message = $rule['message'];
-                $result[] = $setFeed;
-            }
         }
+
+        if ($tempo == 0 && $key == $this->para - 1) {
+            $setFeed->message = $rule['message'];
+            $result[] = $setFeed;
+        }
+
         return $result;
-
-
     }
 
     protected function metrics($tap, $rule) {
@@ -121,12 +125,15 @@ class FeedbackController extends Controller
         foreach($tap as $key => $data) {
             $tempStore = new \stdClass();
             $tempStore->str = $data['str'];
-            $tempStore->message = '';
+            $tempStore->message = array();
             $returnData = $this->stringTokeniser->metrics($data['str']);
             if(isset($returnData->sentWordCounts)) {
                 //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
                 if($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
-                    $tempStore->message = $rule['message'];
+                    //$tempStore->message = $rule['message'];
+                    foreach($rule['message'] as $msg) {
+                        if(isset($msg['metrics'])) $tempStore->message['metrics'] = $msg['metrics'];
+                    }
                 }
             }
             $result[] = $tempStore;
@@ -165,12 +172,108 @@ class FeedbackController extends Controller
                 }
 
                 if($termCount > 0 ) {
-                    $tempStore->message = $rule['message'];
+                    foreach($rule['message'] as $msg) {
+                        if(isset($msg['metrics'])) $tempStore->message['metrics'] = $msg['vocab'];
+                    }
                     $result[] = $tempStore;
                 }
             }
 
         return $result;
     }
+
+    /*
+     * *** applicable only for reflective feedback
+     */
+
+    protected function expression($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $termCount = 0;
+        $all = $check['all'];
+
+
+        if(count($all) == 0) {
+            return $result;
+        }
+
+        foreach($tap as $key => $data) {
+            $tempStore = new \stdClass();
+            $tempStore->str = $data['str'];
+            $tempStore->message = array();
+            $tempStore->affect=array();
+            $tempStore->epistemic=array();
+            $tempStore->modal=array();
+
+            $returnData = $this->stringTokeniser->expression($data['str']);
+            //$returnData is an array but since we are analysing tokenised strings we can safetly assume array[0]
+            $sanitizedResult = $returnData[0];
+            //$tempStore->raw = $sanitizedResult;
+            foreach($all as $exp) {
+
+                if (isset($sanitizedResult->{$exp}) && count($sanitizedResult->{$exp}) > 0) {
+                    $tempStore->{$exp} = $sanitizedResult->{$exp};
+                    foreach($rule['message'] as $msg) {
+                        if(isset($msg[$exp])) $tempStore->message[$exp] = $msg[$exp];
+                    }
+                }
+            }
+
+            $result[] = $tempStore;
+        }
+
+
+        return $result;
+
+    }
+
+
+    protected function moves($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $tempo = 0;
+        $tags = $check['tags'];
+        $messages = $rule['message'];
+        if(count($tags) == 0) {
+            return $result;
+        }
+
+        foreach($tap as $key => $data) {
+            $setFeed = new \stdClass();
+            $setFeed->str = $data['str'];
+            $setFeed->message = array();
+
+            foreach($tags as $tag) {
+                if(count(preg_grep("[^".$tag."]", $data['raw_tags'])) > 0) {
+                    foreach($messages as $msg) {
+                        if(isset($msg[$tag])) $setFeed->message[$tag] = $msg[$tag];
+                    }
+                }
+            }
+            $result[] = $setFeed;
+        }
+
+        return $result;
+    }
+
+    protected function formatFeedback($tap, $result) {
+        $final = array();
+
+        foreach($tap as $key => $raw) {
+            $temp = new \stdClass();
+            $temp->str = $raw['str'];
+            foreach($this->rules as $rule) {
+                if(isset($result->{$rule['name']}[$key])) $temp->{$rule['name']} = $result->{$rule['name']}[$key];
+            }
+            $final[]=$temp;
+        }
+        return $final;
+
+
+
+
+    }
+
+
 
 }

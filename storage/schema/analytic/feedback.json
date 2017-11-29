@@ -1,0 +1,61 @@
+{
+    "rules": [
+      {
+        "name": "background",
+        "check": {
+          "paragraph": "3",
+          "tag":"temporality"
+        },
+        "message": [
+          {"background" : "Background information missing in first paragraph"}
+        ],
+        "css": "temporality"
+      },
+      {
+        "name": "vocab",
+        "check": {
+          "words": [
+            "server",
+            "study",
+            "force"
+          ]
+        },
+        "message": [
+          {"vocab" :"One or more keywords missing"}
+        ],
+        "css": "vocab"
+      },
+      {
+        "name": "metrics",
+        "check": {
+          "sentenceWordCount": "35"
+        },
+        "message": [
+          {"metrics" :"Sentence too long, might disengage the reader. Try breaking it into smaller sentences"}
+        ],
+        "css": "metrics"
+      },
+      {
+        "name": "moves",
+        "check": {
+          "tags": [
+            "attitude",
+            "emph",
+            "vis",
+            "contribution",
+            "novstat",
+            "contrast"
+          ]
+        },
+        "message": [
+          {"attitude" : "position"},
+          {"emph" : "emphasis"},
+          {"vis" : "trend"},
+          {"contribution" : "summary"},
+          {"novstat" : "novelty"},
+          {"contrast" : "contrast"}
+        ],
+        "css": ["attitude","emph","vis", "contribution","novstat", "contrast"]
+      }
+    ]
+}

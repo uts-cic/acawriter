@@ -1,12 +1,12 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="card card-outline-info">
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
                     <div class="card-header">
-                        <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
                             Status
-                        </button>&nbsp;<button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
+                        </button>&nbsp;<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
                         Feedback
                         </button>
                     </div>
@@ -19,10 +19,23 @@
                     </div>
                     <div class="collapse" id="b">
                     <div class="card card-body">
-                        <label for="feedbackOpt">Feedback Options</label>
-                        <select class="form-control" id="feedbackOpt" v-model="feedbackOpt">
-                            <option value="feedback">Default</option>
-                        </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="grammar">Grammar</label>
+                                <select class="form-control" id="grammar" v-model="attributes.grammar">
+                                    <option value="">Select</option>
+                                    <option value="reflective">Reflective</option>
+                                    <option value="analytic">Analytic</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="feedbackOpt">Feedback Options</label>
+                                <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
+                                    <option value="feedback">Reflective01</option>
+                                    <option value="feedback">Analytic01</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,10 +44,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-info text-white">Text Analyser
-                        <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchAnalysis()">Get Feedback</button>
-                        <button type="button" class="btn btn-info pull-right text-white" v-on:click="fetchFeedback()">Get Custom</button>
-
+                    <div class="card-header bg-default">Text Analyser
+                        <!--<button type="button" class="btn btn-outline-info pull-right" v-on:click="fetchFeedback()">Step 2. Get Custom</button>&nbsp;-->
+                        <button type="button" class="btn btn-outline-info btn-sm pull-right" v-on:click="fetchAnalysis()">Get Feedback</button>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -44,42 +56,77 @@
                                     <vue-editor v-model="editorContent"></vue-editor>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!--- Reflective feedback --->
+                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'">
                                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                                     <ul>
                                         <li v-for="error in errors">{{error.message}}</li>
                                     </ul>
                                 </div>
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>TAP Raw output:</h4></div>
+                                <div class="col-md-12"><h4>Feedback</h4></div>
                                 <div class="col-md-12 wrapper">
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
-                                    <span v-for="(feed,idx) in tap">
-                                        [<span class="badge bg-default" data-toggle="tooltip" data-placement="left" v-bind:title="feed.tags"><i class="fa fa-comments" aria-hidden="true"></i></span>]
-                                        <span v-if="!feedback.metrics">
-                                            {{feed.str}}
+                                    <span v-for="(feed,idx) in feedback.final">
+                                        <span v-for="(expression, exp) in feed.expression.message">
+                                            <span v-bind:class="exp">&nbsp;</span>
                                         </span>
-                                        <span v-else>
-                                            <span v-if="feedback.metrics[idx].message!==''" class="text-danger">
-                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <mark>{{feed.str}}</mark>
-                                            </span>
-                                            <span v-else>
-                                                {{feed.str}}
-                                            </span>
+                                        <span v-if="feed.metrics.message.length==0"></span>
+                                        <span v-else class="metrics">&nbsp;</span>
+                                        <span v-for="(rmoves, mv) in feed.moves.message">
+                                            <span v-bind:class="mv">&nbsp;</span>
                                         </span>
+                                        {{feed.str}}
                                     </span>
                                 </div>
                             </div>
+                            <!-- end of reflective -->
+
+
+                            <!--- Analytic feedback --->
+                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'">
+                                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                                    <ul>
+                                        <li v-for="error in errors">{{error.message}}</li>
+                                    </ul>
+                                </div>
+                                <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
+                                <div class="col-md-12"><h4>Feedback</h4></div>
+                                <div class="col-md-12 wrapper">
+                                    <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
+                                    <span v-for="(feed,idx) in feedback.final">
+                                        <span v-if="feed.metrics.message.length==0"></span>
+                                        <span v-else class="metrics">&nbsp;</span>
+                                        <span v-for="(rmoves, mv) in feed.moves.message">
+                                            <span v-bind:class="mv">&nbsp;</span>
+                                        </span>
+                                        {{feed.str}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- end of reflective -->
+
                         </div>
                     </div>
-                    <div class="card-footer bg-info text-white">
+                    <div class="card-footer">
                         <div class="row">
                             <div class="col-md-12">
                                 Feedback <hr />
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3"><h6 class="card-subtitle mb-2">Background:</h6>
+                            <div class="col-md-3" v-for="rule in feedback.rules">
+                                <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
+                                <div v-for="msg in rule.message">
+                                    <span v-for="(m,id) in msg">
+                                        <span v-bind:class="id"></span> - <small>{{m}}</small><br />
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+                           <!-- <div class="col-md-3"><h6 class="card-subtitle mb-2">Background:</h6>
                                 <span v-for="msg in feedback.background"><i class="fa fa-anchor" aria-hidden="true"></i> - <small>{{msg.message}}</small></span>
                             </div>
                             <div class="col-md-3"><h6 class="card-subtitle mb-2">Metrics:</h6>
@@ -91,7 +138,8 @@
                             </div>
                             <div class="col-md-3"><h6 class="card-subtitle mb-2">Rhetorical Moves:</h6>
                                 <i class="fa fa-comments" aria-hidden="true"></i>
-                                <small>- Athanor raw feedback, hover over the icon to see the tags</small></div>
+                                <small>- Athanor raw feedback, hover over the icon to see the tags</small>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -146,7 +194,11 @@
                splitText:[],
                quickTags:'',
                feedback:[],
-               feedbackOpt:'feedback'
+               attributes:{
+                   feedbackOpt:'feedback',
+                   grammar:'reflective'
+               }
+
            }
        },
       /* apollo:{
@@ -167,21 +219,21 @@
            editorContent: function (newVal) {
                this.$data.counter++;
                if(this.$data.counter >= 10 ) {
-                    this.tokeniseTextInput();
+                   this.tokeniseTextInput();
                    this.computeText(this.splitText, this.$data.tap);
                    this.editLog.push(this.editorContent);
                    this.$data.counter = 0;
                }
            },
            tap: function() {
-               console.log(this.tap);
+               this.fetchFeedback();
            }
         },
        methods: {
            fetchAnalysis() {
                this.$data.tapCalls.athanor =true;
                this.$data.counter = 0;
-               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor'})
+               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.grammar})
                    .then(response => {
                        this.$data.tap = response.data.athanor;
                        this.$data.tapCalls.athanor=false;
@@ -249,7 +301,6 @@
                    newTap.push(temp);
                });
                self.tap = newTap;
-
            },
            quickAnalyse(changedText, idx) {
                this.$data.counter = 0;
@@ -285,8 +336,9 @@
                    });
            },
            fetchFeedback() {
+               this.errors=[];
                if(this.feedbackOpt!=='') {
-                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'feedbackOpt': this.feedbackOpt})
+                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
                        .then(response => {
                            this.feedback = response.data;
                        })
@@ -297,6 +349,15 @@
                    this.$data.errors.push({'message':'Please select feedback type'});
                }
            }
+       },
+       computed: {
+           reflective: function() {
+              return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
+           },
+           analytic: function() {
+               return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
+           },
        }
+
    }
 </script>
