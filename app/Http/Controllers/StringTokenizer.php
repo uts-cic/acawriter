@@ -34,8 +34,17 @@ class StringTokenizer extends Controller
                         }
                 }";
 
-    protected $queryOne = "query RhetoricalMoves(\$input: String!) {
+    protected $queryOneR = "query RhetoricalMoves(\$input: String!) {
                           moves(text:\$input,grammar:\"reflective\") {
+                            analytics
+                            message
+                            timestamp
+                            querytime
+                          }
+                        }";
+
+    protected $queryOneA = "query RhetoricalMoves(\$input: String!) {
+                          moves(text:\$input,grammar:\"analytic\") {
                             analytics
                             message
                             timestamp
@@ -157,7 +166,7 @@ class StringTokenizer extends Controller
                     $responseTxt = new \stdClass;
                     $responseTxt->str= $txt->original;
 
-                    $tags = $this->rethoMoves($txt->original);
+                    $tags = $this->rethoMoves($txt->original, $request['grammar']);
 
                     $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
                     $responseTxt->tags= implode(', ',$tags);
@@ -218,7 +227,7 @@ class StringTokenizer extends Controller
 
         if ($originalHash != $responseHash) {
             //get athanor
-            $this->gResponse = $this->client->response($this->queryOne, $variables);
+            $this->gResponse = $this->client->response($this->queryOneR, $variables);
             if ($this->gResponse->hasErrors()) {
                 dd($this->gResponse->errors());
             } else {
@@ -238,7 +247,7 @@ class StringTokenizer extends Controller
         $variables = new \stdClass();
         $variables->input = $queryTxt;
             //get athanor
-            $this->gResponse = $this->client->response($this->queryOne, $variables);
+            $this->gResponse = $this->client->response($this->queryOneR, $variables);
             if ($this->gResponse->hasErrors()) {
                 dd($this->gResponse->errors());
             } else {
@@ -285,7 +294,7 @@ class StringTokenizer extends Controller
         $variables->input = $queryTxt;
 
             //get athanor
-            $this->gResponse = $this->client->response($this->queryOne, $variables);
+            $this->gResponse = $this->client->response($this->queryOneR, $variables);
 
             if ($this->gResponse->hasErrors()) {
                 dd($this->gResponse->errors());
@@ -352,7 +361,7 @@ class StringTokenizer extends Controller
 
      //modified sentence level based on updated tokeniser query
 
-    protected function rethoMoves($text) {
+    protected function rethoMoves($text, $grammar) {
 
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
@@ -360,8 +369,11 @@ class StringTokenizer extends Controller
         $tags = array();
 
         //get athanor rethmoves
-        $this->gResponse = $this->client->response($this->queryOne, $variables);
-
+        if($grammar == 'analytic') {
+            $this->gResponse = $this->client->response($this->queryOneA, $variables);
+        } elseif($grammar == 'reflective') {
+            $this->gResponse = $this->client->response($this->queryOneR, $variables);
+        }
         if ($this->gResponse->hasErrors()) {
             dd($this->gResponse->errors());
         } else {
