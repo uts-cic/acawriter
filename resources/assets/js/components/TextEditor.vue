@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
-                <div class="card bg-info text-white">
+                <div class="card bg-info">
                     <div class="card-header">
                         <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
                             Status
@@ -29,7 +29,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="feedbackOpt">Feedback Options</label>
+                                <label for="feedbackOpt">Feedback Rules</label>
                                 <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
                                     <option value="feedback">Reflective01</option>
                                     <option value="feedback">Analytic01</option>
@@ -57,14 +57,14 @@
                                 </div>
                             </div>
                             <!--- Reflective feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'">
+                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
                                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                                     <ul>
                                         <li v-for="error in errors">{{error.message}}</li>
                                     </ul>
                                 </div>
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>Feedback</h4></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
                                 <div class="col-md-12 wrapper">
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
@@ -84,21 +84,21 @@
 
 
                             <!--- Analytic feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'">
+                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
                                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                                     <ul>
                                         <li v-for="error in errors">{{error.message}}</li>
                                     </ul>
                                 </div>
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>Feedback</h4></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Analytic)</small></h4></div>
                                 <div class="col-md-12 wrapper">
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span v-bind:class="mv">&nbsp;</span>
+                                            <span class="badge badge-info">{{rmoves}}</span>
                                         </span>
                                         {{feed.str}}
                                     </span>
@@ -158,7 +158,6 @@
      *
      */
     import {VueEditor} from 'vue2-editor';
-
    export default {
        components: {
            VueEditor
@@ -172,7 +171,6 @@
                config: {
                    events: {
                        'froalaEditor.contentChanged': function (e, editor) {
-
                        }
                    }
                },
@@ -198,7 +196,6 @@
                    feedbackOpt:'feedback',
                    grammar:'reflective'
                }
-
            }
        },
       /* apollo:{
@@ -233,7 +230,7 @@
            fetchAnalysis() {
                this.$data.tapCalls.athanor =true;
                this.$data.counter = 0;
-               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.grammar})
+               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
                    .then(response => {
                        this.$data.tap = response.data.athanor;
                        this.$data.tapCalls.athanor=false;
@@ -252,11 +249,9 @@
                    });
            },
            computeText: function(nv, ov) {
-
                var changedText='';
                var self = this;
                var newTap = [];
-
                nv.forEach(function(item, idx) {
                    //console.log(item);
                    var temp = {};
@@ -276,7 +271,6 @@
                                .catch(e => {
                                    this.$data.errors.push(e)
                                });
-
                        } else if(ov[idx].str == item) {
                            temp['str'] = ov[idx].str;
                            temp['tags'] = ov[idx].tags;
@@ -313,7 +307,6 @@
                this.$data.auto='processing....';
                var assignment_id=0;
                if(this.assignment!=="") {assignment_id= this.assignment;}
-
                axios.post('/processor', {'txt': this.editorContent, 'action': 'auto', 'assignment_id':assignment_id})
                    .then(response => {
                        this.$data.auto = 'Done';
@@ -358,6 +351,5 @@
                return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
            },
        }
-
    }
 </script>
