@@ -160,7 +160,7 @@ class FeedbackController extends Controller
         }
         $tempStore = new \stdClass();
         $tempStore->str = $completeText;
-        $tempStore->message = '';
+        $tempStore->message = array();
 
             $returnData = $this->stringTokeniser->vocab($tempStore->str);
             if(isset($returnData->terms)) {
