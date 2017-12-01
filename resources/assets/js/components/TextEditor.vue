@@ -218,12 +218,8 @@
                if(this.$data.counter >= 10 ) {
                    this.tokeniseTextInput();
                    this.computeText(this.splitText, this.$data.tap);
-                   this.editLog.push(this.editorContent);
                    this.$data.counter = 0;
                }
-           },
-           tap: function() {
-               this.fetchFeedback();
            }
         },
        methods: {
@@ -341,6 +337,20 @@
                } else {
                    this.$data.errors.push({'message':'Please select feedback type'});
                }
+           },
+           qfetchFeedback() {
+               this.errors=[];
+               if(this.feedbackOpt!=='') {
+                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
+                       .then(response => {
+                           this.feedback = response.data;
+                       })
+                       .catch(e => {
+                           this.$data.errors.push(e)
+                       });
+               } else {
+                   this.$data.errors.push({'message':'Please select feedback type'});
+               }
            }
        },
        computed: {
@@ -349,7 +359,8 @@
            },
            analytic: function() {
                return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
-           },
+           }
+
        }
    }
 </script>
