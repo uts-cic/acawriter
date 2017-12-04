@@ -77874,10 +77874,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         editorContent: function editorContent(newVal) {
             this.$data.counter++;
-        },
-        tap: function tap() {
-            this.fetchFeedback();
         }
+        /* tap: function() {
+             this.fetchFeedback();
+         }*/
     },
     methods: {
         fetchAnalysis: function fetchAnalysis() {
@@ -77888,6 +77888,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/processor', { 'txt': this.editorContent, 'action': 'athanor', 'grammar': this.attributes.grammar }).then(function (response) {
                 _this.$data.tap = response.data.athanor;
                 _this.$data.tapCalls.athanor = false;
+                _this.fetchFeedback();
             }).catch(function (e) {
                 _this.$data.errors.push(e);
             });
@@ -77901,37 +77902,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         computeText: function computeText(nv, ov) {
+
             var changedText = '';
             var self = this;
             var newTap = [];
+            var quickFeedback = [];
+            var qt = {};
+            qt.final = [];
 
             nv.forEach(function (item, idx) {
                 var _this2 = this;
 
                 console.log(item);
                 var temp = {};
-                var qt = {};
+
+                var tfeed;
                 if (typeof ov[idx] !== 'undefined') {
                     if (ov[idx].str != item) {
                         //str exits but str changed
                         changedText = item;
                         temp['str'] = changedText;
+                        console.log("264");
                         self.quickAnalyse(changedText, idx).then(function (response) {
                             if (response.data) {
                                 /* temp['str'] = response.data.athanor.str;
                                  temp['tags'] = response.data.athanor.tags;
                                  temp['raw_tags'] = response.data.athanor.raw_tags;
                                  */
-                                console.log(response.data);
+                                tfeed = response.data.final[0];
+                                console.log(tfeed);
                             }
                         }).catch(function (e) {
                             _this2.$data.errors.push(e);
                         });
+                        qt.final.push(tfeed);
                     } else if (ov[idx].str == item) {
                         //str exists and no change
                         /*temp['str'] = ov[idx].str;
                         temp['tags'] = ov[idx].tags;
                         temp['raw_tags'] = ov[idx].raw_tags;*/
+
+                        tfeed = ov[idx];
+                        qt.final.push(tfeed);
                     }
                 } else {
                     //new str added to the the editor so get analysis
@@ -77943,6 +77955,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             /*temp['str'] = response.data.athanor.str;
                             temp['tags'] = response.data.athanor.tags;
                             temp['raw_tags'] = response.data.athanor.raw_tags;*/
+                            tfeed = response.data.final[0];
+                            qt.final.push(tfeed);
                         }
                     }).catch(function (e) {
                         _this2.$data.errors.push(e);
@@ -77950,6 +77964,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
                 newTap.push(temp);
             });
+            console.log(qt);
             self.tap = newTap;
         },
         quickAnalyse: function quickAnalyse(changedText, idx) {
@@ -78002,23 +78017,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.$data.errors.push({ 'message': 'Please select feedback type' });
             }
         },
-        qfetchFeedback: function qfetchFeedback() {
-            var _this6 = this;
-
-            this.errors = [];
-            if (this.feedbackOpt !== '') {
-                axios.post('/feedback', { 'tap': this.tap, 'action': 'fetch', 'extra': this.attributes }).then(function (response) {
-                    _this6.feedback = response.data;
-                }).catch(function (e) {
-                    _this6.$data.errors.push(e);
-                });
-            } else {
-                this.$data.errors.push({ 'message': 'Please select feedback type' });
-            }
-        },
         quickCheck: function quickCheck() {
             console.log("into quick check");
-            if (this.$data.counter >= 7 && this.editorContent !== '') {
+            if (this.$data.counter >= 20 && this.editorContent !== '') {
+                this.$data.counter = 0;
                 this.tokeniseTextInput();
             }
         }

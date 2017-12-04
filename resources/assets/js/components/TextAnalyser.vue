@@ -217,9 +217,9 @@
             editorContent: function (newVal) {
                 this.$data.counter++;
             },
-            tap: function() {
+           /* tap: function() {
                 this.fetchFeedback();
-            }
+            }*/
         },
         methods: {
             fetchAnalysis() {
@@ -229,6 +229,7 @@
                     .then(response => {
                         this.$data.tap = response.data.athanor;
                         this.$data.tapCalls.athanor=false;
+                        this.fetchFeedback();
                     })
                     .catch(e => {
                         this.$data.errors.push(e)
@@ -244,19 +245,25 @@
                     });
             },
             computeText: function(nv, ov) {
+
                 var changedText='';
                 var self = this;
                 var newTap = [];
+                var quickFeedback= [];
+                var qt={};
+                qt.final =[];
 
                 nv.forEach(function(item, idx) {
                     console.log(item);
                     var temp = {};
-                    var qt={};
+
+                    var tfeed;
                     if(typeof ov[idx]!=='undefined') {
                         if(ov[idx].str!= item) {
                             //str exits but str changed
                             changedText = item;
                             temp['str'] = changedText;
+                            console.log("264");
                             self.quickAnalyse(changedText, idx)
                                 .then(response => {
                                     if(response.data) {
@@ -264,37 +271,46 @@
                                         temp['tags'] = response.data.athanor.tags;
                                         temp['raw_tags'] = response.data.athanor.raw_tags;
                                         */
-                                       console.log(response.data);
+                                       tfeed = response.data.final[0];
+                                        console.log(tfeed);
                                     }
                                 })
                                 .catch(e => {
                                     this.$data.errors.push(e)
                                 });
+                            qt.final.push(tfeed);
                         } else if(ov[idx].str == item) {
                             //str exists and no change
                             /*temp['str'] = ov[idx].str;
                             temp['tags'] = ov[idx].tags;
                             temp['raw_tags'] = ov[idx].raw_tags;*/
+
+                            tfeed = ov[idx];
+                            qt.final.push(tfeed);
                         }
                     } else {
                         //new str added to the the editor so get analysis
                         //changedIds.push(idx);
-                        changedText = item;
-                        //qt = self.quickAnalyse(changedText, idx);
-                        self.quickAnalyse(changedText, idx)
-                            .then(response => {
-                                if(response.data) {
-                                    /*temp['str'] = response.data.athanor.str;
+                            changedText = item;
+                            //qt = self.quickAnalyse(changedText, idx);
+                            self.quickAnalyse(changedText, idx)
+                                .then(response => {
+                                    if (response.data) {
+                                        /*temp['str'] = response.data.athanor.str;
                                     temp['tags'] = response.data.athanor.tags;
                                     temp['raw_tags'] = response.data.athanor.raw_tags;*/
-                                }
-                            })
-                            .catch(e => {
-                                this.$data.errors.push(e)
-                            });
+                                        tfeed = response.data.final[0];
+                                        qt.final.push(tfeed);
+                                    }
+                                })
+                                .catch(e => {
+                                    this.$data.errors.push(e)
+                                });
+
                     }
                     newTap.push(temp);
                 });
+                console.log(qt);
                 self.tap = newTap;
             },
             quickAnalyse(changedText, idx) {
@@ -345,23 +361,10 @@
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
             },
-            qfetchFeedback() {
-                this.errors=[];
-                if(this.feedbackOpt!=='') {
-                    axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
-                        .then(response => {
-                            this.feedback = response.data;
-                        })
-                        .catch(e => {
-                            this.$data.errors.push(e)
-                        });
-                } else {
-                    this.$data.errors.push({'message':'Please select feedback type'});
-                }
-            },
             quickCheck() {
                 console.log("into quick check");
-                if (this.$data.counter >= 7 && this.editorContent !== '') {
+                if (this.$data.counter >= 20 && this.editorContent !== '') {
+                    this.$data.counter =0;
                     this.tokeniseTextInput();
 
                 }
