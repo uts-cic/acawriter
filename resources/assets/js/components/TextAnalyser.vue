@@ -157,7 +157,9 @@
      Vue.use(VueFroala);
      *
      */
+   // import { EventBus } from './event-bus.js';
     import {VueEditor} from 'vue2-editor';
+
     export default {
         components: {
             VueEditor
@@ -179,7 +181,6 @@
                 viewer : {},
                 loading: 0,
                 tap:[],
-                qtap:[],
                 errors:[],
                 tapCalls:{
                     'athanor': false,
@@ -195,7 +196,9 @@
                 attributes:{
                     feedbackOpt:'feedback',
                     grammar:'reflective'
-                }
+                },
+                feedbackQueue:[]
+                ,extractedFeed
             }
         },
         /* apollo:{
@@ -207,6 +210,9 @@
         mounted () {
             this.editLog.push(this.editorContent);
             this.fetchAnalysis();
+            EventBus.$on('compute-done', data => {
+                this.extractedFeed = data;
+            });
         },
         created() {
             this.auto = 'every 5m';
@@ -225,6 +231,7 @@
             fetchAnalysis() {
                 this.$data.tapCalls.athanor =true;
                 this.$data.counter = 0;
+                this.feedback =[];
                 axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
                     .then(response => {
                         this.$data.tap = response.data.athanor;
@@ -249,9 +256,8 @@
                 var changedText='';
                 var self = this;
                 var newTap = [];
-                var quickFeedback= [];
-                var qt={};
-                qt.final =[];
+                self.feedbackQueue=[];
+
 
                 nv.forEach(function(item, idx) {
                     console.log(item);
@@ -271,22 +277,16 @@
                                         temp['tags'] = response.data.athanor.tags;
                                         temp['raw_tags'] = response.data.athanor.raw_tags;
                                         */
-                                       tfeed = response.data.final[0];
+                                        self.feedbackQueue.push(response.data.final[0]);
                                         console.log(tfeed);
                                     }
                                 })
                                 .catch(e => {
-                                    this.$data.errors.push(e)
+                                    self.$data.errors.push(e)
                                 });
-                            qt.final.push(tfeed);
-                        } else if(ov[idx].str == item) {
-                            //str exists and no change
-                            /*temp['str'] = ov[idx].str;
-                            temp['tags'] = ov[idx].tags;
-                            temp['raw_tags'] = ov[idx].raw_tags;*/
 
-                            tfeed = ov[idx];
-                            qt.final.push(tfeed);
+                        } else if(ov[idx].str == item) {
+                            this.feedbackQueue.push(ov[idx]);
                         }
                     } else {
                         //new str added to the the editor so get analysis
@@ -300,17 +300,17 @@
                                     temp['tags'] = response.data.athanor.tags;
                                     temp['raw_tags'] = response.data.athanor.raw_tags;*/
                                         tfeed = response.data.final[0];
-                                        qt.final.push(tfeed);
+                                        self.feedbackQueue.push(tfeed);
                                     }
                                 })
                                 .catch(e => {
-                                    this.$data.errors.push(e)
+                                    self.$data.errors.push(e)
                                 });
 
                     }
                     newTap.push(temp);
                 });
-                console.log(qt);
+                EventBus.$emit('compute-done', self.feedbackQueue);
                 self.tap = newTap;
             },
             quickAnalyse(changedText, idx) {
@@ -362,11 +362,9 @@
                 }
             },
             quickCheck() {
-                console.log("into quick check");
-                if (this.$data.counter >= 20 && this.editorContent !== '') {
+                if (this.$data.counter >= 5 && this.editorContent !== '') {
                     this.$data.counter =0;
                     this.tokeniseTextInput();
-
                 }
             }
         },
@@ -376,8 +374,11 @@
             },
             analytic: function() {
                 return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
-            }
-
+            },
+            /*extractedFeed: function() {
+                console.log(this.extractedFeed);
+                return this.extractedFeed.push(this.feedbackQueue);
+            }*/
         }
     }
 </script>

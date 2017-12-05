@@ -368,7 +368,7 @@ class StringTokenizer extends Controller
 
 
         if ($this->gResponse->hasErrors()) {
-            dd($this->gResponse->errors());
+            $apiResponse = $this->gResponse->errors();
         } else {
             $res = $this->gResponse->moves->analytics;
             foreach ($res as $rest) {

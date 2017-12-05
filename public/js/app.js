@@ -77814,6 +77814,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  Vue.use(VueFroala);
  *
  */
+// import { EventBus } from './event-bus.js';
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -77835,7 +77837,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             viewer: {},
             loading: 0,
             tap: [],
-            qtap: [],
             errors: [],
             tapCalls: {
                 'athanor': false,
@@ -77851,7 +77852,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             attributes: {
                 feedbackOpt: 'feedback',
                 grammar: 'reflective'
-            }
+            },
+            feedbackQueue: [],
+            extractedFeed: extractedFeed
         };
     },
 
@@ -77862,8 +77865,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          }
      },*/
     mounted: function mounted() {
+        var _this = this;
+
         this.editLog.push(this.editorContent);
         this.fetchAnalysis();
+        EventBus.$on('compute-done', function (data) {
+            _this.extractedFeed = data;
+        });
     },
     created: function created() {
         this.auto = 'every 5m';
@@ -77881,23 +77889,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         fetchAnalysis: function fetchAnalysis() {
-            var _this = this;
+            var _this2 = this;
 
             this.$data.tapCalls.athanor = true;
             this.$data.counter = 0;
+            this.feedback = [];
             axios.post('/processor', { 'txt': this.editorContent, 'action': 'athanor', 'grammar': this.attributes.grammar }).then(function (response) {
-                _this.$data.tap = response.data.athanor;
-                _this.$data.tapCalls.athanor = false;
-                _this.fetchFeedback();
+                _this2.$data.tap = response.data.athanor;
+                _this2.$data.tapCalls.athanor = false;
+                _this2.fetchFeedback();
             }).catch(function (e) {
-                _this.$data.errors.push(e);
+                _this2.$data.errors.push(e);
             });
             this.$data.tapCalls.vacab = true;
             axios.post('/processor', { 'txt': this.editLog, 'action': 'vocab' }).then(function (response) {
-                _this.$data.tapCalls.vocab = false;
-                _this.$data.vocab = response.data.vocab.unique;
+                _this2.$data.tapCalls.vocab = false;
+                _this2.$data.vocab = response.data.vocab.unique;
             }).catch(function (e) {
-                _this.$data.errors.push(e);
+                _this2.$data.errors.push(e);
             });
         },
 
@@ -77906,13 +77915,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var changedText = '';
             var self = this;
             var newTap = [];
-            var quickFeedback = [];
-            var qt = {};
-            qt.final = [];
+            self.feedbackQueue = [];
 
             nv.forEach(function (item, idx) {
-                var _this2 = this;
-
                 console.log(item);
                 var temp = {};
 
@@ -77929,21 +77934,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                  temp['tags'] = response.data.athanor.tags;
                                  temp['raw_tags'] = response.data.athanor.raw_tags;
                                  */
-                                tfeed = response.data.final[0];
+                                self.feedbackQueue.push(response.data.final[0]);
                                 console.log(tfeed);
                             }
                         }).catch(function (e) {
-                            _this2.$data.errors.push(e);
+                            self.$data.errors.push(e);
                         });
-                        qt.final.push(tfeed);
                     } else if (ov[idx].str == item) {
-                        //str exists and no change
-                        /*temp['str'] = ov[idx].str;
-                        temp['tags'] = ov[idx].tags;
-                        temp['raw_tags'] = ov[idx].raw_tags;*/
-
-                        tfeed = ov[idx];
-                        qt.final.push(tfeed);
+                        this.feedbackQueue.push(ov[idx]);
                     }
                 } else {
                     //new str added to the the editor so get analysis
@@ -77956,15 +77954,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             temp['tags'] = response.data.athanor.tags;
                             temp['raw_tags'] = response.data.athanor.raw_tags;*/
                             tfeed = response.data.final[0];
-                            qt.final.push(tfeed);
+                            self.feedbackQueue.push(tfeed);
                         }
                     }).catch(function (e) {
-                        _this2.$data.errors.push(e);
+                        self.$data.errors.push(e);
                     });
                 }
                 newTap.push(temp);
             });
-            console.log(qt);
+            EventBus.$emit('compute-done', self.feedbackQueue);
             self.tap = newTap;
         },
         quickAnalyse: function quickAnalyse(changedText, idx) {
@@ -78018,8 +78016,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         quickCheck: function quickCheck() {
-            console.log("into quick check");
-            if (this.$data.counter >= 20 && this.editorContent !== '') {
+            if (this.$data.counter >= 5 && this.editorContent !== '') {
                 this.$data.counter = 0;
                 this.tokeniseTextInput();
             }
@@ -78032,7 +78029,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         analytic: function analytic() {
             return this.attributes.feedbackOpt == 'analytic' ? 'display:inline' : '';
         }
-
+        /*extractedFeed: function() {
+            console.log(this.extractedFeed);
+            return this.extractedFeed.push(this.feedbackQueue);
+        }*/
     }
 });
 

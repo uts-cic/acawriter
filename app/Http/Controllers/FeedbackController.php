@@ -51,9 +51,9 @@ class FeedbackController extends Controller
             $data['txt'] = $request['txt'];
             $data['grammar'] = $request['extra']['grammar'];
             $temp = $this->stringTokeniser->quickTapMoves($data);
-            $tt['str']= $temp->str;
-            $tt['raw_tags'] = $temp->raw_tags;
-            $tt['tags'] = $temp->tags;
+            $tt['str']= $temp->str ? $temp->str : '';
+            $tt['raw_tags'] = $temp->raw_tags? $temp->raw_tags : array();
+            $tt['tags'] = $temp->tags? $temp->tags:'';
             $tap[]=$tt;
 
         } else if($request['action'] == 'fetch') {
