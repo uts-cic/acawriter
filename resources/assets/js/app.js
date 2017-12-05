@@ -37,7 +37,7 @@ const apolloProvider = new VueApollo({
 
 //Vue.component('example', require('./components/Example.vue'));
 Vue.component('log-status', require('./components/lstatus.vue'));
-Vue.component('doc-editor', require('./components/TextEditor.vue'));
+Vue.component('doc-editor', require('./components/TextAnalyser.vue'));
 Vue.component('internet-connection', require('./components/InternetConnection.vue'));
 Vue.component('tap-status', require('./components/TapHealth.vue'));
 Vue.component('autocomplete', require('./components/Autocomplete.vue'));

@@ -41,7 +41,27 @@ class FeedbackController extends Controller
      */
 
     public function generateFeedback(Request $request) {
-        $tap = $request["tap"];
+
+        if($request['action'] == 'quick') {
+            //we need to send a request to get the tap raw tags
+            // input is always going to be string as output by tokeniser
+            $tap = $tt = array();
+
+            $data = array();
+            $data['txt'] = $request['txt'];
+            $data['grammar'] = $request['extra']['grammar'];
+            $temp = $this->stringTokeniser->quickTapMoves($data);
+            $tt['str']= $temp->str ? $temp->str : '';
+            $tt['raw_tags'] = $temp->raw_tags? $temp->raw_tags : array();
+            $tt['tags'] = $temp->tags? $temp->tags:'';
+            $tap[]=$tt;
+
+        } else if($request['action'] == 'fetch') {
+            $tap = $request["tap"];
+
+        }
+
+
         $result = new \stdClass();
         $extra = $request["extra"];
         $result->status = array('message' => 'Success', 'code' => 200  );
@@ -196,6 +216,7 @@ class FeedbackController extends Controller
         if(count($all) == 0) {
             return $result;
         }
+
 
         foreach($tap as $key => $data) {
             $tempStore = new \stdClass();

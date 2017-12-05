@@ -77701,7 +77701,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/TextEditor.vue"
+Component.options.__file = "resources/assets/js/components/TextAnalyser.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -77711,9 +77711,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7a523d71", Component.options)
+    hotAPI.createRecord("data-v-3da63a63", Component.options)
   } else {
-    hotAPI.reload("data-v-7a523d71", Component.options)
+    hotAPI.reload("data-v-3da63a63", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true
@@ -77886,10 +77886,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /**
  commented out - license needed
-            import VueFroala from 'vue-froala-wysiwyg';
-            Vue.use(VueFroala);
+ import VueFroala from 'vue-froala-wysiwyg';
+ Vue.use(VueFroala);
  *
  */
+// import { EventBus } from './event-bus.js';
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -77912,7 +77913,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             viewer: {},
             loading: 0,
             tap: [],
-            qtap: [],
             errors: [],
             tapCalls: {
                 'athanor': false,
@@ -77928,8 +77928,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             attributes: {
                 feedbackOpt: 'feedback',
                 grammar: 'reflective'
-            }
-
+            },
+            feedbackQueue: [],
+            extractedFeed: extractedFeed
         };
     },
 
@@ -77940,46 +77941,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          }
      },*/
     mounted: function mounted() {
+        var _this = this;
+
         this.editLog.push(this.editorContent);
         this.fetchAnalysis();
+        EventBus.$on('compute-done', function (data) {
+            _this.extractedFeed = data;
+        });
     },
     created: function created() {
         this.auto = 'every 5m';
         //setInterval(this.storeAnalysedDrafts, 900000);
+        setInterval(this.quickCheck, 5000);
     },
 
     watch: {
         editorContent: function editorContent(newVal) {
             this.$data.counter++;
-            if (this.$data.counter >= 10) {
-                this.tokeniseTextInput();
-                this.computeText(this.splitText, this.$data.tap);
-                this.editLog.push(this.editorContent);
-                this.$data.counter = 0;
-            }
-        },
-        tap: function tap() {
-            this.fetchFeedback();
         }
+        /* tap: function() {
+             this.fetchFeedback();
+         }*/
     },
     methods: {
         fetchAnalysis: function fetchAnalysis() {
-            var _this = this;
+            var _this2 = this;
 
             this.$data.tapCalls.athanor = true;
             this.$data.counter = 0;
+<<<<<<< HEAD
             axios.post('/processor', { 'txt': this.editorContent, 'action': 'athanor', 'grammar': this.attributes.grammar }).then(function (response) {
                 _this.$data.tap = response.data.athanor;
                 _this.$data.tapCalls.athanor = false;
+=======
+            this.feedback = [];
+            axios.post('/processor', { 'txt': this.editorContent, 'action': 'athanor', 'grammar': this.attributes.grammar }).then(function (response) {
+                _this2.$data.tap = response.data.athanor;
+                _this2.$data.tapCalls.athanor = false;
+                _this2.fetchFeedback();
+>>>>>>> development
             }).catch(function (e) {
-                _this.$data.errors.push(e);
+                _this2.$data.errors.push(e);
             });
             this.$data.tapCalls.vacab = true;
             axios.post('/processor', { 'txt': this.editLog, 'action': 'vocab' }).then(function (response) {
-                _this.$data.tapCalls.vocab = false;
-                _this.$data.vocab = response.data.vocab.unique;
+                _this2.$data.tapCalls.vocab = false;
+                _this2.$data.vocab = response.data.vocab.unique;
             }).catch(function (e) {
-                _this.$data.errors.push(e);
+                _this2.$data.errors.push(e);
             });
         },
 
@@ -77988,53 +77997,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var changedText = '';
             var self = this;
             var newTap = [];
+            self.feedbackQueue = [];
 
             nv.forEach(function (item, idx) {
-                var _this2 = this;
-
-                //console.log(item);
+                console.log(item);
                 var temp = {};
-                var qt = {};
+
+                var tfeed;
                 if (typeof ov[idx] !== 'undefined') {
                     if (ov[idx].str != item) {
+                        //str exits but str changed
                         changedText = item;
                         temp['str'] = changedText;
+                        console.log("264");
                         self.quickAnalyse(changedText, idx).then(function (response) {
                             if (response.data) {
-                                temp['str'] = response.data.athanor.str;
-                                temp['tags'] = response.data.athanor.tags;
-                                temp['raw_tags'] = response.data.athanor.raw_tags;
+                                /* temp['str'] = response.data.athanor.str;
+                                 temp['tags'] = response.data.athanor.tags;
+                                 temp['raw_tags'] = response.data.athanor.raw_tags;
+                                 */
+                                self.feedbackQueue.push(response.data.final[0]);
+                                console.log(tfeed);
                             }
                         }).catch(function (e) {
-                            _this2.$data.errors.push(e);
+                            self.$data.errors.push(e);
                         });
                     } else if (ov[idx].str == item) {
-                        temp['str'] = ov[idx].str;
-                        temp['tags'] = ov[idx].tags;
-                        temp['raw_tags'] = ov[idx].raw_tags;
+                        this.feedbackQueue.push(ov[idx]);
                     }
                 } else {
+                    //new str added to the the editor so get analysis
                     //changedIds.push(idx);
                     changedText = item;
                     //qt = self.quickAnalyse(changedText, idx);
                     self.quickAnalyse(changedText, idx).then(function (response) {
                         if (response.data) {
-                            temp['str'] = response.data.athanor.str;
+                            /*temp['str'] = response.data.athanor.str;
                             temp['tags'] = response.data.athanor.tags;
-                            temp['raw_tags'] = response.data.athanor.raw_tags;
+                            temp['raw_tags'] = response.data.athanor.raw_tags;*/
+                            tfeed = response.data.final[0];
+                            self.feedbackQueue.push(tfeed);
                         }
                     }).catch(function (e) {
-                        _this2.$data.errors.push(e);
+                        self.$data.errors.push(e);
                     });
                 }
                 newTap.push(temp);
             });
+            EventBus.$emit('compute-done', self.feedbackQueue);
             self.tap = newTap;
         },
         quickAnalyse: function quickAnalyse(changedText, idx) {
             this.$data.counter = 0;
             var quickTags = {};
-            return axios.post('/processor', { 'txt': changedText, 'action': 'qathanor' });
+            return axios.post('/feedback', { 'txt': changedText, 'action': 'quick', 'extra': this.attributes });
         },
         storeAnalysedDrafts: function storeAnalysedDrafts() {
             var _this3 = this;
@@ -78046,7 +78062,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.assignment !== "") {
                 assignment_id = this.assignment;
             }
-
             axios.post('/processor', { 'txt': this.editorContent, 'action': 'auto', 'assignment_id': assignment_id }).then(function (response) {
                 _this3.$data.auto = 'Done';
             }).catch(function (e) {
@@ -78062,6 +78077,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/processor', { 'txt': this.editorContent, 'action': 'tokenise' }).then(function (response) {
                 _this4.splitText = response.data.tokenised;
                 _this4.$data.tapCalls.athanor = false;
+                _this4.computeText(_this4.splitText, _this4.$data.feedback.final);
+                _this4.$data.counter = 0;
             }).catch(function (e) {
                 _this4.$data.errors.push(e);
             });
@@ -78071,13 +78088,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.errors = [];
             if (this.feedbackOpt !== '') {
-                axios.post('/feedback', { 'tap': this.tap, 'action': 'fetch', 'extra': this.attributes }).then(function (response) {
+                axios.post('/feedback', { 'tap': this.tap, 'txt': '', 'action': 'fetch', 'extra': this.attributes }).then(function (response) {
                     _this5.feedback = response.data;
                 }).catch(function (e) {
                     _this5.$data.errors.push(e);
                 });
             } else {
                 this.$data.errors.push({ 'message': 'Please select feedback type' });
+            }
+        },
+        quickCheck: function quickCheck() {
+            if (this.$data.counter >= 5 && this.editorContent !== '') {
+                this.$data.counter = 0;
+                this.tokeniseTextInput();
             }
         }
     },
@@ -78088,8 +78111,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         analytic: function analytic() {
             return this.attributes.feedbackOpt == 'analytic' ? 'display:inline' : '';
         }
+        /*extractedFeed: function() {
+            console.log(this.extractedFeed);
+            return this.extractedFeed.push(this.feedbackQueue);
+        }*/
     }
-
 });
 
 /***/ }),
@@ -78110,7 +78136,11 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-4" }, [
         _c("div", { staticClass: "card bg-info" }, [
+<<<<<<< HEAD
           _vm._m(0, false, false),
+=======
+          _vm._m(0),
+>>>>>>> development
           _vm._v(" "),
           _c("div", { staticClass: "card-body collapse", attrs: { id: "a" } }, [
             _c("p", { staticClass: "card-text" }, [
@@ -78332,7 +78362,11 @@ var render = function() {
                         staticClass: "fa fa-spinner fa-spin"
                       }),
                       _vm._v(" "),
+<<<<<<< HEAD
                       _vm._m(1, false, false),
+=======
+                      _vm._m(1),
+>>>>>>> development
                       _vm._v(" "),
                       _c(
                         "div",
@@ -78436,7 +78470,11 @@ var render = function() {
                         staticClass: "fa fa-spinner fa-spin"
                       }),
                       _vm._v(" "),
+<<<<<<< HEAD
                       _vm._m(2, false, false),
+=======
+                      _vm._m(2),
+>>>>>>> development
                       _vm._v(" "),
                       _c(
                         "div",
@@ -78566,7 +78604,7 @@ var staticRenderFns = [
             "aria-controls": "collapseExample"
           }
         },
-        [_vm._v("\n                    Feedback\n                    ")]
+        [_vm._v("\n                    Feedback\n                ")]
       )
     ])
   },
@@ -78603,7 +78641,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-7a523d71", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-3da63a63", module.exports)
   }
 }
 

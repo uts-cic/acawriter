@@ -158,7 +158,6 @@
      *
      */
     import {VueEditor} from 'vue2-editor';
-
    export default {
        components: {
            VueEditor
@@ -172,7 +171,6 @@
                config: {
                    events: {
                        'froalaEditor.contentChanged': function (e, editor) {
-
                        }
                    }
                },
@@ -198,7 +196,6 @@
                    feedbackOpt:'feedback',
                    grammar:'reflective'
                }
-
            }
        },
       /* apollo:{
@@ -221,12 +218,8 @@
                if(this.$data.counter >= 10 ) {
                    this.tokeniseTextInput();
                    this.computeText(this.splitText, this.$data.tap);
-                   this.editLog.push(this.editorContent);
                    this.$data.counter = 0;
                }
-           },
-           tap: function() {
-               this.fetchFeedback();
            }
         },
        methods: {
@@ -252,11 +245,9 @@
                    });
            },
            computeText: function(nv, ov) {
-
                var changedText='';
                var self = this;
                var newTap = [];
-
                nv.forEach(function(item, idx) {
                    //console.log(item);
                    var temp = {};
@@ -276,7 +267,6 @@
                                .catch(e => {
                                    this.$data.errors.push(e)
                                });
-
                        } else if(ov[idx].str == item) {
                            temp['str'] = ov[idx].str;
                            temp['tags'] = ov[idx].tags;
@@ -313,7 +303,6 @@
                this.$data.auto='processing....';
                var assignment_id=0;
                if(this.assignment!=="") {assignment_id= this.assignment;}
-
                axios.post('/processor', {'txt': this.editorContent, 'action': 'auto', 'assignment_id':assignment_id})
                    .then(response => {
                        this.$data.auto = 'Done';
@@ -348,6 +337,20 @@
                } else {
                    this.$data.errors.push({'message':'Please select feedback type'});
                }
+           },
+           qfetchFeedback() {
+               this.errors=[];
+               if(this.feedbackOpt!=='') {
+                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
+                       .then(response => {
+                           this.feedback = response.data;
+                       })
+                       .catch(e => {
+                           this.$data.errors.push(e)
+                       });
+               } else {
+                   this.$data.errors.push({'message':'Please select feedback type'});
+               }
            }
        },
        computed: {
@@ -356,8 +359,8 @@
            },
            analytic: function() {
                return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
-           },
-       }
+           }
 
+       }
    }
 </script>
