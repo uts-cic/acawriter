@@ -141,6 +141,9 @@
                                  <small>- Athanor raw feedback, hover over the icon to see the tags</small>
                              </div>-->
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">{{extractedFeed}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,8 +160,9 @@
      Vue.use(VueFroala);
      *
      */
-   // import { EventBus } from './event-bus.js';
-    import {VueEditor} from 'vue2-editor';
+    const EventBus = new Vue();
+    import { VueEditor } from 'vue2-editor';
+    import moment from 'moment';
 
     export default {
         components: {
@@ -177,8 +181,6 @@
                     }
                 },
                 editorContent: 'Edit Your Content Here!',
-                tmp: 'More text',
-                viewer : {},
                 loading: 0,
                 tap:[],
                 errors:[],
@@ -197,27 +199,27 @@
                     feedbackOpt:'feedback',
                     grammar:'reflective'
                 },
-                feedbackQueue:[]
-                ,extractedFeed
+                extractedFeed:[]
             }
         },
-        /* apollo:{
-             viewer: {
-                 query: POSTS_QUERY,
-                 loadingKey: 'loading'
-             }
-         },*/
         mounted () {
             this.editLog.push(this.editorContent);
             this.fetchAnalysis();
-            EventBus.$on('compute-done', data => {
-                this.extractedFeed = data;
-            });
+
         },
         created() {
             this.auto = 'every 5m';
             //setInterval(this.storeAnalysedDrafts, 900000);
-            setInterval(this.quickCheck, 5000);
+            setInterval(this.quickCheck, 50000);
+            EventBus.$on('compute-done', data => {
+                this.extractedFeed.push(data);
+                if(this.extractedFeed.length == 5) {
+                    this.feedback.final = this.extractedFeed[4];
+                    this.extractedFeed =[];
+                }
+            });
+
+
         },
         watch :{
             editorContent: function (newVal) {
@@ -252,33 +254,22 @@
                     });
             },
             computeText: function(nv, ov) {
-
                 var changedText='';
                 var self = this;
-                var newTap = [];
-                self.feedbackQueue=[];
-
+               // var newTap = [];
+                var feedbackQueue=[];
 
                 nv.forEach(function(item, idx) {
                     console.log(item);
-                    var temp = {};
-
-                    var tfeed;
                     if(typeof ov[idx]!=='undefined') {
                         if(ov[idx].str!= item) {
                             //str exits but str changed
                             changedText = item;
-                            temp['str'] = changedText;
-                            console.log("264");
+
                             self.quickAnalyse(changedText, idx)
                                 .then(response => {
                                     if(response.data) {
-                                       /* temp['str'] = response.data.athanor.str;
-                                        temp['tags'] = response.data.athanor.tags;
-                                        temp['raw_tags'] = response.data.athanor.raw_tags;
-                                        */
-                                        self.feedbackQueue.push(response.data.final[0]);
-                                        console.log(tfeed);
+                                        feedbackQueue.push(response.data.final[0]);
                                     }
                                 })
                                 .catch(e => {
@@ -286,21 +277,16 @@
                                 });
 
                         } else if(ov[idx].str == item) {
-                            this.feedbackQueue.push(ov[idx]);
+                            feedbackQueue.push(ov[idx]);
                         }
                     } else {
                         //new str added to the the editor so get analysis
                         //changedIds.push(idx);
-                            changedText = item;
-                            //qt = self.quickAnalyse(changedText, idx);
-                            self.quickAnalyse(changedText, idx)
-                                .then(response => {
-                                    if (response.data) {
-                                        /*temp['str'] = response.data.athanor.str;
-                                    temp['tags'] = response.data.athanor.tags;
-                                    temp['raw_tags'] = response.data.athanor.raw_tags;*/
-                                        tfeed = response.data.final[0];
-                                        self.feedbackQueue.push(tfeed);
+                        changedText = item;
+                        self.quickAnalyse(changedText, idx)
+                            .then(response => {
+                                if (response.data) {
+                                       feedbackQueue.push(response.data.final[0]);
                                     }
                                 })
                                 .catch(e => {
@@ -308,10 +294,9 @@
                                 });
 
                     }
-                    newTap.push(temp);
+
                 });
-                EventBus.$emit('compute-done', self.feedbackQueue);
-                self.tap = newTap;
+                EventBus.$emit('compute-done', feedbackQueue);
             },
             quickAnalyse(changedText, idx) {
                 this.$data.counter = 0;
@@ -362,8 +347,7 @@
                 }
             },
             quickCheck() {
-                if (this.$data.counter >= 5 && this.editorContent !== '') {
-                    this.$data.counter =0;
+                if (this.editorContent !== '') {
                     this.tokeniseTextInput();
                 }
             }
@@ -374,11 +358,7 @@
             },
             analytic: function() {
                 return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
-            },
-            /*extractedFeed: function() {
-                console.log(this.extractedFeed);
-                return this.extractedFeed.push(this.feedbackQueue);
-            }*/
+            }
         }
     }
 </script>

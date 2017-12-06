@@ -34924,6 +34924,8 @@ window.Vue = __webpack_require__(217);
 
 
 
+
+
 // Create the apollo client
 var apolloClient = new __WEBPACK_IMPORTED_MODULE_0_apollo_client__["a" /* ApolloClient */]({
     networkInterface: Object(__WEBPACK_IMPORTED_MODULE_0_apollo_client__["b" /* createNetworkInterface */])({
@@ -77655,6 +77657,11 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_editor__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_editor___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue2_editor__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+//
+//
+//
 //
 //
 //
@@ -77814,7 +77821,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  Vue.use(VueFroala);
  *
  */
-// import { EventBus } from './event-bus.js';
+var EventBus = new Vue();
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -77833,8 +77841,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             },
             editorContent: 'Edit Your Content Here!',
-            tmp: 'More text',
-            viewer: {},
             loading: 0,
             tap: [],
             errors: [],
@@ -77853,30 +77859,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 feedbackOpt: 'feedback',
                 grammar: 'reflective'
             },
-            feedbackQueue: [],
-            extractedFeed: extractedFeed
+            extractedFeed: []
         };
     },
-
-    /* apollo:{
-         viewer: {
-             query: POSTS_QUERY,
-             loadingKey: 'loading'
-         }
-     },*/
     mounted: function mounted() {
-        var _this = this;
-
         this.editLog.push(this.editorContent);
         this.fetchAnalysis();
-        EventBus.$on('compute-done', function (data) {
-            _this.extractedFeed = data;
-        });
     },
     created: function created() {
+        var _this = this;
+
         this.auto = 'every 5m';
         //setInterval(this.storeAnalysedDrafts, 900000);
-        setInterval(this.quickCheck, 5000);
+        setInterval(this.quickCheck, 50000);
+        EventBus.$on('compute-done', function (data) {
+            _this.extractedFeed.push(data);
+            if (_this.extractedFeed.length == 5) {
+                _this.feedback.final = _this.extractedFeed[4];
+                _this.extractedFeed = [];
+            }
+        });
     },
 
     watch: {
@@ -77911,59 +77913,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         computeText: function computeText(nv, ov) {
-
             var changedText = '';
             var self = this;
-            var newTap = [];
-            self.feedbackQueue = [];
+            // var newTap = [];
+            var feedbackQueue = [];
 
             nv.forEach(function (item, idx) {
                 console.log(item);
-                var temp = {};
-
-                var tfeed;
                 if (typeof ov[idx] !== 'undefined') {
                     if (ov[idx].str != item) {
                         //str exits but str changed
                         changedText = item;
-                        temp['str'] = changedText;
-                        console.log("264");
+
                         self.quickAnalyse(changedText, idx).then(function (response) {
                             if (response.data) {
-                                /* temp['str'] = response.data.athanor.str;
-                                 temp['tags'] = response.data.athanor.tags;
-                                 temp['raw_tags'] = response.data.athanor.raw_tags;
-                                 */
-                                self.feedbackQueue.push(response.data.final[0]);
-                                console.log(tfeed);
+                                feedbackQueue.push(response.data.final[0]);
                             }
                         }).catch(function (e) {
                             self.$data.errors.push(e);
                         });
                     } else if (ov[idx].str == item) {
-                        this.feedbackQueue.push(ov[idx]);
+                        feedbackQueue.push(ov[idx]);
                     }
                 } else {
                     //new str added to the the editor so get analysis
                     //changedIds.push(idx);
                     changedText = item;
-                    //qt = self.quickAnalyse(changedText, idx);
                     self.quickAnalyse(changedText, idx).then(function (response) {
                         if (response.data) {
-                            /*temp['str'] = response.data.athanor.str;
-                            temp['tags'] = response.data.athanor.tags;
-                            temp['raw_tags'] = response.data.athanor.raw_tags;*/
-                            tfeed = response.data.final[0];
-                            self.feedbackQueue.push(tfeed);
+                            feedbackQueue.push(response.data.final[0]);
                         }
                     }).catch(function (e) {
                         self.$data.errors.push(e);
                     });
                 }
-                newTap.push(temp);
             });
-            EventBus.$emit('compute-done', self.feedbackQueue);
-            self.tap = newTap;
+            EventBus.$emit('compute-done', feedbackQueue);
         },
         quickAnalyse: function quickAnalyse(changedText, idx) {
             this.$data.counter = 0;
@@ -78016,8 +78001,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         quickCheck: function quickCheck() {
-            if (this.$data.counter >= 5 && this.editorContent !== '') {
-                this.$data.counter = 0;
+            if (this.editorContent !== '') {
                 this.tokeniseTextInput();
             }
         }
@@ -78029,10 +78013,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         analytic: function analytic() {
             return this.attributes.feedbackOpt == 'analytic' ? 'display:inline' : '';
         }
-        /*extractedFeed: function() {
-            console.log(this.extractedFeed);
-            return this.extractedFeed.push(this.feedbackQueue);
-        }*/
     }
 });
 
@@ -78470,7 +78450,13 @@ var render = function() {
                   2
                 )
               })
-            )
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-12" }, [
+                _vm._v(_vm._s(_vm.extractedFeed))
+              ])
+            ])
           ])
         ])
       ])
