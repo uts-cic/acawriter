@@ -76,7 +76,7 @@
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span v-bind:class="mv">&nbsp;</span>
                                         </span>
-                                        {{feed.str}}
+                                        <span v-html="feed.str"></span>
                                     </span>
                                 </div>
                             </div>
@@ -212,6 +212,7 @@
             //setInterval(this.storeAnalysedDrafts, 900000);
             setInterval(this.quickCheck, 50000);
             EventBus.$on('compute-done', data => {
+                //console.log(data);
                 this.extractedFeed.push(data);
                 if(this.extractedFeed.length == 5) {
                     this.feedback.final = this.extractedFeed[4];
@@ -260,16 +261,17 @@
                 var feedbackQueue=[];
 
                 nv.forEach(function(item, idx) {
-                    console.log(item);
+                    //console.log(item);
                     if(typeof ov[idx]!=='undefined') {
                         if(ov[idx].str!= item) {
                             //str exits but str changed
                             changedText = item;
-
+                            let a = idx;
                             self.quickAnalyse(changedText, idx)
                                 .then(response => {
                                     if(response.data) {
-                                        feedbackQueue.push(response.data.final[0]);
+                                        feedbackQueue[a] = response.data.final[0];
+                                        console.log("274");
                                     }
                                 })
                                 .catch(e => {
@@ -278,15 +280,18 @@
 
                         } else if(ov[idx].str == item) {
                             feedbackQueue.push(ov[idx]);
+                            console.log("283");
                         }
                     } else {
                         //new str added to the the editor so get analysis
                         //changedIds.push(idx);
+                        let b=idx;
                         changedText = item;
                         self.quickAnalyse(changedText, idx)
                             .then(response => {
                                 if (response.data) {
-                                       feedbackQueue.push(response.data.final[0]);
+                                       feedbackQueue[b] = response.data.final[0];
+                                       console.log("293");
                                     }
                                 })
                                 .catch(e => {

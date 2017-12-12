@@ -282,7 +282,9 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $raw) {
             $temp = new \stdClass();
-            $temp->str = $raw['str'];
+            $temp->str = nl2br($raw['str']);
+
+           // $temp->str = $raw['str'];
             foreach($this->rules as $rule) {
                 if(isset($result->{$rule['name']}[$key])) $temp->{$rule['name']} = $result->{$rule['name']}[$key];
             }

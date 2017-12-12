@@ -77873,6 +77873,7 @@ var EventBus = new Vue();
         //setInterval(this.storeAnalysedDrafts, 900000);
         setInterval(this.quickCheck, 50000);
         EventBus.$on('compute-done', function (data) {
+            //console.log(data);
             _this.extractedFeed.push(data);
             if (_this.extractedFeed.length == 5) {
                 _this.feedback.final = _this.extractedFeed[4];
@@ -77919,29 +77920,33 @@ var EventBus = new Vue();
             var feedbackQueue = [];
 
             nv.forEach(function (item, idx) {
-                console.log(item);
+                //console.log(item);
                 if (typeof ov[idx] !== 'undefined') {
                     if (ov[idx].str != item) {
                         //str exits but str changed
                         changedText = item;
-
+                        var a = idx;
                         self.quickAnalyse(changedText, idx).then(function (response) {
                             if (response.data) {
-                                feedbackQueue.push(response.data.final[0]);
+                                feedbackQueue[a] = response.data.final[0];
+                                console.log("274");
                             }
                         }).catch(function (e) {
                             self.$data.errors.push(e);
                         });
                     } else if (ov[idx].str == item) {
                         feedbackQueue.push(ov[idx]);
+                        console.log("283");
                     }
                 } else {
                     //new str added to the the editor so get analysis
                     //changedIds.push(idx);
+                    var b = idx;
                     changedText = item;
                     self.quickAnalyse(changedText, idx).then(function (response) {
                         if (response.data) {
-                            feedbackQueue.push(response.data.final[0]);
+                            feedbackQueue[b] = response.data.final[0];
+                            console.log("293");
                         }
                     }).catch(function (e) {
                         self.$data.errors.push(e);
@@ -78301,11 +78306,10 @@ var render = function() {
                                     _c("span", { class: mv }, [_vm._v(" ")])
                                   ])
                                 }),
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(feed.str) +
-                                    "\n                                "
-                                )
+                                _vm._v(" "),
+                                _c("span", {
+                                  domProps: { innerHTML: _vm._s(feed.str) }
+                                })
                               ],
                               2
                             )
