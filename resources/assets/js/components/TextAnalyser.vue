@@ -68,14 +68,15 @@
                                 <div class="col-md-12 wrapper">
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
-                                        <span v-for="(expression, exp) in feed.expression.message">
+                                        <!--<span v-for="(expression, exp) in feed.expression.message">
                                             <span v-bind:class="exp">&nbsp;</span>
                                         </span>
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span v-bind:class="mv">&nbsp;</span>
-                                        </span>
+                                        </span>-->
+                                        <span v-bind:class="feed.css"></span>
                                         <span v-html="feed.str"></span>
                                     </span>
                                 </div>

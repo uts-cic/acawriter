@@ -77814,6 +77814,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /**
  commented out - license needed
@@ -78280,39 +78281,13 @@ var render = function() {
                           }),
                           _vm._v(" "),
                           _vm._l(_vm.feedback.final, function(feed, idx) {
-                            return _c(
-                              "span",
-                              [
-                                _vm._l(feed.expression.message, function(
-                                  expression,
-                                  exp
-                                ) {
-                                  return _c("span", [
-                                    _c("span", { class: exp }, [_vm._v(" ")])
-                                  ])
-                                }),
-                                _vm._v(" "),
-                                feed.metrics.message.length == 0
-                                  ? _c("span")
-                                  : _c("span", { staticClass: "metrics" }, [
-                                      _vm._v(" ")
-                                    ]),
-                                _vm._v(" "),
-                                _vm._l(feed.moves.message, function(
-                                  rmoves,
-                                  mv
-                                ) {
-                                  return _c("span", [
-                                    _c("span", { class: mv }, [_vm._v(" ")])
-                                  ])
-                                }),
-                                _vm._v(" "),
-                                _c("span", {
-                                  domProps: { innerHTML: _vm._s(feed.str) }
-                                })
-                              ],
-                              2
-                            )
+                            return _c("span", [
+                              _c("span", { class: feed.css }),
+                              _vm._v(" "),
+                              _c("span", {
+                                domProps: { innerHTML: _vm._s(feed.str) }
+                              })
+                            ])
                           })
                         ],
                         2

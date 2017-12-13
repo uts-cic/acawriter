@@ -394,8 +394,8 @@ class StringTokenizer extends Controller
 
     protected function cleanText($string) {
 
-        $pattern = array('/<\/p>/' , '/<br \/>/', '/&nbsp;/');
-        $replace = array('\n', '\n', ' ');
+        $pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
+        $replace = array('\n', '\n', '');
 
         $replace = preg_replace($pattern, "\n", $string);
 
