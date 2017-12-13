@@ -66,6 +66,10 @@
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
                                 <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
                                 <div class="col-md-12 wrapper">
+                                    <span v-html="editorContent"></span>
+
+
+
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
                                         <!--<span v-for="(expression, exp) in feed.expression.message">
@@ -76,7 +80,9 @@
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span v-bind:class="mv">&nbsp;</span>
                                         </span>-->
-                                        <span v-bind:class="feed.css"></span>
+                                        <span v-for="ic in feed.css">
+                                            [<span v-bind:class="ic"></span>]
+                                        </span>
                                         <span v-html="feed.str"></span>
                                     </span>
                                 </div>

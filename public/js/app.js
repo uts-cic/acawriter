@@ -77815,6 +77815,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /**
  commented out - license needed
@@ -78269,6 +78275,10 @@ var render = function() {
                         { staticClass: "col-md-12 wrapper" },
                         [
                           _c("span", {
+                            domProps: { innerHTML: _vm._s(_vm.editorContent) }
+                          }),
+                          _vm._v(" "),
+                          _c("span", {
                             directives: [
                               {
                                 name: "show",
@@ -78281,13 +78291,27 @@ var render = function() {
                           }),
                           _vm._v(" "),
                           _vm._l(_vm.feedback.final, function(feed, idx) {
-                            return _c("span", [
-                              _c("span", { class: feed.css }),
-                              _vm._v(" "),
-                              _c("span", {
-                                domProps: { innerHTML: _vm._s(feed.str) }
-                              })
-                            ])
+                            return _c(
+                              "span",
+                              [
+                                _vm._l(feed.css, function(ic) {
+                                  return _c("span", [
+                                    _vm._v(
+                                      "\n                                        ["
+                                    ),
+                                    _c("span", { class: ic }),
+                                    _vm._v(
+                                      "]\n                                    "
+                                    )
+                                  ])
+                                }),
+                                _vm._v(" "),
+                                _c("span", {
+                                  domProps: { innerHTML: _vm._s(feed.str) }
+                                })
+                              ],
+                              2
+                            )
                           })
                         ],
                         2
