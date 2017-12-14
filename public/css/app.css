@@ -12817,7 +12817,6 @@ a.text-dark:hover {
 
 .link2me:before {
   content: "\F211";
-  /* this is your text. You can also use UTF-8 character codes as I do here */
   color: darkblue;
 }
 

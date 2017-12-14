@@ -66,17 +66,24 @@
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
                                 <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
                                 <div class="col-md-12 wrapper">
+                                    <span v-html="editorContent"></span>
+
+
+
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
-                                        <span v-for="(expression, exp) in feed.expression.message">
+                                        <!--<span v-for="(expression, exp) in feed.expression.message">
                                             <span v-bind:class="exp">&nbsp;</span>
                                         </span>
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span v-bind:class="mv">&nbsp;</span>
+                                        </span>-->
+                                        <span v-for="ic in feed.css">
+                                            [<span v-bind:class="ic"></span>]
                                         </span>
-                                        {{feed.str}}
+                                        <span v-html="feed.str"></span>
                                     </span>
                                 </div>
                             </div>
@@ -212,11 +219,11 @@
             //setInterval(this.storeAnalysedDrafts, 900000);
             setInterval(this.quickCheck, 50000);
             EventBus.$on('compute-done', data => {
-                this.extractedFeed.push(data);
-                if(this.extractedFeed.length == 5) {
-                    this.feedback.final = this.extractedFeed[4];
-                    this.extractedFeed =[];
-                }
+                 this.feedback.final.forEach (function(exp, idx) {
+                     if(exp.str === data.str) {
+                            this.feedback.final[idx] = data;
+                     }
+                 });
             });
 
 
@@ -260,16 +267,18 @@
                 var feedbackQueue=[];
 
                 nv.forEach(function(item, idx) {
-                    console.log(item);
+                    //console.log(item);
                     if(typeof ov[idx]!=='undefined') {
                         if(ov[idx].str!= item) {
                             //str exits but str changed
                             changedText = item;
-
+                            let a = idx;
                             self.quickAnalyse(changedText, idx)
                                 .then(response => {
                                     if(response.data) {
-                                        feedbackQueue.push(response.data.final[0]);
+                                        EventBus.$emit('compute-done', response.data.final[0]);
+
+                                        console.log("274");
                                     }
                                 })
                                 .catch(e => {
@@ -277,16 +286,20 @@
                                 });
 
                         } else if(ov[idx].str == item) {
-                            feedbackQueue.push(ov[idx]);
+                            //feedbackQueue.push(ov[idx]);
+                            //console.log("283");
                         }
                     } else {
                         //new str added to the the editor so get analysis
                         //changedIds.push(idx);
+                        let b=idx;
                         changedText = item;
                         self.quickAnalyse(changedText, idx)
                             .then(response => {
                                 if (response.data) {
-                                       feedbackQueue.push(response.data.final[0]);
+                                       //feedbackQueue[b] = response.data.final[0];
+                                       EventBus.$emit('compute-done', response.data.final[0]);
+                                       console.log("293");
                                     }
                                 })
                                 .catch(e => {
@@ -296,7 +309,7 @@
                     }
 
                 });
-                EventBus.$emit('compute-done', feedbackQueue);
+                //EventBus.$emit('compute-done', feedbackQueue);
             },
             quickAnalyse(changedText, idx) {
                 this.$data.counter = 0;

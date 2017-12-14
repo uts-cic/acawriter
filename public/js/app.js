@@ -77890,6 +77890,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /**
  commented out - license needed
@@ -77949,11 +77956,11 @@ var EventBus = new Vue();
         //setInterval(this.storeAnalysedDrafts, 900000);
         setInterval(this.quickCheck, 50000);
         EventBus.$on('compute-done', function (data) {
-            _this.extractedFeed.push(data);
-            if (_this.extractedFeed.length == 5) {
-                _this.feedback.final = _this.extractedFeed[4];
-                _this.extractedFeed = [];
-            }
+            _this.feedback.final.forEach(function (exp, idx) {
+                if (exp.str === data.str) {
+                    this.feedback.final[idx] = data;
+                }
+            });
         });
     },
 
@@ -78001,36 +78008,42 @@ var EventBus = new Vue();
             var feedbackQueue = [];
 
             nv.forEach(function (item, idx) {
-                console.log(item);
+                //console.log(item);
                 if (typeof ov[idx] !== 'undefined') {
                     if (ov[idx].str != item) {
                         //str exits but str changed
                         changedText = item;
-
+                        var a = idx;
                         self.quickAnalyse(changedText, idx).then(function (response) {
                             if (response.data) {
-                                feedbackQueue.push(response.data.final[0]);
+                                EventBus.$emit('compute-done', response.data.final[0]);
+
+                                console.log("274");
                             }
                         }).catch(function (e) {
                             self.$data.errors.push(e);
                         });
                     } else if (ov[idx].str == item) {
-                        feedbackQueue.push(ov[idx]);
+                        //feedbackQueue.push(ov[idx]);
+                        //console.log("283");
                     }
                 } else {
                     //new str added to the the editor so get analysis
                     //changedIds.push(idx);
+                    var b = idx;
                     changedText = item;
                     self.quickAnalyse(changedText, idx).then(function (response) {
                         if (response.data) {
-                            feedbackQueue.push(response.data.final[0]);
+                            //feedbackQueue[b] = response.data.final[0];
+                            EventBus.$emit('compute-done', response.data.final[0]);
+                            console.log("293");
                         }
                     }).catch(function (e) {
                         self.$data.errors.push(e);
                     });
                 }
             });
-            EventBus.$emit('compute-done', feedbackQueue);
+            //EventBus.$emit('compute-done', feedbackQueue);
         },
         quickAnalyse: function quickAnalyse(changedText, idx) {
             this.$data.counter = 0;
@@ -78353,6 +78366,10 @@ var render = function() {
                         { staticClass: "col-md-12 wrapper" },
                         [
                           _c("span", {
+                            domProps: { innerHTML: _vm._s(_vm.editorContent) }
+                          }),
+                          _vm._v(" "),
+                          _c("span", {
                             directives: [
                               {
                                 name: "show",
@@ -78368,34 +78385,21 @@ var render = function() {
                             return _c(
                               "span",
                               [
-                                _vm._l(feed.expression.message, function(
-                                  expression,
-                                  exp
-                                ) {
+                                _vm._l(feed.css, function(ic) {
                                   return _c("span", [
-                                    _c("span", { class: exp }, [_vm._v(" ")])
+                                    _vm._v(
+                                      "\n                                        ["
+                                    ),
+                                    _c("span", { class: ic }),
+                                    _vm._v(
+                                      "]\n                                    "
+                                    )
                                   ])
                                 }),
                                 _vm._v(" "),
-                                feed.metrics.message.length == 0
-                                  ? _c("span")
-                                  : _c("span", { staticClass: "metrics" }, [
-                                      _vm._v(" ")
-                                    ]),
-                                _vm._v(" "),
-                                _vm._l(feed.moves.message, function(
-                                  rmoves,
-                                  mv
-                                ) {
-                                  return _c("span", [
-                                    _c("span", { class: mv }, [_vm._v(" ")])
-                                  ])
-                                }),
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(feed.str) +
-                                    "\n                                "
-                                )
+                                _c("span", {
+                                  domProps: { innerHTML: _vm._s(feed.str) }
+                                })
                               ],
                               2
                             )

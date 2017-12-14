@@ -214,7 +214,8 @@ class StringTokenizer extends Controller
 
     protected function analyseAuto(Request $request) {
         $apiResponse = new \StdClass();
-        $queryTxt = strip_tags($request['txt']);
+        //$queryTxt = strip_tags($request['txt']);
+        $queryTxt = $this->cleanText($request['txt']);
         $variables = new \stdClass();
         $variables->input = $queryTxt;
             //get athanor
@@ -231,7 +232,8 @@ class StringTokenizer extends Controller
         $collection = collect($request['txt']);
         $unique = $collection->unique();
         $unique->values()->all();
-        $queryTxt = strip_tags($unique->last());
+       // $queryTxt = strip_tags($unique->last());
+        $queryTxt = $this->cleanText($unique->last());
         $variables = new \stdClass();
         $variables->input = $queryTxt;
         $split = preg_split('/[.]/', $queryTxt);
@@ -252,7 +254,8 @@ class StringTokenizer extends Controller
     //quick sentence by sentence
     protected function qanalyseAthanor(Request $request) {
         $apiResponse = new \StdClass();
-        $queryTxt = strip_tags($request['txt']);
+        //$queryTxt = strip_tags($request['txt']);
+        $queryTxt = $this->cleanText($request['txt']);
         $variables = new \stdClass();
         $variables->input = $queryTxt;
             //get athanor
@@ -298,7 +301,10 @@ class StringTokenizer extends Controller
     protected function tapTokeniser(Request $request) {
         $splitTxt = array();
         $variables = new \stdClass();
-        $variables->input = strip_tags($request['txt']);
+        //$variables->input = strip_tags($request['txt']);
+        //$replace = str_replace("</p>","\n",trim($request['txt']));
+        $variables->input = $this->cleanText($request['txt']);
+        //$variables->input = $request['txt'];
         $this->gResponse = $this->client->response($this->queryTokenise, $variables);
         if ($this->gResponse->hasErrors()) {
             dd($this->gResponse->errors());
@@ -313,7 +319,8 @@ class StringTokenizer extends Controller
 
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
-        $variables->input = strip_tags($text);
+       // $variables->input = strip_tags($text);
+        $variables->input = $this->cleanText($text);
         $tags = array();
         //get athanor rethmoves
         if($grammar == 'analytic') {
@@ -336,7 +343,8 @@ class StringTokenizer extends Controller
     public function metrics($string) {
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
-        $variables->input = strip_tags($string);
+        //$variables->input = strip_tags($string);
+        $variables->input = $this->cleanText($string);
         $apiResponse = new \stdClass();
         //get  metrics
         $this->gResponse = $this->client->response($this->queryMetrics, $variables);
@@ -354,7 +362,8 @@ class StringTokenizer extends Controller
     public function vocab($string) {
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
-        $variables->input = strip_tags($string);
+        //$variables->input = strip_tags($string);
+        $variables->input = $this->cleanText($string);
         //get  metrics
         $this->gResponse = $this->client->response($this->queryTwo, $variables);
         if ($this->gResponse->hasErrors()) {
@@ -374,7 +383,8 @@ class StringTokenizer extends Controller
     public function expression($string) {
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
-        $variables->input = strip_tags($string);
+        //$variables->input = $this->cleanText($string);
+        $variables->input = $this->cleanText($string);
         //get  metrics
         $this->gResponse = $this->client->response($this->queryExpressions, $variables);
         if ($this->gResponse->hasErrors()) {
@@ -395,7 +405,8 @@ class StringTokenizer extends Controller
     */
     public function quickTapMoves($data) {
         $apiResponse = new \StdClass();
-        $queryTxt = strip_tags($data['txt']);
+        //$queryTxt = $this->cleanText($data['txt']);
+        $queryTxt = $data['txt'];
         $variables = new \stdClass();
         $variables->input = $queryTxt;
         //get athanor
@@ -418,6 +429,17 @@ class StringTokenizer extends Controller
             }
         }
         return $apiResponse;
+    }
+
+
+    protected function cleanText($string) {
+
+        $pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
+        $replace = array('\n', '\n', '');
+
+        $replace = preg_replace($pattern, "\n", $string);
+
+        return strip_tags(trim($replace));
     }
 
 
