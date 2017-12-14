@@ -66,17 +66,24 @@
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
                                 <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
                                 <div class="col-md-12 wrapper">
+                                    <span v-html="editorContent"></span>
+
+
+
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
-                                        <span v-for="(expression, exp) in feed.expression.message">
+                                        <!--<span v-for="(expression, exp) in feed.expression.message">
                                             <span v-bind:class="exp">&nbsp;</span>
                                         </span>
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span v-bind:class="mv">&nbsp;</span>
+                                        </span>-->
+                                        <span v-for="ic in feed.css">
+                                            [<span v-bind:class="ic"></span>]
                                         </span>
-                                        {{feed.str}}
+                                        <span v-html="feed.str"></span>
                                     </span>
                                 </div>
                             </div>
@@ -141,6 +148,9 @@
                                  <small>- Athanor raw feedback, hover over the icon to see the tags</small>
                              </div>-->
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">{{extractedFeed}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,7 +167,10 @@
      Vue.use(VueFroala);
      *
      */
-    import {VueEditor} from 'vue2-editor';
+    const EventBus = new Vue();
+    import { VueEditor } from 'vue2-editor';
+    import moment from 'moment';
+
     export default {
         components: {
             VueEditor
@@ -175,11 +188,8 @@
                     }
                 },
                 editorContent: 'Edit Your Content Here!',
-                tmp: 'More text',
-                viewer : {},
                 loading: 0,
                 tap:[],
-                qtap:[],
                 errors:[],
                 tapCalls:{
                     'athanor': false,
@@ -195,40 +205,47 @@
                 attributes:{
                     feedbackOpt:'feedback',
                     grammar:'reflective'
-                }
+                },
+                extractedFeed:[]
             }
         },
-        /* apollo:{
-             viewer: {
-                 query: POSTS_QUERY,
-                 loadingKey: 'loading'
-             }
-         },*/
         mounted () {
             this.editLog.push(this.editorContent);
             this.fetchAnalysis();
+
         },
         created() {
             this.auto = 'every 5m';
             //setInterval(this.storeAnalysedDrafts, 900000);
-            setInterval(this.quickCheck, 5000);
+            setInterval(this.quickCheck, 50000);
+            EventBus.$on('compute-done', data => {
+                 this.feedback.final.forEach (function(exp, idx) {
+                     if(exp.str === data.str) {
+                            this.feedback.final[idx] = data;
+                     }
+                 });
+            });
+
+
         },
         watch :{
             editorContent: function (newVal) {
                 this.$data.counter++;
             },
-            tap: function() {
+           /* tap: function() {
                 this.fetchFeedback();
-            }
+            }*/
         },
         methods: {
             fetchAnalysis() {
                 this.$data.tapCalls.athanor =true;
                 this.$data.counter = 0;
+                this.feedback =[];
                 axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
                     .then(response => {
                         this.$data.tap = response.data.athanor;
                         this.$data.tapCalls.athanor=false;
+                        this.fetchFeedback();
                     })
                     .catch(e => {
                         this.$data.errors.push(e)
@@ -246,56 +263,53 @@
             computeText: function(nv, ov) {
                 var changedText='';
                 var self = this;
-                var newTap = [];
+               // var newTap = [];
+                var feedbackQueue=[];
 
                 nv.forEach(function(item, idx) {
-                    console.log(item);
-                    var temp = {};
-                    var qt={};
+                    //console.log(item);
                     if(typeof ov[idx]!=='undefined') {
                         if(ov[idx].str!= item) {
                             //str exits but str changed
                             changedText = item;
-                            temp['str'] = changedText;
+                            let a = idx;
                             self.quickAnalyse(changedText, idx)
                                 .then(response => {
                                     if(response.data) {
-                                       /* temp['str'] = response.data.athanor.str;
-                                        temp['tags'] = response.data.athanor.tags;
-                                        temp['raw_tags'] = response.data.athanor.raw_tags;
-                                        */
-                                       console.log(response.data);
+                                        EventBus.$emit('compute-done', response.data.final[0]);
+
+                                        console.log("274");
                                     }
                                 })
                                 .catch(e => {
-                                    this.$data.errors.push(e)
+                                    self.$data.errors.push(e)
                                 });
+
                         } else if(ov[idx].str == item) {
-                            //str exists and no change
-                            /*temp['str'] = ov[idx].str;
-                            temp['tags'] = ov[idx].tags;
-                            temp['raw_tags'] = ov[idx].raw_tags;*/
+                            //feedbackQueue.push(ov[idx]);
+                            //console.log("283");
                         }
                     } else {
                         //new str added to the the editor so get analysis
                         //changedIds.push(idx);
+                        let b=idx;
                         changedText = item;
-                        //qt = self.quickAnalyse(changedText, idx);
                         self.quickAnalyse(changedText, idx)
                             .then(response => {
-                                if(response.data) {
-                                    /*temp['str'] = response.data.athanor.str;
-                                    temp['tags'] = response.data.athanor.tags;
-                                    temp['raw_tags'] = response.data.athanor.raw_tags;*/
-                                }
-                            })
-                            .catch(e => {
-                                this.$data.errors.push(e)
-                            });
+                                if (response.data) {
+                                       //feedbackQueue[b] = response.data.final[0];
+                                       EventBus.$emit('compute-done', response.data.final[0]);
+                                       console.log("293");
+                                    }
+                                })
+                                .catch(e => {
+                                    self.$data.errors.push(e)
+                                });
+
                     }
-                    newTap.push(temp);
+
                 });
-                self.tap = newTap;
+                //EventBus.$emit('compute-done', feedbackQueue);
             },
             quickAnalyse(changedText, idx) {
                 this.$data.counter = 0;
@@ -345,25 +359,9 @@
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
             },
-            qfetchFeedback() {
-                this.errors=[];
-                if(this.feedbackOpt!=='') {
-                    axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
-                        .then(response => {
-                            this.feedback = response.data;
-                        })
-                        .catch(e => {
-                            this.$data.errors.push(e)
-                        });
-                } else {
-                    this.$data.errors.push({'message':'Please select feedback type'});
-                }
-            },
             quickCheck() {
-                console.log("into quick check");
-                if (this.$data.counter >= 7 && this.editorContent !== '') {
+                if (this.editorContent !== '') {
                     this.tokeniseTextInput();
-
                 }
             }
         },
@@ -374,7 +372,6 @@
             analytic: function() {
                 return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
             }
-
         }
     }
 </script>

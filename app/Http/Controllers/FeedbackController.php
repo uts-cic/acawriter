@@ -51,9 +51,9 @@ class FeedbackController extends Controller
             $data['txt'] = $request['txt'];
             $data['grammar'] = $request['extra']['grammar'];
             $temp = $this->stringTokeniser->quickTapMoves($data);
-            $tt['str']= $temp->str;
-            $tt['raw_tags'] = $temp->raw_tags;
-            $tt['tags'] = $temp->tags;
+            $tt['str']= $temp->str ? $temp->str : '';
+            $tt['raw_tags'] = $temp->raw_tags? $temp->raw_tags : array();
+            $tt['tags'] = $temp->tags? $temp->tags:'';
             $tap[]=$tt;
 
         } else if($request['action'] == 'fetch') {
@@ -121,8 +121,8 @@ class FeedbackController extends Controller
         foreach($tap as $key => $data) {
             $setFeed = new \stdClass();
             $setFeed->str = $data['str'];
-            $setFeed->message = '';
-
+            $setFeed->message = array();
+            $setFeed->css = array();
             if ($key < $check['paragraph'] && count($data['raw_tags']) > 0) {
                 if (in_array($check['paragraph'], $data['raw_tags'])) {
                     $tempo++;
@@ -131,7 +131,8 @@ class FeedbackController extends Controller
         }
 
         if ($tempo == 0 && $key == $this->para - 1) {
-            $setFeed->message = $rule['message'];
+            $setFeed->message['background'] = $rule['message'];
+            $setFeed->css[] = 'background';
             $result[] = $setFeed;
         }
 
@@ -146,13 +147,17 @@ class FeedbackController extends Controller
             $tempStore = new \stdClass();
             $tempStore->str = $data['str'];
             $tempStore->message = array();
+            $tempStore->css = array();
             $returnData = $this->stringTokeniser->metrics($data['str']);
             if(isset($returnData->sentWordCounts)) {
                 //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
                 if($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
                     //$tempStore->message = $rule['message'];
                     foreach($rule['message'] as $msg) {
-                        if(isset($msg['metrics'])) $tempStore->message['metrics'] = $msg['metrics'];
+                        if(isset($msg['metrics'])) {
+                            $tempStore->message['metrics'] = $msg['metrics'];
+                            array_push($tempStore->css, 'metrics');
+                        }
                     }
                 }
             }
@@ -181,6 +186,7 @@ class FeedbackController extends Controller
         $tempStore = new \stdClass();
         $tempStore->str = $completeText;
         $tempStore->message = array();
+        $tempStore->css =array();
 
             $returnData = $this->stringTokeniser->vocab($tempStore->str);
             if(isset($returnData->terms)) {
@@ -193,7 +199,10 @@ class FeedbackController extends Controller
 
                 if($termCount > 0 ) {
                     foreach($rule['message'] as $msg) {
-                        if(isset($msg['metrics'])) $tempStore->message['metrics'] = $msg['vocab'];
+                        if(isset($msg['metrics'])) {
+                            $tempStore->message['vocab'] = $msg['vocab'];
+                            $tempStore->css[] = 'vocab';
+                        }
                     }
                     $result[] = $tempStore;
                 }
@@ -225,6 +234,7 @@ class FeedbackController extends Controller
             $tempStore->affect=array();
             $tempStore->epistemic=array();
             $tempStore->modal=array();
+            $tempStore->css = array();
 
             $returnData = $this->stringTokeniser->expression($data['str']);
             //$returnData is an array but since we are analysing tokenised strings we can safetly assume array[0]
@@ -235,7 +245,10 @@ class FeedbackController extends Controller
                 if (isset($sanitizedResult->{$exp}) && count($sanitizedResult->{$exp}) > 0) {
                     $tempStore->{$exp} = $sanitizedResult->{$exp};
                     foreach($rule['message'] as $msg) {
-                        if(isset($msg[$exp])) $tempStore->message[$exp] = $msg[$exp];
+                        if(isset($msg[$exp])) {
+                            $tempStore->message[$exp] = $msg[$exp];
+                            array_push($tempStore->css, $exp);
+                        }
                     }
                 }
             }
@@ -263,11 +276,15 @@ class FeedbackController extends Controller
             $setFeed = new \stdClass();
             $setFeed->str = $data['str'];
             $setFeed->message = array();
+            $setFeed->css = array();
 
             foreach($tags as $tag) {
                 if(count(preg_grep("[^".$tag."]", $data['raw_tags'])) > 0) {
                     foreach($messages as $msg) {
-                        if(isset($msg[$tag])) $setFeed->message[$tag] = $msg[$tag];
+                        if(isset($msg[$tag])) {
+                            $setFeed->message[$tag] = $msg[$tag];
+                            array_push($setFeed->css,$tag);
+                        }
                     }
                 }
             }
@@ -282,10 +299,19 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $raw) {
             $temp = new \stdClass();
-            $temp->str = $raw['str'];
+            $temp->str = nl2br($raw['str']);
+            $temp->css = array();
+            $resCss= array();
+           // $temp->str = $raw['str'];
             foreach($this->rules as $rule) {
-                if(isset($result->{$rule['name']}[$key])) $temp->{$rule['name']} = $result->{$rule['name']}[$key];
+                $tempcss= array();
+
+                if(isset($result->{$rule['name']}[$key])) {
+                    $temp->{$rule['name']} = $result->{$rule['name']}[$key];
+                    $resCss= array_merge($resCss, $result->{$rule['name']}[$key]->css);
+                }
             }
+            $temp->css = $resCss;
             $final[]=$temp;
         }
         return $final;

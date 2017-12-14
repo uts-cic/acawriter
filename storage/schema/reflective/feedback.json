@@ -28,7 +28,7 @@
       "message": [
         {"vocab" :"One or more keywords missing"}
       ],
-      "css": "vocab"
+      "css": ["vocab"]
     },
     {
       "name": "metrics",
@@ -38,7 +38,7 @@
       "message": [
         {"metrics" :"Sentence too long, might disengage the reader. Try breaking it into smaller sentences"}
       ],
-      "css": "metrics"
+      "css": ["metrics"]
     },
   {
     "name": "moves",

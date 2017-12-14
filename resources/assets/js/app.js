@@ -9,6 +9,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 //import Vue from 'vue';
+
+
+
+
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import VueApollo from 'vue-apollo';
 
