@@ -219,12 +219,11 @@
             //setInterval(this.storeAnalysedDrafts, 900000);
             setInterval(this.quickCheck, 50000);
             EventBus.$on('compute-done', data => {
-                //console.log(data);
-                this.extractedFeed.push(data);
-                if(this.extractedFeed.length == 5) {
-                    this.feedback.final = this.extractedFeed[4];
-                    this.extractedFeed =[];
-                }
+                 this.feedback.final.forEach (function(exp, idx) {
+                     if(exp.str === data.str) {
+                            this.feedback.final[idx] = data;
+                     }
+                 });
             });
 
 
@@ -277,7 +276,8 @@
                             self.quickAnalyse(changedText, idx)
                                 .then(response => {
                                     if(response.data) {
-                                        feedbackQueue[a] = response.data.final[0];
+                                        EventBus.$emit('compute-done', response.data.final[0]);
+
                                         console.log("274");
                                     }
                                 })
@@ -286,8 +286,8 @@
                                 });
 
                         } else if(ov[idx].str == item) {
-                            feedbackQueue.push(ov[idx]);
-                            console.log("283");
+                            //feedbackQueue.push(ov[idx]);
+                            //console.log("283");
                         }
                     } else {
                         //new str added to the the editor so get analysis
@@ -297,7 +297,8 @@
                         self.quickAnalyse(changedText, idx)
                             .then(response => {
                                 if (response.data) {
-                                       feedbackQueue[b] = response.data.final[0];
+                                       //feedbackQueue[b] = response.data.final[0];
+                                       EventBus.$emit('compute-done', response.data.final[0]);
                                        console.log("293");
                                     }
                                 })
@@ -308,7 +309,7 @@
                     }
 
                 });
-                EventBus.$emit('compute-done', feedbackQueue);
+                //EventBus.$emit('compute-done', feedbackQueue);
             },
             quickAnalyse(changedText, idx) {
                 this.$data.counter = 0;
