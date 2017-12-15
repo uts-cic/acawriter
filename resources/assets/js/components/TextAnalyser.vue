@@ -66,7 +66,7 @@
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
                                 <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
                                 <div class="col-md-12 wrapper">
-                                    <span v-html="editorContent"></span>
+                                    <!--<span v-html="editorContent"></span>-->
 
 
 
@@ -170,6 +170,8 @@
     const EventBus = new Vue();
     import { VueEditor } from 'vue2-editor';
     import moment from 'moment';
+    import store from '../store';
+    import { mapState, mapActions, mapGetters} from 'vuex';
 
     export default {
         components: {
@@ -177,6 +179,7 @@
         },
         name: 'editor',
         props:['assignment'],
+        store,
         data () {
             return {
                 preview: '',
@@ -201,7 +204,7 @@
                 auto:'',
                 splitText:[],
                 quickTags:'',
-                feedback:[],
+                //feedback:[],
                 attributes:{
                     feedbackOpt:'feedback',
                     grammar:'reflective'
@@ -212,7 +215,7 @@
         mounted () {
             this.editLog.push(this.editorContent);
             this.fetchAnalysis();
-
+           // this.$store.dispatch('LOAD_FEEDBACK');
         },
         created() {
             this.auto = 'every 5m';
@@ -228,19 +231,30 @@
 
 
         },
-        watch :{
-            editorContent: function (newVal) {
-                this.$data.counter++;
+        computed: {
+            reflective: function() {
+                return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
             },
-           /* tap: function() {
-                this.fetchFeedback();
-            }*/
+            analytic: function() {
+                return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
+            },
+           feedback() {
+                return this.$store.getters.currentFeedback
+           }
+        },
+        watch :{
+            /* editorContent: function (newVal) {
+                 this.$data.counter++;
+             },
+             tap: function() {
+                 this.fetchFeedback();
+             }*/
         },
         methods: {
             fetchAnalysis() {
                 this.$data.tapCalls.athanor =true;
                 this.$data.counter = 0;
-                this.feedback =[];
+                //this.feedback =[];
                 axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
                     .then(response => {
                         this.$data.tap = response.data.athanor;
@@ -338,7 +352,7 @@
                     .then(response => {
                         this.splitText = response.data.tokenised;
                         this.$data.tapCalls.athanor=false;
-                        this.computeText(this.splitText, this.$data.feedback.final);
+                        this.computeText(this.splitText, this.$store.currentFeedback.final);
                         this.$data.counter = 0;
                     })
                     .catch(e => {
@@ -348,13 +362,20 @@
             fetchFeedback() {
                 this.errors=[];
                 if(this.feedbackOpt!=='') {
-                    axios.post('/feedback', {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes})
+                    console.assert(this.tap);
+                    let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
+
+                    this.$store.dispatch('LOAD_FEEDBACK',data);
+
+
+
+                    /*axios.post('/feedback', {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes})
                         .then(response => {
                             this.feedback = response.data;
                         })
                         .catch(e => {
                             this.$data.errors.push(e)
-                        });
+                        });*/
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
@@ -365,13 +386,6 @@
                 }
             }
         },
-        computed: {
-            reflective: function() {
-                return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
-            },
-            analytic: function() {
-                return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
-            }
-        }
+
     }
 </script>
