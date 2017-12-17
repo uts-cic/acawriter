@@ -16,6 +16,9 @@ window.Vue = require('vue');
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import VueApollo from 'vue-apollo';
 
+
+
+
 // Create the apollo client
 const apolloClient = new ApolloClient({
     networkInterface: createNetworkInterface({
