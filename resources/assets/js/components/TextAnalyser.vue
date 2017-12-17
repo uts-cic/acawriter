@@ -221,13 +221,13 @@
             this.auto = 'every 5m';
             //setInterval(this.storeAnalysedDrafts, 900000);
             setInterval(this.quickCheck, 50000);
-            EventBus.$on('compute-done', data => {
+            /*EventBus.$on('compute-done', data => {
                  this.feedback.final.forEach (function(exp, idx) {
                      if(exp.str === data.str) {
                             this.feedback.final[idx] = data;
                      }
                  });
-            });
+            });*/
 
 
         },
@@ -238,9 +238,9 @@
             analytic: function() {
                 return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
             },
-           feedback() {
-                return this.$store.getters.currentFeedback
-           }
+            ...mapGetters({
+                feedback: 'currentFeedback'
+            })
         },
         watch :{
             /* editorContent: function (newVal) {
@@ -287,17 +287,24 @@
                             //str exits but str changed
                             changedText = item;
                             let a = idx;
-                            self.quickAnalyse(changedText, idx)
+                            let data = {
+                                'send': {'txt': item, 'action': 'quick', 'extra': self.attributes},
+                                'idx': idx,
+                                'act': 'update'
+                            }
+                            self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
+                            /*self.quickAnalyse(changedText, idx)
                                 .then(response => {
                                     if(response.data) {
-                                        EventBus.$emit('compute-done', response.data.final[0]);
+                                        this.$store.dispatch('UPDATE_TOKENISED_FEEDBACK',response.data.final[0]);
+                                        //EventBus.$emit('compute-done', response.data.final[0]);
 
                                         console.log("274");
                                     }
                                 })
                                 .catch(e => {
                                     self.$data.errors.push(e)
-                                });
+                                }); */
 
                         } else if(ov[idx].str == item) {
                             //feedbackQueue.push(ov[idx]);
@@ -307,18 +314,23 @@
                         //new str added to the the editor so get analysis
                         //changedIds.push(idx);
                         let b=idx;
-                        changedText = item;
-                        self.quickAnalyse(changedText, idx)
+                        let data = {
+                            'send': {'txt': item, 'action': 'quick', 'extra': self.attributes},
+                            'idx': idx,
+                            'act': 'add'
+                        }
+                        self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
+                       /* self.quickAnalyse(changedText, idx)
                             .then(response => {
                                 if (response.data) {
                                        //feedbackQueue[b] = response.data.final[0];
-                                       EventBus.$emit('compute-done', response.data.final[0]);
+                                      // EventBus.$emit('compute-done', response.data.final[0]);
                                        console.log("293");
                                     }
                                 })
                                 .catch(e => {
                                     self.$data.errors.push(e)
-                                });
+                                });*/
 
                     }
 
@@ -352,7 +364,7 @@
                     .then(response => {
                         this.splitText = response.data.tokenised;
                         this.$data.tapCalls.athanor=false;
-                        this.computeText(this.splitText, this.$store.currentFeedback.final);
+                        this.computeText(this.splitText, this.feedback.final);
                         this.$data.counter = 0;
                     })
                     .catch(e => {
@@ -362,9 +374,7 @@
             fetchFeedback() {
                 this.errors=[];
                 if(this.feedbackOpt!=='') {
-                    console.assert(this.tap);
                     let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
-
                     this.$store.dispatch('LOAD_FEEDBACK',data);
 
 
