@@ -7,6 +7,8 @@
 
 require('./bootstrap');
 
+
+
 window.Vue = require('vue');
 //import Vue from 'vue';
 
@@ -51,7 +53,7 @@ Vue.component('autocomplete', require('./components/Autocomplete.vue'));
 
 
 
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect('http://awa3.utscic.edu.au:3000');
 import moment from 'moment';
 
 const app = new Vue({
