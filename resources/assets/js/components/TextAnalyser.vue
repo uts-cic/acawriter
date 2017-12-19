@@ -242,8 +242,8 @@
             },
             ...mapGetters({
                 feedback: 'currentFeedback'
-            }),
 
+            })
         },
         watch :{
             /* editorContent: function (newVal) {
