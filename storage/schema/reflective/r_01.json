@@ -46,13 +46,15 @@
       "tags": [
         "context",
         "challenge",
-        "link2me"
+        "link2me",
+        "change"
       ]
     },
     "message": [
       {"context" : "Initial thoughts and feelings about a significant experience."},
       {"challenge" : "The challenge of new surprising or unfamiliar ideas, problems or learning experiences."},
-      {"link2me" : "Deeper reflection, personally applied."}
+      {"link2me" : "Deeper reflection, personally applied."},
+      {"change" : "How new knowledge can lead to change."}
     ],
     "css": ["context","challenge","link2me"]
   }

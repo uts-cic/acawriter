@@ -4,6 +4,7 @@ use App\Jobs\StoreDrafts;
 use Illuminate\Http\Request;
 use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
+use Html2Text\Html2Text;
 use Auth;
 use App\User;
 class StringTokenizer extends Controller
@@ -434,10 +435,13 @@ class StringTokenizer extends Controller
 
     protected function cleanText($string) {
 
-        $pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
-        $replace = array('\n', '\n', '');
+        //$pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
+        //$replace = array('\n', '\n', '');
 
-        $replace = preg_replace($pattern, "\n", $string);
+        //$replace = preg_replace($pattern, "\n", $string);
+
+        $replace = Html2Text::convert($string, true);
+        $replace = Html2Text::fixNewlines($replace);
 
         return strip_tags(trim($replace));
     }
