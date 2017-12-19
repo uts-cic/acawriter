@@ -4,7 +4,6 @@ use App\Jobs\StoreDrafts;
 use Illuminate\Http\Request;
 use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
-use Html2Text\Html2Text;
 use Auth;
 use App\User;
 class StringTokenizer extends Controller
@@ -28,7 +27,6 @@ class StringTokenizer extends Controller
                                 analytics
                         }
                 }";
-
     protected $queryOneR = "query RhetoricalMoves(\$input: String!) {
                           moves(text:\$input,grammar:\"reflective\") {
                             analytics
@@ -37,7 +35,6 @@ class StringTokenizer extends Controller
                             querytime
                           }
                         }";
-
     protected $queryOneA = "query RhetoricalMoves(\$input: String!) {
                           moves(text:\$input,grammar:\"analytic\") {
                             analytics
@@ -46,7 +43,6 @@ class StringTokenizer extends Controller
                             querytime
                           }
                         }";
-
     protected $qm       = "query Metrics(\$input: String!) {
                             metrics(text:\$input) {
                                 analytics {
@@ -148,7 +144,6 @@ class StringTokenizer extends Controller
                 foreach($tokenisedText as $txt) {
                     $responseTxt = new \stdClass;
                     $responseTxt->str= $txt->original;
-
                     $tags = $this->rethoMoves($txt->original, $request['grammar']);
                     $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
                     $responseTxt->tags= implode(', ',$tags);
@@ -178,39 +173,6 @@ class StringTokenizer extends Controller
             StoreDrafts::dispatch($draft)->onConnection('redis');
         }
         return response()->json($results);
-
-
-    }
-
-
-    //full text analysis
-    protected function analyseAthanor(Request $request) {
-        $apiResponse = new \StdClass();
-        $collection = collect($request['txt']);
-        $unique = $collection->unique();
-        $unique->values()->all();
-        $queryTxt = strip_tags($unique->last());
-        $variables = new \stdClass();
-        $variables->input = $queryTxt;
-        //$split = preg_split('/$\R?^/m', $queryTxt);
-        $split = explode('\n', $queryTxt);
-
-        $originalHash = Hash::make($queryTxt);
-        $responseHash = '';
-
-        if ($originalHash != $responseHash) {
-            //get athanor
-            $this->gResponse = $this->client->response($this->queryOneR, $variables);
-            if ($this->gResponse->hasErrors()) {
-                dd($this->gResponse->errors());
-            } else {
-                $res = $this->gResponse->moves->analytics;
-                $apiResponse = $this->aggregateData($split, $res);
-            }
-
-        }
-        return $apiResponse;
-
     }
 
     protected function analyseAuto(Request $request) {
@@ -261,7 +223,6 @@ class StringTokenizer extends Controller
         $variables->input = $queryTxt;
             //get athanor
             $this->gResponse = $this->client->response($this->queryOneR, $variables);
-
             if ($this->gResponse->hasErrors()) {
                 dd($this->gResponse->errors());
             } else {
@@ -315,9 +276,7 @@ class StringTokenizer extends Controller
         return $splitTxt;
     }
      //modified sentence level based on updated tokeniser query
-
     protected function rethoMoves($text, $grammar) {
-
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
        // $variables->input = strip_tags($text);
@@ -435,13 +394,10 @@ class StringTokenizer extends Controller
 
     protected function cleanText($string) {
 
-        //$pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
-        //$replace = array('\n', '\n', '');
+        $pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
+        $replace = array('\n', '\n', '');
 
-        //$replace = preg_replace($pattern, "\n", $string);
-
-        $replace = Html2Text::convert($string, true);
-        $replace = Html2Text::fixNewlines($replace);
+        $replace = preg_replace($pattern, "\n", $string);
 
         return strip_tags(trim($replace));
     }

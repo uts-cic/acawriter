@@ -12,7 +12,7 @@
                     </div>
 
                     <div class="card-body collapse" id="a">
-                        <p class="card-text text-white">
+                        <p class="card-text">
                             <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
                             <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
                         </p>
@@ -31,8 +31,8 @@
                                 <div class="col-md-6">
                                     <label for="feedbackOpt">Feedback Rules</label>
                                     <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
-                                        <option value="r_01">Reflective01</option>
-                                        <option value="a_01">Analytic01</option>
+                                        <option value="feedback">Reflective01</option>
+                                        <option value="feedback">Analytic01</option>
                                     </select>
                                 </div>
                             </div>
@@ -81,13 +81,9 @@
                                             <span v-bind:class="mv">&nbsp;</span>
                                         </span>-->
                                         <span v-for="ic in feed.css">
-                                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics'">
-                                                <span v-bind:class="ic"></span>
-                                            </template>
-                                            <!-- <span v-if="ic==='link2me' || ic==='epistemic'" v-bind:class="ic"></span> -->
-
+                                            [<span v-bind:class="ic"></span>]
                                         </span>
-                                        <span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span>
+                                        <span v-html="feed.str"></span>
                                     </span>
                                 </div>
                             </div>
@@ -111,7 +107,7 @@
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span class="badge badge-info">{{rmoves}}</span>
                                         </span>
-                                        <span v-html="feed.str"></span>
+                                        {{feed.str}}
                                     </span>
                                 </div>
                             </div>
@@ -152,6 +148,9 @@
                                  <small>- Athanor raw feedback, hover over the icon to see the tags</small>
                              </div>-->
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">{{extractedFeed}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,7 +167,6 @@
      Vue.use(VueFroala);
      *
      */
-
     const EventBus = new Vue();
     import { VueEditor } from 'vue2-editor';
     import moment from 'moment';
@@ -208,7 +206,7 @@
                 quickTags:'',
                 //feedback:[],
                 attributes:{
-                    feedbackOpt:'r_01',
+                    feedbackOpt:'feedback',
                     grammar:'reflective'
                 },
                 extractedFeed:[]
@@ -242,7 +240,6 @@
             },
             ...mapGetters({
                 feedback: 'currentFeedback'
-
             })
         },
         watch :{
@@ -397,16 +394,8 @@
                 if (this.editorContent !== '') {
                     this.tokeniseTextInput();
                 }
-            },
-            inLineClasses: function(data) {
-                var temp=  data.filter(function( obj ) {
-                    return obj === 'epistemic' || obj ==='link2me';
-                });
-
-                return temp;
-
             }
-        }
+        },
 
     }
 </script>
