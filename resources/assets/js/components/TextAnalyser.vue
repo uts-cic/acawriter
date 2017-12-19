@@ -12,7 +12,7 @@
                     </div>
 
                     <div class="card-body collapse" id="a">
-                        <p class="card-text">
+                        <p class="card-text text-white">
                             <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
                             <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
                         </p>
@@ -31,8 +31,8 @@
                                 <div class="col-md-6">
                                     <label for="feedbackOpt">Feedback Rules</label>
                                     <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
-                                        <option value="feedback">Reflective01</option>
-                                        <option value="feedback">Analytic01</option>
+                                        <option value="r_01">Reflective01</option>
+                                        <option value="a_01">Analytic01</option>
                                     </select>
                                 </div>
                             </div>
@@ -81,9 +81,13 @@
                                             <span v-bind:class="mv">&nbsp;</span>
                                         </span>-->
                                         <span v-for="ic in feed.css">
-                                            [<span v-bind:class="ic"></span>]
+                                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics'">
+                                                <span v-bind:class="ic"></span>
+                                            </template>
+                                            <!-- <span v-if="ic==='link2me' || ic==='epistemic'" v-bind:class="ic"></span> -->
+
                                         </span>
-                                        <span v-html="feed.str"></span>
+                                        <span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span>
                                     </span>
                                 </div>
                             </div>
@@ -107,7 +111,7 @@
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span class="badge badge-info">{{rmoves}}</span>
                                         </span>
-                                        {{feed.str}}
+                                        <span v-html="feed.str"></span>
                                     </span>
                                 </div>
                             </div>
@@ -148,9 +152,6 @@
                                  <small>- Athanor raw feedback, hover over the icon to see the tags</small>
                              </div>-->
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">{{extractedFeed}}</div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -172,7 +173,6 @@
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
-
     export default {
         components: {
             VueEditor
@@ -206,7 +206,7 @@
                 quickTags:'',
                 //feedback:[],
                 attributes:{
-                    feedbackOpt:'feedback',
+                    feedbackOpt:'r_01',
                     grammar:'reflective'
                 },
                 extractedFeed:[]
@@ -215,7 +215,7 @@
         mounted () {
             this.editLog.push(this.editorContent);
             this.fetchAnalysis();
-           // this.$store.dispatch('LOAD_FEEDBACK');
+            // this.$store.dispatch('LOAD_FEEDBACK');
         },
         created() {
             this.auto = 'every 5m';
@@ -228,8 +228,6 @@
                      }
                  });
             });*/
-
-
         },
         computed: {
             reflective: function() {
@@ -240,7 +238,7 @@
             },
             ...mapGetters({
                 feedback: 'currentFeedback'
-            })
+            }),
         },
         watch :{
             /* editorContent: function (newVal) {
@@ -277,9 +275,8 @@
             computeText: function(nv, ov) {
                 var changedText='';
                 var self = this;
-               // var newTap = [];
+                // var newTap = [];
                 var feedbackQueue=[];
-
                 nv.forEach(function(item, idx) {
                     //console.log(item);
                     if(typeof ov[idx]!=='undefined') {
@@ -298,14 +295,12 @@
                                     if(response.data) {
                                         this.$store.dispatch('UPDATE_TOKENISED_FEEDBACK',response.data.final[0]);
                                         //EventBus.$emit('compute-done', response.data.final[0]);
-
                                         console.log("274");
                                     }
                                 })
                                 .catch(e => {
                                     self.$data.errors.push(e)
                                 }); */
-
                         } else if(ov[idx].str == item) {
                             //feedbackQueue.push(ov[idx]);
                             //console.log("283");
@@ -320,20 +315,18 @@
                             'act': 'add'
                         }
                         self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
-                       /* self.quickAnalyse(changedText, idx)
-                            .then(response => {
-                                if (response.data) {
-                                       //feedbackQueue[b] = response.data.final[0];
-                                      // EventBus.$emit('compute-done', response.data.final[0]);
-                                       console.log("293");
-                                    }
-                                })
-                                .catch(e => {
-                                    self.$data.errors.push(e)
-                                });*/
-
+                        /* self.quickAnalyse(changedText, idx)
+                             .then(response => {
+                                 if (response.data) {
+                                        //feedbackQueue[b] = response.data.final[0];
+                                       // EventBus.$emit('compute-done', response.data.final[0]);
+                                        console.log("293");
+                                     }
+                                 })
+                                 .catch(e => {
+                                     self.$data.errors.push(e)
+                                 });*/
                     }
-
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
             },
@@ -376,9 +369,6 @@
                 if(this.feedbackOpt!=='') {
                     let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
-
-
-
                     /*axios.post('/feedback', {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes})
                         .then(response => {
                             this.feedback = response.data;
@@ -394,8 +384,13 @@
                 if (this.editorContent !== '') {
                     this.tokeniseTextInput();
                 }
+            },
+            inLineClasses: function(data) {
+                var temp=  data.filter(function( obj ) {
+                    return obj === 'epistemic' || obj ==='link2me';
+                });
+                return temp;
             }
-        },
-
+        }
     }
 </script>
