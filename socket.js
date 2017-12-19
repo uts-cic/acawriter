@@ -8,8 +8,11 @@ var app     = require('express')();
 var http    = require('http').Server(app);
 var io      = require('socket.io')(http);
 var Redis   = require('ioredis');
+/** non redis 
 var redis   = new Redis();
+**/
 
+var redis = new Redis({host:'redis'});
 
 http.listen(3000,function(){
    console.log('Listening on port 3000');
