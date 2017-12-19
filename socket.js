@@ -8,10 +8,7 @@ var app     = require('express')();
 var http    = require('http').Server(app);
 var io      = require('socket.io')(http);
 var Redis   = require('ioredis');
-/** non docker instance
- var redis   = new Redis();
- **/
-var redis   = new Redis({host:'redis'});
+var redis   = new Redis();
 
 
 http.listen(3000,function(){
