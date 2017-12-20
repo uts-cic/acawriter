@@ -109,7 +109,7 @@
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span class="badge badge-info">{{rmoves}}</span>
+                                            <span class="badge badge-pill badge-primary">{{rmoves}}</span>
                                         </span>
                                         <span v-html="feed.str"></span>
                                     </span>

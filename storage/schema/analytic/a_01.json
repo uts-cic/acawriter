@@ -44,18 +44,20 @@
             "vis",
             "contribution",
             "novstat",
-            "contrast"
+            "contrast",
+            "surprise"
           ]
         },
         "message": [
           {"attitude" : "position"},
           {"emph" : "emphasis"},
           {"vis" : "trend"},
-          {"contribution" : "summary"},
+          {"contribution" : "question"},
           {"novstat" : "novelty"},
-          {"contrast" : "contrast"}
+          {"contrast" : "contrast"},
+          {"surprise" : "surprise"}
         ],
-        "css": ["attitude","emph","vis", "contribution","novstat", "contrast"]
+        "css": ["attitude","emph","vis", "contribution","novstat", "contrast", "surprise"]
       }
     ]
 }
