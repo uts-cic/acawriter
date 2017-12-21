@@ -1,44 +1,41 @@
 <template>
-    <section v-if="offline" class="internet-connection">
-        <div class="alert alert-danger">
-            <i class="fa fa-warning"></i> Internet connection lost
-        </div>
-    </section>
-    <section v-else>
-        <div class="alert alert-success">
-            <i class="fa fa-signal"></i> Last connection: {{lastHeartBeatReceivedAt}}
-
-        </div>
-    </section>
+    <li v-if="offline" class="list-group-item list-group-item-danger internet-connection">
+        <i class="fa fa-warning"></i> Internet connection lost
+    </li>
+    <li v-else class="list-group-item list-group-item-success">
+        <i class="fa fa-signal"></i> {{formatedDate}}
+    </li>
 </template>
 
 <script>
 
-import moment from 'moment';
-var socket = io.connect('http://localhost:3000');
+    import moment from 'moment';
+    var socket = io.connect('http://localhost:3000');
 
-export default {
-    props: ['lastHeartBeatReceivedAt'],
-    data() {
-        return{
-            offline:false,
-        };
-    },
-    created() {
-        setInterval(this.determineConnectionStatus, 1000);
-    },
-    methods: {
-        determineConnectionStatus() {
-            console.log("called:" + this.lastHeartBeatReceivedAt);
-            const lastHeartBeatReceivedSecondsAgo = moment().diff(this.lastHeartBeatReceivedAt, 'seconds');
-            this.offline = lastHeartBeatReceivedSecondsAgo > 125;
+    export default {
+        props: ['lastHeartBeatReceivedAt'],
+        data() {
+            return{
+                offline:false,
+            };
+        },
+        created() {
+            setInterval(this.determineConnectionStatus, 1000);
+        },
+        methods: {
+            determineConnectionStatus() {
+                console.log("called:" + this.lastHeartBeatReceivedAt);
+                const lastHeartBeatReceivedSecondsAgo = moment().diff(this.lastHeartBeatReceivedAt, 'seconds');
+                this.offline = lastHeartBeatReceivedSecondsAgo > 125;
+            }
+        },
+        computed: {
+            formatedDate() {
+                return moment(String(this.lastHeartBeatReceivedAt)).format('MM/DD/YYYY hh:mm');
+            }
         }
-    },
-    mounted() {
+
 
     }
-
-
-}
 
 </script>

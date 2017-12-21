@@ -1,24 +1,12 @@
 <template>
     <div class="container-fluid">
-        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#fh" aria-expanded="false" aria-controls="collapseExample">
-            Feedback Help
-        </button>
-        <div class="card-body collapse" id="fh">
-            <p class="card-text text-primary">
-                <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
-                <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
-            </p>
-        </div>
-
         <div class="row">
-            <div class="col-md-4">
-                <div class="card bg-info">
+            <div class="offset-8 col-md-4">
+                <div class="card bg-default">
                     <div class="card-header">
-                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
-                            Status
-                        </button>&nbsp;<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
-                        Feedback
-                    </button>
+                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
+                            Feedback
+                        </button>
                     </div>
 
                     <div class="card-body collapse" id="a">
@@ -51,40 +39,34 @@
                 </div>
             </div>
         </div>
-        <div class="row analyser">
-            <div class="col-md-12">
+        <div class="row editWrapper">
+            <div id="sidebar">
+                <div class="alert alert-info"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback</div>
+
+                <div class="col-md-12" v-for="rule in feedback.rules">
+                    <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
+                    <div v-for="msg in rule.message">
+                       <span v-for="(m,id) in msg">
+                           <span v-bind:class="id"></span> <small><span v-html="m"></span></small><br />
+                       </span>
+
+                    </div>
+                    <hr />
+                </div>
+            </div>
+
+
+            <!-- start content -->
+            <div id="content" class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-default">Text Analyser
-                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to Pdf
-                            </button>&nbsp;
-                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                        <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
+                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
                             <button type="button" class="btn btn-outline-info btn-sm" v-on:click="fetchAnalysis()"><i class="fa fa-comments" aria-hidden="true"></i> Get Feedback</button>
+                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to Pdf</button>
+                            <button type="button" id="sidebarCollapse" class="btn btn-outline-info btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback</button>
+
                         </div>
-                        <!--<button type="button" class="btn btn-outline-info pull-right" v-on:click="fetchFeedback()">Step 2. Get Custom</button>&nbsp;-->
-                        <nav id="navbar2" class="navbar navbar-default pull-right" role="navigation">
-                            <div class="container-fluid">
-                                <!-- Brand and toggle get grouped for better mobile display -->
-                                <div class="navbar-header">
-                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
-                                        <span class="sr-only">Toggle navigation</span>
-                                        <span class="icon-bar"></span>
-                                        <span class="icon-bar"></span>
-                                        <span class="icon-bar"></span>
-                                    </button>
-                                    <a class="navbar-brand" href="#">Feedback</a>
-                                </div>
-
-                                <!-- Collect the nav links, forms, and other content for toggling -->
-                                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                                    <ul class="nav flex-column">
-                                        <li class="active"><a href="#">Link</a></li>
-                                        <li><a href="#">Link</a></li>
-                                    </ul>
-
-                                </div><!-- /.navbar-collapse -->
-                            </div><!-- /.container-fluid -->
-                        </nav>
 
                     </div>
                     <div class="card-body">
@@ -103,7 +85,7 @@
                                     </ul>
                                 </div>
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4><hr /></div>
                                 <div class="col-md-12 wrapper">
                                     <!--<span v-html="editorContent"></span>-->
 
@@ -148,7 +130,7 @@
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span class="badge badge-info">{{rmoves}}</span>
+                                            <span class="badge badge-pill badge-primary">{{rmoves}}</span>
                                         </span>
                                         <span v-html="feed.str"></span>
                                     </span>
@@ -161,18 +143,11 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-12">
-                                Feedback <hr />
+                                <small>Note: Feedback updated and stored automatically every 5 mins</small>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3" v-for="rule in feedback.rules">
-                                <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
-                                <div v-for="msg in rule.message">
-                                    <span v-for="(m,id) in msg">
-                                        <span v-bind:class="id"></span> - <small>{{m}}</small><br />
-                                    </span>
-                                </div>
-                            </div>
+
 
 
 
@@ -194,6 +169,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>

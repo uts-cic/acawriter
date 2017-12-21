@@ -1,11 +1,11 @@
 .wrapper {
-  max-height:30rem;
+  max-height:40rem;
   overflow-y: scroll;
 }
 
 
 .ql-container {
-  max-height:30rem;
+  max-height:40rem;
   overflow-y: scroll;
 }
 
@@ -70,76 +70,4 @@
 }
 .nonactive {
   display:none;
-}
-
-
-/* Menubar Reset responsive Bootstrap elements */
-#navbar2 .navbar-header {
-  float: none;
-}
-
-#navbar2 .navbar-toggle {
-  display: block;
-}
-
-#navbar2 .navbar-nav {
-  float: none !important;
-  margin: 7.5px -15px;
-}
-
-#navbar2 .navbar-nav .open .dropdown-menu {
-  position: static;
-  float: none;
-  background-color: transparent;
-  border: 0;
-  box-shadow: none;
-}
-
-#navbar2 .navbar-form {
-  float: none !important;
-  padding: 0;
-}
-
-#navbar2 .navbar-nav>li {
-  float: none;
-}
-
-/* Reposition elements affected by the sliding menu */
-#app {
-  position: relative;
-  right: 0;
-  transition: right 0.35s ease;
-}
-
-#navbar2 .navbar-collapse {
-  position: fixed;
-  top: 0;
-  right: -30%;
-  display: block;
-  width: 30%;
-  height: 100% !important;
-  /*max-height: 100%;*/
-  margin: 0;
-  background-color: #f8f8f8;
-  transition: right 0.35s ease;
-}
-
-#navbar2 .navbar-collapse.collapsing {
-  transition: right 0.35s ease;
-}
-
-#navbar2 .navbar-collapse.in {
-  right: 0;
-}
-
-body.menu-slider.in {
-  overflow: hidden;
-}
-
-body.menu-slider #app {
-  transition: right 0.35s ease;
-}
-
-body.menu-slider.in #app {
-  right: 30%;
 }

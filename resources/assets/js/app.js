@@ -87,7 +87,7 @@ const app = new Vue({
     }
 });
 
-(function ($) {
+/*(function ($) {
 
     'use strict';
 
@@ -108,3 +108,10 @@ const app = new Vue({
 
 
 })(jQuery);
+*/
+
+$(document).ready(function () {
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
+});
