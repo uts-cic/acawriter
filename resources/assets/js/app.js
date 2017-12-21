@@ -8,7 +8,6 @@
 require('./bootstrap');
 
 
-
 window.Vue = require('vue');
 //import Vue from 'vue';
 
@@ -53,7 +52,7 @@ Vue.component('autocomplete', require('./components/Autocomplete.vue'));
 
 
 
-var socket = io.connect('http://awa3.utscic.edu.au:3000');
+var socket = io.connect('http://localhost:3000');
 import moment from 'moment';
 
 const app = new Vue({
@@ -86,4 +85,33 @@ const app = new Vue({
             console.log(txt);
         }
     }
+});
+
+/*(function ($) {
+
+    'use strict';
+
+    // Toggle classes in body for syncing sliding animation with other elements
+    $('#bs-example-navbar-collapse-2')
+        .on('show.bs.collapse', function (e) {
+            $('#app').addClass('menu-slider');
+        })
+        .on('shown.bs.collapse', function (e) {
+            $('#app').addClass('in');
+        })
+        .on('hide.bs.collapse', function (e) {
+            $('#app').removeClass('menu-slider');
+        })
+        .on('hidden.bs.collapse', function (e) {
+            $('#app').removeClass('in');
+        });
+
+
+})(jQuery);
+*/
+
+$(document).ready(function () {
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
 });

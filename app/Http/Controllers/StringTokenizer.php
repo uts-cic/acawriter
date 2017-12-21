@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Html2Text\Html2Text;
 use Auth;
 use App\User;
+
 class StringTokenizer extends Controller
 {
     public $gResponse;
@@ -28,7 +29,6 @@ class StringTokenizer extends Controller
                                 analytics
                         }
                 }";
-
     protected $queryOneR = "query RhetoricalMoves(\$input: String!) {
                           moves(text:\$input,grammar:\"reflective\") {
                             analytics
@@ -37,7 +37,6 @@ class StringTokenizer extends Controller
                             querytime
                           }
                         }";
-
     protected $queryOneA = "query RhetoricalMoves(\$input: String!) {
                           moves(text:\$input,grammar:\"analytic\") {
                             analytics
@@ -46,7 +45,6 @@ class StringTokenizer extends Controller
                             querytime
                           }
                         }";
-
     protected $qm       = "query Metrics(\$input: String!) {
                             metrics(text:\$input) {
                                 analytics {
@@ -141,14 +139,12 @@ class StringTokenizer extends Controller
         $draft = new \stdClass;
         if ($request["action"] == 'athanor') {
             $results->athanor = array();
-
             $tokenisedText = $this->tapTokeniser($request);
             if(count($tokenisedText) >0 ) {
                 //now go through each text and analyse
                 foreach($tokenisedText as $txt) {
                     $responseTxt = new \stdClass;
                     $responseTxt->str= $txt->original;
-
                     $tags = $this->rethoMoves($txt->original, $request['grammar']);
                     $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
                     $responseTxt->tags= implode(', ',$tags);
@@ -178,11 +174,7 @@ class StringTokenizer extends Controller
             StoreDrafts::dispatch($draft)->onConnection('redis');
         }
         return response()->json($results);
-
-
     }
-
-
     //full text analysis
     protected function analyseAthanor(Request $request) {
         $apiResponse = new \StdClass();
@@ -194,10 +186,8 @@ class StringTokenizer extends Controller
         $variables->input = $queryTxt;
         //$split = preg_split('/$\R?^/m', $queryTxt);
         $split = explode('\n', $queryTxt);
-
         $originalHash = Hash::make($queryTxt);
         $responseHash = '';
-
         if ($originalHash != $responseHash) {
             //get athanor
             $this->gResponse = $this->client->response($this->queryOneR, $variables);
@@ -207,25 +197,22 @@ class StringTokenizer extends Controller
                 $res = $this->gResponse->moves->analytics;
                 $apiResponse = $this->aggregateData($split, $res);
             }
-
         }
         return $apiResponse;
-
     }
-
     protected function analyseAuto(Request $request) {
         $apiResponse = new \StdClass();
         //$queryTxt = strip_tags($request['txt']);
         $queryTxt = $this->cleanText($request['txt']);
         $variables = new \stdClass();
         $variables->input = $queryTxt;
-            //get athanor
-            $this->gResponse = $this->client->response($this->queryOneR, $variables);
-            if ($this->gResponse->hasErrors()) {
-                dd($this->gResponse->errors());
-            } else {
-                $apiResponse = $this->gResponse->moves->analytics;
-            }
+        //get athanor
+        $this->gResponse = $this->client->response($this->queryOneR, $variables);
+        if ($this->gResponse->hasErrors()) {
+            dd($this->gResponse->errors());
+        } else {
+            $apiResponse = $this->gResponse->moves->analytics;
+        }
         return $apiResponse;
     }
     protected function analyseVocab(Request $request) {
@@ -233,7 +220,7 @@ class StringTokenizer extends Controller
         $collection = collect($request['txt']);
         $unique = $collection->unique();
         $unique->values()->all();
-       // $queryTxt = strip_tags($unique->last());
+        // $queryTxt = strip_tags($unique->last());
         $queryTxt = $this->cleanText($unique->last());
         $variables = new \stdClass();
         $variables->input = $queryTxt;
@@ -251,7 +238,6 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
-
     //quick sentence by sentence
     protected function qanalyseAthanor(Request $request) {
         $apiResponse = new \StdClass();
@@ -259,19 +245,18 @@ class StringTokenizer extends Controller
         $queryTxt = $this->cleanText($request['txt']);
         $variables = new \stdClass();
         $variables->input = $queryTxt;
-            //get athanor
-            $this->gResponse = $this->client->response($this->queryOneR, $variables);
-
-            if ($this->gResponse->hasErrors()) {
-                dd($this->gResponse->errors());
-            } else {
-                $res = $this->gResponse->moves->analytics;
-                foreach ($res as $rest) {
-                    $apiResponse->str = $queryTxt;
-                    $apiResponse->raw_tags =count($rest) > 0? $rest:array();
-                    $apiResponse->tags = implode(", ", $rest);
-                }
+        //get athanor
+        $this->gResponse = $this->client->response($this->queryOneR, $variables);
+        if ($this->gResponse->hasErrors()) {
+            dd($this->gResponse->errors());
+        } else {
+            $res = $this->gResponse->moves->analytics;
+            foreach ($res as $rest) {
+                $apiResponse->str = $queryTxt;
+                $apiResponse->raw_tags =count($rest) > 0? $rest:array();
+                $apiResponse->tags = implode(", ", $rest);
             }
+        }
         return $apiResponse;
     }
     protected function aggregateData(array $original, array $res) {
@@ -279,7 +264,7 @@ class StringTokenizer extends Controller
         $result->responseTxt = [];
         $result->status = false;
         if(!is_array($original) || !is_array($res)) {
-             return $result;
+            return $result;
         } elseif(count($original) == 0 || count($res)== 0) {
             return $result;
         } else {
@@ -314,13 +299,11 @@ class StringTokenizer extends Controller
         }
         return $splitTxt;
     }
-     //modified sentence level based on updated tokeniser query
-
+    //modified sentence level based on updated tokeniser query
     protected function rethoMoves($text, $grammar) {
-
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
-       // $variables->input = strip_tags($text);
+        // $variables->input = strip_tags($text);
         $variables->input = $this->cleanText($text);
         $tags = array();
         //get athanor rethmoves
@@ -374,7 +357,6 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
-
     /*
     * Used retrive expressions
     * input: string single sentence
@@ -395,8 +377,6 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
-
-
     //quick sentence by sentence
     /*
         * Used retrive tags
@@ -411,14 +391,11 @@ class StringTokenizer extends Controller
         $variables = new \stdClass();
         $variables->input = $queryTxt;
         //get athanor
-
         if($data['grammar'] == 'analytic') {
             $this->gResponse = $this->client->response($this->queryOneA, $variables);
         } elseif($data['grammar'] == 'reflective') {
             $this->gResponse = $this->client->response($this->queryOneR, $variables);
         }
-
-
         if ($this->gResponse->hasErrors()) {
             $apiResponse = $this->gResponse->errors();
         } else {
@@ -431,22 +408,12 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
-
-
     protected function cleanText($string) {
-
         //$pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
         //$replace = array('\n', '\n', '');
-
         //$replace = preg_replace($pattern, "\n", $string);
-
         $replace = Html2Text::convert($string, true);
         $replace = Html2Text::fixNewlines($replace);
-
         return strip_tags(trim($replace));
     }
-
-
-
-
 }

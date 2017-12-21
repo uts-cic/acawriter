@@ -1,11 +1,11 @@
 .wrapper {
-  max-height:30rem;
+  max-height:40rem;
   overflow-y: scroll;
 }
 
 
 .ql-container {
-  max-height:30rem;
+  max-height:40rem;
   overflow-y: scroll;
 }
 
@@ -36,10 +36,10 @@
 }
 
 .context:before {
-   content: "\f0c8";  /* this is your text. You can also use UTF-8 character codes as I do here */
-   color:#0000FF;
+  content: "\f0c8";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:#0000FF;
 
- }
+}
 
 .change:before {
   content: "\f071";  /* this is your text. You can also use UTF-8 character codes as I do here */

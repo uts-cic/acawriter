@@ -1,14 +1,12 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
-                <div class="card bg-info">
+            <div class="offset-8 col-md-4">
+                <div class="card bg-default">
                     <div class="card-header">
-                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
-                            Status
-                        </button>&nbsp;<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
-                        Feedback
-                    </button>
+                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
+                            Feedback
+                        </button>
                     </div>
 
                     <div class="card-body collapse" id="a">
@@ -41,12 +39,35 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row editWrapper">
+            <div id="sidebar">
+                <div class="alert alert-info"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback</div>
+
+                <div class="col-md-12" v-for="rule in feedback.rules">
+                    <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
+                    <div v-for="msg in rule.message">
+                       <span v-for="(m,id) in msg">
+                           <span v-bind:class="id"></span> <small><span v-html="m"></span></small><br />
+                       </span>
+
+                    </div>
+                    <hr />
+                </div>
+            </div>
+
+
+            <!-- start content -->
+            <div id="content" class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-default">Text Analyser
-                        <!--<button type="button" class="btn btn-outline-info pull-right" v-on:click="fetchFeedback()">Step 2. Get Custom</button>&nbsp;-->
-                        <button type="button" class="btn btn-outline-info btn-sm pull-right" v-on:click="fetchAnalysis()">Get Feedback</button>
+                        <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
+                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+                            <button type="button" class="btn btn-outline-info btn-sm" v-on:click="fetchAnalysis()"><i class="fa fa-comments" aria-hidden="true"></i> Get Feedback</button>
+                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to Pdf</button>
+                            <button type="button" id="sidebarCollapse" class="btn btn-outline-info btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback</button>
+
+                        </div>
+
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -64,7 +85,7 @@
                                     </ul>
                                 </div>
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4><hr /></div>
                                 <div class="col-md-12 wrapper">
                                     <!--<span v-html="editorContent"></span>-->
 
@@ -109,7 +130,7 @@
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span class="badge badge-info">{{rmoves}}</span>
+                                            <span class="badge badge-pill badge-primary">{{rmoves}}</span>
                                         </span>
                                         <span v-html="feed.str"></span>
                                     </span>
@@ -122,18 +143,11 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-12">
-                                Feedback <hr />
+                                <small>Note: Feedback updated and stored automatically every 5 mins</small>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3" v-for="rule in feedback.rules">
-                                <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
-                                <div v-for="msg in rule.message">
-                                    <span v-for="(m,id) in msg">
-                                        <span v-bind:class="id"></span> - <small>{{m}}</small><br />
-                                    </span>
-                                </div>
-                            </div>
+
 
 
 
@@ -155,6 +169,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -168,13 +183,11 @@
      Vue.use(VueFroala);
      *
      */
-
     const EventBus = new Vue();
     import { VueEditor } from 'vue2-editor';
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
-
     export default {
         components: {
             VueEditor
@@ -217,7 +230,7 @@
         mounted () {
             this.editLog.push(this.editorContent);
             this.fetchAnalysis();
-           // this.$store.dispatch('LOAD_FEEDBACK');
+            // this.$store.dispatch('LOAD_FEEDBACK');
         },
         created() {
             this.auto = 'every 5m';
@@ -230,8 +243,6 @@
                      }
                  });
             });*/
-
-
         },
         computed: {
             reflective: function() {
@@ -242,8 +253,7 @@
             },
             ...mapGetters({
                 feedback: 'currentFeedback'
-
-            })
+            }),
         },
         watch :{
             /* editorContent: function (newVal) {
@@ -280,9 +290,8 @@
             computeText: function(nv, ov) {
                 var changedText='';
                 var self = this;
-               // var newTap = [];
+                // var newTap = [];
                 var feedbackQueue=[];
-
                 nv.forEach(function(item, idx) {
                     //console.log(item);
                     if(typeof ov[idx]!=='undefined') {
@@ -301,14 +310,12 @@
                                     if(response.data) {
                                         this.$store.dispatch('UPDATE_TOKENISED_FEEDBACK',response.data.final[0]);
                                         //EventBus.$emit('compute-done', response.data.final[0]);
-
                                         console.log("274");
                                     }
                                 })
                                 .catch(e => {
                                     self.$data.errors.push(e)
                                 }); */
-
                         } else if(ov[idx].str == item) {
                             //feedbackQueue.push(ov[idx]);
                             //console.log("283");
@@ -323,20 +330,18 @@
                             'act': 'add'
                         }
                         self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
-                       /* self.quickAnalyse(changedText, idx)
-                            .then(response => {
-                                if (response.data) {
-                                       //feedbackQueue[b] = response.data.final[0];
-                                      // EventBus.$emit('compute-done', response.data.final[0]);
-                                       console.log("293");
-                                    }
-                                })
-                                .catch(e => {
-                                    self.$data.errors.push(e)
-                                });*/
-
+                        /* self.quickAnalyse(changedText, idx)
+                             .then(response => {
+                                 if (response.data) {
+                                        //feedbackQueue[b] = response.data.final[0];
+                                       // EventBus.$emit('compute-done', response.data.final[0]);
+                                        console.log("293");
+                                     }
+                                 })
+                                 .catch(e => {
+                                     self.$data.errors.push(e)
+                                 });*/
                     }
-
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
             },
@@ -379,9 +384,6 @@
                 if(this.feedbackOpt!=='') {
                     let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
-
-
-
                     /*axios.post('/feedback', {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes})
                         .then(response => {
                             this.feedback = response.data;
@@ -402,11 +404,8 @@
                 var temp=  data.filter(function( obj ) {
                     return obj === 'epistemic' || obj ==='link2me';
                 });
-
                 return temp;
-
             }
         }
-
     }
 </script>
