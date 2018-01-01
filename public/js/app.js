@@ -79193,6 +79193,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 /**
  commented out - license needed
@@ -79201,7 +79202,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
  *
  */
 var EventBus = new Vue();
-
 
 
 
@@ -79238,7 +79238,7 @@ var EventBus = new Vue();
             quickTags: '',
             //feedback:[],
             attributes: {
-                feedbackOpt: 'feedback',
+                feedbackOpt: 'r_01',
                 grammar: 'reflective'
             },
             extractedFeed: []
@@ -79308,7 +79308,6 @@ var EventBus = new Vue();
             var self = this;
             // var newTap = [];
             var feedbackQueue = [];
-
             nv.forEach(function (item, idx) {
                 //console.log(item);
                 if (typeof ov[idx] !== 'undefined') {
@@ -79327,7 +79326,7 @@ var EventBus = new Vue();
                                 if(response.data) {
                                     this.$store.dispatch('UPDATE_TOKENISED_FEEDBACK',response.data.final[0]);
                                     //EventBus.$emit('compute-done', response.data.final[0]);
-                                     console.log("274");
+                                    console.log("274");
                                 }
                             })
                             .catch(e => {
@@ -79403,7 +79402,6 @@ var EventBus = new Vue();
             if (this.feedbackOpt !== '') {
                 var data = { 'tap': this.tap, 'txt': '', 'action': 'fetch', 'extra': this.attributes };
                 this.$store.dispatch('LOAD_FEEDBACK', data);
-
                 /*axios.post('/feedback', {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes})
                     .then(response => {
                         this.feedback = response.data;
@@ -79419,9 +79417,15 @@ var EventBus = new Vue();
             if (this.editorContent !== '') {
                 this.tokeniseTextInput();
             }
+        },
+
+        inLineClasses: function inLineClasses(data) {
+            var temp = data.filter(function (obj) {
+                return obj === 'epistemic' || obj === 'link2me';
+            });
+            return temp;
         }
     }
-
 });
 
 /***/ }),
@@ -79523,7 +79527,7 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "card-body collapse", attrs: { id: "a" } }, [
-            _c("p", { staticClass: "card-text" }, [
+            _c("p", { staticClass: "card-text text-white" }, [
               _c("i", { staticClass: "fa fa-globe" }),
               _vm._v(" TAP "),
               _c("small", [
@@ -79640,11 +79644,11 @@ var render = function() {
                       }
                     },
                     [
-                      _c("option", { attrs: { value: "feedback" } }, [
+                      _c("option", { attrs: { value: "r_01" } }, [
                         _vm._v("Reflective01")
                       ]),
                       _vm._v(" "),
-                      _c("option", { attrs: { value: "feedback" } }, [
+                      _c("option", { attrs: { value: "a_01" } }, [
                         _vm._v("Analytic01")
                       ])
                     ]
@@ -79765,18 +79769,22 @@ var render = function() {
                               "span",
                               [
                                 _vm._l(feed.css, function(ic) {
-                                  return _c("span", [
-                                    _vm._v(
-                                      "\n                                        ["
-                                    ),
-                                    _c("span", { class: ic }),
-                                    _vm._v(
-                                      "]\n                                    "
-                                    )
-                                  ])
+                                  return _c(
+                                    "span",
+                                    [
+                                      ic === "context" ||
+                                      ic === "challenge" ||
+                                      ic === "change" ||
+                                      ic === "metrics"
+                                        ? [_c("span", { class: ic })]
+                                        : _vm._e()
+                                    ],
+                                    2
+                                  )
                                 }),
                                 _vm._v(" "),
                                 _c("span", {
+                                  class: [_vm.inLineClasses(feed.css)],
                                   domProps: { innerHTML: _vm._s(feed.str) }
                                 })
                               ],
@@ -79873,11 +79881,10 @@ var render = function() {
                                     )
                                   ])
                                 }),
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(feed.str) +
-                                    "\n                                "
-                                )
+                                _vm._v(" "),
+                                _c("span", {
+                                  domProps: { innerHTML: _vm._s(feed.str) }
+                                })
                               ],
                               2
                             )
@@ -79923,13 +79930,7 @@ var render = function() {
                   2
                 )
               })
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-md-12" }, [
-                _vm._v(_vm._s(_vm.extractedFeed))
-              ])
-            ])
+            )
           ])
         ])
       ])
