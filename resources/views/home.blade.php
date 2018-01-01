@@ -23,8 +23,8 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">Reports</div>
+            <div class="card ">
+                <div class="card-header bg-dark text-white">My Documents</div>
                 <div class="card-body">
                     <table class="table">
                         <thead class="thead-dark">

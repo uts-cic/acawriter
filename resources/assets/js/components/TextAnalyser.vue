@@ -8,7 +8,6 @@
                             Feedback
                         </button>
                     </div>
-
                     <div class="card-body collapse" id="a">
                         <p class="card-text text-white">
                             <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
@@ -41,8 +40,7 @@
         </div>
         <div class="row editWrapper">
             <div id="sidebar">
-                <div class="alert alert-info"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback</div>
-
+                <div class="p-3 bg-dark text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</div>
                 <div class="col-md-12" v-for="rule in feedback.rules">
                     <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
                     <div v-for="msg in rule.message">
@@ -59,12 +57,12 @@
             <!-- start content -->
             <div id="content" class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-default">Text Analyser
+                    <div class="card-header bg-dark text-white">Document Analyser
                         <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
-                            <button type="button" class="btn btn-outline-info btn-sm" v-on:click="fetchAnalysis()"><i class="fa fa-comments" aria-hidden="true"></i> Get Feedback</button>
-                            <button type="button" class="btn btn-outline-info btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to Pdf</button>
-                            <button type="button" id="sidebarCollapse" class="btn btn-outline-info btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" v-on:click="fetchAnalysis()"><i class="fa fa-comments" aria-hidden="true"></i> Get Feedback</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to Pdf</button>
+                            <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
 
                         </div>
 
@@ -74,7 +72,7 @@
                             <div class="col-md-6">
                                 <div id="editor">
                                     <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
-                                    <vue-editor v-model="editorContent"></vue-editor>
+                                    <vue-editor v-model="editorContent" :editorToolbar="customToolbar"></vue-editor>
                                 </div>
                             </div>
                             <!--- Reflective feedback --->
@@ -93,22 +91,12 @@
 
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
-                                        <!--<span v-for="(expression, exp) in feed.expression.message">
-                                            <span v-bind:class="exp">&nbsp;</span>
-                                        </span>
-                                        <span v-if="feed.metrics.message.length==0"></span>
-                                        <span v-else class="metrics">&nbsp;</span>
-                                        <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span v-bind:class="mv">&nbsp;</span>
-                                        </span>-->
                                         <span v-for="ic in feed.css">
-                                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics'">
+                                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
                                                 <span v-bind:class="ic"></span>
                                             </template>
-                                            <!-- <span v-if="ic==='link2me' || ic==='epistemic'" v-bind:class="ic"></span> -->
-
                                         </span>
-                                        <span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span>
+                                        &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span>
                                     </span>
                                 </div>
                             </div>
@@ -123,20 +111,20 @@
                                     </ul>
                                 </div>
                                 <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>Feedback <small>(Analytic)</small></h4></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4></div>
                                 <div class="col-md-12 wrapper">
                                     <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span class="badge badge-pill badge-primary">{{rmoves}}</span>
+                                            <span class="badge badge-pill badge-analytic">{{rmoves}}</span>
                                         </span>
                                         <span v-html="feed.str"></span>
                                     </span>
                                 </div>
                             </div>
-                            <!-- end of reflective -->
+                            <!-- end of analytics -->
 
                         </div>
                     </div>
@@ -145,26 +133,6 @@
                             <div class="col-md-12">
                                 <small>Note: Feedback updated and stored automatically every 5 mins</small>
                             </div>
-                        </div>
-                        <div class="row">
-
-
-
-
-                            <!-- <div class="col-md-3"><h6 class="card-subtitle mb-2">Background:</h6>
-                                 <span v-for="msg in feedback.background"><i class="fa fa-anchor" aria-hidden="true"></i> - <small>{{msg.message}}</small></span>
-                             </div>
-                             <div class="col-md-3"><h6 class="card-subtitle mb-2">Metrics:</h6>
-                                 <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                 <small>- Sentence is too long and may disengage reader. Break into smaller sentences.</small>
-                             </div>
-                             <div class="col-md-3"><h6 class="card-subtitle mb-2">Vocab:</h6>
-                                 <span v-for="msg in feedback.vocab"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> - <small>{{msg.message}}</small></span>
-                             </div>
-                             <div class="col-md-3"><h6 class="card-subtitle mb-2">Rhetorical Moves:</h6>
-                                 <i class="fa fa-comments" aria-hidden="true"></i>
-                                 <small>- Athanor raw feedback, hover over the icon to see the tags</small>
-                             </div>-->
                         </div>
                     </div>
                 </div>
@@ -224,7 +192,11 @@
                     feedbackOpt:'r_01',
                     grammar:'reflective'
                 },
-                extractedFeed:[]
+                customToolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ]
+
             }
         },
         mounted () {
@@ -292,6 +264,7 @@
                 var self = this;
                 // var newTap = [];
                 var feedbackQueue=[];
+                if(nv.length===0) return;
                 nv.forEach(function(item, idx) {
                     //console.log(item);
                     if(typeof ov[idx]!=='undefined') {
@@ -330,17 +303,6 @@
                             'act': 'add'
                         }
                         self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
-                        /* self.quickAnalyse(changedText, idx)
-                             .then(response => {
-                                 if (response.data) {
-                                        //feedbackQueue[b] = response.data.final[0];
-                                       // EventBus.$emit('compute-done', response.data.final[0]);
-                                        console.log("293");
-                                     }
-                                 })
-                                 .catch(e => {
-                                     self.$data.errors.push(e)
-                                 });*/
                     }
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
@@ -384,13 +346,6 @@
                 if(this.feedbackOpt!=='') {
                     let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
-                    /*axios.post('/feedback', {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes})
-                        .then(response => {
-                            this.feedback = response.data;
-                        })
-                        .catch(e => {
-                            this.$data.errors.push(e)
-                        });*/
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
@@ -402,7 +357,7 @@
             },
             inLineClasses: function(data) {
                 var temp=  data.filter(function( obj ) {
-                    return obj === 'epistemic' || obj ==='link2me';
+                    return (obj === 'epistemic' || obj ==='link2me');
                 });
                 return temp;
             }

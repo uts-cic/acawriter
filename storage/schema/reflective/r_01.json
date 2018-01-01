@@ -10,11 +10,11 @@
         ]
       },
       "message": [
-        {"affect" : "Some feedback for affect"},
+        {"affect" : "Words associated with strong feelings"},
         {"epistemic" : "<u>Expressions indicating belief, learning, or knowledge.</u>"},
-        {"modal" : "Some feedback for modal"}
+        {"modal" : "Expressions indicating self critique"}
       ],
-      "css": ["epistemic","affect","modal"]
+      "css": ["epistemic","affect","modall"]
     },
     {
       "name": "vocab",

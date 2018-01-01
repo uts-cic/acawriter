@@ -18,12 +18,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.affect:before {
-  content: "\f043";  /* this is your text. You can also use UTF-8 character codes as I do here */
-  color:goldenrod;
-}
-
-
 
 .vocab:before {
   content: "\f05b";  /* this is your text. You can also use UTF-8 character codes as I do here */
@@ -55,6 +49,12 @@
   content: "\f0e7";
 }
 
+.affect:before {
+  content: "\f1dd";
+  color: orange;
+}
+
+
 
 .epistemic {
   text-decoration: underline;
@@ -64,10 +64,21 @@
   font-weight:bold;
 }
 
+.modall {
+  color: red;
+}
+
 
 .activeClass{
   display: inline;
 }
 .nonactive {
   display:none;
+}
+
+
+/* analytical css */
+.badge-analytic {
+  color:white;
+  background-color: darkorange;
 }

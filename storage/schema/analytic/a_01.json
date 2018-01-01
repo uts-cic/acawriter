@@ -44,18 +44,21 @@
             "vis",
             "contribution",
             "novstat",
-            "contrast"
+            "contrast",
+            "tempstat",
+            "surprise"
           ]
         },
         "message": [
-          {"attitude" : "position"},
-          {"emph" : "emphasis"},
-          {"vis" : "trend"},
-          {"contribution" : "summary"},
-          {"novstat" : "novelty"},
-          {"contrast" : "contrast"}
+          {"attitude" : "P"},
+          {"emph" : "E"},
+          {"vis" : "T"},
+          {"contribution" : "S"},
+          {"novstat" : "N"},
+          {"contrast" : "C"},
+          {"tempstat": "B"}
         ],
-        "css": ["attitude","emph","vis", "contribution","novstat", "contrast"]
+        "css": ["P","E", "T","N", "C", "B"]
       }
     ]
 }
