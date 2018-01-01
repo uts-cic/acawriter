@@ -1,15 +1,10 @@
 <template>
-    <section v-if="tapStatus=='failed'" class="tap-health">
-        <div class="alert alert-danger">
-            <i class="fa fa-warning"></i> Tap problem
-        </div>
-    </section>
-    <section v-else>
-        <div class="alert alert-success">
-            <i class="fa fa-signal"></i> Tap Operational
-
-        </div>
-    </section>
+    <li v-if="tapStatus=='failed'" class="list-group-item list-group-item-danger tap-health">
+        <i class="fa fa-warning"></i> Tap API connection problem
+    </li>
+    <li v-else class="list-group-item list-group-item-success">
+        <i class="fa fa-signal"></i> Tap Operational
+    </li>
 </template>
 
 <script>
