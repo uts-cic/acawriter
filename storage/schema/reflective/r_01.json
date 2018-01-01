@@ -1,7 +1,7 @@
 {
-"rules": [
-  {
-    "name": "expression",
+  "rules": [
+    {
+      "name": "expression",
       "check": {
         "all": [
           "affect",
@@ -10,12 +10,12 @@
         ]
       },
       "message": [
-          {"affect" : "Some feedback for affect"},
-          {"epistemic" : "Expressions indicating belief, learning, or knowledge."},
-          {"modal" : "Some feedback for modal"}
+        {"affect" : "Words associated with strong feelings"},
+        {"epistemic" : "<u>Expressions indicating belief, learning, or knowledge.</u>"},
+        {"modal" : "Expressions indicating self critique"}
       ],
-      "css": ["epistemic","affect","modal"]
-  },
+      "css": ["epistemic","affect","modall"]
+    },
     {
       "name": "vocab",
       "check": {
@@ -40,22 +40,24 @@
       ],
       "css": ["metrics"]
     },
-  {
-    "name": "moves",
-    "check": {
-      "tags": [
-        "context",
-        "challenge",
-        "link2me"
-      ]
-    },
-    "message": [
-      {"context" : "Initial thoughts and feelings about a significant experience."},
-      {"challenge" : "The challenge of new surprising or unfamiliar ideas, problems or learning experiences."},
-      {"link2me" : "Deeper reflection, personally applied."}
-    ],
-    "css": ["context","challenge","link2me"]
-  }
+    {
+      "name": "moves",
+      "check": {
+        "tags": [
+          "context",
+          "challenge",
+          "link2me",
+          "change"
+        ]
+      },
+      "message": [
+        {"context" : "Initial thoughts and feelings about a significant experience."},
+        {"challenge" : "The challenge of new surprising or unfamiliar ideas, problems or learning experiences."},
+        {"link2me" : "<b>Deeper reflection, personally applied.</b>"},
+        {"change": "How new knowledge can lead to a change"}
+      ],
+      "css": ["context","challenge","link2me", "change"]
+    }
 
   ]
 }

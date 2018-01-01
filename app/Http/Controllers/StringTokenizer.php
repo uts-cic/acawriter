@@ -413,7 +413,9 @@ class StringTokenizer extends Controller
         //$replace = array('\n', '\n', '');
         //$replace = preg_replace($pattern, "\n", $string);
         $replace = Html2Text::convert($string, true);
-        $replace = Html2Text::fixNewlines($replace);
-        return strip_tags(trim($replace));
+
+        $output = str_replace("\n", "[&]", $replace);
+
+        return $output;
     }
 }

@@ -2,36 +2,73 @@
 
 @section('content')
 <div class="container" id="app">
+
+
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header"> <h5>Assignments</h5></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <autocomplete></autocomplete>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header bg-dark text-white">My Documents</div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Code</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Last Updated</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($data->assignments as $list)
+                        <tr>
+                            <th scope="row">{{$list->code}}</th>
+                            <td><a href="/analyse/{{$list->code}}">{{$list->name}}</a></td>
+                            <td><small>22/7/2017</small></td>
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Dashboard</div>
-
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
+                    <ul class="list-group">
+                        @if (session('status'))
+                        <li class="list-group-item list-group-item-success">
                             {{ session('status') }}
-                        </div>
-                    @endif
-                    <div class="alert alert-info" role="alert">You are logged in!</div>
-                    <br />
-                    <internet-connection :last-heart-beat-received-at="lastHeartBeatReceivedAt"></internet-connection>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header card-inverse card-primary">Status</div>
-                <div class="card-body">
-                    <div class="alert alert-info" role="alert">
-                        <log-status :slogs="slogs"></log-status>
-                    </div>
-
+                        </li>
+                        @endif
+                        <li class="list-group-item list-group-item-info" role="alert">You are logged in!</li>
+                        <internet-connection :last-heart-beat-received-at="lastHeartBeatReceivedAt"></internet-connection>
                         <tap-status :tap-health="tapHealth"></tap-status>
-
+                        <log-status :slogs="slogs"></log-status>
+                    </ul>
                 </div>
             </div>
         </div>
+
 
         @if(in_array('admin', $data->roles))
         <div class="col-md-4">
@@ -48,48 +85,6 @@
 
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header"> <h5>Assignments</h5></div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <autocomplete></autocomplete>
-                        </div>
-                        <div class="col-md-4">
-                            <h5>My Assignments</h5>
-                            <ul class="list-group">
-                                @foreach($data->assignments as $list)
-                                <a href="/analyse/{{$list->code}}" class="list-group-item list-group-item-action">{{$list->name}}</a>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Reports</div>
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Notifications</div>
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 @endsection

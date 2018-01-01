@@ -299,7 +299,9 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $raw) {
             $temp = new \stdClass();
-            $temp->str = nl2br($raw['str']);
+            $newLn=str_replace("[&][&]", "<br />", $raw['str']);
+            //$temp->str = nl2br($raw['str']);
+            $temp->str = $newLn;
             $temp->css = array();
             $resCss= array();
            // $temp->str = $raw['str'];
