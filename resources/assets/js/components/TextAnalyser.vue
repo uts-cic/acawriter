@@ -40,11 +40,12 @@
         </div>
         <div class="row editWrapper">
             <div id="sidebar">
-                <div class="p-3 bg-dark text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</div>
-                <div class="col-md-12" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
+                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</div>
+                <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
+                     <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
                     <div v-for="msg in rule.message">
                        <span v-for="(m,id) in msg">
+                           <i class="fa fa-toggle-on text-success" aria-hidden="true"></i> &nbsp; &nbsp;
                            <span v-bind:class="id"></span> <small><span v-html="m"></span></small><br />
                        </span>
 
