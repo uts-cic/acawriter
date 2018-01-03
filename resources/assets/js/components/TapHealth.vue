@@ -1,9 +1,9 @@
 <template>
     <li v-if="tapStatus=='failed'" class="list-group-item list-group-item-danger tap-health">
-        <i class="fa fa-warning"></i> Tap API connection problem
+        <i class="fa fa-warning"></i> <small>Tap API connection problem</small>
     </li>
     <li v-else class="list-group-item list-group-item-success">
-        <i class="fa fa-signal"></i> Tap Operational
+        <i class="fa fa-check-square-o"></i> <small>Tap Operational</small>
     </li>
 </template>
 
