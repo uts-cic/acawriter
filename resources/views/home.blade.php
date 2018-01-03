@@ -2,16 +2,57 @@
 
 @section('content')
 <div class="container" id="app">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>My Dashboard</h1>
+            <small>The Academic Writing Analyser (AWA) provides feedback on your analytical or reflective writing.</small>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-md-4">
+                <i class="fa fa-3x fa-caret-square-o-right pull-left" aria-hidden="true"></i><p>Already have the document - click on the document and start analysis.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fa fa-3x fa-angle-double-right pull-left" aria-hidden="true"></i><p>Have an assignment code - add to my documents by entering the code & then start analysis</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fa fa-3x fa-question-circle pull-left" aria-hidden="true"></i><p>Alternatively create a new document and start analysis</p>
+            </div>
+    </div>
 
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header"> <h5>Assignments</h5></div>
+                <div class="card-header"> <h5>Enter Assignment code</h5></div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <autocomplete></autocomplete>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header"> <h5>Add a Document</h5></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="doc_title" placeholder="document title" />
+                        </div>
+                        <div class="col-md-6">
+                            <input type="radio" id="doc_grammar_ana" name="doc_grammar" /> Analytical
+                            <input type="radio" id="doc_grammar_ref" name="doc_grammar" /> Reflective
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-dark">Add</button>
+                        </div>
+                        <div class="col-md-6">
+
                         </div>
                     </div>
                 </div>
@@ -52,7 +93,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Dashboard</div>
+                <div class="card-header">System Status</div>
                 <div class="card-body">
                     <ul class="list-group">
                         @if (session('status'))
