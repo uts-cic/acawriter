@@ -40,11 +40,12 @@
         </div>
         <div class="row editWrapper">
             <div id="sidebar">
-                <div class="p-3 bg-dark text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</div>
-                <div class="col-md-12" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
+                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</div>
+                <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
+                     <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
                     <div v-for="msg in rule.message">
                        <span v-for="(m,id) in msg">
+                           <i class="fa fa-toggle-on text-success" aria-hidden="true"></i> &nbsp; &nbsp;
                            <span v-bind:class="id"></span> <small><span v-html="m"></span></small><br />
                        </span>
 
@@ -96,7 +97,9 @@
                                                 <span v-bind:class="ic"></span>
                                             </template>
                                         </span>
-                                        &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span>
+                                       <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
+                                        <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
+
                                     </span>
                                 </div>
                             </div>
@@ -357,9 +360,36 @@
             },
             inLineClasses: function(data) {
                 var temp=  data.filter(function( obj ) {
-                    return (obj === 'epistemic' || obj ==='link2me');
+                    return (obj ==='link2me');
                 });
                 return temp;
+            },
+            inText: function(data) {
+                if(data.str!=='' && typeof data.expression!== 'undefined') {
+                    let str = data.str;
+                    let inT;
+                    if(data.expression.affect.length > 0) {
+                        data.expression.affect.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='affect'>"+word.text+"</span>");
+                        });
+
+                    }
+                    if(data.expression.epistemic.length > 0) {
+                        data.expression.epistemic.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='epistemic'>"+word.text+"</span>");
+                        });
+                    }
+                    if(data.expression.modal.length > 0) {
+                        data.expression.modal.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='modall'>"+word.text+"</span>");
+                        });
+                    }
+                    return str;
+
+
+                } else {
+                    return str;
+                }
             }
         }
     }

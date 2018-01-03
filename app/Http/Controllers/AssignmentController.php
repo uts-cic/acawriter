@@ -7,6 +7,7 @@ use Auth;
 use App\User;
 use App\Assignment;
 use Illuminate\Support\Facades\DB;
+use App\Feature;
 
 
 class AssignmentController extends Controller
@@ -20,30 +21,35 @@ class AssignmentController extends Controller
     public function index(){
         //get all assignments belonging to the user
         $assignments = User::find(Auth::user()->id)->assignments;
-        return view('assignment', ['assignments' => $assignments]);
+        $features = Feature::all();
+        return view('assignment', ['assignments' => $assignments, 'features'=>$features]);
     }
 
     public function store(Request $request) {
 
         $this->validate(request(), [
-            'name' => 'required'
+            'name' => 'required',
+            'grammar' =>'required'
             ]);
 
         $assignment = new Assignment();
         $assignment->name = $request->name;
+        $assignment->feature_id=$request->grammar;
         $assignment->code = str_random(8);
         $assignment->user_id = Auth::user()->id;
+        $assignment->keywords=$request->keywords;
         $assignment->published =0;
 
         $assignment->save();
 
-        return view('/assignment');
+        //return view('/assignment');
+        return redirect()->back()->with('success','Assignment added successfully!');
     }
 
     public function search(Request $request) {
 
         $s = $request->input('query');
-        $list = Assignment::where('name', 'ILIKE', '%'.$s.'%')->get();
+        $list = Assignment::where('code', 'ILIKE', '%'.$s.'%')->get();
 
         return $list;
     }

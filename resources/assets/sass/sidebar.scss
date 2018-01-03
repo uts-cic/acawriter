@@ -7,13 +7,17 @@
 }
 
 #sidebar {
-  min-width: 250px;
-  max-width: 250px;
-  min-height: 100vh;
+  min-width: 350px;
+  max-width: 350px;
+  min-height: 75vh;
 }
 
 #sidebar.active {
-  margin-left: -250px;
+  margin-left: -350px;
+}
+
+.bg-uts-primary {
+  background-color:#0000FF;
 }
 
 
@@ -36,10 +40,10 @@ a[aria-expanded="true"]::before {
 
 @media (max-width: 768px) {
   #sidebar {
-    margin-left: -250px;
+    width: 200px;
   }
   #sidebar.active {
-    margin-left: 0;
+    margin-left: -200px;
   }
 }
 
@@ -49,13 +53,15 @@ a[aria-expanded="true"]::before {
   color: #333;
   transition: all 0.3s;
   position:absolute;
-  left:0.2em;
+  left:1em;
+  top:29%;
   z-index:999;
+  border: 1px solid #0000FF;
 
 }
 
 #sidebar .sidebar-header {
-  background: #CCCCCC;
+  background: #0000FF;
 }
 
 #sidebar ul.components {

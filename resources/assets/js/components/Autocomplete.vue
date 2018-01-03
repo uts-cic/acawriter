@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-md-6">
             <div v-bind:class="'open:openSuggestion'">
-                Select an Assignment:
-                <input type="text" placeholder="start typing name or code" v-model="query" v-on:keyup="autoComplete" class="form-control">
+                Paste your assignment code
+                <input type="text" placeholder="XT45EWS" v-model="query" v-on:keyup="autoComplete" class="form-control">
                 <div class="panel-footer" v-if="results.length">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="(result,index) in results"
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            Selected Assignments: {{operation}}
+            {{operation}}
             <div v-if="selectedAssignments.length">
                 <div  v-for="(a, i) in selectedAssignments">
                     <small> {{a.name}} ({{a.code}})

@@ -1,9 +1,9 @@
 <template>
     <li v-if="offline" class="list-group-item list-group-item-danger internet-connection">
-        <i class="fa fa-warning"></i> Internet connection lost
+        <i class="fa fa-warning"></i>&nbsp;<small>Internet connection lost</small>
     </li>
     <li v-else class="list-group-item list-group-item-success">
-        <i class="fa fa-signal"></i> {{formatedDate}}
+        <small>Online status last updated: {{formatedDate}}</small>
     </li>
 </template>
 
