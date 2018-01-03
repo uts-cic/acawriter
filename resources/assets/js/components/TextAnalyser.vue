@@ -97,7 +97,9 @@
                                                 <span v-bind:class="ic"></span>
                                             </template>
                                         </span>
-                                        &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span>
+                                       <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
+                                        <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
+
                                     </span>
                                 </div>
                             </div>
@@ -358,9 +360,36 @@
             },
             inLineClasses: function(data) {
                 var temp=  data.filter(function( obj ) {
-                    return (obj === 'epistemic' || obj ==='link2me');
+                    return (obj ==='link2me');
                 });
                 return temp;
+            },
+            inText: function(data) {
+                if(data.str!=='' && typeof data.expression!== 'undefined') {
+                    let str = data.str;
+                    let inT;
+                    if(data.expression.affect.length > 0) {
+                        data.expression.affect.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='affect'>"+word.text+"</span>");
+                        });
+
+                    }
+                    if(data.expression.epistemic.length > 0) {
+                        data.expression.epistemic.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='epistemic'>"+word.text+"</span>");
+                        });
+                    }
+                    if(data.expression.modal.length > 0) {
+                        data.expression.modal.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='modall'>"+word.text+"</span>");
+                        });
+                    }
+                    return str;
+
+
+                } else {
+                    return str;
+                }
             }
         }
     }
