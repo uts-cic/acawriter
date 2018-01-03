@@ -9,7 +9,7 @@
   overflow-y: scroll;
 }
 
-.affect, .vocab , .context, .challenge, .wordcount, .metrics, .change{
+.vocab , .context, .challenge, .wordcount, .metrics, .change{
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -49,9 +49,8 @@
   content: "\f0e7";
 }
 
-.affect:before {
-  content: "\f1dd";
-  color: orange;
+.affect {
+  border-bottom: 1px dashed #ff0000;
 }
 
 
@@ -65,7 +64,8 @@
 }
 
 .modall {
-  color: red;
+  font-style:italic;
+  color: darkgreen;
 }
 
 
