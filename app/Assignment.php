@@ -4,12 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use App\Feature;
 
 class Assignment extends Model
 {
     //
     public function user() {
-        $this->belongsTo(User::class);
+        return $this->belongsTo('App\User');
+    }
+
+    public function feature() {
+        return $this->belongsTo('App\Feature','feature_id', 'id');
     }
 
 

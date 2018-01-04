@@ -71,6 +71,7 @@
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">Code</th>
+                            <th scope="col">Grammar</th>
                             <th scope="col">Title</th>
                             <th scope="col">Last Updated</th>
                         </tr>
@@ -79,6 +80,7 @@
                         @foreach($data->assignments as $list)
                         <tr>
                             <th scope="row">{{$list->code}}</th>
+                            <td>{{$list->feature->grammar}}</td>
                             <td><a href="/analyse/{{$list->code}}">{{$list->name}}</a></td>
                             <td><small>22/7/2017</small></td>
                         </tr>

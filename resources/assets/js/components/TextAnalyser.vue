@@ -1,7 +1,8 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="offset-8 col-md-4">
+            <div class="col-md-8"><h3>{{preSetAssignment.name}}</h3></div>
+            <div class="col-md-4">
                 <div class="card bg-default">
                     <div class="card-header">
                         <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
@@ -191,10 +192,10 @@
                 splitText:[],
                 quickTags:'',
                 //feedback:[],
-                attributes:{
+               /* attributes:{
                     feedbackOpt:'r_01',
-                    grammar:'reflective'
-                },
+                    grammar:this.preSetAssignment.feature.grammar? this.preSetAssignment.feature.grammar : 'reflective'
+                },*/
                 customToolbar: [
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -229,6 +230,23 @@
             ...mapGetters({
                 feedback: 'currentFeedback'
             }),
+            preSetAssignment: function() {
+                return JSON.parse(this.assignment);
+            },
+            attributes: function() {
+
+                if(this.preSetAssignment) {
+                    return {
+                        feedbackOpt:this.preSetAssignment.feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
+                        grammar: this.preSetAssignment.feature.grammar.toLocaleLowerCase()
+                    };
+                } else {
+                   return {
+                        feedbackOpt:'a_01',
+                        grammar: 'analytic'
+                    };
+                }
+            }
         },
         watch :{
             /* editorContent: function (newVal) {
