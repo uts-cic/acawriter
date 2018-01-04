@@ -79,7 +79,8 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    AWA 3.0
+                    <img src="/images/uts_logo.png" /><br /><img src="https://utscic.edu.au/wp-content/uploads/2015/05/cropped-ciclogo.png" /><br />
+                    Academic Text Analyser<sup>3.0</sup>
                 </div>
 
                 <!-- <div class="links">
