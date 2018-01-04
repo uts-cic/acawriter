@@ -17,16 +17,18 @@ class AnalyseController extends Controller
         $this->middleware('auth');
         $this->ui = new \stdClass;
         $this->ui->assignment_id=0;
-
     }
 
 
     public function index($code=NULL) {
 
         if(isset($code)) {
+            $this->ui->assignment = Assignment::where('code', '=', $code)
+                                    ->with('feature')
+                                    ->get();
             $this->ui->assignment_id = Assignment::where('code', '=', $code)->pluck('id');
         }
-      //  dd($this->ui);
+
         return view('analyse', ['data' => $this->ui]);
     }
 
