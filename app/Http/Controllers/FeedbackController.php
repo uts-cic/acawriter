@@ -54,11 +54,15 @@ class FeedbackController extends Controller
             $tt['str']= $temp->str ? $temp->str : '';
             $tt['raw_tags'] = $temp->raw_tags? $temp->raw_tags : array();
             $tt['tags'] = $temp->tags? $temp->tags:'';
-            $tap[]=$tt;
+            $tap[]=$temp;
 
-        } else if($request['action'] == 'fetch') {
-            $tap = $request["tap"];
+        } /* else if($request['action'] == 'fetch') {
+            //$tap = $request["tap"];
 
+        } */
+        else if($request['action'] == 'fetch') {
+            $tap = $this->stringTokeniser->preProcess($request);
+            //print_r($tap);
         }
 
 
@@ -120,11 +124,11 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $data) {
             $setFeed = new \stdClass();
-            $setFeed->str = $data['str'];
+            $setFeed->str = $data->str;
             $setFeed->message = array();
             $setFeed->css = array();
-            if ($key < $check['paragraph'] && count($data['raw_tags']) > 0) {
-                if (in_array($check['paragraph'], $data['raw_tags'])) {
+            if ($key < $check['paragraph'] && count($data->raw_tags) > 0) {
+                if (in_array($check['paragraph'], $data->raw_tags)) {
                     $tempo++;
                 }
             }
@@ -145,10 +149,10 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $data) {
             $tempStore = new \stdClass();
-            $tempStore->str = $data['str'];
+            $tempStore->str = $data->str;
             $tempStore->message = array();
             $tempStore->css = array();
-            $returnData = $this->stringTokeniser->metrics($data['str']);
+            $returnData = $this->stringTokeniser->metrics($data->str);
             if(isset($returnData->sentWordCounts)) {
                 //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
                 if($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
@@ -181,7 +185,7 @@ class FeedbackController extends Controller
         $completeText = "";
 
         foreach($tap as $key => $data) {
-            $completeText .= $data['str'];
+            $completeText .= $data->str;
         }
         $tempStore = new \stdClass();
         $tempStore->str = $completeText;
@@ -229,14 +233,14 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $data) {
             $tempStore = new \stdClass();
-            $tempStore->str = $data['str'];
+            $tempStore->str = $data->str;
             $tempStore->message = array();
             $tempStore->affect=array();
             $tempStore->epistemic=array();
             $tempStore->modal=array();
             $tempStore->css = array();
 
-            $returnData = $this->stringTokeniser->expression($data['str']);
+            $returnData = $this->stringTokeniser->expression($data->str);
             //$returnData is an array but since we are analysing tokenised strings we can safetly assume array[0]
             $sanitizedResult = $returnData[0];
             //$tempStore->raw = $sanitizedResult;
@@ -274,12 +278,12 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $data) {
             $setFeed = new \stdClass();
-            $setFeed->str = $data['str'];
+            $setFeed->str = $data->str;
             $setFeed->message = array();
             $setFeed->css = array();
 
             foreach($tags as $tag) {
-                if(count(preg_grep("[^".$tag."]", $data['raw_tags'])) > 0) {
+                if(count(preg_grep("[^".$tag."]", $data->raw_tags)) > 0) {
                     foreach($messages as $msg) {
                         if(isset($msg[$tag])) {
                             $setFeed->message[$tag] = $msg[$tag];
@@ -299,7 +303,7 @@ class FeedbackController extends Controller
 
         foreach($tap as $key => $raw) {
             $temp = new \stdClass();
-            $newLn=str_replace("[&][&]", "<br />", $raw['str']);
+            $newLn=str_replace("[&][&]", "<br />", $raw->str);
             //$temp->str = nl2br($raw['str']);
             $temp->str = $newLn;
             $temp->css = array();
