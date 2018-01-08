@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="offset-2 col-md-6 col-xs-12 align-self-center">
+        <div class="mx-auto col-md-6 col-xs-12 align-self-center">
             <div class="card">
-                <div class="card-header">Login</div>
+                <div class="card-header bg-dark text-white">Login</div>
 
                 <div class="card-body">
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-dark">
                                     Login
                                 </button>
                                 </div>
@@ -65,7 +65,7 @@
                         </div>
                         <hr />
                         <div class="form-group">
-                            <a class="btn btn-lg btn-primary" href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw"
+                            <a class="btn btn-lg btn-dark" href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw"
                             >UTS Login</a>
                         </div>
                     </form>

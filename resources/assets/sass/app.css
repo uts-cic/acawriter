@@ -3,7 +3,7 @@ Error: File to import not found or unreadable: node_modules/bootstrap/scss/boots
         on line 10 of app.scss
 
 5: // Variables
-6: //@import "variables";
+6: @import "variables";
 7: 
 8: // Bootstrap
 9: //@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
@@ -12,7 +12,7 @@ Error: File to import not found or unreadable: node_modules/bootstrap/scss/boots
 12: //fontawesome
 13: @import "node_modules/font-awesome/scss/font-awesome.scss";
 14: 
-15: //customised text editor
+15: 
 
 Backtrace:
 app.scss:10
@@ -60,4 +60,4 @@ app.scss:10
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: node_modules/bootstrap/scss/bootstrap.\A         on line 10 of app.scss\A \A 5: // Variables\A 6: //@import \"variables\";\A 7: \A 8: // Bootstrap\A 9: //@import \"node_modules/bootstrap-sass/assets/stylesheets/bootstrap\";\A 10: @import \"node_modules/bootstrap/scss/bootstrap\";\A 11: \A 12: //fontawesome\A 13: @import \"node_modules/font-awesome/scss/font-awesome.scss\";\A 14: \A 15: //customised text editor"; }
+  content: "Error: File to import not found or unreadable: node_modules/bootstrap/scss/bootstrap.\A         on line 10 of app.scss\A \A 5: // Variables\A 6: @import \"variables\";\A 7: \A 8: // Bootstrap\A 9: //@import \"node_modules/bootstrap-sass/assets/stylesheets/bootstrap\";\A 10: @import \"node_modules/bootstrap/scss/bootstrap\";\A 11: \A 12: //fontawesome\A 13: @import \"node_modules/font-awesome/scss/font-awesome.scss\";\A 14: \A 15: "; }

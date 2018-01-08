@@ -1,7 +1,8 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="offset-8 col-md-4">
+            <div class="col-md-8"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
+            <div class="col-md-4">
                 <div class="card bg-default">
                     <div class="card-header">
                         <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
@@ -38,6 +39,19 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span v-if="autoCheck"  class="text-primary">
+                    <i class="fa fa-spinner fa-spin fa-3x"></i> Processing text .....
+                    <span class="sr-only">Loading...</span>
+                </span>
+                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                    <ul>
+                        <li v-for="error in errors">{{error.message}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="row editWrapper">
             <div id="sidebar">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</div>
@@ -60,7 +74,7 @@
                 <div class="card">
                     <div class="card-header bg-dark text-white">Document Analyser
                         <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" v-on:click="fetchAnalysis()"><i class="fa fa-comments" aria-hidden="true"></i> Get Feedback</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-comments" aria-hidden="true"></i> Get Feedback</button>
                             <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
                             <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to Pdf</button>
                             <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
@@ -78,19 +92,11 @@
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
-                                    <ul>
-                                        <li v-for="error in errors">{{error.message}}</li>
-                                    </ul>
-                                </div>
-                                <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
+
                                 <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4><hr /></div>
                                 <div class="col-md-12 wrapper">
                                     <!--<span v-html="editorContent"></span>-->
 
-
-
-                                    <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-for="ic in feed.css">
                                             <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
@@ -108,15 +114,8 @@
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
-                                    <ul>
-                                        <li v-for="error in errors">{{error.message}}</li>
-                                    </ul>
-                                </div>
-                                <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
                                 <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4></div>
                                 <div class="col-md-12 wrapper">
-                                    <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
@@ -191,10 +190,10 @@
                 splitText:[],
                 quickTags:'',
                 //feedback:[],
-                attributes:{
+               /* attributes:{
                     feedbackOpt:'r_01',
-                    grammar:'reflective'
-                },
+                    grammar:this.preSetAssignment.feature.grammar? this.preSetAssignment.feature.grammar : 'reflective'
+                },*/
                 customToolbar: [
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -204,13 +203,14 @@
         },
         mounted () {
             this.editLog.push(this.editorContent);
-            this.fetchAnalysis();
+            //this.fetchAnalysis();
+            this.fetchFeedback();
             // this.$store.dispatch('LOAD_FEEDBACK');
         },
         created() {
             this.auto = 'every 5m';
             //setInterval(this.storeAnalysedDrafts, 900000);
-            setInterval(this.quickCheck, 50000);
+            setInterval(this.quickCheck, 300000);
             /*EventBus.$on('compute-done', data => {
                  this.feedback.final.forEach (function(exp, idx) {
                      if(exp.str === data.str) {
@@ -227,8 +227,29 @@
                 return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
             },
             ...mapGetters({
-                feedback: 'currentFeedback'
+                feedback: 'currentFeedback',
+                autoCheck: 'loadingStatus'
             }),
+            preSetAssignment: function() {
+                if(this.assignment) {
+                    return JSON.parse(this.assignment);
+                } else {
+                    return false;
+                }
+            },
+            attributes: function() {
+                if(this.preSetAssignment) {
+                    return {
+                        feedbackOpt:this.preSetAssignment.feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
+                        grammar: this.preSetAssignment.feature.grammar.toLocaleLowerCase()
+                    };
+                } else {
+                   return {
+                        feedbackOpt:'a_01',
+                        grammar: 'analytic'
+                   };
+                }
+            }
         },
         watch :{
             /* editorContent: function (newVal) {
@@ -252,7 +273,7 @@
                     .catch(e => {
                         this.$data.errors.push(e)
                     });
-                this.$data.tapCalls.vacab =true;
+                this.$data.tapCalls.vocab =true;
                 axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
                     .then(response => {
                         this.$data.tapCalls.vocab=false;
@@ -281,17 +302,6 @@
                                 'act': 'update'
                             }
                             self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
-                            /*self.quickAnalyse(changedText, idx)
-                                .then(response => {
-                                    if(response.data) {
-                                        this.$store.dispatch('UPDATE_TOKENISED_FEEDBACK',response.data.final[0]);
-                                        //EventBus.$emit('compute-done', response.data.final[0]);
-                                        console.log("274");
-                                    }
-                                })
-                                .catch(e => {
-                                    self.$data.errors.push(e)
-                                }); */
                         } else if(ov[idx].str == item) {
                             //feedbackQueue.push(ov[idx]);
                             //console.log("283");
@@ -310,11 +320,6 @@
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
             },
-            quickAnalyse(changedText, idx) {
-                this.$data.counter = 0;
-                var quickTags = {};
-                return axios.post('/feedback', {'txt': changedText, 'action': 'quick', 'extra': this.attributes});
-            },
             storeAnalysedDrafts() {
                 console.log("into auto store");
                 // this.$data.tap='';
@@ -331,12 +336,12 @@
             },
             tokeniseTextInput() {
                 console.log("into tokenise");
-                this.$data.tapCalls.athanor =true;
+                this.$data.autoCheckr =true;
                 this.$data.counter = 0;
                 axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
                     .then(response => {
                         this.splitText = response.data.tokenised;
-                        this.$data.tapCalls.athanor=false;
+                        this.$data.autoCheck=false;
                         this.computeText(this.splitText, this.feedback.final);
                         this.$data.counter = 0;
                     })
@@ -346,9 +351,12 @@
             },
             fetchFeedback() {
                 this.errors=[];
+                this.autoCheck = true;
                 if(this.feedbackOpt!=='') {
-                    let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
+                   // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
+                    let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
+                    this.autoCheck = false;
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
@@ -388,6 +396,7 @@
 
 
                 } else {
+                    let str = '';
                     return str;
                 }
             }

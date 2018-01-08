@@ -51,7 +51,7 @@ class HomeController extends Controller
         if(count($list) > 0 ) {
             foreach($list as $a) {
                // dd($a->assignment_id);
-                $this->userData->assignments = Assignment::find($a->assignment_id)->get();
+                $this->userData->assignments = Assignment::find($a->assignment_id)->with('feature')->get();
             }
         }
 //dd($this->userData->assignments);

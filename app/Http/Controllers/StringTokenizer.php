@@ -408,6 +408,32 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
+
+
+    public function preProcess($data) {
+        $results = array();
+
+        $tokenisedText = $this->tapTokeniser($data);
+        if(count($tokenisedText) >0 ) {
+        //now go through each text and analyse
+            foreach($tokenisedText as $txt) {
+                    $responseTxt = new \stdClass;
+                    $responseTxt->str= $txt->original;
+                    $tags = $this->rethoMoves($txt->original, $data['extra']['grammar']);
+                    $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
+                    $responseTxt->tags= implode(', ',$tags);
+                    $results[]=$responseTxt;
+            }
+        }
+
+        return $results;
+    }
+
+
+
+
+
+
     protected function cleanText($string) {
         //$pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
         //$replace = array('\n', '\n', '');
