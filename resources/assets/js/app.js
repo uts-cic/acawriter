@@ -49,6 +49,7 @@ Vue.component('doc-editor', require('./components/TextAnalyser.vue'));
 Vue.component('internet-connection', require('./components/InternetConnection.vue'));
 Vue.component('tap-status', require('./components/TapHealth.vue'));
 Vue.component('autocomplete', require('./components/Autocomplete.vue'));
+Vue.component('assignment-list', require('./components/Assignment.vue'));
 
 
 

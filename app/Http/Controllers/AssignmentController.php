@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\Assignment;
+use App\Draft;
 use Illuminate\Support\Facades\DB;
 use App\Feature;
 
@@ -20,7 +21,7 @@ class AssignmentController extends Controller
 
     public function index(){
         //get all assignments belonging to the user
-        $assignments = User::find(Auth::user()->id)->assignments;
+        $assignments = User::find(Auth::user()->id)->assignments()->with('feature')->get();
         $features = Feature::all();
         return view('assignment', ['assignments' => $assignments, 'features'=>$features]);
     }
@@ -73,7 +74,7 @@ class AssignmentController extends Controller
             foreach($request["list"] as $a ) {
                 $message = 'Record Updated';
                 $up=array();
-                $status =array('success' => true, 'message' => 'Record Updated');
+                $status =array('success' => true, 'message' => 'Added to your document list ');
                 $code = 200;
                 //skip insert if already subscribed
                 $subscribed = DB::table('user_subscription')->where([
@@ -106,6 +107,24 @@ class AssignmentController extends Controller
         }
 
         return response()->json($status, $code);
+    }
+
+
+    public function action(Request $request) {
+        $complete = false;
+        $status =array('success' => true, 'message' => 'Deleted Assignment');
+        $code = 200;
+        if($request->action == 'delete') {
+            if(is_numeric($request->id) ) {
+
+                    $res = Draft::where('assignment_id', $request->id)->delete();
+
+                    $complete = Assignment::where('id', $request->id)->delete();
+
+            }
+        }
+        return response()->json($status, $code);
+
     }
 
 
