@@ -57,35 +57,11 @@
                 <div class="card">
                     <div class="card-header bg-dark text-white">Current Assignments</div>
                     <div class="card-body">
-                        <table class="table">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Code</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Grammar</th>
-                                <th scope="col">Keywords</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($assignments as $assignment)
-                            <tr>
-                                <th scope="row">{{$assignment->code}}</th>
-                                <td>{{$assignment->name}}</td>
-                                <td>Analytical</td>
-                                <td><small>{{$assignment->keywords}}</small></td>
-                                <td><a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> &nbsp; <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-                            </tr>
-                            @endforeach
+                       <assignment-list assignments="{{($assignments)}}"></assignment-list>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
     </div>
-
-
 </div>
 @endsection
