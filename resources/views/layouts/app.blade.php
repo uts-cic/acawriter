@@ -15,8 +15,8 @@
 </head>
 <body>
     <div class="row">
-        <div class="offset-1 col-md-4"><img src="/images/uts_logo.png" /></div>
-        <div class="col-md-4 "><img src="/images/logo.jpg" /></div>
+        <div class="offset-1 col-md-2"><img src="/images/uts_logo.png" /></div>
+        <div class="col-md-2 "><img src="/images/cic_logo.png" /></div>
     </div>
 
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
@@ -72,6 +72,6 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-    @yield('footer')
+    @include('layouts.footer')
 </body>
 </html>

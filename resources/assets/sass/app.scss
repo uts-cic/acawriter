@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
 // Variables
-//@import "variables";
+@import "variables";
 
 // Bootstrap
 //@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
@@ -11,6 +11,10 @@
 
 //fontawesome
 @import "node_modules/font-awesome/scss/font-awesome.scss";
+
+
+//customised css for complete app
+@import "awa.scss";
 
 //customised text editor
 @import "editor.scss";

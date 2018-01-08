@@ -53,6 +53,9 @@ Route::get('/assignment/search', 'AssignmentController@search');
 
 Route::post('assignments/toUser', 'AssignmentController@subscribeUserToAssignment');
 
+    //called from axios to update delete assignments
+Route::post('assignments/action', 'AssignmentController@action');
+
 
 //staff & admin only pages
 
