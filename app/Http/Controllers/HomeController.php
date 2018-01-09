@@ -47,11 +47,11 @@ class HomeController extends Controller
             ->select('assignment_id')
             ->where('user_id','=',$user_id)
             ->get();
-       // dd($list);
+       //dd($list);
         if(count($list) > 0 ) {
             foreach($list as $a) {
-               // dd($a->assignment_id);
-                $this->userData->assignments = Assignment::find($a->assignment_id)->with('feature')->get();
+               //print_r($a->assignment_id);
+                $this->userData->assignments = Assignment::where('id',$a->assignment_id)->with('feature')->get();
             }
         }
 //dd($this->userData->assignments);
