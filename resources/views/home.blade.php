@@ -35,7 +35,8 @@
                                 <th scope="col">Code</th>
                                 <th scope="col">Grammar</th>
                                 <th scope="col">Title</th>
-                                <th scope="col">Last Updated</th>
+                                <th scope="col">Document</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -44,7 +45,8 @@
                                 <th scope="row">{{$list->code}}</th>
                                 <td>{{$list->feature->grammar}}</td>
                                 <td><a href="/analyse/{{$list->code}}">{{$list->name}}</a></td>
-                                <td><small>22/7/2017</small></td>
+                                <td>document name</td>
+                                <td><a href="/document/edit"><i class="fa fa-edit"></i></a> | <a href="/document/delete"><i class="fa fa-trash"></i></a> </td>
                             </tr>
                             @endforeach
                             </tbody>

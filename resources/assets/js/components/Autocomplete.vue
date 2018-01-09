@@ -19,11 +19,16 @@
         <div class="col-md-6">
             {{operation}}
             <div v-if="selectedAssignments.length">
-                <div  v-for="(a, i) in selectedAssignments">
-                    <small> {{a.name}} ({{a.code}})
-                        &nbsp;<a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a>
-                    </small>
+                <div  v-for="(a, i) in selectedAssignments" class="row">
+                    <div class="col-md-6">Assignment Title: <small> {{a.name}} ({{a.code}})
+                        &nbsp;
+                    </small></div>
+                    <div class="col-md-5">Document name:
+                        <input type="text" class="form-control" :value="slug(a.name)" />
+                    </div>
+                    <div class="col-md-1"><a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a></div>
                 </div>
+                <hr />
                 <button type="button" class="btn btn-success btn-sm" @click="addAssignments()"><i class="fa fa-plus-square-o"></i> Add</button>
             </div>
         </div>
@@ -38,7 +43,8 @@
                 selectedAssignments:[],
                 open:false,
                 current:0,
-                operation:''
+                operation:'',
+                doc_name:''
             }
         },
         methods: {
@@ -57,7 +63,8 @@
             suggestionClick(index) {
                 var currentSelection = this.results[index];
                 this.query = '';
-                this.selectedAssignments.push(currentSelection);
+                this.selectedAssignments.push({'assignment':currentSelection, 'doc_name':this.doc_name});
+                console.log(this.selectedAssignments);
                 this.open = false;
             },
             addAssignments() {
@@ -77,7 +84,13 @@
                 return this.query !== "" &&
                     this.results.length > 0 &&
                     this.open === true;
+            },
+            slug(str) {
+                let name = str.toLowerCase();
+                name= name.replace(' ', '-');
+                return name;
             }
+
         }
     }
 </script>
