@@ -16,6 +16,7 @@
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding:1px;
 }
 
 
@@ -47,6 +48,7 @@
 
 .metrics:before {
   content: "\f0e7";
+  color: orangered;
 }
 
 .affect {
