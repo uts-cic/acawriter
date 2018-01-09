@@ -17,6 +17,11 @@ $brand-success: #2ab27b;
 $brand-warning: #cbb956;
 $brand-danger: #bf5329;
 
+$brand-btn-outline-secondary:rgba(255,255,255,0.7);
+
+
+
+
 // Typography
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $font-family-sans-serif: "Arial", sans-serif;
@@ -25,7 +30,8 @@ $line-height-base: 1.6;
 $text-color: #636b6f;
 
 // Navbar
-$navbar-default-bg: #fff;
+$navbar-default-bg: #000000;
+$nav-link:rgba(255,255,255,1);
 
 // Buttons
 $btn-default-color: $text-color;

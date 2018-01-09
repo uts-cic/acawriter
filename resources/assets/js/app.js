@@ -112,7 +112,7 @@ const app = new Vue({
 */
 
 $(document).ready(function () {
-    $('#sidebarCollapse').on('click', function () {
+    $('#sidebarCollapse, #sidebarCollapseTwice').on('click', function () {
         $('#sidebar').toggleClass('active');
     });
 });
