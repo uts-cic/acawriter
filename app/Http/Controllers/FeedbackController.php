@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Auth;
 use App\User;
 use App\Http\Controllers\StringTokenizer;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -62,7 +63,7 @@ class FeedbackController extends Controller
         } */
         else if($request['action'] == 'fetch') {
             $tap = $this->stringTokeniser->preProcess($request);
-            //print_r($tap);
+            Log::info('tokeniser',['tokeniser' =>'completed'.date('d/m/y:H:i:s') ]);
         }
 
 
@@ -320,6 +321,7 @@ class FeedbackController extends Controller
             $temp->css = $resCss;
             $final[]=$temp;
         }
+        Log::info('feedback',['feed' =>'completed'.date('d/m/y:H:i:s') ]);
         return $final;
 
 
