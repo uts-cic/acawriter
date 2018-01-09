@@ -17,5 +17,9 @@ class Assignment extends Model
         return $this->belongsTo('App\Feature','feature_id', 'id');
     }
 
+    public function documents() {
+        return $this->hasMany('App\Documents', 'assignment_id', 'id');
+    }
+
 
 }

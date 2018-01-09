@@ -8,15 +8,15 @@ class Draft extends Model
 {
     //
     public function user() {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
 
-    public function assignment() {
-        $this->belongsTo(Assignment::class);
+    public function document() {
+        return $this->belongsTo(Assignment::class);
     }
 
     public function feature() {
-        $this->belongsTo(Feature::class);
+        return $this->belongsTo(Feature::class);
     }
 }
