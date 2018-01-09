@@ -41,10 +41,6 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <span v-if="autoCheck"  class="text-primary">
-                    <i class="fa fa-spinner fa-spin fa-3x"></i> Processing text .....
-                    <span class="sr-only">Loading...</span>
-                </span>
                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                     <ul>
                         <li v-for="error in errors">{{error.message}}</li>
@@ -54,7 +50,9 @@
         </div>
         <div class="row editWrapper">
             <div id="sidebar">
-                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</div>
+                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide
+                    <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
+                </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                      <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
                     <div v-for="msg in rule.message">
@@ -74,10 +72,10 @@
                 <div class="card">
                     <div class="card-header bg-dark text-white">Document Analyser
                         <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-comments" aria-hidden="true"></i> Get Feedback</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to Pdf</button>
-                            <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>
+                            <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
 
                         </div>
 
@@ -93,7 +91,12 @@
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
 
-                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4><hr /></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4>
+                                    <span v-if="processing"  class="text-success">
+                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
+                                        <span class="sr-only">Loading...</span>
+                                    </span>
+                                <hr /></div>
                                 <div class="col-md-12 wrapper">
                                     <!--<span v-html="editorContent"></span>-->
 
@@ -228,7 +231,7 @@
             },
             ...mapGetters({
                 feedback: 'currentFeedback',
-                autoCheck: 'loadingStatus'
+                processing: 'loadingStatus'
             }),
             preSetAssignment: function() {
                 if(this.assignment) {
