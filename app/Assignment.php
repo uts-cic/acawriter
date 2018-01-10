@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Feature;
+use App\Document;
 
 class Assignment extends Model
 {
@@ -18,7 +19,7 @@ class Assignment extends Model
     }
 
     public function documents() {
-        return $this->hasMany('App\Documents', 'assignment_id', 'id');
+        return $this->hasMany('App\Document');
     }
 
 

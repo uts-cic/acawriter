@@ -1,4 +1,5 @@
 <template>
+    <div>
     <div class="row">
         <div class="col-md-6">
             <div v-bind:class="'open:openSuggestion'">
@@ -17,21 +18,36 @@
             </div>
         </div>
         <div class="col-md-6">
-            {{operation}}
-            <div v-if="selectedAssignments.length">
-                <div  v-for="(a, i) in selectedAssignments" class="row">
-                    <div class="col-md-6">Assignment Title: <small> {{a.name}} ({{a.code}})
-                        &nbsp;
-                    </small></div>
-                    <div class="col-md-5">Document name:
-                        <input type="text" class="form-control" :value="slug(a.name)" />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                        <ul>
+                            <li v-for="error in errors">{{error.message}}</li>
+                        </ul>
                     </div>
-                    <div class="col-md-1"><a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a></div>
+                    <div v-else-if="operation!==''" class="alert alert-info">{{operation}}</div>
                 </div>
-                <hr />
-                <button type="button" class="btn btn-success btn-sm" @click="addAssignments()"><i class="fa fa-plus-square-o"></i> Add</button>
             </div>
         </div>
+    </div>
+        <div v-if="selectedAssignments.length">
+            <div  v-for="(a, i) in selectedAssignments" class="row">
+                <div class="col-md-3">Assignment Title: <br /><small> {{a.name}} ({{a.code}})
+                    &nbsp;
+                </small></div>
+                <div class="col-md-4">Document name:
+                    <input type="text" class="form-control"  v-model="doc_name"  />
+                </div>
+                <div class="col-md-4">Document filename:<small class="text-danger">Unique</small>
+                    <input type="text" class="form-control"  v-model="doc_file"  />
+                </div>
+                <div class="col-md-1"><a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a></div>
+            </div>
+                <hr />
+                <button type="button" class="btn btn-dark" @click="addAssignments()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add to My Documents</button>
+        </div>
+
     </div>
 </template>
 <script>
@@ -44,13 +60,15 @@
                 open:false,
                 current:0,
                 operation:'',
-                doc_name:''
+                doc_name:[],
+                doc_file:[],
+                errors:[]
             }
         },
         methods: {
             autoComplete(){
                 this.results = [];
-                if(this.query.length > 2){
+                if(this.query.length > 7){
                     axios.get('/assignment/search',{params: {query: this.query}}).then(response => {
                         this.results = response.data;
                     });
@@ -63,20 +81,42 @@
             suggestionClick(index) {
                 var currentSelection = this.results[index];
                 this.query = '';
-                this.selectedAssignments.push({'assignment':currentSelection, 'doc_name':this.doc_name});
-                console.log(this.selectedAssignments);
+                this.doc_name.push(currentSelection.name);
+                this.doc_file.push(currentSelection.name.replace(/\s+/g, '-').toLowerCase());
+                currentSelection.doc_name= '';
+                currentSelection.doc_file= '';
+                this.selectedAssignments.push(currentSelection);
                 this.open = false;
             },
             addAssignments() {
-                axios.post('/assignments/toUser', {'list': this.selectedAssignments})
+                let list = {};
+                list = this.selectedAssignments.map(function(assignment, idx) {
+                    assignment.doc_name= this.doc_name[idx];
+                    assignment.doc_file= this.doc_file[idx];
+                    return assignment;
+                });
+
+                axios.post('/assignments/toUser', {'list': list})
                     .then(response => {
                         this.$data.operation = response.data.message;
                         this.selectedAssignments =[];
-
+                        this.open =false;
                     })
                     .catch(e => {
                         this.$data.errors.push(e)
                     });
+            },
+            slug(str) {
+                if(str!=='') {
+                    return str.replace(/\s+/g, '-').toLowerCase();
+                } else {
+                    return '';
+                }
+            },
+            remove(i) {
+                this.selectedAssignments.splice(i,1);
+                this.doc_name.splice(i,1);
+                this.doc_file.splice(i,1);
             }
         },
         computed :{
@@ -84,13 +124,7 @@
                 return this.query !== "" &&
                     this.results.length > 0 &&
                     this.open === true;
-            },
-            slug(str) {
-                let name = str.toLowerCase();
-                name= name.replace(' ', '-');
-                return name;
             }
-
         }
     }
 </script>

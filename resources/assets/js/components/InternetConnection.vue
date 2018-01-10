@@ -24,7 +24,7 @@
         },
         methods: {
             determineConnectionStatus() {
-                console.log("called:" + this.lastHeartBeatReceivedAt);
+               // console.log("called:" + this.lastHeartBeatReceivedAt);
                 const lastHeartBeatReceivedSecondsAgo = moment().diff(this.lastHeartBeatReceivedAt, 'seconds');
                 this.offline = lastHeartBeatReceivedSecondsAgo > 125;
             }

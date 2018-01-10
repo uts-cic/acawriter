@@ -40,13 +40,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($data->assignments as $list)
+                            @foreach($data->documents as $list)
                             <tr>
-                                <th scope="row">{{$list->code}}</th>
-                                <td>{{$list->feature->grammar}}</td>
-                                <td><a href="/analyse/{{$list->code}}">{{$list->name}}</a></td>
-                                <td>document name</td>
-                                <td><a href="/document/edit"><i class="fa fa-edit"></i></a> | <a href="/document/delete"><i class="fa fa-trash"></i></a> </td>
+                                <th scope="row">{{$list->assignment->code}}</th>
+                                @foreach($data->assignments as $a)
+                                    @if($a->feature->id == $list->assignment->feature_id)
+                                        <td>{{$a->feature->grammar}}</td>
+                                    @endif
+                                @endforeach
+                                <td>{{$list->assignment->name}}</td>
+                                <td><a href="/analyse/{{$list->assignment->code}}">{{$list->slug}}</a></td>
+                                <td><a href="/document/action/edit/doc/{{$list->id}}"><i class="fa fa-edit"></i></a>  <a href="/document/action/delete/doc/{{$list->id}}"><i class="fa fa-trash"></i></a> </td>
                             </tr>
                             @endforeach
                             </tbody>

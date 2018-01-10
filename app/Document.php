@@ -8,11 +8,16 @@ class Document extends Model
 {
     //
     //
-    public function assignments() {
-        return $this->belongsTo('App\Assignment');
+    public function assignment() {
+        return $this->belongsTo('App\Assignment','assignment_id','id');
     }
 
     public function drafts() {
         return $this->hasMany('App\Draft');
     }
+
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+
 }
