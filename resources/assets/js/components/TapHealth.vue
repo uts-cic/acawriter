@@ -24,9 +24,9 @@
         },
         methods: {
             checkTapStatus() {
-                console.log("called:" + this.tapHealth);
+                //console.log("called:" + this.tapHealth);
                 if(this.tapHealth == 'Ok') {
-                    console.log("true");
+                    //console.log("true");
                     this.tapStatus = 'ok';
                 } else {
                     this.tapStatus='failed';

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use App\Assignment;
+use App\Document;
 
 
 class HomeController extends Controller
@@ -52,6 +53,7 @@ class HomeController extends Controller
             foreach($list as $a) {
                //print_r($a->assignment_id);
                 $this->userData->assignments = Assignment::where('id',$a->assignment_id)->with('feature')->get();
+                $this->userData->documents = Document::where('assignment_id',$a->assignment_id)->with('assignment')->get();
             }
         }
 //dd($this->userData->assignments);

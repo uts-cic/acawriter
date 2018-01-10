@@ -57,6 +57,15 @@ Route::post('assignments/toUser', 'AssignmentController@subscribeUserToAssignmen
 Route::post('assignments/action', 'AssignmentController@action');
 
 
+
+
+//document controller
+Route::get('documents/action/{act}/document/{id}', 'DocumentController@action');
+
+
+
+
+
 //staff & admin only pages
 
 Route::get('/assignment', 'AssignmentController@index');
