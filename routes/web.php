@@ -60,7 +60,7 @@ Route::post('assignments/action', 'AssignmentController@action');
 
 
 //document controller
-Route::get('documents/action/{act}/document/{id}', 'DocumentController@action');
+Route::get('documents/action/{act}/doc/{id}', 'DocumentController@action');
 
 
 
