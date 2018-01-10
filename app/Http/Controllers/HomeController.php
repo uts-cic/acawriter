@@ -43,6 +43,7 @@ class HomeController extends Controller
 
         //assignments
         $this->userData->assignments= array();
+        $this->userData->documents= array();
         $user_id = Auth::user()->id;
         $list = DB::table('user_subscription')
             ->select('assignment_id')

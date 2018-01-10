@@ -37,10 +37,10 @@
                     &nbsp;
                 </small></div>
                 <div class="col-md-4">Document name:
-                    <input type="text" class="form-control"  v-model="doc_name"  />
+                    <input type="text" class="form-control"  v-model="doc_name[i]"  />
                 </div>
                 <div class="col-md-4">Document filename:<small class="text-danger">Unique</small>
-                    <input type="text" class="form-control"  v-model="doc_file"  />
+                    <input type="text" class="form-control"  v-model="doc_file[i]"  />
                 </div>
                 <div class="col-md-1"><a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a></div>
             </div>
@@ -90,9 +90,10 @@
             },
             addAssignments() {
                 let list = {};
-                list = this.selectedAssignments.map(function(assignment, idx) {
-                    assignment.doc_name= this.doc_name[idx];
-                    assignment.doc_file= this.doc_file[idx];
+                var self =this;
+                list = self.selectedAssignments.map(function(assignment, idx) {
+                    assignment.doc_name= self.$data.doc_name[idx];
+                    assignment.doc_file= self.$data.doc_file[idx];
                     return assignment;
                 });
 

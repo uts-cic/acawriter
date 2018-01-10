@@ -50,7 +50,9 @@
                                 @endforeach
                                 <td>{{$list->assignment->name}}</td>
                                 <td><a href="/analyse/{{$list->assignment->code}}">{{$list->slug}}</a></td>
-                                <td><a href="/document/action/edit/doc/{{$list->id}}"><i class="fa fa-edit"></i></a>  <a href="/document/action/delete/doc/{{$list->id}}"><i class="fa fa-trash"></i></a> </td>
+                                <td><a href="/documents/action/edit/doc/{{$list->id}}"><i class="fa fa-edit"></i></a> &nbsp;
+                                    <a href="/documents/action/delete/doc/{{$list->id}}"><i class="fa fa-trash"></i></a>
+                                </td>
                             </tr>
                             @endforeach
                             </tbody>
