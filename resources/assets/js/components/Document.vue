@@ -7,10 +7,10 @@
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">Code</th>
-            <th scope="col">Grammar</th>
-            <th scope="col">Title</th>
-            <th scope="col">Document</th>
+            <th scope="col">Access Code</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Assignment Title</th>
+            <th scope="col">Document Title</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -18,9 +18,9 @@
 
         <tr v-for= "list in lists">
             <th scope="row">{{list.assignment.code}}</th>
-            <td>Grammar</td>
+            <td>{{list.grammar}}</td>
             <td>{{list.assignment.name}}</td>
-            <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.slug}}</a></td>
+            <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.name}}</a></td>
             <td><a href="#" v-on:click="action('edit',list.id)"><i class="fa fa-edit"></i></a> &nbsp;
                 <a href="#" v-on:click="action('delete',list.id)"><i class="fa fa-trash"></i></a>
             </td>
@@ -55,7 +55,7 @@
             },
             action(what, idx) {
                 let data ={'action': what, 'id':idx };
-                if(confirm("All drafts associated with the Document will be deleted. Do you wish to proceed?")) {
+                if(confirm("All feedback associated with the document will be deleted. Do you wish to proceed?")) {
                     axios.post('documents/action', data).then((response) => {
                         this.$data.flash = response.data.message;
                         setTimeout(() => {

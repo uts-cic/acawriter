@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\DB;
-use App\Assignment;
+use App\Feature;
 use App\Document;
 
 
@@ -40,6 +40,7 @@ class HomeController extends Controller
         foreach($roles as $role) {
             $this->userData->roles[] = $role->name;
         }
+        $this->userData->features = Feature::all();
 
         return view('home', ['data'=> $this->userData]);
     }
