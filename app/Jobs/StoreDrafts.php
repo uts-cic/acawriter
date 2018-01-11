@@ -32,13 +32,12 @@ class StoreDrafts implements ShouldQueue
     public function handle()
     {
         //
+        $draftNew = new Draft();
         $draftNew->text_input = $this->draft->original_text;
         $draftNew->feature_id = 1;
-        $draftNew->assignment_id = $this->draft->assignment_id;
+        $draftNew->document_id = $this->draft->document_id;
         $draftNew->raw_response = json_encode($this->draft->response);
         $draftNew->user_id = $this->draft->user_id;
-        $draftNew = new Draft();
-
 
         $draftNew->save();
 

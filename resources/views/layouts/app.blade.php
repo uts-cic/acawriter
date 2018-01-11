@@ -43,8 +43,8 @@
                         @else
                             <li class="nav-item"><a class="nav-link" href="{{ url('/home') }}">My Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Example Texts</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/analyse">Analyse</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/assignment">Assignment</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="/analyse">Analyse</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/assignment">Assignment</a></li> -->
 
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

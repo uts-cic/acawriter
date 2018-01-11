@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\DB;
-use App\Assignment;
+use App\Feature;
+use App\Document;
 
 
 class HomeController extends Controller
@@ -39,23 +40,13 @@ class HomeController extends Controller
         foreach($roles as $role) {
             $this->userData->roles[] = $role->name;
         }
+        $this->userData->features = Feature::all();
 
-        //assignments
-        $this->userData->assignments= array();
-        $user_id = Auth::user()->id;
-        $list = DB::table('user_subscription')
-            ->select('assignment_id')
-            ->where('user_id','=',$user_id)
-            ->get();
-       // dd($list);
-        if(count($list) > 0 ) {
-            foreach($list as $a) {
-               // dd($a->assignment_id);
-                $this->userData->assignments = Assignment::find($a->assignment_id)->with('feature')->get();
-            }
-        }
-//dd($this->userData->assignments);
         return view('home', ['data'=> $this->userData]);
     }
+
+
+
+
 
 }

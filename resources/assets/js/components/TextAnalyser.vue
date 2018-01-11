@@ -54,11 +54,11 @@
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                     <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
+                     <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
                        <span v-for="(m,id) in msg">
-                           <i class="fa fa-toggle-on text-success" aria-hidden="true"></i> &nbsp; &nbsp;
-                           <span v-bind:class="id"></span> <small><span v-html="m"></span></small><br />
+                           <!-- <input type="checkbox" v-bind:id="id" v-bind:value="id" v-model="rulesClasses">--> <i class="fa fa-toggle-on text-success" aria-hidden="true"></i> &nbsp; &nbsp;
+                               <span v-bind:class="id"></span> <small><span v-html="m"></span></small>
                        </span>
 
                     </div>
@@ -103,7 +103,7 @@
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-for="ic in feed.css">
                                             <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
-                                                <span v-bind:class="ic"></span>
+                                                <span v-bind:class="ic" v-bind:style="styles(ic)"></span>
                                             </template>
                                         </span>
                                        <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
@@ -200,7 +200,14 @@
                 customToolbar: [
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ]
+                ],
+                cssSpec: {
+                    inline :['link2me'],
+                    iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
+                    inText :['affect', 'epistemic','modall']
+                }
+
+
 
             }
         },
@@ -252,7 +259,19 @@
                         grammar: 'analytic'
                    };
                 }
-            }
+            },
+            rulesClasses: function() {
+                let rules = [];
+                rules = this.feedback.rules.map(function(rule,idx){
+                    return rule.css.map(function(cl){
+                        return cl;
+                    });
+                });
+                let classes = [].concat(...rules);
+                return classes;
+            },
+
+
         },
         watch :{
             /* editorContent: function (newVal) {
@@ -261,6 +280,7 @@
              tap: function() {
                  this.fetchFeedback();
              }*/
+
         },
         methods: {
             fetchAnalysis() {
@@ -378,7 +398,6 @@
             inText: function(data) {
                 if(data.str!=='' && typeof data.expression!== 'undefined') {
                     let str = data.str;
-                    let inT;
                     if(data.expression.affect.length > 0) {
                         data.expression.affect.forEach(function(word) {
                             str = str.replace(word.text, "<span class='affect'>"+word.text+"</span>");
@@ -402,7 +421,15 @@
                     let str = '';
                     return str;
                 }
+            },
+            styles: function(ic) {
+                let style = "";
+            /*    if(this.rulesClasses.indexOf(ic) !== -1) {
+                    return "display:'none'";
+                } */
+                return style;
             }
+
         }
     }
 </script>
