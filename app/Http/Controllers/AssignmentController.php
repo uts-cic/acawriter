@@ -9,6 +9,7 @@ use App\Assignment;
 use App\Draft;
 use Illuminate\Support\Facades\DB;
 use App\Feature;
+use App\Document;
 
 
 class AssignmentController extends Controller
@@ -72,7 +73,7 @@ class AssignmentController extends Controller
         $user_id = Auth::user()->id;
         if(count($request["list"]) > 0) {
             foreach($request["list"] as $a ) {
-                $message = 'Record Updated';
+                $message = 'Document list updated';
                 $up=array();
                 $status =array('success' => true, 'message' => 'Added to your document list ');
                 $code = 200;
@@ -91,12 +92,12 @@ class AssignmentController extends Controller
                             'updated_at' => date('Y-m-d H:i:s')
                         ]
                     ])) {
-                          $up[] =0;
+                        $up[]  = $this->addDocument($a) ? 0 :1 ;
                     } else {
                         $up[]=1;
                     }
                 } else {
-                    $up[] =0;
+                    $up[]  = $this->addDocument($a) ? 0 :1 ;
                 }
             }
             if(in_array(1, $up)) {
@@ -125,6 +126,22 @@ class AssignmentController extends Controller
         }
         return response()->json($status, $code);
 
+    }
+
+
+    private function addDocument($data) {
+
+        $document = new Document();
+        $document->name = $data['doc_name'];
+        $document->user_id = Auth::user()->id;
+        $document->slug = $data['doc_file'];
+        $document->assignment_id = $data['id'];
+        $document->created_at = date('Y-m-d H:i:s');
+        $document->updated_at = date('Y-m-d H:i:s');
+
+        $document->save();
+
+        return $document->id > 0 ? true: false;
     }
 
 

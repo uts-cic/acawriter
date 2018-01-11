@@ -169,7 +169,7 @@ class StringTokenizer extends Controller
             $draft->response= $results->auto;
             $draft->original_text= $request["txt"];
             $draft->feature = '1';
-            $draft->assignment_id = $request["assignment_id"]==0?999999:$request["assignment_id"];
+            $draft->document_id = $request["document_id"];
             $draft->user_id = Auth::user()->id;
             StoreDrafts::dispatch($draft)->onConnection('redis');
         }

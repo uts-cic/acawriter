@@ -29,26 +29,7 @@
                 <div class="tab-content p-5">
                     <div class="tab-pane active" id="document" role="tabpanel">
                         <h4 class="card-title">My Documents</h4>
-                        <table class="table">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Code</th>
-                                <th scope="col">Grammar</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Last Updated</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($data->assignments as $list)
-                            <tr>
-                                <th scope="row">{{$list->code}}</th>
-                                <td>{{$list->feature->grammar}}</td>
-                                <td><a href="/analyse/{{$list->code}}">{{$list->name}}</a></td>
-                                <td><small>22/7/2017</small></td>
-                            </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                        <documents></documents>
                     </div>
                     <div class="tab-pane" id="assignment" role="tabpanel">
                         <h4>Enter your Assignment Code:</h4>
@@ -56,13 +37,16 @@
                     </div>
                     <div class="tab-pane" id="new" role="tabpanel">
                         <h4>Add a Document</h4>
+                        <form class="form" method="POST" action="/document">
+                            {{ csrf_field() }}
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="doc_title" placeholder="document title" />
+                                <input type="text" class="form-control" id="doc_title" name="docu_name" placeholder="document title" />
                             </div>
                             <div class="col-md-6">
-                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" /> Analytical
-                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" /> Reflective
+                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" checked="checked" value="1" /> Analytic
+
+                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" value="2" /> Reflective
                             </div>
                         </div>
                         <br />
@@ -74,6 +58,7 @@
 
                             </div>
                         </div>
+                        </form>
                     </div>
 
                 </div>

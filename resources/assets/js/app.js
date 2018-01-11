@@ -17,7 +17,10 @@ window.Vue = require('vue');
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import VueApollo from 'vue-apollo';
 
+//import modals lib
+import VModal from 'vue-js-modal';
 
+Vue.use(VModal);
 
 
 // Create the apollo client
@@ -50,6 +53,7 @@ Vue.component('internet-connection', require('./components/InternetConnection.vu
 Vue.component('tap-status', require('./components/TapHealth.vue'));
 Vue.component('autocomplete', require('./components/Autocomplete.vue'));
 Vue.component('assignment-list', require('./components/Assignment.vue'));
+Vue.component('documents', require('./components/Document.vue'));
 
 
 
@@ -71,12 +75,12 @@ const app = new Vue({
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {
-            console.log("ok yes listened");
+            //console.log("ok yes listened");
             return this.lastHeartBeatReceivedAt = moment().format('LLL');
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\Tap\\Health', function (data) {
-            console.log("ok yes listened tap health");
+            //console.log("ok yes listened tap health");
             return this.tapHealth=data.health.message;
         }.bind(this));
 

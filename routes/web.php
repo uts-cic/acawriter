@@ -53,8 +53,23 @@ Route::get('/assignment/search', 'AssignmentController@search');
 
 Route::post('assignments/toUser', 'AssignmentController@subscribeUserToAssignment');
 
-    //called from axios to update delete assignments
-Route::post('assignments/action', 'AssignmentController@action');
+/* axois calls **/
+    Route::post('assignments/action', 'AssignmentController@action');
+
+
+
+
+//document controller
+/* axois calls **/
+    Route::post('documents/action', 'DocumentController@action');
+
+    //get all documents belonging to logged in user
+    Route::get('/documents/all', 'DocumentController@fetchDocuments');
+
+/* direct calls */
+    Route::post('/document', 'DocumentController@store');
+
+
 
 
 //staff & admin only pages

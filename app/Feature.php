@@ -14,4 +14,5 @@ class Feature extends Model
     public function drafts() {
         return $this->hasMany('App\Draft');
     }
+
 }
