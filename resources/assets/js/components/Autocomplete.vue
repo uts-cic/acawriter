@@ -39,9 +39,7 @@
                 <div class="col-md-4">Document name:
                     <input type="text" class="form-control"  v-model="doc_name[i]"  />
                 </div>
-                <div class="col-md-4">Document filename:<small class="text-danger">Unique</small>
-                    <input type="text" class="form-control"  v-model="doc_file[i]"  />
-                </div>
+
                 <div class="col-md-1"><a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a></div>
             </div>
                 <hr />
@@ -61,7 +59,7 @@
                 current:0,
                 operation:'',
                 doc_name:[],
-                doc_file:[],
+               // doc_file:[],
                 errors:[]
             }
         },
@@ -82,7 +80,7 @@
                 var currentSelection = this.results[index];
                 this.query = '';
                 this.doc_name.push(currentSelection.name);
-                this.doc_file.push(currentSelection.name.replace(/\s+/g, '-').toLowerCase());
+                //this.doc_file.push(currentSelection.name.replace(/\s+/g, '-').toLowerCase());
                 currentSelection.doc_name= '';
                 currentSelection.doc_file= '';
                 this.selectedAssignments.push(currentSelection);
@@ -93,7 +91,7 @@
                 var self =this;
                 list = self.selectedAssignments.map(function(assignment, idx) {
                     assignment.doc_name= self.$data.doc_name[idx];
-                    assignment.doc_file= self.$data.doc_file[idx];
+                    assignment.doc_file= self.slug();
                     return assignment;
                 });
 
@@ -107,12 +105,8 @@
                         this.$data.errors.push(e)
                     });
             },
-            slug(str) {
-                if(str!=='') {
-                    return str.replace(/\s+/g, '-').toLowerCase();
-                } else {
-                    return '';
-                }
+            slug() {
+                    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             },
             remove(i) {
                 this.selectedAssignments.splice(i,1);

@@ -18,6 +18,70 @@ class DocumentController extends Controller
     }
 
 
+    public function store(Request $request) {
+
+        $this->validate(request(), [
+            'docu_name' => 'required',
+            'doc_grammar' =>'required'
+        ]);
+        $up = array();
+
+        $assignment = new Assignment();
+        $assignment->name = 'NA';
+        $assignment->feature_id=$request->doc_grammar;
+        $assignment->code = str_random(8);
+        $assignment->user_id = Auth::user()->id;
+        $assignment->keywords='';
+        $assignment->published =0;
+        $assignment->updated_at = date('Y-m-d H:i:s');
+        $assignment->created_at = date('Y-m-d H:i:s');
+
+        $assignment->save();
+
+        if($assignment->id > 0) {
+            $up[] = 0;
+
+            $subscribed = DB::table('user_subscription')->where([
+                ['user_id', '=', Auth::user()->id],
+                ['assignment_id', '=', $assignment->id]
+            ])->count();
+
+            if($subscribed == 0) {
+                if (DB::table('user_subscription')->insert([
+                    [
+                        'user_id' => Auth::user()->id,
+                        'assignment_id' => $assignment->id,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]
+                ])) {
+                    $up[] = 0;
+                } else {
+                    $up[] =1;
+                }
+            }
+
+            $document = new Document();
+            $document->name = $request->docu_name;
+            $document->user_id = Auth::user()->id;
+            $document->slug = strtolower(str_random(22));
+            $document->assignment_id = $assignment->id;
+            $document->created_at = date('Y-m-d H:i:s');
+            $document->updated_at = date('Y-m-d H:i:s');
+
+            $document->save();
+            $up[] = $document->id > 0 ? 0: 1;
+        } else {
+            $up[] = 1;
+        }
+
+        if(in_array(1, $up)) {
+            return redirect()->back()->with('error','Error creating document');
+        }
+
+        //return view('/assignment');
+        return redirect()->back()->with('success','Document added successfully!');
+    }
 
 
     public function action(Request $request) {
@@ -44,6 +108,7 @@ class DocumentController extends Controller
     public function fetchDocuments() {
         $list = new \stdClass;
         $list->documents= array();
+        $assignments = array();
 
         $user_id = Auth::user()->id;
 
@@ -52,18 +117,23 @@ class DocumentController extends Controller
             ->select('assignment_id')
             ->where('user_id','=',$user_id)
             ->get();
-        //dd($list);
+
+        $assignmentIds = array();
         if(count($documentList) > 0 ) {
             foreach($documentList as $a) {
-                //print_r($a->assignment_id);
-                $assignments = Assignment::where('id',$a->assignment_id)->with('feature')->get();
-                $list->documents = Document::where('assignment_id',$a->assignment_id)->with('assignment')->get();
-                foreach($list->documents as $document) {
-                    foreach($assignments as $assignment ) {
-                        if($document->assignment_id === $assignment->id) {
-                            $document->feature_id = $assignment->feature->id;
-                            $document->grammar = $assignment->feature->grammar;
-                        }
+                $assignmentIds[]=  $a->assignment_id;
+            }
+
+            $assignments = Assignment::whereIn('id',$assignmentIds)->with('feature')->get();
+            $list->documents = Document::whereIn('assignment_id',$assignmentIds)->with('assignment')->get();
+        }
+
+        if(count($list->documents) > 0 && count($assignments) >0) {
+            foreach($list->documents as $document) {
+                foreach($assignments as $assignment ) {
+                    if($document->assignment_id === $assignment->id) {
+                        $document->feature_id = $assignment->feature->id;
+                        $document->grammar = $assignment->feature->grammar;
                     }
                 }
             }

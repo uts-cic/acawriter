@@ -17,7 +17,7 @@
                                     <input type="text"  class="form-control" id="assignment-name" name="name" placeholder="assignment name"/>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="feedbackOpt">2. Grammar</label>
+                                    <label for="feedbackOpt">2. Genre</label>
                                     <select class="form-control" id="grammar" name="grammar">
                                         <option value="">--Select--</option>
                                         @foreach($features as $feature)

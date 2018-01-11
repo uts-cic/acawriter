@@ -37,13 +37,16 @@
                     </div>
                     <div class="tab-pane" id="new" role="tabpanel">
                         <h4>Add a Document</h4>
+                        <form class="form" method="POST" action="/document">
+                            {{ csrf_field() }}
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="doc_title" placeholder="document title" />
+                                <input type="text" class="form-control" id="doc_title" name="docu_name" placeholder="document title" />
                             </div>
                             <div class="col-md-6">
-                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" /> Analytical
-                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" /> Reflective
+                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" checked="checked" value="1" /> Analytic
+
+                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" value="2" /> Reflective
                             </div>
                         </div>
                         <br />
@@ -55,6 +58,7 @@
 
                             </div>
                         </div>
+                        </form>
                     </div>
 
                 </div>
