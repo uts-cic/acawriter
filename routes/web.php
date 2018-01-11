@@ -60,7 +60,10 @@ Route::post('assignments/action', 'AssignmentController@action');
 
 
 //document controller
-Route::get('documents/action/{act}/doc/{id}', 'DocumentController@action');
+Route::post('documents/action', 'DocumentController@action');
+
+//get all documents belonging to logged in user
+Route::get('/documents/all', 'DocumentController@fetchDocuments');
 
 
 

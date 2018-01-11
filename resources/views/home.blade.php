@@ -29,34 +29,7 @@
                 <div class="tab-content p-5">
                     <div class="tab-pane active" id="document" role="tabpanel">
                         <h4 class="card-title">My Documents</h4>
-                        <table class="table">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Code</th>
-                                <th scope="col">Grammar</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Document</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($data->documents as $list)
-                            <tr>
-                                <th scope="row">{{$list->assignment->code}}</th>
-                                @foreach($data->assignments as $a)
-                                    @if($a->feature->id == $list->assignment->feature_id)
-                                        <td>{{$a->feature->grammar}}</td>
-                                    @endif
-                                @endforeach
-                                <td>{{$list->assignment->name}}</td>
-                                <td><a href="/analyse/{{$list->assignment->code}}">{{$list->slug}}</a></td>
-                                <td><a href="/documents/action/edit/doc/{{$list->id}}"><i class="fa fa-edit"></i></a> &nbsp;
-                                    <a href="/documents/action/delete/doc/{{$list->id}}"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                        <documents></documents>
                     </div>
                     <div class="tab-pane" id="assignment" role="tabpanel">
                         <h4>Enter your Assignment Code:</h4>

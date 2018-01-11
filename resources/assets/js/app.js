@@ -17,7 +17,10 @@ window.Vue = require('vue');
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import VueApollo from 'vue-apollo';
 
+//import modals lib
+import VModal from 'vue-js-modal';
 
+Vue.use(VModal);
 
 
 // Create the apollo client
@@ -50,6 +53,7 @@ Vue.component('internet-connection', require('./components/InternetConnection.vu
 Vue.component('tap-status', require('./components/TapHealth.vue'));
 Vue.component('autocomplete', require('./components/Autocomplete.vue'));
 Vue.component('assignment-list', require('./components/Assignment.vue'));
+Vue.component('documents', require('./components/Document.vue'));
 
 
 
