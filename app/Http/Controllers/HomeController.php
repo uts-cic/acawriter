@@ -41,24 +41,11 @@ class HomeController extends Controller
             $this->userData->roles[] = $role->name;
         }
 
-        //assignments
-        $this->userData->assignments= array();
-        $this->userData->documents= array();
-        $user_id = Auth::user()->id;
-        $list = DB::table('user_subscription')
-            ->select('assignment_id')
-            ->where('user_id','=',$user_id)
-            ->get();
-       //dd($list);
-        if(count($list) > 0 ) {
-            foreach($list as $a) {
-               //print_r($a->assignment_id);
-                $this->userData->assignments = Assignment::where('id',$a->assignment_id)->with('feature')->get();
-                $this->userData->documents = Document::where('assignment_id',$a->assignment_id)->with('assignment')->get();
-            }
-        }
-//dd($this->userData->assignments);
         return view('home', ['data'=> $this->userData]);
     }
+
+
+
+
 
 }
