@@ -55,8 +55,6 @@
   border-bottom: 1px dashed #ff0000;
 }
 
-
-
 .epistemic {
   text-decoration: underline;
 }
@@ -74,6 +72,7 @@
 .activeClass{
   display: inline;
 }
+
 .nonactive {
   display:none;
 }
@@ -84,3 +83,10 @@
   color:white;
   background-color: darkorange;
 }
+
+
+.hidemarkup {
+  display:none !important;
+}
+
+
