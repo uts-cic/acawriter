@@ -54,7 +54,7 @@
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                     <h6 class="card-subtitle mb-2">&nbsp;</h6>
+                    <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
                        <span v-for="(m,id) in msg">
                            <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp; &nbsp;
@@ -96,7 +96,7 @@
                                         <i class="fa fa-spinner fa-spin"></i> Processing text .....
                                         <span class="sr-only">Loading...</span>
                                     </span>
-                                <hr /></div>
+                                    <hr /></div>
                                 <div class="col-md-12 wrapper">
                                     <!--<span v-html="editorContent"></span>-->
 
@@ -106,7 +106,7 @@
                                                 <span v-bind:class="getI(ic)"></span>
                                             </template>
                                         </span>
-                                       <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
+                                        <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
                                         <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
 
                                     </span>
@@ -170,15 +170,33 @@
         store,
         data () {
             return {
+                preview: '',
+                editLog : [],
+                config: {
+                    events: {
+                        'froalaEditor.contentChanged': function (e, editor) {
+                        }
+                    }
+                },
                 editorContent: 'Edit Your Content Here!',
                 loading: 0,
                 tap:[],
                 errors:[],
+                tapCalls:{
+                    'athanor': false,
+                    'vocab'  :false
+                },
+                vocab:'',
                 counter:0,
                 tempIds:[],
                 auto:'',
                 splitText:[],
                 quickTags:'',
+                //feedback:[],
+                /* attributes:{
+                     feedbackOpt:'r_01',
+                     grammar:this.preSetAssignment.feature.grammar? this.preSetAssignment.feature.grammar : 'reflective'
+                 },*/
                 customToolbar: [
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -188,15 +206,28 @@
                     iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
                     inText :['affect', 'epistemic','modall']
                 }
+
+
+
             }
         },
         mounted () {
+            this.editLog.push(this.editorContent);
+            //this.fetchAnalysis();
             this.fetchFeedback();
+            // this.$store.dispatch('LOAD_FEEDBACK');
         },
         created() {
             this.auto = 'every 5m';
             //setInterval(this.storeAnalysedDrafts, 900000);
             setInterval(this.quickCheck, 300000);
+            /*EventBus.$on('compute-done', data => {
+                 this.feedback.final.forEach (function(exp, idx) {
+                     if(exp.str === data.str) {
+                            this.feedback.final[idx] = data;
+                     }
+                 });
+            });*/
         },
         computed: {
             reflective: function() {
@@ -223,10 +254,10 @@
                         grammar: this.preSetAssignment.feature.grammar.toLocaleLowerCase()
                     };
                 } else {
-                   return {
+                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytic'
-                   };
+                    };
                 }
             },
             rulesClasses: function() {
@@ -239,10 +270,42 @@
                 let classes = [].concat(...rules);
                 return classes;
             },
+
+
         },
         watch :{
+            /* editorContent: function (newVal) {
+                 this.$data.counter++;
+             },
+             tap: function() {
+                 this.fetchFeedback();
+             }*/
+
         },
         methods: {
+            fetchAnalysis() {
+                this.$data.tapCalls.athanor =true;
+                this.$data.counter = 0;
+                //this.feedback =[];
+                axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
+                    .then(response => {
+                        this.$data.tap = response.data.athanor;
+                        this.$data.tapCalls.athanor=false;
+                        this.fetchFeedback();
+                    })
+                    .catch(e => {
+                        this.$data.errors.push(e)
+                    });
+                this.$data.tapCalls.vocab =true;
+                axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
+                    .then(response => {
+                        this.$data.tapCalls.vocab=false;
+                        this.$data.vocab = response.data.vocab.unique;
+                    })
+                    .catch(e => {
+                        this.$data.errors.push(e)
+                    });
+            },
             computeText: function(nv, ov) {
                 var changedText='';
                 var self = this;
@@ -313,7 +376,7 @@
                 this.errors=[];
                 this.autoCheck = true;
                 if(this.feedbackOpt!=='') {
-                   // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
+                    // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
                     this.autoCheck = false;
@@ -360,6 +423,13 @@
                     let str = '';
                     return str;
                 }
+            },
+            styles: function(ic) {
+                let style = "";
+                /*    if(this.rulesClasses.indexOf(ic) !== -1) {
+                        return "display:'none'";
+                    } */
+                return style;
             },
             getI(ic) {
                 return 'std'+ic+' '+ic;

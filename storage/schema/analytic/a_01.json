@@ -50,13 +50,13 @@
           ]
         },
         "message": [
-          {"attitude" : "P"},
-          {"emph" : "E"},
-          {"vis" : "T"},
-          {"contribution" : "S"},
-          {"novstat" : "N"},
-          {"contrast" : "C"},
-          {"tempstat": "B"}
+          {"attitude" : "<span class=\"badge badge-pill badge-analytic\">P</span> A perspective or stance"},
+          {"emph" : "<span class=\"badge badge-pill badge-analytic\">E</span> Emphasis or importance to ideas "},
+          {"vis" : "<span class=\"badge badge-pill badge-analytic\">T</span> A trend or tendency related to ideas approaches and methods"},
+          {"contribution" : "<span class=\"badge badge-pill badge-analytic-green\">S</span> Summarise the authors goals"},
+          {"novstat" : "<span class=\"badge badge-pill badge-analytic\">N</span> Novelty improvements of ideas methods"},
+          {"contrast" : "<span class=\"badge badge-pill badge-analytic\">C</span> Disagreement, Tension, Options, Inconsistency"},
+          {"tempstat": "<span class=\"badge badge-pill badge-analytic\">B</span> Reference to generally accepted previous work"}
         ],
         "css": ["P","E", "T","N", "C", "B"]
       }
