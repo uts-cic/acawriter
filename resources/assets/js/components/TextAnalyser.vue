@@ -57,7 +57,7 @@
                      <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
                        <span v-for="(m,id) in msg">
-                           <!-- <input type="checkbox" v-bind:id="id" v-bind:value="id" v-model="rulesClasses">--> <i class="fa fa-toggle-on text-success" aria-hidden="true"></i> &nbsp; &nbsp;
+                           <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp; &nbsp;
                                <span v-bind:class="id"></span> <small><span v-html="m"></span></small>
                        </span>
 
@@ -103,7 +103,7 @@
                                     <span v-for="(feed,idx) in feedback.final">
                                         <span v-for="ic in feed.css">
                                             <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
-                                                <span v-bind:class="ic" v-bind:style="styles(ic)"></span>
+                                                <span v-bind:class="getI(ic)"></span>
                                             </template>
                                         </span>
                                        <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
@@ -391,7 +391,9 @@
             },
             inLineClasses: function(data) {
                 var temp=  data.filter(function( obj ) {
-                    return (obj ==='link2me');
+                    if (obj ==='link2me') {
+                        return obj + ' std' + obj;
+                    }
                 });
                 return temp;
             },
@@ -400,18 +402,18 @@
                     let str = data.str;
                     if(data.expression.affect.length > 0) {
                         data.expression.affect.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='affect'>"+word.text+"</span>");
+                            str = str.replace(word.text, "<span class='stdaffect affect'>"+word.text+"</span>");
                         });
 
                     }
                     if(data.expression.epistemic.length > 0) {
                         data.expression.epistemic.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='epistemic'>"+word.text+"</span>");
+                            str = str.replace(word.text, "<span class='stdepistemic epistemic'>"+word.text+"</span>");
                         });
                     }
                     if(data.expression.modal.length > 0) {
                         data.expression.modal.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='modall'>"+word.text+"</span>");
+                            str = str.replace(word.text, "<span class='stdmodal modall'>"+word.text+"</span>");
                         });
                     }
                     return str;
@@ -428,7 +430,11 @@
                     return "display:'none'";
                 } */
                 return style;
+            },
+            getI(ic) {
+                return 'std'+ic+' '+ic;
             }
+
 
         }
     }

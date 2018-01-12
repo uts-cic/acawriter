@@ -119,4 +119,24 @@ $(document).ready(function () {
     $('#sidebarCollapse, #sidebarCollapseTwice').on('click', function () {
         $('#sidebar').toggleClass('active');
     });
+
+
+    //manipulation of the checkbox fields on text analyser page
+    $(document).on('change', '#sidebar input[type=checkbox]' , function () {
+        var r = $(this).val();
+        /*if($(this).is(':checked')) {
+            $('.wrapper .'+r).removeClass('hidemarkup');
+        } else {
+            $('.wrapper .'+r).addClass('hidemarkup');
+        }*/
+        if($(this).is(':checked')) {
+            $('.wrapper .std'+r).addClass(r);
+        } else {
+            $('.wrapper .std'+r).removeClass(r);
+        }
+    });
+
+
+
+
 });
