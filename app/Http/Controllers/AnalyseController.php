@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Assignment;
 use Illuminate\Http\Request;
+use App\Assignment;
+use App\Document;
+use App\Draft;
+use App\Feature;
 
 
 class AnalyseController extends Controller
@@ -23,10 +26,17 @@ class AnalyseController extends Controller
     public function index($code=NULL) {
 
         if(isset($code)) {
-            $this->ui->assignment = Assignment::where('code', '=', $code)
+
+            $this->ui->document = Document::where('slug', '=', $code)->with('assignment')->get();
+
+            $this->ui->document[0]->feature = Feature::where('id',$this->ui->document[0]->assignment->feature_id)->get();
+
+
+            /* $this->ui->assignment = Assignment::where('code', '=', $code)
                                     ->with('feature')
                                     ->get();
             $this->ui->assignment_id = Assignment::where('code', '=', $code)->pluck('id');
+            */
         }
 
         return view('analyse', ['data' => $this->ui]);

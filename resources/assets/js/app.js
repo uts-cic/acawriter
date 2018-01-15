@@ -122,7 +122,7 @@ $(document).ready(function () {
 
 
     //manipulation of the checkbox fields on text analyser page
-    $(document).on('change', '#sidebar input[type=checkbox]' , function () {
+    $(document).on('change', '#sidebar.ref input[type=checkbox]' , function () {
         var r = $(this).val();
         /*if($(this).is(':checked')) {
             $('.wrapper .'+r).removeClass('hidemarkup');
@@ -133,6 +133,16 @@ $(document).ready(function () {
             $('.wrapper .std'+r).addClass(r);
         } else {
             $('.wrapper .std'+r).removeClass(r);
+        }
+    });
+
+    //manipulation of the checkbox fields on text analyser page
+    $(document).on('change', '#sidebar.ana input[type=checkbox]' , function () {
+        var r = $(this).val();
+        if($(this).is(':checked')) {
+            $('.wrapper .'+r).removeClass('hidemarkup');
+        } else {
+            $('.wrapper .'+r).addClass('hidemarkup');
         }
     });
 
