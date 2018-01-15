@@ -73,8 +73,8 @@
                     <div class="card-header bg-dark text-white">Document Analyser
                         <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                             <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm muted"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>
                             <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
 
                         </div>
@@ -143,7 +143,7 @@
                                                 <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAna(ic)"></span>
                                             </template>
                                         </span>
-                                        <span v-html="feed.str"></span>
+                                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>
 
                                     </span>
                                 </div>
@@ -312,13 +312,12 @@
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
             },
-            storeAnalysedDrafts() {
+            storeAnalysedDrafts(type) {
                 console.log("into auto store");
                 // this.$data.tap='';
                 this.$data.auto='processing....';
-                var assignment_id=0;
-                if(this.assignment!=="") {assignment_id= this.assignment;}
-                axios.post('/processor', {'txt': this.editorContent, 'action': 'auto', 'assignment_id':assignment_id})
+                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
+                axios.post('/feedback/store', data)
                     .then(response => {
                         this.$data.auto = 'Done';
                     })
@@ -363,6 +362,18 @@
                     if (obj ==='link2me') {
                         return obj + ' std' + obj;
                     }
+                });
+                return temp;
+            },
+            inLineAnaClasses: function(data) {
+                var temp=  '';
+                    data.forEach(function( obj ) {
+                    if (obj ==='contribution') {
+                        temp = 'ana_bg_green';
+                    } else if(obj != 'metrics') {
+                        temp = 'ana_bg_yellow';
+                    }
+
                 });
                 return temp;
             },

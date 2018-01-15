@@ -45,6 +45,7 @@ class FeedbackController extends Controller
     public function generateFeedback(Request $request) {
 
         if($request['action'] == 'quick') {
+            //single sentence change analysis
             //we need to send a request to get the tap raw tags
             // input is always going to be string as output by tokeniser
             $tap = $tt = array();
@@ -75,9 +76,7 @@ class FeedbackController extends Controller
         if($extra['feature'] > 0 ) {
             $feed = $this->getFeedbackSchema('',$extra['feature']);
             $feedbackSchema = json_decode($feed, true);
-            //print_r($feedbackSchema[0]);
             $result->rules= $this->rules = $feedbackSchema["rules"];
-           // print_r($this->rules);
         } else {
             $path = storage_path() . '/schema/' . $extra['grammar'] . '/' . $extra['feedbackOpt'] . '.json';
             $feedbackSchema = $this->getFeedbackSchema($path);
@@ -118,6 +117,12 @@ class FeedbackController extends Controller
 
         return response()->json($result);
 
+    }
+
+
+    /* stores draft by generating a job **/
+    public function storeFeedback(Request $request) {
+        StoreDrafts::dispatch($request)->onConnection('redis');
     }
 
 
