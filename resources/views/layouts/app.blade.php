@@ -36,33 +36,44 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav mx-auto">
+
                         <!-- Authentication Links -->
+
                         @if (Auth::guest())
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                             <!-- <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li> -->
                         @else
                             <li class="nav-item"><a class="nav-link" href="{{ url('/home') }}">My Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Example Texts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Example Texts</a></li>
                             <!-- <li class="nav-item"><a class="nav-link" href="/analyse">Analyse</a></li>
                             <li class="nav-item"><a class="nav-link" href="/assignment">Assignment</a></li> -->
 
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                    </form>
-                                </div>
-                            </li>
                         @endif
                     </ul>
+                <ul class="nav navbar-nav pull-right">
+                    <!-- Authentication Links -->
+                    @if (Auth::guest())
+                    <!-- <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li> -->
+                    <!-- <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li> -->
+                    @else
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            {{ Auth::user()->name }} <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        </div>
+                    </li>
+                    @endif
+                </ul>
+
                 </div>
 
         </nav>

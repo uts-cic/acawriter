@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-            <!-- <div class="col-md-4">
+            <div class="col-md-4">
                 <div class="card bg-default">
                     <div class="card-header">
                         <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -49,12 +49,12 @@
             </div>
         </div>
         <div class="row editWrapper">
-            <div id="sidebar" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
+            <div id="sidebar">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                     <h6 class="card-subtitle mb-2">&nbsp;</h6>
+                    <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
                        <span v-for="(m,id) in msg">
                            <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp; &nbsp;
@@ -96,7 +96,7 @@
                                         <i class="fa fa-spinner fa-spin"></i> Processing text .....
                                         <span class="sr-only">Loading...</span>
                                     </span>
-                                <hr /></div>
+                                    <hr /></div>
                                 <div class="col-md-12 wrapper">
                                     <!--<span v-html="editorContent"></span>-->
 
@@ -106,7 +106,7 @@
                                                 <span v-bind:class="getI(ic)"></span>
                                             </template>
                                         </span>
-                                       <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
+                                        <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
                                         <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
 
                                     </span>
@@ -117,34 +117,15 @@
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
-                                    <span v-if="processing"  class="text-success">
-                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
-                                        <span class="sr-only">Loading...</span>
-                                    </span>
-                                    <hr />
-                                </div>
+                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4></div>
                                 <div class="col-md-12 wrapper">
                                     <span v-for="(feed,idx) in feedback.final">
-                                        <!-- <span v-if="feed.metrics.message.length==0"></span>
+                                        <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span class="badge badge-pill badge-analytic">{{rmoves}}</span>
                                         </span>
-                                        <span v-html="feed.str"></span> -->
-                                        <span v-for="ic in feed.css">
-                                            <template v-if="ic=='contribution'">
-                                                <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
-                                            </template>
-                                            <template v-else-if="ic=='metrics'">
-                                                <span v-bind:class="ic"></span>
-                                            </template>
-                                            <template v-else>
-                                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAna(ic)"></span>
-                                            </template>
-                                        </span>
                                         <span v-html="feed.str"></span>
-
                                     </span>
                                 </div>
                             </div>
@@ -185,19 +166,37 @@
             VueEditor
         },
         name: 'editor',
-        props:['document'],
+        props:['assignment'],
         store,
         data () {
             return {
+                preview: '',
+                editLog : [],
+                config: {
+                    events: {
+                        'froalaEditor.contentChanged': function (e, editor) {
+                        }
+                    }
+                },
                 editorContent: 'Edit Your Content Here!',
                 loading: 0,
                 tap:[],
                 errors:[],
+                tapCalls:{
+                    'athanor': false,
+                    'vocab'  :false
+                },
+                vocab:'',
                 counter:0,
                 tempIds:[],
                 auto:'',
                 splitText:[],
                 quickTags:'',
+                //feedback:[],
+                /* attributes:{
+                     feedbackOpt:'r_01',
+                     grammar:this.preSetAssignment.feature.grammar? this.preSetAssignment.feature.grammar : 'reflective'
+                 },*/
                 customToolbar: [
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -206,26 +205,29 @@
                     inline :['link2me'],
                     iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
                     inText :['affect', 'epistemic','modall']
-                },
-                analytic_xlator:[
-                    {'metrics': 'metrics'},
-                    {'emph': 'E'},
-                    {'vis': 'T'},
-                    {'contrast': 'C'},
-                    {'contribution': 'S'},
-                    {'novstat': 'N'},
-                    {'tempstat': 'B'},
-                    {'attitude': 'P'},
-                ]
+                }
+
+
+
             }
         },
         mounted () {
+            this.editLog.push(this.editorContent);
+            //this.fetchAnalysis();
             this.fetchFeedback();
+            // this.$store.dispatch('LOAD_FEEDBACK');
         },
         created() {
             this.auto = 'every 5m';
             //setInterval(this.storeAnalysedDrafts, 900000);
             setInterval(this.quickCheck, 300000);
+            /*EventBus.$on('compute-done', data => {
+                 this.feedback.final.forEach (function(exp, idx) {
+                     if(exp.str === data.str) {
+                            this.feedback.final[idx] = data;
+                     }
+                 });
+            });*/
         },
         computed: {
             reflective: function() {
@@ -239,26 +241,23 @@
                 processing: 'loadingStatus'
             }),
             preSetAssignment: function() {
-                if(this.document) {
-                    return JSON.parse(this.document);
+                if(this.assignment) {
+                    return JSON.parse(this.assignment);
                 } else {
                     return false;
                 }
             },
             attributes: function() {
                 if(this.preSetAssignment) {
-                    let feature = this.preSetAssignment.feature[0];
                     return {
-                        feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
-                        grammar: feature.grammar.toLocaleLowerCase(),
-                        feature: feature.id
+                        feedbackOpt:this.preSetAssignment.feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
+                        grammar: this.preSetAssignment.feature.grammar.toLocaleLowerCase()
                     };
                 } else {
-                   return {
+                    return {
                         feedbackOpt:'a_01',
-                        grammar: 'analytic',
-                        feature:0
-                   };
+                        grammar: 'analytic'
+                    };
                 }
             },
             rulesClasses: function() {
@@ -271,10 +270,42 @@
                 let classes = [].concat(...rules);
                 return classes;
             },
+
+
         },
         watch :{
+            /* editorContent: function (newVal) {
+                 this.$data.counter++;
+             },
+             tap: function() {
+                 this.fetchFeedback();
+             }*/
+
         },
         methods: {
+            fetchAnalysis() {
+                this.$data.tapCalls.athanor =true;
+                this.$data.counter = 0;
+                //this.feedback =[];
+                axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
+                    .then(response => {
+                        this.$data.tap = response.data.athanor;
+                        this.$data.tapCalls.athanor=false;
+                        this.fetchFeedback();
+                    })
+                    .catch(e => {
+                        this.$data.errors.push(e)
+                    });
+                this.$data.tapCalls.vocab =true;
+                axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
+                    .then(response => {
+                        this.$data.tapCalls.vocab=false;
+                        this.$data.vocab = response.data.vocab.unique;
+                    })
+                    .catch(e => {
+                        this.$data.errors.push(e)
+                    });
+            },
             computeText: function(nv, ov) {
                 var changedText='';
                 var self = this;
@@ -345,7 +376,7 @@
                 this.errors=[];
                 this.autoCheck = true;
                 if(this.feedbackOpt!=='') {
-                   // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
+                    // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
                     this.autoCheck = false;
@@ -393,20 +424,16 @@
                     return str;
                 }
             },
+            styles: function(ic) {
+                let style = "";
+                /*    if(this.rulesClasses.indexOf(ic) !== -1) {
+                        return "display:'none'";
+                    } */
+                return style;
+            },
             getI(ic) {
                 return 'std'+ic+' '+ic;
-            },
-            getAna(ic) {
-                let tg = '';
-                this.analytic_xlator.forEach(function(val){
-                    if(val[ic]) {
-                        console.log(val[ic]);
-                        tg = val[ic];
-                    }
-                });
-                return tg;
             }
-
 
 
         }
