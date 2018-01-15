@@ -10,6 +10,7 @@ use Auth;
 use App\User;
 use App\Http\Controllers\StringTokenizer;
 use Illuminate\Support\Facades\Log;
+use App\Feature;
 
 
 
@@ -70,10 +71,24 @@ class FeedbackController extends Controller
         $result = new \stdClass();
         $extra = $request["extra"];
         $result->status = array('message' => 'Success', 'code' => 200  );
-        $path = storage_path().'/schema/'.$extra['grammar'].'/'.$extra['feedbackOpt'].'.json';
         $result->rules = array();
-        $feedbackSchema = $this->getFeedbackSchema($path);
-        $result->rules= $this->rules = $feedbackSchema['rules'];
+        if($extra['feature'] > 0 ) {
+            $feed = $this->getFeedbackSchema('',$extra['feature']);
+            $feedbackSchema = json_decode($feed, true);
+            //print_r($feedbackSchema[0]);
+            $result->rules= $this->rules = $feedbackSchema["rules"];
+           // print_r($this->rules);
+        } else {
+            $path = storage_path() . '/schema/' . $extra['grammar'] . '/' . $extra['feedbackOpt'] . '.json';
+            $feedbackSchema = $this->getFeedbackSchema($path);
+            $result->rules= $this->rules = $feedbackSchema['rules'];
+        }
+
+
+        //print_r($feedbackSchema);
+
+
+        //$result->rules= $this->rules = $feedbackSchema['rules'];
 
 
         //$result->rules = $feedbackSchema['rules'];
@@ -106,13 +121,16 @@ class FeedbackController extends Controller
     }
 
 
-    protected function getFeedbackSchema($path) {
-        if(!$path) {
-            return false;
+    protected function getFeedbackSchema($path, $id)
+    {
+        if ($path == '') {
+            $features = Feature::find($id);
+            $data = $features->rules;
+           // print_r($data);
+            $json= json_decode($data, true);
+        } else {
+            $json = json_decode(file_get_contents($path), true);
         }
-
-        $json = json_decode(file_get_contents($path),true);
-
         return $json;
     }
 

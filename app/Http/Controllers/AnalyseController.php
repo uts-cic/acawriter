@@ -27,13 +27,16 @@ class AnalyseController extends Controller
 
         if(isset($code)) {
 
-            //$this->ui->document = Document::where('slug', '=', $code)->with('assignment')->get();
+            $this->ui->document = Document::where('slug', '=', $code)->with('assignment')->get();
+
+            $this->ui->document[0]->feature = Feature::where('id',$this->ui->document[0]->assignment->feature_id)->get();
 
 
-            $this->ui->assignment = Assignment::where('code', '=', $code)
+            /* $this->ui->assignment = Assignment::where('code', '=', $code)
                                     ->with('feature')
                                     ->get();
             $this->ui->assignment_id = Assignment::where('code', '=', $code)->pluck('id');
+            */
         }
 
         return view('analyse', ['data' => $this->ui]);

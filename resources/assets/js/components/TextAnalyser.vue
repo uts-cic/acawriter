@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="card bg-default">
                     <div class="card-header">
                         <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="row editWrapper">
-            <div id="sidebar">
+            <div id="sidebar" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                 </div>
@@ -117,15 +117,34 @@
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
+                                    <span v-if="processing"  class="text-success">
+                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
+                                        <span class="sr-only">Loading...</span>
+                                    </span>
+                                    <hr />
+                                </div>
                                 <div class="col-md-12 wrapper">
                                     <span v-for="(feed,idx) in feedback.final">
-                                        <span v-if="feed.metrics.message.length==0"></span>
+                                        <!-- <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span class="badge badge-pill badge-analytic">{{rmoves}}</span>
                                         </span>
+                                        <span v-html="feed.str"></span> -->
+                                        <span v-for="ic in feed.css">
+                                            <template v-if="ic=='contribution'">
+                                                <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
+                                            </template>
+                                            <template v-else-if="ic=='metrics'">
+                                                <span v-bind:class="ic"></span>
+                                            </template>
+                                            <template v-else>
+                                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAna(ic)"></span>
+                                            </template>
+                                        </span>
                                         <span v-html="feed.str"></span>
+
                                     </span>
                                 </div>
                             </div>
@@ -166,7 +185,7 @@
             VueEditor
         },
         name: 'editor',
-        props:['assignment'],
+        props:['document'],
         store,
         data () {
             return {
@@ -187,7 +206,17 @@
                     inline :['link2me'],
                     iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
                     inText :['affect', 'epistemic','modall']
-                }
+                },
+                analytic_xlator:[
+                    {'metrics': 'metrics'},
+                    {'emph': 'E'},
+                    {'vis': 'T'},
+                    {'contrast': 'C'},
+                    {'contribution': 'S'},
+                    {'novstat': 'N'},
+                    {'tempstat': 'B'},
+                    {'attitude': 'P'},
+                ]
             }
         },
         mounted () {
@@ -210,22 +239,25 @@
                 processing: 'loadingStatus'
             }),
             preSetAssignment: function() {
-                if(this.assignment) {
-                    return JSON.parse(this.assignment);
+                if(this.document) {
+                    return JSON.parse(this.document);
                 } else {
                     return false;
                 }
             },
             attributes: function() {
                 if(this.preSetAssignment) {
+                    let feature = this.preSetAssignment.feature[0];
                     return {
-                        feedbackOpt:this.preSetAssignment.feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
-                        grammar: this.preSetAssignment.feature.grammar.toLocaleLowerCase()
+                        feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
+                        grammar: feature.grammar.toLocaleLowerCase(),
+                        feature: feature.id
                     };
                 } else {
                    return {
                         feedbackOpt:'a_01',
-                        grammar: 'analytic'
+                        grammar: 'analytic',
+                        feature:0
                    };
                 }
             },
@@ -363,7 +395,18 @@
             },
             getI(ic) {
                 return 'std'+ic+' '+ic;
+            },
+            getAna(ic) {
+                let tg = '';
+                this.analytic_xlator.forEach(function(val){
+                    if(val[ic]) {
+                        console.log(val[ic]);
+                        tg = val[ic];
+                    }
+                });
+                return tg;
             }
+
 
 
         }

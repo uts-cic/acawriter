@@ -20,7 +20,8 @@
             <th scope="row">{{list.assignment.code}}</th>
             <td>{{list.grammar}}</td>
             <td>{{list.assignment.name}}</td>
-            <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.name}}</a></td>
+            <!-- <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.name}}</a></td> -->
+            <td><a v-bind:href="'analyse/'+list.slug">{{list.name}}</a></td>
             <td><a href="#" v-on:click="action('edit',list.id)"><i class="fa fa-edit"></i></a> &nbsp;
                 <a href="#" v-on:click="action('delete',list.id)"><i class="fa fa-trash"></i></a>
             </td>
