@@ -40,6 +40,9 @@ Route::get('/analyse/{code}', 'AnalyseController@index');
 Route::post('/processor', 'StringTokenizer@process');
 Route::post('/feedback', 'FeedbackController@generateFeedback');
 
+/**axios call **/
+Route::post('/feedback/store', 'FeedbackController@storeFeedback');
+
 
 
 Route::get('/hb', function(){
