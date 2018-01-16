@@ -11,6 +11,7 @@
             <th scope="col">Genre</th>
             <th scope="col">Assignment Title</th>
             <th scope="col">Document Title</th>
+            <th scope="col">Last Updated</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -22,6 +23,7 @@
             <td>{{list.assignment.name}}</td>
             <!-- <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.name}}</a></td> -->
             <td><a v-bind:href="'analyse/'+list.slug">{{list.name}}</a></td>
+            <td><span v-if="list.draft_last_updated_at">{{list.draft_last_updated_at}}</span></td>
             <td><a href="#" v-on:click="action('edit',list.id)"><i class="fa fa-edit"></i></a> &nbsp;
                 <a href="#" v-on:click="action('delete',list.id)"><i class="fa fa-trash"></i></a>
             </td>

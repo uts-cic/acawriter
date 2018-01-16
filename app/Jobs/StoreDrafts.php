@@ -9,10 +9,12 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Draft;
+use Illuminate\Http\Request;
 use App\Http\Controllers\StringTokenizer;
+use App\Draft;
 use App\Feature;
 use App\User;
+use App\Events\OperationLog;
 
 
 class StoreDrafts implements ShouldQueue
@@ -22,11 +24,14 @@ class StoreDrafts implements ShouldQueue
 
     protected $draft;
     protected $stringTokeniser;
+    private $metricsWordLength = 25;
+    private $para = 3;
+    private $user;
 
-    public function __construct($draft)
+    public function __construct($draft, $user)
     {
         $this->draft = $draft;
-        $this->stringTokeniser = new StringTokenizer();
+        $this->user = $user;
     }
 
     /**
@@ -37,6 +42,7 @@ class StoreDrafts implements ShouldQueue
     public function handle()
     {
         // get feedback
+        $this->stringTokeniser = new StringTokenizer();
         $tap = $this->stringTokeniser->preProcess($this->draft);
         Log::info('Drafts',['tokeniser' =>'completed'.date('d/m/y:H:i:s') ]);
 
@@ -76,13 +82,25 @@ class StoreDrafts implements ShouldQueue
 
         $draftNew = new Draft();
         $draftNew->text_input = $this->draft['txt'];
-        $draftNew->feature_id = 1;
-        $draftNew->document_id = $this->draft['document_id'];
+        $draftNew->feature_id = $this->draft['extra']['feature'];
+        $draftNew->document_id = $this->draft['document'];
         $draftNew->raw_response = json_encode($result);
-        $draftNew->user_id = Auth::user()->id;
-        $draftNew->isAuto = $this->draft['type'] == 'manual' ? 0 :1;
+        $draftNew->user_id = $this->user->id;
+        $draftNew->is_auto = $this->draft['type'] == 'manual' ? 0 :1;
 
         $draftNew->save();
+
+
+
+        if($draftNew->id > 0) {
+            $message = "Draft stored";
+        } else {
+            $message = "Encountered some issue storing the Draft";
+        }
+
+
+
+        event(new OperationLog($this->user, $message));
 
         Log::info('Stored draft into db',['draft' => $draftNew]);
 

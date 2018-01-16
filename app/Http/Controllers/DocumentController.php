@@ -130,6 +130,8 @@ class DocumentController extends Controller
 
         if(count($list->documents) > 0 && count($assignments) >0) {
             foreach($list->documents as $document) {
+                $draft = Draft::where('document_id',$document->id)->orderBy('created_at','desc')->first();
+                $document->draft_last_updated_at = $draft ? date('Y-m-d H:i:s',strtotime($draft->created_at)): '';
                 foreach($assignments as $assignment ) {
                     if($document->assignment_id === $assignment->id) {
                         $document->feature_id = $assignment->feature->id;

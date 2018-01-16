@@ -122,7 +122,9 @@ class FeedbackController extends Controller
 
     /* stores draft by generating a job **/
     public function storeFeedback(Request $request) {
-        StoreDrafts::dispatch($request)->onConnection('redis');
+        $user_id = Auth::user()->id;
+        $user = Auth::user();
+        StoreDrafts::dispatch($request->all(), $user)->onConnection('redis');
     }
 
 
