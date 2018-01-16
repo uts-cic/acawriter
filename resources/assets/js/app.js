@@ -71,6 +71,7 @@ const app = new Vue({
     mounted: function() {
 
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
+            console.log(data);
             return this.slogs.push(data.details);
         }.bind(this));
 

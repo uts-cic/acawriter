@@ -9,11 +9,12 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Draft;
+use Illuminate\Http\Request;
 use App\Http\Controllers\StringTokenizer;
+use App\Draft;
 use App\Feature;
 use App\User;
-use Illuminate\Http\Request;
+use App\Events\OperationLog;
 
 
 class StoreDrafts implements ShouldQueue
@@ -84,7 +85,7 @@ class StoreDrafts implements ShouldQueue
         $draftNew->feature_id = $this->draft['extra']['feature'];
         $draftNew->document_id = $this->draft['document'];
         $draftNew->raw_response = json_encode($result);
-        $draftNew->user_id = $this->userId;
+        $draftNew->user_id = $this->user->id;
         $draftNew->is_auto = $this->draft['type'] == 'manual' ? 0 :1;
 
         $draftNew->save();

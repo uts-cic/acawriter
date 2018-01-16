@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3>
-                <div v-if="draftUpdate">{{draftUpdate.message}}</div>
+                <div v-if="draftUpdate!=''">{{draftUpdate.message}}</div>
 
             </div>
             <!-- <div class="col-md-4">
@@ -75,9 +75,9 @@
                 <div class="card">
                     <div class="card-header bg-dark text-white">Document Analyser
                         <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm muted"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                            <button type="button" class="btn brand-btn-outline-secondary btn-sm muted"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
                             <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
 
                         </div>
@@ -250,6 +250,9 @@
             },
             attributes: function() {
                 if(this.preSetAssignment) {
+                    if(this.preSetAssignment.draft) {
+                        this.editorContent = this.preSetAssignment.draft.text_input;
+                    }
                     let feature = this.preSetAssignment.feature[0];
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
@@ -276,8 +279,11 @@
             },
             draftUpdate: function() {
                 let upd = {};
-                console.log(this.slogs);
-                upd.message = "Called";
+                upd.message ='';
+                if(this.slogs){
+                    console.log(this.slogs.details.status);
+                    upd.message = this.slogs.details.status;
+                }
                 return upd;
             }
         },

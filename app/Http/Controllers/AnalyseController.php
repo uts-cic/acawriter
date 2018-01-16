@@ -31,7 +31,7 @@ class AnalyseController extends Controller
 
             $this->ui->document[0]->feature = Feature::where('id',$this->ui->document[0]->assignment->feature_id)->get();
 
-
+            $this->ui->document[0]->draft = Draft::where('document_id',$this->ui->document[0]->id)->orderBy('created_at','desc')->first();
             /* $this->ui->assignment = Assignment::where('code', '=', $code)
                                     ->with('feature')
                                     ->get();
