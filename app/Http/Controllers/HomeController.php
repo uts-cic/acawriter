@@ -45,6 +45,18 @@ class HomeController extends Controller
         return view('home', ['data'=> $this->userData]);
     }
 
+    public function page ($which) {
+        if(!isset($which)) {
+            return view ('welcome');
+        } elseif($which==='about') {
+            return view('about');
+        } elseif($which==='contact') {
+            return view('contact');
+        } else {
+            return view ('welcome');
+        }
+    }
+
 
 
 
