@@ -14,9 +14,9 @@
         <style>
             html, body {
                 background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
+                color: #000000;
+                font-family: 'Arial', sans-serif;
+                /* font-weight: 100; */
                 height: 100vh;
                 margin: 0;
             }
@@ -46,7 +46,7 @@
             }
 
             .title {
-                font-size: 84px;
+                font-size: 60px;
             }
 
             .links > a {
@@ -71,8 +71,8 @@
                     @if (Auth::check())
                         <a href="{{ url('/home') }}">Home</a>
                     @else
-                        <a href="{{ url('/login') }}">Login</a>
-                        <a href="{{ url('/register') }}">Register</a>
+                       <!--  <a href="{{ url('/login') }}">Login</a>
+                        <a href="{{ url('/register') }}">Register</a> -->
                     @endif
                 </div>
             @endif
@@ -80,7 +80,10 @@
             <div class="content">
                 <div class="title m-b-md">
                     <img src="/images/uts_logo.png" /><br /><img src="https://utscic.edu.au/wp-content/uploads/2015/05/cropped-ciclogo.png" /><br />
-                    Academic Text Analyser<sup>3.0</sup>
+                    Academic Writing Analytics<sup>3.0</sup><br />
+                   <!-- <a class="btn btn-lg btn-dark" href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw?entityID=https://test-aaf-login.uts.edu.au/idp/shibboleth"
+                    >Get Started</a> -->
+                    <a class="btn btn-lg btn-dark" href="/login">Get Started</a>
                 </div>
 
                 <!-- <div class="links">

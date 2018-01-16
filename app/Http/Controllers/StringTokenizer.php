@@ -284,7 +284,7 @@ class StringTokenizer extends Controller
         }
     }
     //full text analyer based on tap tokening and then send it via analyser
-    protected function tapTokeniser(Request $request) {
+    protected function tapTokeniser($request) {
         $splitTxt = array();
         $variables = new \stdClass();
         //$variables->input = strip_tags($request['txt']);

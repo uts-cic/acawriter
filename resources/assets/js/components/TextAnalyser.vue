@@ -1,7 +1,10 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
+            <div class="col-md-8"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3>
+                <div v-if="draftUpdate">{{draftUpdate.message}}</div>
+
+            </div>
             <!-- <div class="col-md-4">
                 <div class="card bg-default">
                     <div class="card-header">
@@ -185,7 +188,7 @@
             VueEditor
         },
         name: 'editor',
-        props:['document'],
+        props:['document', 'slogs'],
         store,
         data () {
             return {
@@ -271,6 +274,12 @@
                 let classes = [].concat(...rules);
                 return classes;
             },
+            draftUpdate: function() {
+                let upd = {};
+                console.log(this.slogs);
+                upd.message = "Called";
+                return upd;
+            }
         },
         watch :{
         },
