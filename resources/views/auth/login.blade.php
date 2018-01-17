@@ -65,7 +65,7 @@
                         </div>
                         <hr />
                         <div class="form-group">
-                            <a class="btn btn-lg btn-dark" href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw?entityID=https://aaf-login.uts.edu.au/idp/shibboleth"
+                            <a class="btn btn-lg btn-dark" href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw?entityID=https://test-aaf-login.uts.edu.au/idp/shibboleth"
                             >UTS Login</a>
                         </div>
                     </form>

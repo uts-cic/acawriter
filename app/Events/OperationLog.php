@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Log;
 
 use App\User;
 
@@ -31,6 +32,7 @@ class OperationLog implements ShouldBroadcast
             "info"  => array("user" => $user),
             "time"  =>time()
         );
+        Log::info('operationLog',['details' => $this->details ]);
     }
 
     /**

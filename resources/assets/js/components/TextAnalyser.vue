@@ -1,15 +1,8 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-            <div class="col-md-4">
-                <div class="card bg-dark text-white text-center mb-3">
-                    <div class="card_block">
-                        Auto feedback: <input type="checkbox" v-model="autofeedback" /> | Auto Save: <input type="checkbox" v-model="autosave" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span></div>
+            <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
+            <div class="col-md-4"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span></div>
 
 
             <!-- <div class="col-md-4">
@@ -81,7 +74,8 @@
             <div id="content" class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-dark text-white">Document Analyser &nbsp;&nbsp;
-                        Auto feedback: <input type="checkbox" v-model="autofeedback" /> | Auto Save: <input type="checkbox" v-model="autosave" />
+                        Auto feedback: <input type="checkbox" v-model="autofeedback" />
+                        &nbsp; &nbsp; <span class="text-white" v-if="auto!=''">{{auto}}</span>
                         <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                             <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
                             <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
@@ -191,6 +185,7 @@
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
+
     export default {
         components: {
             VueEditor
@@ -236,7 +231,7 @@
             this.fetchFeedback();
         },
         created() {
-            this.auto = 'every 5m';
+            this.auto = '';
             //setInterval(this.storeAnalysedDrafts, 900000);
             setInterval(this.quickCheck, 300000);
         },
@@ -288,12 +283,14 @@
                 return classes;
             },
             draftUpdate: function() {
+                console.log(this.slogs);
                 let upd = {};
                 upd.message ='';
                 if(this.slogs){
-                    console.log(this.slogs.details.status);
+                    //console.log(this.slogs.details.status);
                     upd.message = this.slogs.details.status;
                 }
+                console.log(upd);
                 return upd;
             }
         },
@@ -421,7 +418,7 @@
                 let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
                 axios.post('/feedback/store', data)
                     .then(response => {
-                        this.$data.auto = 'Done';
+                        this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
                     })
                     .catch(e => {
                         this.$data.errors.push(e)

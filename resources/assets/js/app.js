@@ -72,8 +72,9 @@ const app = new Vue({
     mounted: function() {
 
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
-            console.log(data);
-            return this.slogs.push(data.details);
+            this.$data.slogs.push(data.details);
+            console.log(this.slogs);
+            return this.$data.slogs;
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {
