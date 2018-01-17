@@ -14,7 +14,7 @@
             <div class="card-header bg-dark text-white">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#document" data-toggle="tab">Already have your document?</a>
+                        <a class="nav-link active" href="#document" data-toggle="tab">Already have your documents?</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#assignment" data-toggle="tab">Have an Assignment code</a>

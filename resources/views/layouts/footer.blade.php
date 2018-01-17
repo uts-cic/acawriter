@@ -4,11 +4,11 @@
             <div class="col-lg-12 h-100 text-center text-lg-left my-auto">
                 <ul class="list-inline mb-2">
                     <li class="list-inline-item">
-                        <a href="#">About</a>
+                        <a href="/page/about">About</a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
-                        <a href="#">Contact</a>
+                        <a href="/page/contact">Contact</a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
