@@ -26,7 +26,9 @@
                             <li v-for="error in errors">{{error.message}}</li>
                         </ul>
                     </div>
-                    <div v-else-if="operation!==''" class="alert alert-info">{{operation}}</div>
+                    <div v-else-if="operation!==''" class="alert alert-info">{{operation}}
+                        <a href="/home">Go to my documents</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,7 +38,7 @@
                 <div class="col-md-3">Assignment Title: <br /><small> {{a.name}} ({{a.code}})
                     &nbsp;
                 </small></div>
-                <div class="col-md-4">Document name:
+                <div class="col-md-4">Document name:<small class="text-danger">(has to be unique)</small>
                     <input type="text" class="form-control"  v-model="doc_name[i]"  />
                 </div>
 

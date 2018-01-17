@@ -87,13 +87,23 @@ class DocumentController extends Controller
     public function action(Request $request) {
 
         $complete = false;
-        $status =array('success' => true, 'message' => 'Deleted Document');
+        $status =array('success' => true, 'message' => 'Document deleted successfully');
         $code = 200;
         if($request->action == 'delete') {
             if(is_numeric($request->id) ) {
 
                 $res = Draft::where('document_id', $request->id)->delete();
                 $complete = Document::where('id', $request->id)->delete();
+            }
+        }
+
+        if($request->action == 'edit') {
+            if(isset($request->doc) ) {
+                $doc = $request->doc;
+                $docu = Document::find($doc['id']);
+                $docu->name = $doc['name'];
+                $docu->save();
+                $status['message'] = 'Document name updated successfully';
             }
         }
         return response()->json($status, $code);

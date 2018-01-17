@@ -54,6 +54,7 @@ Vue.component('tap-status', require('./components/TapHealth.vue'));
 Vue.component('autocomplete', require('./components/Autocomplete.vue'));
 Vue.component('assignment-list', require('./components/Assignment.vue'));
 Vue.component('documents', require('./components/Document.vue'));
+Vue.component('edit-document', require('./components/modal/EditDocument.vue'));
 
 
 
