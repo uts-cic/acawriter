@@ -54,6 +54,7 @@ Vue.component('tap-status', require('./components/TapHealth.vue'));
 Vue.component('autocomplete', require('./components/Autocomplete.vue'));
 Vue.component('assignment-list', require('./components/Assignment.vue'));
 Vue.component('documents', require('./components/Document.vue'));
+Vue.component('edit-document', require('./components/modal/EditDocument.vue'));
 
 
 
@@ -71,8 +72,9 @@ const app = new Vue({
     mounted: function() {
 
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
-            console.log(data);
-            return this.slogs.push(data.details);
+            this.$data.slogs.push(data.details);
+            console.log(this.slogs);
+            return this.$data.slogs;
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {

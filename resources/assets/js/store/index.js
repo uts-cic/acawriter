@@ -29,7 +29,11 @@ const store = new Vuex.Store({
             }, (err) => {
                 console.log(err)
             })
-        }
+        },
+        PRELOAD_FEEDBACK: function ({ commit, state }, params) {
+            commit( 'SET_LOADING', {status:true} );
+            commit('UPDATE_FEEDBACK', { feedback: params.savedFeed });
+        },
     },
     mutations: {
         UPDATE_FEEDBACK: (state, {feedback }) => {

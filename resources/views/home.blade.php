@@ -14,20 +14,20 @@
             <div class="card-header bg-dark text-white">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#document" data-toggle="tab">Already have your document?</a>
+                        <a class="nav-link active" href="#new" data-toggle="tab">Create a new Document</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#assignment" data-toggle="tab">Have an Assignment code</a>
+                        <a class="nav-link" href="#assignment" data-toggle="tab">Enter my Assignment code</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#new" data-toggle="tab">Create a new Document</a>
+                        <a class="nav-link" href="#document" data-toggle="tab">View my documents</a>
                     </li>
                 </ul>
             </div>
 
             <div class="card-block">
                 <div class="tab-content p-5">
-                    <div class="tab-pane active" id="document" role="tabpanel">
+                    <div class="tab-pane" id="document" role="tabpanel">
                         <h4 class="card-title">My Documents</h4>
                         <documents></documents>
                     </div>
@@ -35,7 +35,7 @@
                         <h4>Enter your Assignment Code:</h4>
                         <autocomplete></autocomplete>
                     </div>
-                    <div class="tab-pane" id="new" role="tabpanel">
+                    <div class="tab-pane active" id="new" role="tabpanel">
                         <h4>Add a Document</h4>
                         <form class="form" method="POST" action="/document">
                             {{ csrf_field() }}

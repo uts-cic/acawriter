@@ -24,17 +24,19 @@
             <!-- <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.name}}</a></td> -->
             <td><a v-bind:href="'analyse/'+list.slug">{{list.name}}</a></td>
             <td><span v-if="list.draft_last_updated_at">{{list.draft_last_updated_at}}</span></td>
-            <td><a href="#" v-on:click="action('edit',list.id)"><i class="fa fa-edit"></i></a> &nbsp;
-                <a href="#" v-on:click="action('delete',list.id)"><i class="fa fa-trash"></i></a>
+            <td><a href="#" v-on:click="action('edit',list)"><i class="fa fa-edit"></i></a> &nbsp;
+                <a href="#" v-on:click="action('delete',list)"><i class="fa fa-trash"></i></a>
             </td>
         </tr>
 
         </tbody>
     </table>
+        <edit-document></edit-document>
     </div>
 </template>
 
 <script>
+
     export default {
         name: "document",
         data() {
@@ -56,18 +58,23 @@
                     this.$data.errors.push(e)
                 });
             },
-            action(what, idx) {
-                let data ={'action': what, 'id':idx };
-                if(confirm("All feedback associated with the document will be deleted. Do you wish to proceed?")) {
-                    axios.post('documents/action', data).then((response) => {
-                        this.$data.flash = response.data.message;
-                        setTimeout(() => {
-                            this.$data.flash = '';
-                            this.fetchDocuments();
-                        }, 3000);
-                    }, (err) => {
-                        this.$data.errors.push(e)
-                    });
+            action(what, doc) {
+                if(what === 'delete') {
+                    let data = {'action': what, 'id': doc.id};
+                    if (confirm("All feedback associated with the document will be deleted. Do you wish to proceed?")) {
+                        axios.post('documents/action', data).then((response) => {
+                            this.$data.flash = response.data.message;
+                            setTimeout(() => {
+                                this.$data.flash = '';
+                                this.fetchDocuments();
+                            }, 3000);
+                        }, (err) => {
+                            this.$data.errors.push(e)
+                        });
+                    }
+                } else if(what === 'edit') {
+                    let data = {'id':doc.id, 'name': doc.name };
+                    this.$modal.show('edit-document', {'data':data} );
                 }
             }
         },
