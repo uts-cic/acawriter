@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="row editWrapper">
-            <div id="sidebar" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
+            <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                 </div>
@@ -73,16 +73,24 @@
             <!-- start content -->
             <div id="content" class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-dark text-white">Document Analyser &nbsp;&nbsp;
-                        Auto feedback: <input type="checkbox" v-model="autofeedback" />
-                        &nbsp; &nbsp; <span class="text-white" v-if="auto!=''">{{auto}}</span>
-                        <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm muted"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
-                            <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
+                    <div class="card-header bg-dark text-white">
+                        <div class="row">
+                            <div class="col-md-2">Document Analyser</div>
+                            <div class="col-md-2 text-right">
+                                <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
+                            </div>
+                            <div class="col-md-2 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" /></div>
+                            <div class="col-md-6">
+                                <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
+                                    <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
 
-                        </div>
+                                </div>
+                            </div>
+
+                    </div>
 
                     </div>
                     <div class="card-body">
@@ -224,7 +232,8 @@
                     {'novstat': 'N'},
                     {'tempstat': 'B'},
                     {'attitude': 'P'},
-                ]
+                ],
+                initFeedback:true
             }
         },
         mounted () {
