@@ -59,11 +59,10 @@
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                      <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
-                       <span v-for="(m,id) in msg">
-                           <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp; &nbsp;
-                               <span v-bind:class="id"></span> <small><span v-html="m"></span></small>
-                       </span>
-
+                        <div class="row" v-for="(m,id) in msg">
+                            <div class="col-md-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
+                            <div class="col-md-10"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
+                        </div>
                     </div>
                     <hr />
                 </div>
@@ -163,13 +162,6 @@
                             </div>
                             <!-- end of analytics -->
 
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <small>Note: Feedback updated and stored automatically every 5 mins</small>
-                            </div>
                         </div>
                     </div>
                 </div>
