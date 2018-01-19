@@ -295,7 +295,7 @@
                 upd.message ='';
                 if(this.slogs){
                     //console.log(this.slogs.details.status);
-                    upd.message = this.slogs.details.status;
+                    if(this.slogs.details) upd.message = this.slogs.details.status;
                 }
                 console.log(upd);
                 return upd;

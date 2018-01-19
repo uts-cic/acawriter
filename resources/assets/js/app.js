@@ -67,13 +67,13 @@ const app = new Vue({
     data: {
         slogs: [],
         lastHeartBeatReceivedAt: moment(),
-        tapHealth: 'failed'
+        tapHealth: 'failed',
+        userActivity:[]
     },
     mounted: function() {
 
         socket.on('operational-log:App\\Events\\OperationLog', function(data){
             this.$data.slogs.push(data.details);
-            console.log(this.slogs);
             return this.$data.slogs;
         }.bind(this));
 
@@ -85,6 +85,12 @@ const app = new Vue({
         socket.on('private-dashboard:App\\Events\\Tap\\Health', function (data) {
             //console.log("ok yes listened tap health");
             return this.tapHealth=data.health.message;
+        }.bind(this));
+
+        socket.on('private-user-activity.*:App\\Events\\UserActivity', function (data) {
+            console.log("into user activity");
+            console.log(data);
+            return this.userActivity.push(data);
         }.bind(this));
 
     },

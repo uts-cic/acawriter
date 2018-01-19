@@ -1,5 +1,5 @@
 <template>
-    <li v-if="offline" class="list-group-item list-group-item-danger internet-connection">
+    <li v-if="offline" class="list-group-item list-group-item-danger">
         <i class="fa fa-warning"></i>&nbsp;<small>Internet connection lost</small>
     </li>
     <li v-else class="list-group-item list-group-item-success">
