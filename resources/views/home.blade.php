@@ -146,7 +146,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">System Status</div>
+                <div class="card-header bg-dark text-white">System Status</div>
                 <div class="card-body">
                     <ul class="list-group">
                         @if (session('status'))
