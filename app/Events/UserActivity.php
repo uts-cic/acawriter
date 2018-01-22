@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use App\User;
 
 
-class UserActivity
+class UserActivity implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -29,11 +29,17 @@ class UserActivity
 
     public function __construct(User $user, $data)
     {
-        Log::info('user activity',['draft' => $data]);
-        $this->data = $data;
+        $sockData = new \stdClass;
+        $sockData->type = $data->type ? $data->type : 'General';
+        $sockData->ref= $data->ref ? $data->ref->id: 0;
+
+        Log::info('activity',['draft' => $sockData]);
+
+        $this->data = $sockData;
+
         $this->userId = $user->id;
 
-        Log::info('user activity',['draft' => $data]);
+
     }
 
     /**
@@ -43,6 +49,6 @@ class UserActivity
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user-activity.'.$this->userId);
+        return new PrivateChannel('user-activity');
     }
 }

@@ -33,6 +33,11 @@ http.listen(3000,function(){
     });
 
     redis.subscribe('private-dashboard', function(err, d){
+        console.log("dash"+d);
+
+    });
+
+    redis.subscribe('private-user-activity', function(err, r){
 
     });
 

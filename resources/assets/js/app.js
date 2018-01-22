@@ -87,7 +87,7 @@ const app = new Vue({
             return this.tapHealth=data.health.message;
         }.bind(this));
 
-        socket.on('private-user-activity.*:App\\Events\\UserActivity', function (data) {
+        socket.on('private-user-activity:App\\Events\\UserActivity', function (data) {
             console.log("into user activity");
             console.log(data);
             return this.userActivity.push(data);
