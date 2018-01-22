@@ -14,7 +14,8 @@ use App\Http\Controllers\StringTokenizer;
 use App\Draft;
 use App\Feature;
 use App\User;
-use App\Events\OperationLog;
+//use App\Events\OperationLog;
+use App\Events\UserActivity;
 
 
 class StoreDrafts implements ShouldQueue
@@ -41,6 +42,10 @@ class StoreDrafts implements ShouldQueue
      */
     public function handle()
     {
+        //emit activity
+        $activityLog = new \stdClass;
+        $activityLog->status = 'success';
+        $activityLog->data =[];
         // get feedback
         $this->stringTokeniser = new StringTokenizer();
         $tap = $this->stringTokeniser->preProcess($this->draft);
@@ -94,13 +99,17 @@ class StoreDrafts implements ShouldQueue
 
         if($draftNew->id > 0) {
             $message = "Draft stored";
+            $activityLog->status= 'success';
         } else {
-            $message = "Encountered some issue storing the Draft";
+            $activityLog->status= 'error';
         }
+        $activityLog->user = $this->user;
+        $activityLog->type = 'Draft';
+        $activityLog->ref = $draftNew;
 
 
-
-        event(new OperationLog($this->user, $message));
+        event(new UserActivity($this->user, $activityLog));
+        //event(new OperationLog($this->user, $message));
 
         Log::info('Stored draft into db',['draft' => $draftNew]);
 

@@ -1,8 +1,13 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-            <div class="col-md-4">
+            <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
+            <div class="col-md-4 text-success">
+                <span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
+            </div>
+
+
+            <!-- <div class="col-md-4">
                 <div class="card bg-default">
                     <div class="card-header">
                         <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
@@ -37,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -49,18 +54,17 @@
             </div>
         </div>
         <div class="row editWrapper">
-            <div id="sidebar">
-                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide
+            <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
+                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                     <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
-                       <span v-for="(m,id) in msg">
-                           <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp; &nbsp;
-                               <span v-bind:class="id"></span> <small><span v-html="m"></span></small>
-                       </span>
-
+                        <div class="row" v-for="(m,id) in msg">
+                            <div class="col-md-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
+                            <div class="col-md-10"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
+                        </div>
                     </div>
                     <hr />
                 </div>
@@ -70,12 +74,22 @@
             <!-- start content -->
             <div id="content" class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-dark text-white">Document Analyser
-                        <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
-                            <button type="button" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>
-                            <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Feedback Guide</button>
+                    <div class="card-header bg-dark text-white">
+                        <div class="row">
+                            <div class="col-md-2">Document Analyser</div>
+                            <div class="col-md-2 text-right">
+                                <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
+                            </div>
+                            <div class="col-md-2 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/></div>
+                            <div class="col-md-6">
+                                <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
+                                    <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
+
+                                </div>
+                            </div>
 
                         </div>
 
@@ -117,27 +131,39 @@
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4></div>
+                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
+                                    <span v-if="processing"  class="text-success">
+                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
+                                        <span class="sr-only">Loading...</span>
+                                    </span>
+                                    <hr />
+                                </div>
                                 <div class="col-md-12 wrapper">
                                     <span v-for="(feed,idx) in feedback.final">
-                                        <span v-if="feed.metrics.message.length==0"></span>
+                                        <!-- <span v-if="feed.metrics.message.length==0"></span>
                                         <span v-else class="metrics">&nbsp;</span>
                                         <span v-for="(rmoves, mv) in feed.moves.message">
                                             <span class="badge badge-pill badge-analytic">{{rmoves}}</span>
                                         </span>
-                                        <span v-html="feed.str"></span>
+                                        <span v-html="feed.str"></span> -->
+                                        <span v-for="ic in feed.css">
+                                            <template v-if="ic=='contribution'">
+                                                <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
+                                            </template>
+                                            <template v-else-if="ic=='metrics'">
+                                                <span v-bind:class="ic"></span>
+                                            </template>
+                                            <template v-else>
+                                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAna(ic)"></span>
+                                            </template>
+                                        </span>
+                                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>
+
                                     </span>
                                 </div>
                             </div>
                             <!-- end of analytics -->
 
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <small>Note: Feedback updated and stored automatically every 5 mins</small>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -161,42 +187,27 @@
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
+
     export default {
         components: {
             VueEditor
         },
         name: 'editor',
-        props:['assignment'],
+        props:['document', 'userActivity'],
         store,
         data () {
             return {
-                preview: '',
-                editLog : [],
-                config: {
-                    events: {
-                        'froalaEditor.contentChanged': function (e, editor) {
-                        }
-                    }
-                },
                 editorContent: 'Edit Your Content Here!',
                 loading: 0,
                 tap:[],
                 errors:[],
-                tapCalls:{
-                    'athanor': false,
-                    'vocab'  :false
-                },
-                vocab:'',
                 counter:0,
                 tempIds:[],
                 auto:'',
+                autosave:'',
+                autofeedback:false,
                 splitText:[],
                 quickTags:'',
-                //feedback:[],
-                /* attributes:{
-                     feedbackOpt:'r_01',
-                     grammar:this.preSetAssignment.feature.grammar? this.preSetAssignment.feature.grammar : 'reflective'
-                 },*/
                 customToolbar: [
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -205,29 +216,29 @@
                     inline :['link2me'],
                     iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
                     inText :['affect', 'epistemic','modall']
-                }
-
-
-
+                },
+                analytic_xlator:[
+                    {'metrics': 'metrics'},
+                    {'emph': 'E'},
+                    {'vis': 'T'},
+                    {'contrast': 'C'},
+                    {'contribution': 'S'},
+                    {'novstat': 'N'},
+                    {'tempstat': 'B'},
+                    {'attitude': 'P'},
+                ],
+                initFeedback:true
             }
         },
         mounted () {
-            this.editLog.push(this.editorContent);
-            //this.fetchAnalysis();
-            this.fetchFeedback();
-            // this.$store.dispatch('LOAD_FEEDBACK');
+            if(this.initFeedback) {
+                this.fetchFeedback();
+            }
         },
         created() {
-            this.auto = 'every 5m';
+            this.auto = '';
             //setInterval(this.storeAnalysedDrafts, 900000);
-            setInterval(this.quickCheck, 300000);
-            /*EventBus.$on('compute-done', data => {
-                 this.feedback.final.forEach (function(exp, idx) {
-                     if(exp.str === data.str) {
-                            this.feedback.final[idx] = data;
-                     }
-                 });
-            });*/
+            // setInterval(this.quickCheck, 300000);
         },
         computed: {
             reflective: function() {
@@ -241,24 +252,35 @@
                 processing: 'loadingStatus'
             }),
             preSetAssignment: function() {
-                if(this.assignment) {
-                    return JSON.parse(this.assignment);
+                if(this.document) {
+                    return JSON.parse(this.document);
                 } else {
                     return false;
                 }
             },
             attributes: function() {
                 if(this.preSetAssignment) {
+                    if(this.preSetAssignment.draft) {
+                        this.editorContent = this.preSetAssignment.draft.text_input;
+
+                        let data = {'savedFeed':JSON.parse(this.preSetAssignment.draft.raw_response)};
+                        this.$store.dispatch('PRELOAD_FEEDBACK',data);
+                        this.initFeedback = false;
+                    }
+                    let feature = this.preSetAssignment.feature[0];
                     return {
-                        feedbackOpt:this.preSetAssignment.feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
-                        grammar: this.preSetAssignment.feature.grammar.toLocaleLowerCase()
+                        feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
+                        grammar: feature.grammar.toLocaleLowerCase(),
+                        feature: feature.id
                     };
                 } else {
                     return {
                         feedbackOpt:'a_01',
-                        grammar: 'analytic'
+                        grammar: 'analytic',
+                        feature:0
                     };
                 }
+                setInterval(this.storeAnalysedDrafts('auto'), 900000);
             },
             rulesClasses: function() {
                 let rules = [];
@@ -270,42 +292,28 @@
                 let classes = [].concat(...rules);
                 return classes;
             },
+            draftUpdate: function() {
+                let upd = {};
+                upd.message ='';
+                var s = this;
+                if(this.userActivity && this.preSetAssignment){
+                    //console.log(this.slogs.details.status);
+                    this.userActivity.forEach(function(activity){
+                        if(activity.data) {
+                            if(activity.data.type==='Draft') {
+                                upd.message = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
+                                s.auto = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
+                            }
+                        }
+                    });
+                }
 
-
+                return upd;
+            },
         },
         watch :{
-            /* editorContent: function (newVal) {
-                 this.$data.counter++;
-             },
-             tap: function() {
-                 this.fetchFeedback();
-             }*/
-
         },
         methods: {
-            fetchAnalysis() {
-                this.$data.tapCalls.athanor =true;
-                this.$data.counter = 0;
-                //this.feedback =[];
-                axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
-                    .then(response => {
-                        this.$data.tap = response.data.athanor;
-                        this.$data.tapCalls.athanor=false;
-                        this.fetchFeedback();
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
-                this.$data.tapCalls.vocab =true;
-                axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
-                    .then(response => {
-                        this.$data.tapCalls.vocab=false;
-                        this.$data.vocab = response.data.vocab.unique;
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
-            },
             computeText: function(nv, ov) {
                 var changedText='';
                 var self = this;
@@ -343,57 +351,48 @@
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
             },
-            storeAnalysedDrafts() {
-                console.log("into auto store");
-                // this.$data.tap='';
-                this.$data.auto='processing....';
-                var assignment_id=0;
-                if(this.assignment!=="") {assignment_id= this.assignment;}
-                axios.post('/processor', {'txt': this.editorContent, 'action': 'auto', 'assignment_id':assignment_id})
-                    .then(response => {
-                        this.$data.auto = 'Done';
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
-            },
-            tokeniseTextInput() {
-                console.log("into tokenise");
-                this.$data.autoCheckr =true;
-                this.$data.counter = 0;
-                axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
-                    .then(response => {
-                        this.splitText = response.data.tokenised;
-                        this.$data.autoCheck=false;
-                        this.computeText(this.splitText, this.feedback.final);
-                        this.$data.counter = 0;
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
-            },
             fetchFeedback() {
                 this.errors=[];
-                this.autoCheck = true;
+                //this.autoCheck = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
-                    this.autoCheck = false;
+                    //this.autoCheck = false;
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
             },
-            quickCheck() {
-                if (this.editorContent !== '') {
-                    this.tokeniseTextInput();
-                }
+            getI(ic) {
+                return 'std'+ic+' '+ic;
+            },
+            getAna(ic) {
+                let tg = '';
+                this.analytic_xlator.forEach(function(val){
+                    if(val[ic]) {
+                        // console.log(val[ic]);
+                        tg = val[ic];
+                    }
+                });
+                return tg;
             },
             inLineClasses: function(data) {
                 var temp=  data.filter(function( obj ) {
                     if (obj ==='link2me') {
                         return obj + ' std' + obj;
                     }
+                });
+                return temp;
+            },
+            inLineAnaClasses: function(data) {
+                var temp=  '';
+                data.forEach(function( obj ) {
+                    if (obj ==='contribution') {
+                        temp = 'ana_bg_green';
+                    } else if(obj != 'metrics') {
+                        temp = 'ana_bg_yellow';
+                    }
+
                 });
                 return temp;
             },
@@ -424,18 +423,44 @@
                     return str;
                 }
             },
-            styles: function(ic) {
-                let style = "";
-                /*    if(this.rulesClasses.indexOf(ic) !== -1) {
-                        return "display:'none'";
-                    } */
-                return style;
+            quickCheck() {
+                if (this.editorContent !== '') {
+                    this.tokeniseTextInput();
+                }
             },
-            getI(ic) {
-                return 'std'+ic+' '+ic;
+            storeAnalysedDrafts(type) {
+                console.log("into auto store");
+                // this.$data.tap='';
+                this.$data.auto='processing....';
+                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
+                axios.post('/feedback/store', data)
+                    .then(response => {
+                        //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
+                    })
+                    .catch(e => {
+                        this.$data.errors.push(e)
+                    });
+            },
+            tokeniseTextInput() {
+                console.log("into tokenise");
+                //this.$data.autoCheckr =true;
+                this.$data.counter = 0;
+                axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
+                    .then(response => {
+                        this.splitText = response.data.tokenised;
+                        //this.$data.autoCheck=false;
+                        this.computeText(this.splitText, this.feedback.final);
+                        this.$data.counter = 0;
+                    })
+                    .catch(e => {
+                        this.$data.errors.push(e)
+                    });
+            },
+            updateAutoFeedback(){
+                if(this.autofeedback) {
+                    setInterval(this.quickCheck, 300000);
+                }
             }
-
-
         }
     }
 </script>
