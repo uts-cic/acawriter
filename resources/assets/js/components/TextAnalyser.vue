@@ -2,7 +2,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-            <div class="col-md-4"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span></div>
+            <div class="col-md-4 text-success">
+                <span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
+            </div>
 
 
             <!-- <div class="col-md-4">
@@ -59,11 +61,10 @@
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                      <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
-                       <span v-for="(m,id) in msg">
-                           <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp; &nbsp;
-                               <span v-bind:class="id"></span> <small><span v-html="m"></span></small>
-                       </span>
-
+                        <div class="row" v-for="(m,id) in msg">
+                            <div class="col-md-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
+                            <div class="col-md-10"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
+                        </div>
                     </div>
                     <hr />
                 </div>
@@ -79,7 +80,7 @@
                             <div class="col-md-2 text-right">
                                 <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
                             </div>
-                            <div class="col-md-2 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" /></div>
+                            <div class="col-md-2 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/></div>
                             <div class="col-md-6">
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                                     <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
@@ -165,13 +166,6 @@
 
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <small>Note: Feedback updated and stored automatically every 5 mins</small>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -199,7 +193,7 @@
             VueEditor
         },
         name: 'editor',
-        props:['document', 'slogs'],
+        props:['document', 'userActivity'],
         store,
         data () {
             return {
@@ -211,7 +205,7 @@
                 tempIds:[],
                 auto:'',
                 autosave:'',
-                autofeedback:'',
+                autofeedback:false,
                 splitText:[],
                 quickTags:'',
                 customToolbar: [
@@ -244,7 +238,7 @@
         created() {
             this.auto = '';
             //setInterval(this.storeAnalysedDrafts, 900000);
-            setInterval(this.quickCheck, 300000);
+           // setInterval(this.quickCheck, 300000);
         },
         computed: {
             reflective: function() {
@@ -286,6 +280,7 @@
                         feature:0
                    };
                 }
+                setInterval(this.storeAnalysedDrafts('auto'), 900000);
             },
             rulesClasses: function() {
                 let rules = [];
@@ -298,16 +293,23 @@
                 return classes;
             },
             draftUpdate: function() {
-                console.log(this.slogs);
                 let upd = {};
                 upd.message ='';
-                if(this.slogs){
+                var s = this;
+                if(this.userActivity && this.preSetAssignment){
                     //console.log(this.slogs.details.status);
-                    upd.message = this.slogs.details.status;
+                    this.userActivity.forEach(function(activity){
+                        if(activity.data) {
+                            if(activity.data.type==='Draft') {
+                                upd.message = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
+                                s.auto = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
+                            }
+                        }
+                    });
                 }
-                console.log(upd);
+
                 return upd;
-            }
+            },
         },
         watch :{
         },
@@ -368,7 +370,7 @@
                 let tg = '';
                 this.analytic_xlator.forEach(function(val){
                     if(val[ic]) {
-                        console.log(val[ic]);
+                       // console.log(val[ic]);
                         tg = val[ic];
                     }
                 });
@@ -433,7 +435,7 @@
                 let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
                 axios.post('/feedback/store', data)
                     .then(response => {
-                        this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
+                        //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
                     })
                     .catch(e => {
                         this.$data.errors.push(e)
@@ -453,6 +455,11 @@
                     .catch(e => {
                         this.$data.errors.push(e)
                     });
+            },
+            updateAutoFeedback(){
+                if(this.autofeedback) {
+                    setInterval(this.quickCheck, 300000);
+                }
             }
         }
     }
