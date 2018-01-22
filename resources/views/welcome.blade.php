@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    <img src="/images/uts_logo.png" /><br /><img src="https://utscic.edu.au/wp-content/uploads/2015/05/cropped-ciclogo.png" /><br />
+                    <img src="/images/uts_logo.png" alt="UTS"/><br /><img src="https://utscic.edu.au/wp-content/uploads/2015/05/cropped-ciclogo.png" alt="UTS CIC"/><br />
                     Academic Writing Analytics<sup>3.0</sup><br />
                    <!-- <a class="btn btn-lg btn-dark" href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw?entityID=https://test-aaf-login.uts.edu.au/idp/shibboleth"
                     >Get Started</a> -->

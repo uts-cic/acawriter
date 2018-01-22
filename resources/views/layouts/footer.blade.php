@@ -1,3 +1,4 @@
+<div class="clear"></div>
 <footer class="footer bg-dark">
     <div class="container">
         <div class="row">
@@ -6,15 +7,15 @@
                     <li class="list-inline-item">
                         <a href="/page/about">About</a>
                     </li>
-                    <li class="list-inline-item">&sdot;</li>
+
                     <li class="list-inline-item">
                         <a href="/page/contact">Contact</a>
                     </li>
-                    <li class="list-inline-item">&sdot;</li>
+
                     <li class="list-inline-item">
                         <a href="#">Terms of Use</a>
                     </li>
-                    <li class="list-inline-item">&sdot;</li>
+
                     <li class="list-inline-item">
                         <a href="#">Privacy Policy</a>
                     </li>
