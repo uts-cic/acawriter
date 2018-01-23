@@ -46,7 +46,6 @@ const apolloProvider = new VueApollo({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-//Vue.component('example', require('./components/Example.vue'));
 Vue.component('log-status', require('./components/lstatus.vue'));
 Vue.component('doc-editor', require('./components/TextAnalyser.vue'));
 Vue.component('internet-connection', require('./components/InternetConnection.vue'));
@@ -55,7 +54,8 @@ Vue.component('autocomplete', require('./components/Autocomplete.vue'));
 Vue.component('assignment-list', require('./components/Assignment.vue'));
 Vue.component('documents', require('./components/Document.vue'));
 Vue.component('edit-document', require('./components/modal/EditDocument.vue'));
-
+Vue.component('example-text', require('./components/Example.vue'));
+Vue.component('ex-doc-editor', require('./components/ExampleAnalyser.vue'));
 
 
 var socket = io.connect('http://localhost:3000');

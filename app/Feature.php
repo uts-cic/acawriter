@@ -15,4 +15,9 @@ class Feature extends Model
         return $this->hasMany('App\Draft');
     }
 
+    public function examples() {
+        return $this->hasMany('App\Example');
+    }
+
+
 }
