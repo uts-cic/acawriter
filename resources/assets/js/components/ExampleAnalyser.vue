@@ -7,6 +7,20 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-4"><lable for="faculty">Faculty</lable><input class="form-control" type="text" id="faculty" v-model="example.faculty" /></div>
+            <div class="col-md-4"><lable for="faculty">Title</lable><input class="form-control" type="text" id="title" v-model="example.title" /></div>
+            <div class="col-md-4"><label for="genre">Genre</label>
+                <select class="form-control"  id="genre">
+                <option value="">Select</option>
+                <option value="reflective">Reflective</option>
+                <option value="analytic">Analytic</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12"><label for="summary">Summary</label><input class="form-control" type="text" v-model="example.summary" id="summary" /></div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                     <ul>
@@ -160,7 +174,11 @@
                 tempIds:[],
                 auto:'',
                 autosave:'',
-
+                example:{
+                    faculty:'',
+                    title:'',
+                    summary:''
+                },
                 splitText:[],
                 quickTags:'',
                 customToolbar: [
