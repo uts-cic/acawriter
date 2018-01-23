@@ -79,7 +79,7 @@ class FeedbackController extends Controller
             $result->rules= $this->rules = $feedbackSchema["rules"];
         } else {
             $path = storage_path() . '/schema/' . $extra['grammar'] . '/' . $extra['feedbackOpt'] . '.json';
-            $feedbackSchema = $this->getFeedbackSchema($path);
+            $feedbackSchema = $this->getFeedbackSchema($path,0);
             $result->rules= $this->rules = $feedbackSchema['rules'];
         }
 
