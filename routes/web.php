@@ -77,6 +77,15 @@ Route::post('assignments/toUser', 'AssignmentController@subscribeUserToAssignmen
 
 
 
+//example texts
+    Route::get('/example', 'ExampleController@index');
+    Route::get('/example/analyse', 'ExampleController@analyse');
+    Route::get('/example/analyse/{code}', 'ExampleController@analyse');
+
+/* axois calls **/
+    Route::get('/example/all', 'ExampleController@fetchExamples');
+
+
 
 //staff & admin only pages
 
