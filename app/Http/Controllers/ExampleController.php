@@ -26,7 +26,7 @@ class ExampleController extends Controller
     public function fetchExamples() {
         $list = new \stdClass;
 
-        $list->examples = Example::with('feature');
+        $list->examples = Example::with('feature')->get();
         return response()->json($list);
 
     }
@@ -41,6 +41,38 @@ class ExampleController extends Controller
         }
 
         return view('example.analyse', ['data' => $details]);
+    }
+
+    public function store(Request $request) {
+
+        $this->validate(request(), [
+            'txt' => 'required',
+            'feedback' =>'required'
+        ]);
+
+        $status =array('success' => false, 'message' => 'Problem storing example');
+        $code = 500;
+
+
+        $example = new Example();
+
+        $example->feature_id = $request['extra']['feature'];
+        $example->title= $request['other']['title'];
+        $example->summary = $request['other']['summary'];
+        $example->faculty = $request['other']['faculty'];
+        $example->text_input = $request['txt'];
+        $example->raw_response = json_encode($request['feedback']);
+
+        $example->save();
+
+        if($example->id  >0 ) {
+            $status['message'] = 'Example text stored';
+            $status['success'] = true;
+            $code = 200;
+        }
+
+        return response()->json($status, $code);
+
     }
 
 
