@@ -84,6 +84,7 @@ Route::post('assignments/toUser', 'AssignmentController@subscribeUserToAssignmen
 
 /* axois calls **/
     Route::get('/example/all', 'ExampleController@fetchExamples');
+    Route::post('/example/store', 'ExampleController@store');
 
 
 

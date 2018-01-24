@@ -7,19 +7,28 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4"><lable for="faculty">Faculty</lable><input class="form-control" type="text" id="faculty" v-model="example.faculty" /></div>
-            <div class="col-md-4"><lable for="faculty">Title</lable><input class="form-control" type="text" id="title" v-model="example.title" /></div>
-            <div class="col-md-4"><label for="genre">Genre</label>
-                <select class="form-control"  id="genre">
-                <option value="">Select</option>
-                <option value="reflective">Reflective</option>
-                <option value="analytic">Analytic</option>
-                </select>
+            <div class="col-md-12">
+                <div class="card bg-secondary text-white">
+                    <div class="card-block p-3">
+                        <div class="row">
+                            <div class="col-md-4"><label for="faculty">Faculty</label><input class="form-control" type="text" id="faculty" v-model="example.faculty" /></div>
+                            <div class="col-md-4"><label for="faculty">Title</label><input class="form-control" type="text" id="title" v-model="example.title" /></div>
+                            <div class="col-md-4"><label for="genre">Genre</label>
+                                <select class="form-control" id="genre" v-model="example.genre">
+                                <option value="">Select</option>
+                                <option value="2">Reflective</option>
+                                <option value="1">Analytic</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><label for="summary">Summary</label><input class="form-control" type="text" v-model="example.summary" id="summary" /></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12"><label for="summary">Summary</label><input class="form-control" type="text" v-model="example.summary" id="summary" /></div>
-        </div>
+        <br />
         <div class="row">
             <div class="col-md-12">
                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
@@ -50,19 +59,17 @@
             <!-- start content -->
             <div id="content" class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-dark text-white">
+                    <div class="card-header bg-primary text-white">
                         <div class="row">
                             <div class="col-md-2">Example Text Analyser</div>
                             <div class="col-md-2 text-right">
                                 <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
-                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
-                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
-                                    <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
-
+                                    <button type="button" class="btn btn-primary" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
+                                    <button type="button" class="btn btn-primary btn-sm" v-on:click="storeAnalysedDrafts()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                                    <button type="button" id="sidebarCollapse" class="btn btn-primary"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
                                 </div>
                             </div>
 
@@ -81,8 +88,8 @@
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
 
                                 <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4>
-                                    <span v-if="processing"  class="text-success">
-                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
+                                    <span v-if="processing!=''" class="text-danger">
+                                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>{{processing}}
                                         <span class="sr-only">Loading...</span>
                                     </span>
                                     <hr /></div>
@@ -107,8 +114,8 @@
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
                                 <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
-                                    <span v-if="processing"  class="text-success">
-                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
+                                    <span v-if="processing!==''"  class="text-success">
+                                        <i class="fa fa-spinner fa-spin"></i> {{processing}}
                                         <span class="sr-only">Loading...</span>
                                     </span>
                                     <hr />
@@ -177,7 +184,8 @@
                 example:{
                     faculty:'',
                     title:'',
-                    summary:''
+                    summary:'',
+                    genre:1
                 },
                 splitText:[],
                 quickTags:'',
@@ -233,14 +241,14 @@
             },
             attributes: function() {
                 if(this.preSetAssignment) {
-                    if(this.preSetAssignment.draft) {
-                        this.editorContent = this.preSetAssignment.draft.text_input;
+                    if(this.preSetAssignment.raw_response) {
+                        this.editorContent = this.preSetAssignment.text_input;
 
-                        let data = {'savedFeed':JSON.parse(this.preSetAssignment.draft.raw_response)};
+                        let data = {'savedFeed':JSON.parse(this.preSetAssignment.raw_response)};
                         this.$store.dispatch('PRELOAD_FEEDBACK',data);
                         this.initFeedback = false;
                     }
-                    let feature = this.preSetAssignment.feature[0];
+                    let feature = this.preSetAssignment.feature;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
@@ -248,9 +256,9 @@
                     };
                 } else {
                     return {
-                        feedbackOpt:'a_01',
-                        grammar: 'analytic',
-                        feature:0
+                        feedbackOpt:this.example.genre== 1 ? 'a_01' : 'r_01',
+                        grammar: this.example.genre == 1 ? 'analytic' : 'reflective',
+                        feature:this.example.genre
                     };
                 }
                 //setInterval(this.storeAnalysedDrafts('auto'), 900000);
@@ -287,43 +295,6 @@
         watch :{
         },
         methods: {
-            computeText: function(nv, ov) {
-                var changedText='';
-                var self = this;
-                // var newTap = [];
-                var feedbackQueue=[];
-                if(nv.length===0) return;
-                nv.forEach(function(item, idx) {
-                    //console.log(item);
-                    if(typeof ov[idx]!=='undefined') {
-                        if(ov[idx].str!= item) {
-                            //str exits but str changed
-                            changedText = item;
-                            let a = idx;
-                            let data = {
-                                'send': {'txt': item, 'action': 'quick', 'extra': self.attributes},
-                                'idx': idx,
-                                'act': 'update'
-                            }
-                            self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
-                        } else if(ov[idx].str == item) {
-                            //feedbackQueue.push(ov[idx]);
-                            //console.log("283");
-                        }
-                    } else {
-                        //new str added to the the editor so get analysis
-                        //changedIds.push(idx);
-                        let b=idx;
-                        let data = {
-                            'send': {'txt': item, 'action': 'quick', 'extra': self.attributes},
-                            'idx': idx,
-                            'act': 'add'
-                        }
-                        self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
-                    }
-                });
-                //EventBus.$emit('compute-done', feedbackQueue);
-            },
             fetchFeedback() {
                 this.errors=[];
                 //this.autoCheck = true;
@@ -396,34 +367,12 @@
                     return str;
                 }
             },
-            quickCheck() {
-                if (this.editorContent !== '') {
-                    this.tokeniseTextInput();
-                }
-            },
-            storeAnalysedDrafts(type) {
-                console.log("into auto store");
-                // this.$data.tap='';
+            storeAnalysedDrafts() {
                 this.$data.auto='processing....';
-                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
-                axios.post('/feedback/store', data)
+                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes,'feedback':this.feedback, 'other':this.example};
+                axios.post('/example/store', data)
                     .then(response => {
-                        //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
-            },
-            tokeniseTextInput() {
-                console.log("into tokenise");
-                //this.$data.autoCheckr =true;
-                this.$data.counter = 0;
-                axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
-                    .then(response => {
-                        this.splitText = response.data.tokenised;
-                        //this.$data.autoCheck=false;
-                        this.computeText(this.splitText, this.feedback.final);
-                        this.$data.counter = 0;
+                        this.$data.auto = 'Stored : '+ moment().format('DD/MM/YYYY hh:mma');
                     })
                     .catch(e => {
                         this.$data.errors.push(e)

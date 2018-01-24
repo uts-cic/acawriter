@@ -8,12 +8,13 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         feedback :[],
-        loading: false
+        loading: ''
     },
     actions: {
         LOAD_FEEDBACK: function ({ commit, state }, params) {
-            commit( 'SET_LOADING', {status:true} );
+            commit( 'SET_LOADING', {status:'Processing - step 1 of 2 completed'} );
             axios.post('/feedback', params).then((response) => {
+                commit( 'SET_LOADING', {status:'Processing - step  2 of 2 completed'} );
                 commit('UPDATE_FEEDBACK', { feedback: response.data })
             }, (err) => {
                 console.log(err)
@@ -31,14 +32,13 @@ const store = new Vuex.Store({
             })
         },
         PRELOAD_FEEDBACK: function ({ commit, state }, params) {
-            commit( 'SET_LOADING', {status:true} );
             commit('UPDATE_FEEDBACK', { feedback: params.savedFeed });
         },
     },
     mutations: {
         UPDATE_FEEDBACK: (state, {feedback }) => {
             state.feedback = feedback;
-            state.loading = false;
+            state.loading = '';
         },
         UPDATE_SINGLE_FEEDBACK: (state, { feedback, idx }) => {
             if(idx!==-1) state.feedback.final[idx] = feedback.final[0];
