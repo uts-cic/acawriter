@@ -46,7 +46,7 @@
         },
         methods:{
             fetchExamples() {
-                axios.get('/examples/all').then((response) => {
+                axios.get('/example/all').then((response) => {
                     this.$data.lists = response.data.examples;
                 }, (err) => {
                     this.$data.errors.push(e)
