@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Example;
 use App\Feature;
+use App\User;
+use Auth;
 
 class ExampleController extends Controller
 {
@@ -34,13 +36,17 @@ class ExampleController extends Controller
 
     public function analyse($code=NULL) {
 
+        $result = new \stdClass;
         $details = array();
+        $user_id = Auth::user()->id;
+        $result->isAdmin = User::find($user_id)->hasRole('admin');
 
         if(isset($code)) {
            $details = Example::where('id', $code)->with('feature')->get();
         }
+        $result->details = $details;
 
-        return view('example.analyse', ['data' => $details]);
+        return view('example.analyse', ['data' => $result]);
     }
 
     public function store(Request $request) {

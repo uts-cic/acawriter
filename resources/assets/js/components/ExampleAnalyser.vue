@@ -6,7 +6,7 @@
                 <span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
             </div>
         </div>
-        <div class="row">
+        <div v-if="admin" class="row">
             <div class="col-md-12">
                 <div class="card bg-secondary text-white">
                     <div class="card-block p-3">
@@ -68,7 +68,7 @@
                             <div class="col-md-8">
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                                     <button type="button" class="btn btn-primary" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
-                                    <button type="button" class="btn btn-primary btn-sm" v-on:click="storeAnalysedDrafts()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                                    <button type="button" class="btn btn-primary btn-sm" v-if="admin" v-on:click="storeAnalysedDrafts()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
                                     <button type="button" id="sidebarCollapse" class="btn btn-primary"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
                                 </div>
                             </div>
@@ -169,7 +169,7 @@
             VueEditor
         },
         name: 'editor',
-        props:['ex'],
+        props:['ex', 'role'],
         store,
         data () {
             return {
@@ -232,6 +232,9 @@
                 feedback: 'currentFeedback',
                 processing: 'loadingStatus'
             }),
+            admin: function() {
+                return this.role;
+            },
             preSetAssignment: function() {
                 if(this.ex) {
                     return JSON.parse(this.ex);

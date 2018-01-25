@@ -2,10 +2,10 @@
 
 @section('content')
 <div id="app">
-    @if (isset($data[0]))
-    <ex-doc-editor ex="{{$data[0]}}"></ex-doc-editor>
+    @if (isset($data->details[0]))
+    <ex-doc-editor ex="{{$data->details[0]}}" role="{{$data->isAdmin}}"></ex-doc-editor>
     @else
-    <ex-doc-editor ex=""></ex-doc-editor>
+    <ex-doc-editor ex="" role="{{$data->isAdmin}}"></ex-doc-editor>
     @endif
 
 </div>
