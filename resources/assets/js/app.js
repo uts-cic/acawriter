@@ -139,9 +139,17 @@ $(document).ready(function () {
             $('.wrapper .'+r).addClass('hidemarkup');
         }*/
         if($(this).is(':checked')) {
-            $('.wrapper .std'+r).addClass(r);
+            if(r==='modal') {
+                $('.wrapper .std' + r).addClass('modall');
+            } else {
+                $('.wrapper .std' + r).addClass(r);
+            }
         } else {
-            $('.wrapper .std'+r).removeClass(r);
+            if(r==='modal') {
+                $('.wrapper .std' + r).removeClass('modall');
+            } else {
+                $('.wrapper .std' + r).removeClass(r);
+            }
         }
     });
 
