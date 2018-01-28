@@ -5,44 +5,6 @@
             <div class="col-md-4 text-success">
                 <span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
             </div>
-
-
-            <!-- <div class="col-md-4">
-                <div class="card bg-default">
-                    <div class="card-header">
-                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
-                            Feedback
-                        </button>
-                    </div>
-                    <div class="card-body collapse" id="a">
-                        <p class="card-text text-white">
-                            <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
-                            <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
-                        </p>
-                    </div>
-                    <div class="collapse" id="b">
-                        <div class="card card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="grammar">Grammar</label>
-                                    <select class="form-control" id="grammar" v-model="attributes.grammar">
-                                        <option value="">Select</option>
-                                        <option value="reflective">Reflective</option>
-                                        <option value="analytic">Analytic</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="feedbackOpt">Feedback Rules</label>
-                                    <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
-                                        <option value="r_01">Reflective01</option>
-                                        <option value="a_01">Analytic01</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -317,66 +279,6 @@
                     //this.autoCheck = false;
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
-                }
-            },
-            getI(ic) {
-                return 'std'+ic+' '+ic;
-            },
-            getAna(ic) {
-                let tg = '';
-                this.analytic_xlator.forEach(function(val){
-                    if(val[ic]) {
-                       // console.log(val[ic]);
-                        tg = val[ic];
-                    }
-                });
-                return tg;
-            },
-            inLineClasses: function(data) {
-                var temp=  data.filter(function( obj ) {
-                    if (obj ==='link2me') {
-                        return obj + ' std' + obj;
-                    }
-                });
-                return temp;
-            },
-            inLineAnaClasses: function(data) {
-                var temp=  '';
-                data.forEach(function( obj ) {
-                    if (obj ==='contribution') {
-                        temp = 'ana_bg_green';
-                    } else if(obj != 'metrics') {
-                        temp = 'ana_bg_yellow';
-                    }
-
-                });
-                return temp;
-            },
-            inText: function(data) {
-                if(data.str!=='' && typeof data.expression!== 'undefined') {
-                    let str = data.str;
-                    if(data.expression.affect.length > 0) {
-                        data.expression.affect.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='stdaffect affect'>"+word.text+"</span>");
-                        });
-
-                    }
-                    if(data.expression.epistemic.length > 0) {
-                        data.expression.epistemic.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='stdepistemic epistemic'>"+word.text+"</span>");
-                        });
-                    }
-                    if(data.expression.modal.length > 0) {
-                        data.expression.modal.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='stdmodal modall'>"+word.text+"</span>");
-                        });
-                    }
-                    return str;
-
-
-                } else {
-                    let str = '';
-                    return str;
                 }
             },
             quickCheck() {
