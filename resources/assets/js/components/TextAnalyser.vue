@@ -57,13 +57,14 @@
             <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
+                    <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>&nbsp;&nbsp;
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                      <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
                         <div class="row" v-for="(m,id) in msg">
-                            <div class="col-md-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
-                            <div class="col-md-10"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
+                            <div class="col-md-1 col-xs-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
+                            <div class="col-md-10 col-xs-11"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
                         </div>
                     </div>
                     <hr />
@@ -104,63 +105,14 @@
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-
-                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4>
-                                    <span v-if="processing"  class="text-success">
-                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
-                                        <span class="sr-only">Loading...</span>
-                                    </span>
-                                <hr /></div>
-                                <div class="col-md-12 wrapper">
-                                    <!--<span v-html="editorContent"></span>-->
-
-                                    <span v-for="(feed,idx) in feedback.final">
-                                        <span v-for="ic in feed.css">
-                                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
-                                                <span v-bind:class="getI(ic)"></span>
-                                            </template>
-                                        </span>
-                                       <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
-                                        <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
-
-                                    </span>
-                                </div>
+                                <reflective-result :feed="feedback" :processing="processing"></reflective-result>
                             </div>
                             <!-- end of reflective -->
 
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
-                                    <span v-if="processing"  class="text-success">
-                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
-                                        <span class="sr-only">Loading...</span>
-                                    </span>
-                                    <hr />
-                                </div>
-                                <div class="col-md-12 wrapper">
-                                    <span v-for="(feed,idx) in feedback.final">
-                                        <!-- <span v-if="feed.metrics.message.length==0"></span>
-                                        <span v-else class="metrics">&nbsp;</span>
-                                        <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span class="badge badge-pill badge-analytic">{{rmoves}}</span>
-                                        </span>
-                                        <span v-html="feed.str"></span> -->
-                                        <span v-for="ic in feed.css">
-                                            <template v-if="ic=='contribution'">
-                                                <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
-                                            </template>
-                                            <template v-else-if="ic=='metrics'">
-                                                <span v-bind:class="ic"></span>
-                                            </template>
-                                            <template v-else>
-                                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAna(ic)"></span>
-                                            </template>
-                                        </span>
-                                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>
-
-                                    </span>
-                                </div>
+                                <analytic-result :feed="feedback" :processing="processing"></analytic-result>
                             </div>
                             <!-- end of analytics -->
 
@@ -176,7 +128,7 @@
 </template>
 
 <script>
-    /**
+    /**\
      commented out - license needed
      import VueFroala from 'vue-froala-wysiwyg';
      Vue.use(VueFroala);
@@ -187,10 +139,14 @@
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
+    import  Reflective from './analyser/Reflective.vue';
+    import  Analytic from './analyser/Analytic.vue';
 
     export default {
         components: {
-            VueEditor
+            VueEditor,
+            reflectiveResult: Reflective,
+            analyticResult: Analytic
         },
         name: 'editor',
         props:['document', 'userActivity'],
