@@ -1,0 +1,79 @@
+<template>
+    <div>
+    <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4>
+        <span v-if="processing!=''" class="text-danger">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>{{processing}}
+            <span class="sr-only">Loading...</span>
+        </span>
+        <hr />
+    </div>
+    <div class="col-md-12 wrapper">
+        <span v-for="(feed,idx) in feedback.final">
+            <span v-for="ic in feed.css">
+                <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
+                    <span v-bind:class="getIcons(ic)"></span>
+                </template>
+            </span>
+            <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
+        </span>
+    </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "reflectiveResult",
+        props: ['feed','processing'],
+        data() {
+            return {
+            }
+        },
+        mounted:function() {
+        },
+        methods:{
+            getIcons(ic) {
+                return 'std'+ic+' '+ic;
+            },
+            inLineClasses: function(data) {
+                var temp=  data.filter(function( obj ) {
+                    if (obj ==='link2me') {
+                        return obj + ' std' + obj;
+                    }
+                });
+                return temp;
+            },
+            inText: function(data) {
+                if(data.str!=='' && typeof data.expression!== 'undefined') {
+                    let str = data.str;
+                    if(data.expression.affect.length > 0) {
+                        data.expression.affect.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='stdaffect affect'>"+word.text+"</span>");
+                        });
+
+                    }
+                    if(data.expression.epistemic.length > 0) {
+                        data.expression.epistemic.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='stdepistemic epistemic'>"+word.text+"</span>");
+                        });
+                    }
+                    if(data.expression.modal.length > 0) {
+                        data.expression.modal.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='stdmodal modall'>"+word.text+"</span>");
+                        });
+                    }
+                    return str;
+
+
+                } else {
+                    let str = '';
+                    return str;
+                }
+            }
+        },
+        computed:{
+            feedback() {
+                return this.feed;
+            }
+        }
+    }
+</script>
