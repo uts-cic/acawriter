@@ -155,7 +155,16 @@ $(document).ready(function () {
         }
     });
 
+    $('#extendOut').on('click', openWindow)
 
+
+    function openWindow(){
+        var w = window.open('','AWA3 key','width=600, height=600');
+        var html = "<html><head><title>AWA3 Key</title><link rel=\"stylesheet\" type=\"text/css\" href='/css/app.css'></head><body>";
+        html +=  $('#sidebar').html();
+        html += '</body></html>';
+        w.document.write(html);
+    }
 
 
 });

@@ -2,6 +2,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
+            <div class="col-md-4 text-success">
+                <span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
+            </div>
         </div>
         <div v-if="admin" class="row">
             <div class="col-md-12">
@@ -12,9 +15,9 @@
                             <div class="col-md-4"><label for="faculty">Title</label><input class="form-control" type="text" id="title" v-model="example.title" /></div>
                             <div class="col-md-4"><label for="genre">Genre</label>
                                 <select class="form-control" id="genre" v-model="example.genre">
-                                <option value="">Select</option>
-                                <option value="2">Reflective</option>
-                                <option value="1">Analytic</option>
+                                    <option value="">Select</option>
+                                    <option value="2">Reflective</option>
+                                    <option value="1">Analytic</option>
                                 </select>
                             </div>
                         </div>
@@ -39,9 +42,7 @@
             <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
-                    <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>
                 </div>
-
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                     <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
@@ -79,19 +80,63 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div id="editor">
+                                    <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
                                     <vue-editor v-model="editorContent" :editorToolbar="customToolbar"></vue-editor>
                                 </div>
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <reflective-result :feed="feedback" :processing="processing"></reflective-result>
+
+                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4>
+                                    <span v-if="processing!=''" class="text-danger">
+                                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>{{processing}}
+                                        <span class="sr-only">Loading...</span>
+                                    </span>
+                                    <hr /></div>
+                                <div class="col-md-12 wrapper">
+                                    <!--<span v-html="editorContent"></span>-->
+
+                                    <span v-for="(feed,idx) in feedback.final">
+                                        <span v-for="ic in feed.css">
+                                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
+                                                <span v-bind:class="getI(ic)"></span>
+                                            </template>
+                                        </span>
+                                        <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
+                                        <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
+
+                                    </span>
+                                </div>
                             </div>
                             <!-- end of reflective -->
 
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <analytic-result :feed="feedback" :processing="processing"></analytic-result>
+                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
+                                    <span v-if="processing!==''"  class="text-success">
+                                        <i class="fa fa-spinner fa-spin"></i> {{processing}}
+                                        <span class="sr-only">Loading...</span>
+                                    </span>
+                                    <hr />
+                                </div>
+                                <div class="col-md-12 wrapper">
+                                    <span v-for="(feed,idx) in feedback.final">
+                                        <span v-for="ic in feed.css">
+                                            <template v-if="ic=='contribution'">
+                                                <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
+                                            </template>
+                                            <template v-else-if="ic=='metrics'">
+                                                <span v-bind:class="ic"></span>
+                                            </template>
+                                            <template v-else>
+                                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAna(ic)"></span>
+                                            </template>
+                                        </span>
+                                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>
+
+                                    </span>
+                                </div>
                             </div>
                             <!-- end of analytics -->
 
@@ -113,18 +158,15 @@
      Vue.use(VueFroala);
      *
      */
+    const EventBus = new Vue();
     import { VueEditor } from 'vue2-editor';
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
-    import  Reflective from './analyser/Reflective.vue';
-    import  Analytic from './analyser/Analytic.vue';
 
     export default {
         components: {
-            VueEditor,
-            reflectiveResult: Reflective,
-            analyticResult: Analytic
+            VueEditor
         },
         name: 'editor',
         props:['ex', 'role'],
@@ -156,6 +198,16 @@
                     iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
                     inText :['affect', 'epistemic','modall']
                 },
+                analytic_xlator:[
+                    {'metrics': 'metrics'},
+                    {'emph': 'E'},
+                    {'vis': 'T'},
+                    {'contrast': 'C'},
+                    {'contribution': 'S'},
+                    {'novstat': 'N'},
+                    {'tempstat': 'B'},
+                    {'attitude': 'P'},
+                ],
                 initFeedback:true
             }
         },
@@ -223,7 +275,25 @@
                 });
                 let classes = [].concat(...rules);
                 return classes;
-            }
+            },
+            draftUpdate: function() {
+                let upd = {};
+                upd.message ='';
+                var s = this;
+                if(this.userActivity && this.preSetAssignment){
+                    //console.log(this.slogs.details.status);
+                    this.userActivity.forEach(function(activity){
+                        if(activity.data) {
+                            if(activity.data.type==='Draft') {
+                                upd.message = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
+                                s.auto = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
+                            }
+                        }
+                    });
+                }
+
+                return upd;
+            },
         },
         watch :{
         },
@@ -239,7 +309,68 @@
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
-            },storeAnalysedDrafts() {
+            },
+            getI(ic) {
+                return 'std'+ic+' '+ic;
+            },
+            getAna(ic) {
+                let tg = '';
+                this.analytic_xlator.forEach(function(val){
+                    if(val[ic]) {
+                        // console.log(val[ic]);
+                        tg = val[ic];
+                    }
+                });
+                return tg;
+            },
+            inLineClasses: function(data) {
+                var temp=  data.filter(function( obj ) {
+                    if (obj ==='link2me') {
+                        return obj + ' std' + obj;
+                    }
+                });
+                return temp;
+            },
+            inLineAnaClasses: function(data) {
+                var temp=  '';
+                data.forEach(function( obj ) {
+                    if (obj ==='contribution') {
+                        temp = 'ana_bg_green';
+                    } else if(obj != 'metrics') {
+                        temp = 'ana_bg_yellow';
+                    }
+
+                });
+                return temp;
+            },
+            inText: function(data) {
+                if(data.str!=='' && typeof data.expression!== 'undefined') {
+                    let str = data.str;
+                    if(data.expression.affect.length > 0) {
+                        data.expression.affect.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='stdaffect affect'>"+word.text+"</span>");
+                        });
+
+                    }
+                    if(data.expression.epistemic.length > 0) {
+                        data.expression.epistemic.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='stdepistemic epistemic'>"+word.text+"</span>");
+                        });
+                    }
+                    if(data.expression.modal.length > 0) {
+                        data.expression.modal.forEach(function(word) {
+                            str = str.replace(word.text, "<span class='stdmodal modall'>"+word.text+"</span>");
+                        });
+                    }
+                    return str;
+
+
+                } else {
+                    let str = '';
+                    return str;
+                }
+            },
+            storeAnalysedDrafts() {
                 this.$data.auto='processing....';
                 let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes,'feedback':this.feedback, 'other':this.example};
                 axios.post('/example/store', data)
