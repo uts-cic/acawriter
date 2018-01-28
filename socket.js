@@ -23,9 +23,6 @@ http.listen(3000,function(){
 
 
 
-
-
-
 // subscribe to various channels here
 
     redis.subscribe('operational-log',function(e,dd){
@@ -33,7 +30,6 @@ http.listen(3000,function(){
     });
 
     redis.subscribe('private-dashboard', function(err, d){
-        console.log("dash"+d);
 
     });
 
