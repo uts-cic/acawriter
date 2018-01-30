@@ -5,44 +5,6 @@
             <div class="col-md-4 text-success">
                 <span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
             </div>
-
-
-            <!-- <div class="col-md-4">
-                <div class="card bg-default">
-                    <div class="card-header">
-                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
-                            Feedback
-                        </button>
-                    </div>
-                    <div class="card-body collapse" id="a">
-                        <p class="card-text text-white">
-                            <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
-                            <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
-                        </p>
-                    </div>
-                    <div class="collapse" id="b">
-                        <div class="card card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="grammar">Grammar</label>
-                                    <select class="form-control" id="grammar" v-model="attributes.grammar">
-                                        <option value="">Select</option>
-                                        <option value="reflective">Reflective</option>
-                                        <option value="analytic">Analytic</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="feedbackOpt">Feedback Rules</label>
-                                    <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
-                                        <option value="r_01">Reflective01</option>
-                                        <option value="a_01">Analytic01</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -57,13 +19,14 @@
             <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
+                    <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>&nbsp;&nbsp;
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                      <h6 class="card-subtitle mb-2">&nbsp;</h6>
                     <div v-for="msg in rule.message">
                         <div class="row" v-for="(m,id) in msg">
-                            <div class="col-md-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
-                            <div class="col-md-10"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
+                            <div class="col-md-1 col-xs-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
+                            <div class="col-md-10 col-xs-11"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
                         </div>
                     </div>
                     <hr />
@@ -104,63 +67,14 @@
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-
-                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4>
-                                    <span v-if="processing"  class="text-success">
-                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
-                                        <span class="sr-only">Loading...</span>
-                                    </span>
-                                <hr /></div>
-                                <div class="col-md-12 wrapper">
-                                    <!--<span v-html="editorContent"></span>-->
-
-                                    <span v-for="(feed,idx) in feedback.final">
-                                        <span v-for="ic in feed.css">
-                                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
-                                                <span v-bind:class="getI(ic)"></span>
-                                            </template>
-                                        </span>
-                                       <!-- &nbsp;<span v-html="feed.str" v-bind:class="[inLineClasses(feed.css)]"></span> -->
-                                        <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
-
-                                    </span>
-                                </div>
+                                <reflective-result :feed="feedback" :processing="processing"></reflective-result>
                             </div>
                             <!-- end of reflective -->
 
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
-                                    <span v-if="processing"  class="text-success">
-                                        <i class="fa fa-spinner fa-spin"></i> Processing text .....
-                                        <span class="sr-only">Loading...</span>
-                                    </span>
-                                    <hr />
-                                </div>
-                                <div class="col-md-12 wrapper">
-                                    <span v-for="(feed,idx) in feedback.final">
-                                        <!-- <span v-if="feed.metrics.message.length==0"></span>
-                                        <span v-else class="metrics">&nbsp;</span>
-                                        <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span class="badge badge-pill badge-analytic">{{rmoves}}</span>
-                                        </span>
-                                        <span v-html="feed.str"></span> -->
-                                        <span v-for="ic in feed.css">
-                                            <template v-if="ic=='contribution'">
-                                                <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
-                                            </template>
-                                            <template v-else-if="ic=='metrics'">
-                                                <span v-bind:class="ic"></span>
-                                            </template>
-                                            <template v-else>
-                                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAna(ic)"></span>
-                                            </template>
-                                        </span>
-                                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>
-
-                                    </span>
-                                </div>
+                                <analytic-result :feed="feedback" :processing="processing"></analytic-result>
                             </div>
                             <!-- end of analytics -->
 
@@ -176,7 +90,7 @@
 </template>
 
 <script>
-    /**
+    /**\
      commented out - license needed
      import VueFroala from 'vue-froala-wysiwyg';
      Vue.use(VueFroala);
@@ -187,10 +101,14 @@
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
+    import  Reflective from './analyser/Reflective.vue';
+    import  Analytic from './analyser/Analytic.vue';
 
     export default {
         components: {
-            VueEditor
+            VueEditor,
+            reflectiveResult: Reflective,
+            analyticResult: Analytic
         },
         name: 'editor',
         props:['document', 'userActivity'],
@@ -361,66 +279,6 @@
                     //this.autoCheck = false;
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
-                }
-            },
-            getI(ic) {
-                return 'std'+ic+' '+ic;
-            },
-            getAna(ic) {
-                let tg = '';
-                this.analytic_xlator.forEach(function(val){
-                    if(val[ic]) {
-                       // console.log(val[ic]);
-                        tg = val[ic];
-                    }
-                });
-                return tg;
-            },
-            inLineClasses: function(data) {
-                var temp=  data.filter(function( obj ) {
-                    if (obj ==='link2me') {
-                        return obj + ' std' + obj;
-                    }
-                });
-                return temp;
-            },
-            inLineAnaClasses: function(data) {
-                var temp=  '';
-                data.forEach(function( obj ) {
-                    if (obj ==='contribution') {
-                        temp = 'ana_bg_green';
-                    } else if(obj != 'metrics') {
-                        temp = 'ana_bg_yellow';
-                    }
-
-                });
-                return temp;
-            },
-            inText: function(data) {
-                if(data.str!=='' && typeof data.expression!== 'undefined') {
-                    let str = data.str;
-                    if(data.expression.affect.length > 0) {
-                        data.expression.affect.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='stdaffect affect'>"+word.text+"</span>");
-                        });
-
-                    }
-                    if(data.expression.epistemic.length > 0) {
-                        data.expression.epistemic.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='stdepistemic epistemic'>"+word.text+"</span>");
-                        });
-                    }
-                    if(data.expression.modal.length > 0) {
-                        data.expression.modal.forEach(function(word) {
-                            str = str.replace(word.text, "<span class='stdmodal modall'>"+word.text+"</span>");
-                        });
-                    }
-                    return str;
-
-
-                } else {
-                    let str = '';
-                    return str;
                 }
             },
             quickCheck() {

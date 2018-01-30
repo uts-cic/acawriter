@@ -139,9 +139,17 @@ $(document).ready(function () {
             $('.wrapper .'+r).addClass('hidemarkup');
         }*/
         if($(this).is(':checked')) {
-            $('.wrapper .std'+r).addClass(r);
+            if(r==='modal') {
+                $('.wrapper .std' + r).addClass('modall');
+            } else {
+                $('.wrapper .std' + r).addClass(r);
+            }
         } else {
-            $('.wrapper .std'+r).removeClass(r);
+            if(r==='modal') {
+                $('.wrapper .std' + r).removeClass('modall');
+            } else {
+                $('.wrapper .std' + r).removeClass(r);
+            }
         }
     });
 
@@ -159,7 +167,7 @@ $(document).ready(function () {
 
 
     function openWindow(){
-        var w = window.open('','AWA3 key','width=600, height=600');
+        var w = window.open('','AWA3 key','width=770, height=600, toolbar=no,location=no,status=no,menubar=no,addressbar=0');
         var html = "<html><head><title>AWA3 Key</title><link rel=\"stylesheet\" type=\"text/css\" href='/css/app.css'></head><body>";
         html +=  $('#sidebar').html();
         html += '</body></html>';
