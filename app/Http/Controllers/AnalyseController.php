@@ -7,7 +7,7 @@ use App\Assignment;
 use App\Document;
 use App\Draft;
 use App\Feature;
-
+use Auth;
 
 class AnalyseController extends Controller
 {
@@ -25,10 +25,17 @@ class AnalyseController extends Controller
 
     public function index($code=NULL) {
 
+        $user_id = Auth::user()->id;
         if(isset($code)) {
 
-            $this->ui->document = Document::where('slug', '=', $code)->with('assignment')->get();
+            $this->ui->document = Document::where('slug', '=', $code)
+                                            ->where('user_id',$user_id)
+                                            ->with('assignment')
+                                            ->get();
 
+            if(count($this->ui->document) == 0) {
+                return redirect('home');
+            }
             $this->ui->document[0]->feature = Feature::where('id',$this->ui->document[0]->assignment->feature_id)->get();
 
             $this->ui->document[0]->draft = Draft::where('document_id',$this->ui->document[0]->id)->orderBy('created_at','desc')->first();
