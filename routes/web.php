@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Artisan;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
+
+Route::get('/page/{which}', 'PageController@page');
 
 Route::get('/log',function(){
    return view('log');
@@ -27,7 +29,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/page/{which}', 'HomeController@page');
+
 
 
 
