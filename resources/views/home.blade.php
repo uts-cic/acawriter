@@ -14,10 +14,10 @@
             <div class="card-header bg-dark text-white">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#new" data-toggle="tab">Create a new Document</a>
+                        <a class="nav-link active" href="#new" data-toggle="tab">Create a new document</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#assignment" data-toggle="tab">Enter my Assignment code</a>
+                        <a class="nav-link" href="#assignment" data-toggle="tab">Enter my assignment code</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#document" data-toggle="tab">View my documents</a>
