@@ -60,7 +60,6 @@ Vue.component('ex-doc-editor', require('./components/ExampleAnalyser.vue'));
 
 var socket = io.connect('http://localhost:3000');
 import moment from 'moment';
-
 const app = new Vue({
     el: '#app',
     apolloProvider,

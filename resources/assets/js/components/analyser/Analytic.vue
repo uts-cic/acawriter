@@ -38,7 +38,7 @@
                     {'vis': 'T'},
                     {'contrast': 'C'},
                     {'contribution': 'S'},
-                    {'novstat': 'N'},
+                    {'nostat': 'N'},
                     {'tempstat': 'B'},
                     {'attitude': 'P'},
                 ],
