@@ -59,7 +59,7 @@ class FeaturesTableUpdateSeeder extends Seeder
             \"emph\",
             \"vis\",
             \"contribution\",
-            \"novstat\",
+            \"nostat\",
             \"contrast\",
             \"tempstat\",
             \"surprise\"
@@ -70,7 +70,7 @@ class FeaturesTableUpdateSeeder extends Seeder
           {\"attitude\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">P<\/span> A perspective or stance\"},
           {\"emph\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">E<\/span> Emphasis or importance to ideas \"},
           {\"vis\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">T<\/span> A trend or tendency related to ideas approaches and methods\"},
-          {\"novstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N<\/span> Novelty improvements of ideas methods\"},
+          {\"nostat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N<\/span> Novelty improvements of ideas methods\"},
           {\"contrast\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">C<\/span> Disagreement, Tension, Options, Inconsistency\"},
           {\"tempstat\": \"<span class=\\\"badge badge-pill badge-analytic\\\">B<\/span> Reference to generally accepted previous work\"}
         ],
