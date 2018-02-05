@@ -20,7 +20,7 @@
                         <a href="#">Privacy Policy</a>
                     </li>
                 </ul>
-                <p class="small mx-auto">&copy; Copyright UTS - CRICOS Provider No: 00099F. The page is authorised by Deputy Vice-Chancellor and Vice-President (Corporate Services).</p>
+                <p class="small mx-auto">&copy; Copyright UTS - CRICOS Provider No: 00099F. Authorised by the Director, Connected Intelligence Centre.</p>
             </div>
         </div>
     </div>
