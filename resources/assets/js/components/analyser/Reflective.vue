@@ -21,9 +21,15 @@
 </template>
 
 <script>
+
+    import store from '../../store';
+    import { mapState, mapActions, mapGetters} from 'vuex';
+
+
     export default {
         name: "reflectiveResult",
-        props: ['feed','processing'],
+        //props: ['feed','processing'],
+        store,
         data() {
             return {
             }
@@ -71,9 +77,11 @@
             }
         },
         computed:{
-            feedback() {
-                return this.feed;
-            }
+            ...mapGetters({
+                feedback: 'currentFeedback',
+                processing: 'loadingStatus'
+            }),
+
         }
     }
 </script>
