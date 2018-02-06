@@ -22,7 +22,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <!-- Branding Image -->
             <a class="navbar-brand" href="{{ url('/home') }}">
-                {{ config('app.name', 'Writing Tutor') }}
+                <i class="fa fa-home"></i>
             </a>
             <!-- Collapsed Hamburger -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,8 +30,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav">
-                        &nbsp;
+                <ul class="nav navbar-nav iconic">
+                    <li class="nav-item"><a class="nav-link" href="/page/about"><i class="fa fa-info-circle"></i></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/page/contact"><i class="fa fa-envelope"></i></a></li>
                 </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -58,7 +59,7 @@
                     @else
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {{ Auth::user()->name }} <span class="caret"></span>
+                            {{ Auth::user()->name }} <span class="fa fa-caret"></span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('logout') }}"

@@ -16,10 +16,6 @@
   margin-left: -450px;
 }
 
-.bg-uts-primary {
-  background-color:#0000FF;
-}
-
 
 a[data-toggle="collapse"] {
   position: relative;
@@ -62,34 +58,4 @@ a[aria-expanded="true"]::before {
 
 #sidebar .sidebar-header {
   background: #0000FF;
-}
-
-#sidebar ul.components {
-  padding: 20px 0;
-  border-bottom: 1px solid #47748b;
-}
-
-#sidebar ul p {
-  color: #fff;
-  padding: 10px;
-}
-
-#sidebar ul li a {
-  padding: 10px;
-  font-size: 1.1em;
-  display: block;
-}
-#sidebar ul li a:hover {
-  color: #7386D5;
-  background: #fff;
-}
-
-#sidebar ul li.active > a, a[aria-expanded="true"] {
-  color: #fff;
-  background: #6d7fcc;
-}
-ul ul a {
-  font-size: 0.9em !important;
-  padding-left: 30px !important;
-  background: #6d7fcc;
 }

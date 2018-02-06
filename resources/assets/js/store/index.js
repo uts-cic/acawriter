@@ -21,10 +21,13 @@ const store = new Vuex.Store({
             })
         },
         FETCH_TOKENISED_FEEDBACK: function({commit, state}, params){
+            commit( 'SET_LOADING', {status:'Auto feedback initiated'} );
             axios.post('/feedback', params.send).then((response) => {
+
                 if(params.act==='update') {
                     commit('UPDATE_SINGLE_FEEDBACK', {feedback: response.data, idx: params.idx})
                 } else {
+
                     commit('ADD_SINGLE_FEEDBACK', {feedback: response.data, idx: params.idx})
                 }
             }, (err) => {
@@ -41,12 +44,16 @@ const store = new Vuex.Store({
             state.loading = '';
         },
         UPDATE_SINGLE_FEEDBACK: (state, { feedback, idx }) => {
-            if(idx!==-1) state.feedback.final[idx] = feedback.final[0];
+            //if(idx!==-1) state.feedback.final[idx] = feedback.final[0];
+            if(idx!==-1) Vue.set(state.feedback.final, idx, feedback.final[0]);
+            state.loading = '';
         },
         ADD_SINGLE_FEEDBACK: (state, { feedback, idx }) => {
             if(idx!==-1) {
-                state.feedback.final[idx] = feedback.final[0];
+                //state.feedback.final[idx] = feedback.final[0];
+                Vue.set(state.feedback.final, idx, feedback.final[0]);
             }
+            state.loading = '';
         },
         SET_LOADING: (state, {status}) => {
             state.loading = status;
