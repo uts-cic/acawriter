@@ -27,9 +27,15 @@
 </template>
 
 <script>
+
+    import store from '../../store';
+    import { mapState, mapActions, mapGetters} from 'vuex';
+
+
     export default {
         name: "analyticResult",
-        props: ['feed','processing'],
+        //props: ['feed','processing'],
+        store,
         data() {
             return {
                 analytic_xlator:[
@@ -38,7 +44,7 @@
                     {'vis': 'T'},
                     {'contrast': 'C'},
                     {'contribution': 'S'},
-                    {'novstat': 'N'},
+                    {'nostat': 'N'},
                     {'tempstat': 'B'},
                     {'attitude': 'P'},
                 ],
@@ -69,9 +75,19 @@
             }
         },
         computed:{
-            feedback() {
+            /*feedback() {
+                return this.feed;
+            }*/
+            ...mapGetters({
+                feedback: 'currentFeedback',
+                processing: 'loadingStatus'
+            }),
+
+        }
+        /*watch: {
+            feed: function(val, oldVal) {
                 return this.feed;
             }
-        }
+        }*/
     }
 </script>

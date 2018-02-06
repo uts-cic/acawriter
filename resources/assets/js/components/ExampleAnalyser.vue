@@ -84,14 +84,14 @@
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <reflective-result :feed="feedback" :processing="processing"></reflective-result>
+                                <reflective-result></reflective-result>
                             </div>
                             <!-- end of reflective -->
 
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <analytic-result :feed="feedback" :processing="processing"></analytic-result>
+                                <analytic-result></analytic-result>
                             </div>
                             <!-- end of analytics -->
 

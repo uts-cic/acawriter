@@ -43,8 +43,8 @@
                             <div class="col-md-2 text-right">
                                 <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
                             </div>
-                            <div class="col-md-2 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/></div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-8 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> &nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                                     <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
                                     <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
@@ -67,14 +67,14 @@
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <reflective-result :feed="feedback" :processing="processing"></reflective-result>
+                                <reflective-result></reflective-result>
                             </div>
                             <!-- end of reflective -->
 
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <analytic-result :feed="feedback" :processing="processing"></analytic-result>
+                                <analytic-result></analytic-result>
                             </div>
                             <!-- end of analytics -->
 
@@ -141,11 +141,12 @@
                     {'vis': 'T'},
                     {'contrast': 'C'},
                     {'contribution': 'S'},
-                    {'novstat': 'N'},
+                    {'nostat': 'N'},
                     {'tempstat': 'B'},
                     {'attitude': 'P'},
                 ],
-                initFeedback:true
+                initFeedback:true,
+                intervalId:0
             }
         },
         mounted () {
@@ -198,7 +199,7 @@
                         feature:0
                    };
                 }
-                setInterval(this.storeAnalysedDrafts('auto'), 900000);
+                setInterval(this.storeAnalysedDrafts('auto'), 300000);
             },
             rulesClasses: function() {
                 let rules = [];
@@ -316,7 +317,12 @@
             },
             updateAutoFeedback(){
                 if(this.autofeedback) {
-                    setInterval(this.quickCheck, 300000);
+                    this.intervalId = setInterval(this.quickCheck, 120000);
+                } else  {
+                    if(this.intervalId > 0) {
+                        clearInterval(this.intervalId);
+                        this.intervalId =0;
+                    }
                 }
             }
         }
