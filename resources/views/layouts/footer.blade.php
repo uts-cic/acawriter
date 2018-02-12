@@ -13,12 +13,9 @@
                     </li>
 
                     <li class="list-inline-item">
-                        <a href="#">Terms of Use</a>
+                        <a href="/page/terms">Terms of Use / Privacy policy</a>
                     </li>
 
-                    <li class="list-inline-item">
-                        <a href="#">Privacy Policy</a>
-                    </li>
                 </ul>
                 <p class="small mx-auto">&copy; Copyright UTS - CRICOS Provider No: 00099F. Authorised by the Director, Connected Intelligence Centre.</p>
             </div>

@@ -8,12 +8,18 @@
                 <div class="card-header bg-default"><h2>Contact</h2> <small>Feel free to drop us a line if you have any questions.</small></div>
                 <div class="card-block p-5">
                     <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="card-title">Contact Info</h4>
+                        <div class="col-md-12">
+
                             <p class="card-text">
-                                <strong>Phone:</strong> +61 2 9514 1911<br />
-                                <strong>Email:</strong> cicsysadmin@uts.edu.au<br />
-                                <strong>Address:</strong> Ground Floor, Bldg 22, 2-12 Blackfriars Street, Chippendale NSW 2008, Sydney
+                                How well did AcaWriter do? We want to hear from you! Click the <a href="#">Tell us what you think</a> margin button to share your thoughts.
+                            </p>
+                            <p class="card-text">
+                                <em>Academic questions:</em> Prof. Simon Buckingham Shum (CIC Director)<br />
+                                <a href="mailto:Simon.BuckinghamShum@uts.edu.au">Simon.BuckinghamShum@uts.edu.au </a>
+                                <br />
+                                <em>Technical questions:</em> Radhikar Mogarkar (CIC Web Developer) <br />
+                                <a href="mailto:RadhikaVijay.Mogarkar@uts.edu.au">RadhikaVijay.Mogarkar@uts.edu.au </a>
+
                             </p>
                         </div>
                     </div>
