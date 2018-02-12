@@ -20,12 +20,12 @@ class FeaturesTableUpdateSeeder extends Seeder
         \"name\": \"background\",
         \"check\": {
           \"paragraph\": \"3\",
-          \"tag\":\"temporality\"
+          \"tag\":\"tempstat\"
         },
         \"message\": [
           {\"background\" : \"Background information missing in first paragraph\"}
         ],
-        \"css\": \"temporality\"
+        \"css\": \"background\"
       },
       {
         \"name\": \"vocab\",
