@@ -54,6 +54,7 @@ class StoreDrafts implements ShouldQueue
         $result = new \stdClass();
         $extra = $this->draft["extra"];
         $result->status = array('message' => 'Success', 'code' => 200  );
+        $jobRef= $extra['storeDraftJobRef'];
         $result->rules = array();
         if($extra['feature'] > 0 ) {
             $feed = $this->getFeedbackSchema('',$extra['feature']);
@@ -106,6 +107,7 @@ class StoreDrafts implements ShouldQueue
         $activityLog->user = $this->user;
         $activityLog->type = 'Draft';
         $activityLog->ref = $draftNew;
+        $activityLog->jobRef = $jobRef;
 
 
         event(new UserActivity($this->user, $activityLog));

@@ -13,7 +13,7 @@
                     <template v-if="ic=='contribution'">
                         <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
                     </template>
-                    <template v-else-if="ic=='metrics'">
+                    <template v-else-if="ic=='metrics' || ic=='background'">
                         <span v-bind:class="ic"></span>
                     </template>
                     <template v-else>

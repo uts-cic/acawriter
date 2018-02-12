@@ -53,7 +53,6 @@
 
                                 </div>
                             </div>
-
                     </div>
 
                     </div>
@@ -190,13 +189,15 @@
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
-                        feature: feature.id
+                        feature: feature.id,
+                        storeDraftJobRef: Math.random().toString(36).substring(7)
                     };
                 } else {
                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytic',
-                        feature:0
+                        feature:0,
+                        storeDraftJobRef: Math.random().toString(36).substring(7)
                    };
                 }
                 setInterval(this.storeAnalysedDrafts('auto'), 300000);
@@ -219,7 +220,7 @@
                     //console.log(this.slogs.details.status);
                     this.userActivity.forEach(function(activity){
                         if(activity.data) {
-                            if(activity.data.type==='Draft') {
+                            if(activity.data.type==='Draft' && activity.data.ref === s.attributes.storeDraftJobRef) {
                                 upd.message = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
                                 s.auto = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
                             }

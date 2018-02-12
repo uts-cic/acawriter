@@ -9,7 +9,7 @@
   overflow-y: scroll;
 }
 
-.vocab , .context, .challenge, .wordcount, .metrics, .change{
+.vocab , .context, .challenge, .wordcount, .metrics, .change, .background{
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -43,6 +43,11 @@
 
 .wordcount:before {
   content: "\f096";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color: #721c24;
+}
+
+.background:before {
+  content: "\f06a";  /* this is your text. You can also use UTF-8 character codes as I do here */
   color: #721c24;
 }
 
