@@ -1,6 +1,6 @@
 <template>
     <div>
-    <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4>
+    <div class="col-md-12"><h4>Feedback <small>(Reflective Writing)</small></h4>
         <span v-if="processing!=''" class="text-danger">
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>{{processing}}
             <span class="sr-only">Loading...</span>

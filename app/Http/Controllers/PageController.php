@@ -10,7 +10,7 @@ class PageController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        //$this->middleware('guest')->except('logout');
     }
 
     public function page ($which) {
@@ -20,6 +20,8 @@ class PageController extends Controller
             return view('about');
         } elseif($which==='contact') {
             return view('contact');
+        }  elseif($which==='terms') {
+            return view('terms');
         } else {
             return view ('welcome');
         }

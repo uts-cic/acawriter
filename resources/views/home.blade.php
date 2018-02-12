@@ -4,8 +4,8 @@
 <div class="container" id="app">
     <div class="row">
         <div class="col-md-12">
-            <h1>My Dashboard</h1>
-            <small>The Academic Writing Analyser (AWA) provides feedback on your analytical or reflective writing.</small>
+            <h2>My Dashboard </h2>
+            <small>The AcaWriter provides feedback on your analytical or reflective writing.</small>
         </div>
     </div>
     <div class="row">
@@ -44,9 +44,8 @@
                                 <input type="text" class="form-control" id="doc_title" name="docu_name" placeholder="document title" />
                             </div>
                             <div class="col-md-6">
-                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" checked="checked" value="1" /> Analytic
-
-                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" value="2" /> Reflective
+                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" checked="checked" value="1" /> Analytical Writing
+                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" value="2" /> Reflective Writing
                             </div>
                         </div>
                         <br />
