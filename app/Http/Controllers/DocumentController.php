@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use App\Assignment;
 use App\Document;
 use App\Draft;
@@ -141,22 +142,33 @@ class DocumentController extends Controller
         if(count($list->documents) > 0 && count($assignments) >0) {
             foreach($list->documents as $document) {
                 $draft = Draft::where('document_id',$document->id)->orderBy('created_at','desc')->first();
-                $document->draft_last_updated_at = $draft ? date('Y-m-d H:i:s',strtotime($draft->created_at)): '';
+                $document->draft_last_updated_at = '';
                 foreach($assignments as $assignment ) {
                     if($document->assignment_id === $assignment->id) {
+                        if($draft) {
+                            if(strtotime($draft->created_at) > strtotime($document->created_at)) {
+                                $document->draft_last_updated_at = strtotime($draft->created_at);
+                            } else {
+                                $document->draft_last_updated_at = strtotime($document->created_at);
+                            }
+                        } else {
+                            $document->draft_last_updated_at = strtotime($document->created_at);
+                        }
                         $document->feature_id = $assignment->feature->id;
                         $document->grammar = $assignment->feature->grammar;
                     }
                 }
             }
+            $tmp = new Collection($list->documents);
+
+            $sorted = $tmp->sortByDesc('draft_last_updated_at');
+            $list->documents = $sorted->values()->all();
+
         }
 
         return response()->json($list);
 
     }
-
-
-
-
+    
 
 }
