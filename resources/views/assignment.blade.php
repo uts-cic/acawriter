@@ -19,9 +19,12 @@
                                 <div class="col-md-6">
                                     <label for="feedbackOpt">2. Genre</label>
                                     <select class="form-control" id="grammar" name="grammar">
-                                        <option value="">--Select--</option>
-                                        @foreach($features as $feature)
-                                            <option value="{{$feature->id}}">{{$feature->grammar}}</option>
+                                        @foreach($features as $key => $value)
+                                            <optgroup label="{{$key}}">
+                                                @foreach($value as $feature)
+                                                    <option value="{{$feature->id}}">{{$feature->name}}</option>
+                                                @endforeach
+                                            </optgroup>
                                         @endforeach
                                     </select>
                                 </div>

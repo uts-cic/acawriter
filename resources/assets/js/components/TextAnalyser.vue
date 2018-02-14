@@ -46,8 +46,8 @@
 
                             <div class="col-md-8 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> &nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
-                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
+                                   <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
                                     <button type="button" class="btn brand-btn-outline-secondary btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
                                     <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
 
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    /**\
+    /**
      commented out - license needed
      import VueFroala from 'vue-froala-wysiwyg';
      Vue.use(VueFroala);
@@ -203,7 +203,7 @@
                         storeDraftJobRef: Math.random().toString(36).substring(7)
                    };
                 }
-                setInterval(this.storeAnalysedDrafts('auto'), 300000);
+                setInterval(this.storeAnalysedDrafts('auto'), 120000);
             },
             rulesClasses: function() {
                 let rules = [];
@@ -274,12 +274,12 @@
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
             },
-            fetchFeedback() {
+            fetchFeedback(type) {
                 this.errors=[];
                 //this.autoCheck = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
-                    let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes};
+                    let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
                     //this.autoCheck = false;
                 } else {

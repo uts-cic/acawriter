@@ -23,7 +23,17 @@ class AssignmentController extends Controller
     public function index(){
         //get all assignments belonging to the user
         $assignments = User::find(Auth::user()->id)->assignments()->with('feature')->get();
-        $features = Feature::all();
+        $features_all = Feature::all();
+        $features = new \stdClass();
+
+        foreach($features_all as $feature) {
+            if(!isset($features->{$feature->grammar})) {
+                $features->{$feature->grammar} = array();
+            }
+            $tmp = new \stdClass();
+            $tmp->id = $feature->id; $tmp->name = $feature->name;
+            array_push($features->{$feature->grammar}, $tmp );
+        }
         return view('assignment', ['assignments' => $assignments, 'features'=>$features]);
     }
 
