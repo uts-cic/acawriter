@@ -162,13 +162,14 @@ $(document).ready(function () {
         }
     });
 
-    $('#extendOut').on('click', openWindow)
+    $('#extendOut').on('click', openWindow);
 
 
     function openWindow(){
-        var w = window.open('','AWA3 key','width=770, height=600, toolbar=no,location=no,status=no,menubar=no,addressbar=0');
+        $('#sidebar').toggleClass('active');
+        var w = window.open('','AWA3 key','width=500, height=600, toolbar=no,location=no,status=no,menubar=no,addressbar=0');
         var html = "<html><head><title>AWA3 Key</title><link rel=\"stylesheet\" type=\"text/css\" href='/css/app.css'></head><body>";
-        html +=  $('#sidebar').html();
+        html +=  $('#popup').html();
         html += '</body></html>';
         w.document.write(html);
     }
