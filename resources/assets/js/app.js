@@ -58,7 +58,8 @@ Vue.component('example-text', require('./components/Example.vue'));
 Vue.component('ex-doc-editor', require('./components/ExampleAnalyser.vue'));
 
 
-var socket = io.connect('http://localhost:3000');
+
+var socket = io.connect(process.env.MIX_APP_SOCKET);
 import moment from 'moment';
 const app = new Vue({
     el: '#app',
@@ -88,7 +89,7 @@ const app = new Vue({
 
         socket.on('private-user-activity:App\\Events\\UserActivity', function (data) {
             console.log("into user activity");
-            console.log(data);
+            //console.log(data);
             return this.userActivity.push(data);
         }.bind(this));
 
