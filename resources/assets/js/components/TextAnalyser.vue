@@ -33,6 +33,20 @@
                 </div>
             </div>
 
+            <div id="popup" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
+                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
+                </div>
+                <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
+                    <h6 class="card-subtitle mb-2">&nbsp;</h6>
+                    <div v-for="msg in rule.message">
+                        <div class="row" v-for="(m,id) in msg">
+                            <div class="col-md-12 col-xs-12"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+
 
             <!-- start content -->
             <div id="content" class="col-md-12">
