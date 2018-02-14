@@ -24,7 +24,7 @@
                                 <div class="form-group">
                                     <p>UTS staff & students can login using the link below: <br />
                                     </p>
-                                    <a class="btn btn-lg btn-dark" href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/RSZugnWNHUn18txG5bFkmw?entityID=https://test-aaf-login.uts.edu.au/idp/shibboleth"
+                                    <a class="btn btn-lg btn-dark" href="{{env('AAF_LINK', '')}}"
                                     >UTS Login</a>
                                 </div>
                             </div>

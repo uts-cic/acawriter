@@ -4,8 +4,8 @@
 <div class="container" id="app">
     <div class="row">
         <div class="col-md-12">
-            <h1>My Dashboard</h1>
-            <small>The Academic Writing Analyser (AWA) provides feedback on your analytical or reflective writing.</small>
+            <h2>My Dashboard </h2>
+            <small>The AcaWriter provides feedback on your analytical or reflective writing.</small>
         </div>
     </div>
     <div class="row">
@@ -44,9 +44,8 @@
                                 <input type="text" class="form-control" id="doc_title" name="docu_name" placeholder="document title" />
                             </div>
                             <div class="col-md-6">
-                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" checked="checked" value="1" /> Analytic
-
-                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" value="2" /> Reflective
+                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" checked="checked" value="1" /> Analytical Writing
+                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" value="2" /> Reflective Writing
                             </div>
                         </div>
                         <br />
@@ -176,7 +175,43 @@
                 </div>
             </div>
         </div>
-        @endif
+
+
+
+        @elseif(in_array('staff', $data->roles))
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">System Status</div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            @if (session('status'))
+                            <li class="list-group-item list-group-item-success">
+                                {{ session('status') }}
+                            </li>
+                            @endif
+                            <li class="list-group-item list-group-item-info" role="alert">You are logged in!</li>
+                            <internet-connection :last-heart-beat-received-at="lastHeartBeatReceivedAt"></internet-connection>
+                            <tap-status :tap-health="tapHealth"></tap-status>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">Admin</div>
+                    <div class="card-body">
+                        <a href="/assignment" class="list-group-item list-group-item-action"><i class="fa fa-clone"></i>  Manage Assignments</a>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
+
 
     </div>
 

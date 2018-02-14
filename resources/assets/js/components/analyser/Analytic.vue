@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="col-md-12"><h4>Feedback <small>(Analytical)</small></h4>
+        <div class="col-md-12"><h4>Feedback <small>(Analytical Writing)</small></h4>
             <span v-if="processing!==''"  class="text-success">
                 <i class="fa fa-spinner fa-spin"></i> {{processing}}
                 <span class="sr-only">Loading...</span>
@@ -13,7 +13,7 @@
                     <template v-if="ic=='contribution'">
                         <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
                     </template>
-                    <template v-else-if="ic=='metrics'">
+                    <template v-else-if="ic=='metrics' || ic=='background'">
                         <span v-bind:class="ic"></span>
                     </template>
                     <template v-else>

@@ -11,7 +11,8 @@ use Auth;
 use App\User;
 use App\Http\Controllers\StringTokenizer;
 use App\Feature;
-
+use App\Draft;
+use App\Events\UserActivity;
 
 
 
@@ -44,6 +45,12 @@ class FeedbackController extends Controller
 
     public function generateFeedback(Request $request) {
 
+
+        $activityLog = new \stdClass;
+        $activityLog->status = 'success';
+        $activityLog->data =[];
+        $user_id = Auth::user()->id;
+
         if($request['action'] == 'quick') {
             //single sentence change analysis
             //we need to send a request to get the tap raw tags
@@ -73,6 +80,7 @@ class FeedbackController extends Controller
         $extra = $request["extra"];
         $result->status = array('message' => 'Success', 'code' => 200  );
         $result->rules = array();
+        $jobRef= $extra['storeDraftJobRef'];
         if($extra['feature'] > 0 ) {
             $feed = $this->getFeedbackSchema('',$extra['feature']);
             $feedbackSchema = json_decode($feed, true);
@@ -114,6 +122,40 @@ class FeedbackController extends Controller
 
         $final = $this->formatFeedback($tap, $result);
         $result->final = $final;
+
+        /*
+         * this is an extension applied to fetch feedback and save all at one go!
+         *
+         */
+        $draftNew = new Draft();
+        $draftNew->text_input = $request['txt'];
+        $draftNew->feature_id = $request['extra']['feature'];
+        $draftNew->document_id = $request['document'];
+        $draftNew->raw_response = json_encode($result);
+        $draftNew->user_id = $user_id;
+        $draftNew->is_auto = $request['type'] == 'manual' ? 0 :1;
+
+        $draftNew->save();
+
+        $user = User::find($user_id);
+
+        if($draftNew->id > 0) {
+            $message = "Draft stored";
+            $activityLog->status= 'success';
+        } else {
+            $activityLog->status= 'error';
+        }
+        $activityLog->user = $user;
+        $activityLog->type = 'Draft';
+        $activityLog->ref = $draftNew;
+        $activityLog->jobRef = $jobRef;
+
+
+        event(new UserActivity($user, $activityLog));
+        //event(new OperationLog($this->user, $message));
+
+        Log::info('Draft stored after fetch feedback',['draft' => $draftNew]);
+
 
         return response()->json($result);
 

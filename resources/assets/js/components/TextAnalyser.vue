@@ -46,14 +46,13 @@
 
                             <div class="col-md-8 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> &nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
-                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
+                                   <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
                                     <button type="button" class="btn brand-btn-outline-secondary btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
                                     <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
 
                                 </div>
                             </div>
-
                     </div>
 
                     </div>
@@ -62,11 +61,13 @@
                             <div class="col-md-6">
                                 <div id="editor">
                                     <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
+                                    <p><small>AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</small></p>
                                     <vue-editor v-model="editorContent" :editorToolbar="customToolbar"></vue-editor>
                                 </div>
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
+                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
                                 <reflective-result></reflective-result>
                             </div>
                             <!-- end of reflective -->
@@ -74,6 +75,7 @@
 
                             <!--- Analytic feedback --->
                             <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
+                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
                                 <analytic-result></analytic-result>
                             </div>
                             <!-- end of analytics -->
@@ -90,7 +92,7 @@
 </template>
 
 <script>
-    /**\
+    /**
      commented out - license needed
      import VueFroala from 'vue-froala-wysiwyg';
      Vue.use(VueFroala);
@@ -190,16 +192,18 @@
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
-                        feature: feature.id
+                        feature: feature.id,
+                        storeDraftJobRef: Math.random().toString(36).substring(7)
                     };
                 } else {
                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytic',
-                        feature:0
+                        feature:0,
+                        storeDraftJobRef: Math.random().toString(36).substring(7)
                    };
                 }
-                setInterval(this.storeAnalysedDrafts('auto'), 300000);
+                setInterval(this.storeAnalysedDrafts('auto'), 120000);
             },
             rulesClasses: function() {
                 let rules = [];
@@ -219,7 +223,7 @@
                     //console.log(this.slogs.details.status);
                     this.userActivity.forEach(function(activity){
                         if(activity.data) {
-                            if(activity.data.type==='Draft') {
+                            if(activity.data.type==='Draft' && activity.data.ref === s.attributes.storeDraftJobRef) {
                                 upd.message = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
                                 s.auto = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
                             }
@@ -270,12 +274,12 @@
                 });
                 //EventBus.$emit('compute-done', feedbackQueue);
             },
-            fetchFeedback() {
+            fetchFeedback(type) {
                 this.errors=[];
                 //this.autoCheck = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
-                    let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes};
+                    let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
                     this.$store.dispatch('LOAD_FEEDBACK',data);
                     //this.autoCheck = false;
                 } else {
