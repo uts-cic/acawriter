@@ -30,10 +30,10 @@ class FeaturesTableUpdateSeeder extends Seeder
       },
       \"message\": [
         {\"emph\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">E</span> Studied extensively, received considerable attention\"},
-        {\"tempstat\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">B</span> Wide interest\"}
+        {\"tempstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">B</span> Wide interest\"}
       ],
       \"css\": [\"E\",\"B\"],
-      \"custom\" : \"move 1: Establishing a research territory\"
+      \"custom\" : \"Move 1: Establishing a research territory\"
      },
     {
        \"name\": \"moves2\",
@@ -49,7 +49,7 @@ class FeaturesTableUpdateSeeder extends Seeder
         {\"nostat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">Q</span> Question\"}
       ],
       \"css\": [\"C\", \"Q\"],
-      \"custom\" : \"move 2: Establishing a Niche\"
+      \"custom\" : \"Move 2: Establishing a Niche\"
     },
     {
        \"name\": \"moves3\",
@@ -65,7 +65,7 @@ class FeaturesTableUpdateSeeder extends Seeder
         {\"contribution\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">S</span> Summarises/signals author’s goals\"}
       ],
       \"css\": [\"N\", \"S\"],
-      \"custom\" : \"move 3: Occupying the Niche\"
+      \"custom\" : \"Move 3: Occupying the Niche\"
     }
   ]
 }");
