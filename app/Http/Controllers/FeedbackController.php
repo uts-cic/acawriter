@@ -114,9 +114,10 @@ class FeedbackController extends Controller
 
         //go through and call each rule if the rule is defined
         foreach($this->rules as $rule) {
-            $method = $rule['name'];
+            $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
+            $name = $rule['name'];
             if(method_exists($this, $method)) {
-               $result->{$method} = $this->{$method}($tap, $rule);
+               $result->{$name} = $this->{$method}($tap, $rule);
             }
         }
 
@@ -125,37 +126,41 @@ class FeedbackController extends Controller
 
         /*
          * this is an extension applied to fetch feedback and save all at one go!
+         * provided intitFeedback is set to true
          *
          */
-        $draftNew = new Draft();
-        $draftNew->text_input = $request['txt'];
-        $draftNew->feature_id = $request['extra']['feature'];
-        $draftNew->document_id = $request['document'];
-        $draftNew->raw_response = json_encode($result);
-        $draftNew->user_id = $user_id;
-        $draftNew->is_auto = $request['type'] == 'manual' ? 0 :1;
 
-        $draftNew->save();
+        if($request['extra']['initFeedback']) {
 
-        $user = User::find($user_id);
+            $draftNew = new Draft();
+            $draftNew->text_input = $request['txt'];
+            $draftNew->feature_id = $request['extra']['feature'];
+            $draftNew->document_id = $request['document'];
+            $draftNew->raw_response = json_encode($result);
+            $draftNew->user_id = $user_id;
+            $draftNew->is_auto = $request['type'] == 'manual' ? 0 : 1;
 
-        if($draftNew->id > 0) {
-            $message = "Draft stored";
-            $activityLog->status= 'success';
-        } else {
-            $activityLog->status= 'error';
+            $draftNew->save();
+
+            $user = User::find($user_id);
+
+            if ($draftNew->id > 0) {
+                $message = "Draft stored";
+                $activityLog->status = 'success';
+            } else {
+                $activityLog->status = 'error';
+            }
+            $activityLog->user = $user;
+            $activityLog->type = 'Draft';
+            $activityLog->ref = $draftNew;
+            $activityLog->jobRef = $jobRef;
+
+
+            event(new UserActivity($user, $activityLog));
+            //event(new OperationLog($this->user, $message));
+
+            Log::info('Draft stored after fetch feedback', ['draft' => $draftNew]);
         }
-        $activityLog->user = $user;
-        $activityLog->type = 'Draft';
-        $activityLog->ref = $draftNew;
-        $activityLog->jobRef = $jobRef;
-
-
-        event(new UserActivity($user, $activityLog));
-        //event(new OperationLog($this->user, $message));
-
-        Log::info('Draft stored after fetch feedback',['draft' => $draftNew]);
-
 
         return response()->json($result);
 
