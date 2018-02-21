@@ -44,9 +44,10 @@
                     {'vis': 'T'},
                     {'contrast': 'C'},
                     {'contribution': 'S'},
-                    {'nostat': 'N'},
+                    {'nostat': 'Q'},
                     {'tempstat': 'B'},
                     {'attitude': 'P'},
+                    {'novstat': 'N'}
                 ],
             }
         },
