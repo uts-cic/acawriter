@@ -22,7 +22,7 @@
                     <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>&nbsp;&nbsp;
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                     <h6 class="card-subtitle mb-2">&nbsp;</h6>
+                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
                     <div v-for="msg in rule.message">
                         <div class="row" v-for="(m,id) in msg">
                             <div class="col-md-1 col-xs-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
@@ -37,7 +37,7 @@
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle mb-2">&nbsp;</h6>
+                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
                     <div v-for="msg in rule.message">
                         <div class="row" v-for="(m,id) in msg">
                             <div class="col-md-12 col-xs-12"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
@@ -161,13 +161,13 @@
                     {'tempstat': 'B'},
                     {'attitude': 'P'},
                 ],
-                initFeedback:true,
+                initFeedback:false,
                 intervalId:0
             }
         },
         mounted () {
             if(this.initFeedback) {
-                this.fetchFeedback();
+                //this.fetchFeedback();
             }
         },
         created() {
@@ -207,14 +207,16 @@
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
                         feature: feature.id,
-                        storeDraftJobRef: Math.random().toString(36).substring(7)
+                        storeDraftJobRef: Math.random().toString(36).substring(7),
+                        initFeedback:this.initFeedback
                     };
                 } else {
                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytic',
                         feature:0,
-                        storeDraftJobRef: Math.random().toString(36).substring(7)
+                        storeDraftJobRef: Math.random().toString(36).substring(7),
+                       initFeedback:this.initFeedback
                    };
                 }
                 setInterval(this.storeAnalysedDrafts('auto'), 120000);

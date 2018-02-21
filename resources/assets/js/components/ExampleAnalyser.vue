@@ -12,9 +12,13 @@
                             <div class="col-md-4"><label for="faculty">Title</label><input class="form-control" type="text" id="title" v-model="example.title" /></div>
                             <div class="col-md-4"><label for="genre">Genre</label>
                                 <select class="form-control" id="genre" v-model="example.genre">
-                                <option value="">Select</option>
+                                    <optgroup v-for= "(item, key) in features" :label="key">
+                                        <option v-for = "val in item" :value="val.id">{{val.name}}</option>
+                                    </optgroup>
+
+                                <!-- <option value="">Select</option>
                                 <option value="2">Reflective</option>
-                                <option value="1">Analytic</option>
+                                <option value="1">Analytic</option> -->
                                 </select>
                             </div>
                         </div>
@@ -43,7 +47,7 @@
                 </div>
 
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle mb-2">&nbsp;</h6>
+                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
                     <div v-for="msg in rule.message">
                         <div class="row" v-for="(m,id) in msg">
                             <div class="col-md-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
@@ -127,7 +131,7 @@
             analyticResult: Analytic
         },
         name: 'editor',
-        props:['ex', 'role'],
+        props:['ex', 'role', 'ext'],
         store,
         data () {
             return {
@@ -156,7 +160,7 @@
                     iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
                     inText :['affect', 'epistemic','modall']
                 },
-                initFeedback:true
+                initFeedback:false
             }
         },
         mounted () {
@@ -190,6 +194,21 @@
                     return false;
                 }
             },
+            features: function() {
+              return JSON.parse(this.ext);
+            },
+            grammar: function() {
+                var self =this;
+                let gram ='';
+                for( var [k ,v] of Object.entries(this.features)) {
+                    v.forEach(function(item){
+                        if(item.id == self.example.genre)  {
+                            gram =  k.toLowerCase();
+                        }
+                    });
+                }
+                return gram;
+            },
             attributes: function() {
                 if(this.preSetAssignment) {
                     if(this.preSetAssignment.raw_response) {
@@ -203,27 +222,35 @@
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
-                        feature: feature.id
+                        feature: feature.id,
+                        storeDraftJobRef: Math.random().toString(36).substring(7),
+                        initFeedback:this.initFeedback
+
                     };
                 } else {
                     return {
                         feedbackOpt:this.example.genre== 1 ? 'a_01' : 'r_01',
-                        grammar: this.example.genre == 1 ? 'analytic' : 'reflective',
-                        feature:this.example.genre
+                       // grammar: this.example.genre == 1 ? 'analytic' : 'reflective',
+                        grammar: this.grammar,
+                        feature:this.example.genre,
+                        storeDraftJobRef: Math.random().toString(36).substring(7),
+                        initFeedback:this.initFeedback
                     };
                 }
                 //setInterval(this.storeAnalysedDrafts('auto'), 900000);
             },
             rulesClasses: function() {
                 let rules = [];
-                rules = this.feedback.rules.map(function(rule,idx){
-                    return rule.css.map(function(cl){
+                rules = this.feedback.rules.map(function (rule, idx) {
+                    return rule.css.map(function (cl) {
                         return cl;
                     });
                 });
                 let classes = [].concat(...rules);
                 return classes;
             }
+
+
         },
         watch :{
         },
@@ -241,6 +268,7 @@
                 }
             },storeAnalysedDrafts() {
                 this.$data.auto='processing....';
+                this.attributes.initFeedback = true;
                 let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes,'feedback':this.feedback, 'other':this.example};
                 axios.post('/example/store', data)
                     .then(response => {
@@ -249,6 +277,15 @@
                     .catch(e => {
                         this.$data.errors.push(e)
                     });
+            },
+            getGrammar: function(idx) {
+                for( var [k ,v] of Object.entries(this.features)) {
+                    v.forEach(function(item){
+                        if(item.id == idx)  {
+                            return k.toLowerCase();
+                        }
+                    });
+                }
             }
 
         }

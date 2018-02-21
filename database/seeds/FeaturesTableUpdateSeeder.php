@@ -8,39 +8,64 @@ class FeaturesTableUpdateSeeder extends Seeder
     /**
      * Run the database seeds.
      *
+     * update Analytic rules
+     * just update the id and attach the required rules
+     *
      * @return void
      */
     public function run()
     {
         //
-        $feature = Feature::find(1);
+        $feature = Feature::find(4);
         $feature->rules= json_encode("{
   \"rules\": [
     {
-      \"name\": \"moves\",
+       \"name\": \"moves1\",
+      \"method\": \"moves\",
       \"check\": {
         \"tags\": [
-          \"attitude\",
           \"emph\",
-          \"vis\",
-          \"contribution\",
-          \"nostat\",
-          \"contrast\",
-          \"tempstat\",
-          \"surprise\"
+          \"tempstat\"
         ]
       },
       \"message\": [
-        {\"contribution\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">S<\/span> Summarise the authors goals\"},
-        {\"attitude\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">P<\/span> A perspective or stance\"},
-        {\"emph\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">E<\/span> Emphasis or importance to ideas \"},
-        {\"vis\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">T<\/span> A trend or tendency related to ideas approaches and methods\"},
-        {\"nostat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N<\/span> Novelty improvements of ideas methods\"},
-        {\"contrast\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">C<\/span> Disagreement, Tension, Options, Inconsistency\"},
-        {\"tempstat\": \"<span class=\\\"badge badge-pill badge-analytic\\\">B<\/span> Reference to generally accepted previous work\"},
-        {\"surprise\": \"<span class=\\\"badge badge-pill badge-analytic\\\">S<\/span> Surprise\"}
+        {\"emph\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">E</span> Studied extensively, received considerable attention\"},
+        {\"tempstat\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">B</span> Wide interest\"}
       ],
-      \"css\": [\"P\",\"E\", \"T\", \"S\", \"N\", \"C\", \"B\", \"S\"]
+      \"css\": [\"E\",\"B\"],
+      \"custom\" : \"move 1: Establishing a research territory\"
+     },
+    {
+       \"name\": \"moves2\",
+      \"method\": \"moves\",
+      \"check\": {
+        \"tags\": [
+          \"contrast\",
+          \"nostat\"
+        ]
+      },
+      \"message\": [
+        {\"contrast\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">C</span> Disagreement, Tension, Options, Inconsistency\"},
+        {\"nostat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">Q</span> Question\"}
+      ],
+      \"css\": [\"C\", \"Q\"],
+      \"custom\" : \"move 2: Establishing a Niche\"
+    },
+    {
+       \"name\": \"moves3\",
+      \"method\": \"moves\",
+      \"check\": {
+        \"tags\": [
+          \"novstat\",
+          \"contribution\"
+        ]
+      },
+      \"message\": [
+        {\"novstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N</span> Novelty improvements of ideas methods\"},
+        {\"contribution\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">S</span> Summarises/signals author’s goals\"}
+      ],
+      \"css\": [\"N\", \"S\"],
+      \"custom\" : \"move 3: Occupying the Niche\"
     }
   ]
 }");
