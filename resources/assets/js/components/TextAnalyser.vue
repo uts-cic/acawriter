@@ -293,6 +293,7 @@
             fetchFeedback(type) {
                 this.errors=[];
                 //this.autoCheck = true;
+                this.attributes.initFeedback = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
