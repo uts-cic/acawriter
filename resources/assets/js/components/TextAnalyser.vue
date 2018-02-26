@@ -1,11 +1,11 @@
 <template>
     <div class="container-fluid">
-        <div class="row">
+      <!--   <div class="row">
             <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
             <div class="col-md-4 text-success">
-                <span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
+
             </div>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col-md-12">
                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
@@ -53,12 +53,12 @@
                 <div class="card">
                     <div class="card-header bg-dark text-white">
                         <div class="row">
-                            <div class="col-md-2">Document Analyser</div>
-                            <div class="col-md-2 text-right">
+                            <div class="col-md-2"><span v-if="preSetAssignment">{{preSetAssignment.name}}</span></div>
+                            <div class="col-md-4 text-right"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
                                 <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
                             </div>
 
-                            <div class="col-md-8 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> &nbsp; &nbsp;
+                            <div class="col-md-6 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> &nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                                     <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
                                    <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
@@ -240,8 +240,8 @@
                     this.userActivity.forEach(function(activity){
                         if(activity.data) {
                             if(activity.data.type==='Draft' && activity.data.ref === s.attributes.storeDraftJobRef) {
-                                upd.message = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
-                                s.auto = "Draft Saved " + moment().format('DD/MM/YYYY hh:mma');
+                                upd.message = "Draft Saved ";
+                                s.auto = moment().format('DD/MM/YYYY hh:mma');
                             }
                         }
                     });
@@ -293,6 +293,7 @@
             fetchFeedback(type) {
                 this.errors=[];
                 //this.autoCheck = true;
+                this.attributes.initFeedback = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};

@@ -20,13 +20,11 @@ class FeatureReflectiveUpdateSeeder extends Seeder
       \"name\": \"expression\",
       \"check\": {
         \"all\": [
-          \"affect\",
           \"epistemic\",
           \"modal\"
         ]
       },
       \"message\": [
-        {\"affect\" : \"<span class=\\\"affect\\\">Words associated with strong feelings<\/span>\"},
         {\"epistemic\" : \"<u>Expressions indicating belief, learning, or knowledge.</u>\"},
         {\"modal\" : \"<span class=\\\"modall\\\">Expressions indicating self critique<\/span>\"}
       ],
