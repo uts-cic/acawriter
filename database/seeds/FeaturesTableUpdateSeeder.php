@@ -16,56 +16,36 @@ class FeaturesTableUpdateSeeder extends Seeder
     public function run()
     {
         //
-        $feature = Feature::find(4);
+        $feature = Feature::find(1);
         $feature->rules= json_encode("{
-  \"rules\": [
+\"rules\": [
     {
-       \"name\": \"moves1\",
-      \"method\": \"moves\",
+      \"name\": \"moves\",
       \"check\": {
         \"tags\": [
+          \"attitude\",
           \"emph\",
-          \"tempstat\"
-        ]
-      },
-      \"message\": [
-        {\"emph\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">E</span> Studied extensively, received considerable attention\"},
-        {\"tempstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">B</span> Wide interest\"}
-      ],
-      \"css\": [\"E\",\"B\"],
-      \"custom\" : \"Move 1: Establishing a research territory\"
-     },
-    {
-       \"name\": \"moves2\",
-      \"method\": \"moves\",
-      \"check\": {
-        \"tags\": [
-          \"contrast\",
-          \"nostat\"
-        ]
-      },
-      \"message\": [
-        {\"contrast\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">C</span> Disagreement, Tension, Options, Inconsistency\"},
-        {\"nostat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">Q</span> Question\"}
-      ],
-      \"css\": [\"C\", \"Q\"],
-      \"custom\" : \"Move 2: Establishing a Niche\"
-    },
-    {
-       \"name\": \"moves3\",
-      \"method\": \"moves\",
-      \"check\": {
-        \"tags\": [
+          \"contribution\",
           \"novstat\",
-          \"contribution\"
+          \"contrast\",
+          \"tempstat\",
+          \"surprise\",
+          \"nostat\",
+          \"grow\"
         ]
       },
       \"message\": [
-        {\"novstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N</span> Novelty improvements of ideas methods\"},
-        {\"contribution\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">S</span> Summarises/signals author’s goals\"}
+        {\"attitude\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">P<\/span> A perspective or stance\"},
+        {\"emph\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">E<\/span> Emphasis to highlight key ideas\"},
+        {\"contribution\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">S<\/span> Summarises or signals the authors goals\"},
+        {\"novstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N<\/span> Novelty improvements in ideas and methods\"},
+        {\"contrast\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">C</span> Contrast: Disagreement, Tension, Inconsistency\"},
+        {\"tempstat\": \"<span class=\\\"badge badge-pill badge-analytic\\\">B</span> Background: generally accepted work\"},
+        {\"surprise\": \"<span class=\\\"badge badge-pill badge-analytic\\\">S</span> Surprising\"},
+        {\"nostat\": \"<span class=\\\"badge badge-pill badge-analytic\\\">Q</span> Question\"},
+        {\"grow\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">T<\/span> A trend or tendency related to ideas approaches and methods\"}
       ],
-      \"css\": [\"N\", \"S\"],
-      \"custom\" : \"Move 3: Occupying the Niche\"
+      \"css\": [\"P\",\"E\", \"T\", \"S\", \"N\", \"C\", \"B\", \"S\"]
     }
   ]
 }");

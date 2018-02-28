@@ -8,22 +8,22 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Writing Tutor') }}</title>
+    <title>AcaWriter | University of Technology Sydney</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="row">
-        <div class="offset-1 col-md-2"><img src="/images/uts_logo_sm.png" alt="UTS"/></div>
-        <div class="col-md-9"><h1>AcaWriter</h1></div>
+        <div class="col-md-2"><img src="/images/uts_logo_sm.png" alt="UTS"/></div>
+        <div class="col-md-9"></div>
     </div>
 
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <!-- Branding Image -->
             <a class="navbar-brand" href="{{ url('/home') }}">
-                <i class="fa fa-home"></i>
-            </a>
+               AcaWriter
+            </a>  &nbsp;
             <!-- Collapsed Hamburger -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -31,6 +31,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav iconic">
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/home') }}"><i class="fa fa-home"></i></a></li>
                     <li class="nav-item"><a class="nav-link" href="/page/about"><i class="fa fa-info-circle"></i></a></li>
                     <li class="nav-item"><a class="nav-link" href="/page/contact"><i class="fa fa-envelope"></i></a></li>
                 </ul>

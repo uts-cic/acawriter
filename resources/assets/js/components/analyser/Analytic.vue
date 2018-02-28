@@ -11,7 +11,7 @@
             <span v-for="(feed,idx) in feedback.final">
                 <span v-for="ic in feed.css">
                     <template v-if="ic=='contribution'">
-                        <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
+                        <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">Summary</span>
                     </template>
                     <template v-else-if="ic=='metrics' || ic=='background'">
                         <span v-bind:class="ic"></span>
@@ -40,14 +40,16 @@
             return {
                 analytic_xlator:[
                     {'metrics': 'metrics'},
-                    {'emph': 'E'},
-                    {'vis': 'T'},
-                    {'contrast': 'C'},
-                    {'contribution': 'S'},
-                    {'nostat': 'Q'},
-                    {'tempstat': 'B'},
-                    {'attitude': 'P'},
-                    {'novstat': 'N'}
+                    {'emph': 'Emphasis'},
+                    {'grow': 'Trend'},
+                    {'contrast': 'Contrast'},
+                    {'contribution': 'Summary'},
+                    {'nostat': 'Question'},
+                    {'tempstat': 'Background'},
+                    {'attitude': 'Position'},
+                    {'novstat': 'Novelty'},
+                    {'surprise':'Surprise'}
+
                 ],
             }
         },
