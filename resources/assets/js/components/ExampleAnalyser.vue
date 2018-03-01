@@ -3,6 +3,11 @@
         <div class="row">
             <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
         </div>
+        <div class="row">
+            <div class="col-md-6"><small>This is an example piece of writing to experiment with. You can edit this text (nothing is saved).</small></div>
+            <div class="col-md-6"><small>Click Get Feedback to see the automatic feedback on the right: click the Key for more information about the icons and highlights.
+                When you're ready, go to <a href="/home">My Dashboard</a> and create your own document.</small></div>
+        </div>
         <div v-if="admin" class="row">
             <div class="col-md-12">
                 <div class="card bg-secondary text-white">
