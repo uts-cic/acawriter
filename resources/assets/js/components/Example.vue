@@ -11,7 +11,7 @@
                 <th scope="col">Genre</th>
                 <th scope="col">Title</th>
                 <th scope="col">Summary</th>
-                <th>Feedback</th>
+
             </tr>
             </thead>
             <tbody>
@@ -19,9 +19,8 @@
             <tr v-for= "list in lists">
                 <th scope="row">{{list.faculty}}</th>
                 <td>{{list.feature.grammar}}</td>
-                <td>{{list.title}}</td>
+                <td><a v-bind:href="'example/analyse/'+list.id">{{list.title}}</a></td>
                 <td><small>{{list.summary}}</small></td>
-                <td><a v-bind:href="'example/analyse/'+list.id">View</a></td>
             </tr>
 
             </tbody>

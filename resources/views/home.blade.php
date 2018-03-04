@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12">
             <h2>My Dashboard </h2>
-            <small>The AcaWriter provides feedback on your analytical or reflective writing.</small>
+            <small><em>AcaWriter</em> provides feedback on your analytical or reflective writing.</small>
         </div>
     </div>
     <div class="row">

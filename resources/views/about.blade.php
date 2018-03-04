@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container" id="app">
-
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -22,7 +21,7 @@
                         <strong>Just give it a go</strong> and Create a new document! Or to learn more about the website, browse the AcaWriter Guide.
                     </p>
                     <p class="card-text">
-                        <strong><em>AcaWriter</em> was created by</strong> the Academic Writing Analytics project, at the UTS Connected Intelligence Centre. Go there to learn about the ideas and tech behind the scenes, and what we're learning as we test it with staff and students. The software is now being shared and improved across universities in Australia and beyond, as part of the Higher Education Text Analytics open source project.
+                        <strong><em>AcaWriter</em> was created by</strong> the <a href="https://utscic.edu.au/tools/awa/">Academic Writing Analytics</a> project, at the UTS Connected Intelligence Centre. Go there to learn about the ideas and tech behind the scenes, and what we're learning as we test it with staff and students. The software is now being shared and improved across universities in Australia and beyond, as part of the Higher Education Text Analytics open source project.
                     </p>
                 </div>
 
