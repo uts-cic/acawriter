@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="row editWrapper">
-            <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
+            <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                     <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>
@@ -99,7 +99,7 @@
 
 
                             <!--- Analytic feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
+                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytical'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytical'">
                                 <analytic-result></analytic-result>
                             </div>
                             <!-- end of analytics -->
@@ -183,7 +183,7 @@
                 return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
             },
             analytic: function() {
-                return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
+                return this.attributes.feedbackOpt == 'analytical' ? 'display:inline': '';
             },
             ...mapGetters({
                 feedback: 'currentFeedback',
@@ -225,7 +225,7 @@
                     }
                     let feature = this.preSetAssignment.feature;
                     return {
-                        feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
+                        feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),

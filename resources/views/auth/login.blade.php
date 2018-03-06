@@ -10,7 +10,7 @@
                     <div class="card-header bg-dark text-white">
                         <ul class="nav nav-tabs card-header-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#utslogin" data-toggle="tab">UTS Staff Login</a>
+                                <a class="nav-link active" href="#utslogin" data-toggle="tab">UTS Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#otherlogin" data-toggle="tab">Non UTS login</a>

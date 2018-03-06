@@ -7,7 +7,7 @@
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">Access Code</th>
+            <th scope="col">Code</th>
             <th scope="col">Genre</th>
             <th scope="col">Assignment Title</th>
             <th scope="col">Document Title</th>
@@ -19,7 +19,7 @@
 
         <tr v-for= "list in lists">
             <th scope="row">{{list.assignment.code}}</th>
-            <td>{{list.grammar}}</td>
+            <td><a href="/example" title="check out an example">{{list.grammar}}<small>({{list.feature_name}})</small></a></td>
             <td>{{list.assignment.name}}</td>
             <!-- <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.name}}</a></td> -->
             <td><a v-bind:href="'analyse/'+list.slug">{{list.name}}</a></td>

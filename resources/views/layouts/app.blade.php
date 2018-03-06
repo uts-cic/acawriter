@@ -44,6 +44,17 @@
                         @if (Auth::guest())
                             <!-- <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li> -->
                             <!-- <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li> -->
+                        @elseif (Auth::user()->hasRole('admin'))
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/home')}}">My Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url('example')}}">Example Texts</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/assignment')}}">Manage Assignment</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/assignment')}}">Manage Users</a></li>
+
+                        @elseif (Auth::user()->hasRole('staff'))
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/home')}}">My Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url('example')}}">Example Texts</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/assignment')}}">Manage Assignment</a></li>
+
                         @else
                             <li class="nav-item"><a class="nav-link" href="{{ url('/home')}}">My Dashboard</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{url('example')}}">Example Texts</a></li>

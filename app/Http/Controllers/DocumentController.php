@@ -156,6 +156,7 @@ class DocumentController extends Controller
                         }
                         $document->feature_id = $assignment->feature->id;
                         $document->grammar = $assignment->feature->grammar;
+                        $document->feature_name = $assignment->feature->name;
                     }
                 }
             }

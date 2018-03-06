@@ -12,7 +12,8 @@
                             <p class="card-text">
                                 How well did AcaWriter do? We want to hear from you!
                             </p>
-                            <form class="form-horizontal" method="POST" action="">
+
+                            <form class="form-horizontal" method="POST" action="/page/contact">
                                 {{ csrf_field() }}
 
                                 <div class="form-group">
@@ -43,7 +44,7 @@
 
                             </form>
                         </div>
-                        <div class="col-md-6 bg-info">
+                        <div class="col-md-6">
 
 
                             <p class="card-text">
