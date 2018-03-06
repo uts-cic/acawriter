@@ -1,22 +1,50 @@
 <template>
     <div>
-    <div class="col-md-12"><h4>Feedback <small>(Reflective Writing)</small></h4>
-        <span v-if="processing!=''" class="text-danger">
-            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>{{processing}}
-            <span class="sr-only">Loading...</span>
-        </span>
-        <hr />
-    </div>
-    <div class="col-md-12 wrapper">
-        <span v-for="(feed,idx) in feedback.final">
-            <span v-for="ic in feed.css">
-                <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
-                    <span v-bind:class="getIcons(ic)"></span>
-                </template>
+        <ul class="nav nav-tabs bg-dark text-white">
+            <li class="nav-item">
+                <a class="nav-link active" href="#analysed" data-toggle="tab">Feedback <small>(Reflective writing)</small></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#moreAna" data-toggle="tab">Extra</a>
+            </li>
+        </ul>
+        <div class="tab-content ref activeClass" id="legend">
+            <div class="tab-pane active" id="analysed" role="tabpanel">
+                <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
+                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
+                    <ul class="list-inline">
+                        <template v-for="msg in rule.message">
+                            <li class="list-inline-item" v-for="(m,id) in msg">
+                                <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;
+                                <span v-bind:class="id"></span>&nbsp;<span v-html="m"></span>
+                            </li>
+                        </template>
+                    </ul>
+                    <hr />
+                </div>
+            </div>
+            <div class="tab-pane" id="moreAna" role="tabpanel">
+                Some details here
+            </div>
+        </div>
+        <div class="col-md-12">
+            <span v-if="processing!=''" class="text-danger">
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>{{processing}}
+                    <span class="sr-only">Loading...</span>
+                <hr />
             </span>
-            <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
-        </span>
-    </div>
+        </div>
+        <div class="col-md-12 wrapper">
+            <span v-for="(feed,idx) in feedback.final">
+                <span v-for="ic in feed.css">
+                    <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
+                        <span v-bind:class="getIcons(ic)"></span>
+                    </template>
+                </span>
+                <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>
+            </span>
+        </div>
+
     </div>
 </template>
 

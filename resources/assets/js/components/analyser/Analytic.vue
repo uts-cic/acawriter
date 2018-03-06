@@ -1,28 +1,55 @@
 <template>
     <div>
-        <div class="col-md-12"><h4>Feedback <small>(Analytical Writing)</small></h4>
-            <span v-if="processing!==''"  class="text-success">
-                <i class="fa fa-spinner fa-spin"></i> {{processing}}
-                <span class="sr-only">Loading...</span>
-            </span>
-            <hr />
-        </div>
-        <div class="col-md-12 wrapper">
-            <span v-for="(feed,idx) in feedback.final">
-                <span v-for="ic in feed.css">
-                    <template v-if="ic=='contribution'">
-                        <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">Summary</span>
-                    </template>
-                    <template v-else-if="ic=='metrics' || ic=='background'">
-                        <span v-bind:class="ic"></span>
-                    </template>
-                    <template v-else>
-                        <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAnnotation(ic)"></span>
-                    </template>
+    <ul class="nav nav-tabs bg-dark text-white">
+        <li class="nav-item">
+            <a class="nav-link active" href="#analysed" data-toggle="tab">Feedback <small>(Analytical writing)</small></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#moreAna" data-toggle="tab">Extra</a>
+        </li>
+    </ul>
+    <div class="tab-content ana activeClass" id="legend">
+        <div class="tab-pane active" id="analysed" role="tabpanel">
+            <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
+                <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
+                <ul class="list-inline">
+                <template v-for="msg in rule.message">
+                     <li class="list-inline-item" v-for="(m,id) in msg">
+                        <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;
+                        <span v-bind:class="id"></span>&nbsp;<span v-html="m"></span>
+                    </li>
+                </template>
+                </ul>
+                <hr />
+            </div>
+            <div class="col-md-12">
+                <span v-if="processing!==''"  class="text-success">
+                    <i class="fa fa-spinner fa-spin"></i> {{processing}}
+                    <span class="sr-only">Loading...</span>
+                     <hr />
                 </span>
-                <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>
-            </span>
+            </div>
+            <div class="col-md-12 wrapper">
+                <span v-for="(feed,idx) in feedback.final">
+                    <span v-for="ic in feed.css">
+                        <template v-if="ic=='contribution'">
+                            <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
+                        </template>
+                        <template v-else-if="ic=='metrics' || ic=='background'">
+                            <span v-bind:class="ic"></span>
+                        </template>
+                        <template v-else>
+                           <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAnnotation(ic)"></span>
+                        </template>
+                    </span>
+                    <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>&nbsp;
+                </span>
+            </div>
         </div>
+        <div class="tab-pane" id="moreAna" role="tabpanel">
+            Some details here
+        </div>
+    </div>
     </div>
 </template>
 
@@ -40,15 +67,15 @@
             return {
                 analytic_xlator:[
                     {'metrics': 'metrics'},
-                    {'emph': 'Emphasis'},
-                    {'grow': 'Trend'},
-                    {'contrast': 'Contrast'},
-                    {'contribution': 'Summary'},
-                    {'nostat': 'Question'},
-                    {'tempstat': 'Background'},
-                    {'attitude': 'Position'},
-                    {'novstat': 'Novelty'},
-                    {'surprise':'Surprise'}
+                    {'emph': 'E'},
+                    {'grow': 'T'},
+                    {'contrast': 'C'},
+                    {'contribution': 'S'},
+                    {'nostat': 'Q'},
+                    {'tempstat': 'B'},
+                    {'attitude': 'P'},
+                    {'novstat': 'N'},
+                    {'surprise':'S'}
 
                 ],
             }

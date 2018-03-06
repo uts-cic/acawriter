@@ -307,7 +307,7 @@ class StringTokenizer extends Controller
         $variables->input = $this->cleanText($text);
         $tags = array();
         //get athanor rethmoves
-        if($grammar == 'analytic') {
+        if($grammar == 'analytical') {
             $this->gResponse = $this->client->response($this->queryOneA, $variables);
         } elseif($grammar == 'reflective') {
             $this->gResponse = $this->client->response($this->queryOneR, $variables);
@@ -391,7 +391,7 @@ class StringTokenizer extends Controller
         $variables = new \stdClass();
         $variables->input = $queryTxt;
         //get athanor
-        if($data['grammar'] == 'analytic') {
+        if($data['grammar'] == 'analytical') {
             $this->gResponse = $this->client->response($this->queryOneA, $variables);
         } elseif($data['grammar'] == 'reflective') {
             $this->gResponse = $this->client->response($this->queryOneR, $variables);

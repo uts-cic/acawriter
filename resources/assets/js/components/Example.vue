@@ -18,7 +18,7 @@
 
             <tr v-for= "list in lists">
                 <th scope="row">{{list.faculty}}</th>
-                <td>{{list.feature.grammar}}</td>
+                <td>{{list.feature.grammar}} ({{list.feature.name}})</td>
                 <td><a v-bind:href="'example/analyse/'+list.id">{{list.title}}</a></td>
                 <td><small>{{list.summary}}</small></td>
             </tr>

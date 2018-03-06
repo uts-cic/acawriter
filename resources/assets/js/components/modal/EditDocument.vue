@@ -23,18 +23,16 @@
                             <input type="hidden" name="document_id" v-model="m_document.id" />
                             <br />
                             <button class="btn btn-dark" v-on:click="saveModalDocument()">Save</button> &nbsp;
-                            <button class="btn btn-dark">Cancel</button>
-
+                            <button class="btn btn-dark" v-on:click="close()">Cancel</button>
                     </div>
                 </div>
             </div>
-
         </div>
     </modal>
 </template>
 
 <script>
-    const MODAL_WIDTH = 656
+    const MODAL_WIDTH = 400
     export default {
         name: "editDocument",
         data () {
@@ -72,9 +70,13 @@
                     setTimeout(() => {
                         this.$data.flash = '';
                     }, 3000);
+                    this.$modal.hide("edit-document");
                 }, (err) => {
                     this.$data.errors.push(e)
                 });
+            },
+            close() {
+                this.$modal.hide("edit-document");
             }
         }
     }
