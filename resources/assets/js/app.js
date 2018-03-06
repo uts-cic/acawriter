@@ -131,7 +131,7 @@ $(document).ready(function () {
 
 
     //manipulation of the checkbox fields on text analyser page
-    $(document).on('change', '#sidebar.ref input[type=checkbox]' , function () {
+    $(document).on('change', '#legend.ref input[type=checkbox]' , function () {
         var r = $(this).val();
         /*if($(this).is(':checked')) {
             $('.wrapper .'+r).removeClass('hidemarkup');
@@ -154,7 +154,7 @@ $(document).ready(function () {
     });
 
     //manipulation of the checkbox fields on text analyser page
-    $(document).on('change', '#sidebar.ana input[type=checkbox]' , function () {
+    $(document).on('change', '#legend.ana input[type=checkbox]' , function () {
         var r = $(this).val();
         if($(this).is(':checked')) {
             $('.wrapper .'+r).removeClass('hidemarkup');

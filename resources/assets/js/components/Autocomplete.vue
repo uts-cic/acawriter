@@ -1,7 +1,19 @@
 <template>
     <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                    <ul>
+                        <li v-for="error in errors">{{error.message}}</li>
+                    </ul>
+                </div>
+                <div v-else-if="operation!==''" class="alert alert-info">{{operation}}
+                    <a v-bind:href="'/analyse/' + this.link">Go to my document</a>
+                </div>
+            </div>
+        </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div v-bind:class="'open:openSuggestion'">
                 Paste your assignment code
                 <input type="text" placeholder="XT45EWS" v-model="query" v-on:keyup="autoComplete" class="form-control">
@@ -17,36 +29,25 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
+            <div v-if="selectedAssignments.length">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
-                        <ul>
-                            <li v-for="error in errors">{{error.message}}</li>
-                        </ul>
+                <div  v-for="(a, i) in selectedAssignments" class="row">
+                    <div class="col-md-12">Assignment Title: {{a.name}} ({{a.code}})</div>
+                    <div class="col-md-12">Document name:<small class="text-danger">(ideally should be unique for self reference)</small>
+                        <input type="text" class="form-control"  v-model="doc_name[i]"  /> &nbsp;
+                        <button type="button" class="btn btn-dark" @click="addAssignments()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add to My Documents</button>
                     </div>
-                    <div v-else-if="operation!==''" class="alert alert-info">{{operation}}
-                        <a href="/home">Go to my documents</a>
-                    </div>
+
+                    <!-- <div class="col-md-1"><a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a></div> -->
                 </div>
+                <hr />
+
             </div>
+
         </div>
     </div>
-        <div v-if="selectedAssignments.length">
-            <div  v-for="(a, i) in selectedAssignments" class="row">
-                <div class="col-md-3">Assignment Title: <br /><small> {{a.name}} ({{a.code}})
-                    &nbsp;
-                </small></div>
-                <div class="col-md-4">Document name:<small class="text-danger">(has to be unique)</small>
-                    <input type="text" class="form-control"  v-model="doc_name[i]"  />
-                </div>
 
-                <div class="col-md-1"><a href="#" @click="remove(i)"><i class="fa fa-minus-circle txt-danger"></i></a></div>
-            </div>
-                <hr />
-                <button type="button" class="btn btn-dark" @click="addAssignments()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add to My Documents</button>
-        </div>
 
     </div>
 </template>
@@ -62,7 +63,9 @@
                 operation:'',
                 doc_name:[],
                // doc_file:[],
-                errors:[]
+                errors:[],
+                link: '/analyse'
+
             }
         },
         methods: {
@@ -101,6 +104,7 @@
                     .then(response => {
                         this.$data.operation = response.data.message;
                         this.selectedAssignments =[];
+                        this.link = list[0].doc_file;
                         this.open =false;
                     })
                     .catch(e => {
@@ -122,6 +126,7 @@
                     this.results.length > 0 &&
                     this.open === true;
             }
+
         }
     }
 </script>

@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="row editWrapper">
-            <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
+             <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                     <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>&nbsp;&nbsp;
@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <div id="popup" class="active" v-bind:class="this.attributes.grammar == 'analytic'? 'ana' : 'ref'">
+            <div id="popup" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
@@ -80,18 +80,71 @@
                                 </div>
                             </div>
                             <!--- Reflective feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
-                                <reflective-result></reflective-result>
+                            <div class="col-md-6 bg-light">
+
+
+                                <div v-if="this.attributes.grammar == 'reflective'">
+                                    <reflective-result></reflective-result>
+                                </div>
+                                <div v-else-if="this.attributes.grammar == 'analytical'">
+                                    <analytic-result></analytic-result>
+                                </div>
                             </div>
+
+
+
+
+                          <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
+                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
+                                <ul class="nav nav-tabs card-header-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#ref_analysed" data-toggle="tab">Feedback</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#ref_moreAna" data-toggle="tab">Extra</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane" id="ref_analysed" role="tabpanel">
+                                        <reflective-result></reflective-result>
+                                    </div>
+                                    <div class="tab-pane" id="ref_moreAna" role="tabpanel">
+                                        Some details here
+                                    </div>
+                                </div>
+
+                            </div> -->
                             <!-- end of reflective -->
 
 
                             <!--- Analytic feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
+
+
+                           <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytical'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytical'">
                                 <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
-                                <analytic-result></analytic-result>
-                            </div>
+                                <ul class="nav nav-tabs card-header-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#ana_analysed" data-toggle="tab">Feedback</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#ana_moreAna" data-toggle="tab">Extra</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane" id="ana_analysed" role="tabpanel">
+                                        <analytic-result></analytic-result>
+                                    </div>
+                                    <div class="tab-pane" id="ana_moreAna" role="tabpanel">
+                                        Some details here
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                            </div> -->
                             <!-- end of analytics -->
 
                         </div>
@@ -180,7 +233,7 @@
                 return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
             },
             analytic: function() {
-                return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
+                return this.attributes.feedbackOpt == 'analytical' ? 'display:inline': '';
             },
             ...mapGetters({
                 feedback: 'currentFeedback',
@@ -204,7 +257,7 @@
                     }
                     let feature = this.preSetAssignment.feature[0];
                     return {
-                        feedbackOpt:feature.grammar.toLowerCase() == 'analytic' ? 'a_01': 'r_01',
+                        feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
@@ -213,7 +266,7 @@
                 } else {
                    return {
                         feedbackOpt:'a_01',
-                        grammar: 'analytic',
+                        grammar: 'analytical',
                         feature:0,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
                        initFeedback:this.initFeedback

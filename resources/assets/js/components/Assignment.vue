@@ -6,7 +6,7 @@
             <th scope="col">Code</th>
             <th scope="col">Title</th>
             <th scope="col">Grammar</th>
-            <th scope="col">Keywords</th>
+            <th scope="col">Description</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -14,7 +14,7 @@
             <tr v-for="assignment in assignmentList">
                 <th scope="row">{{assignment.code}}</th>
                 <td>{{assignment.name}}</td>
-                <td>{{assignment.feature.grammar}}</td>
+                <td><a href="/example" title="check out an example">{{assignment.feature.grammar}} <small>({{assignment.feature.name}})</small></a></td>
                 <td><small>{{assignment.keywords}}</small></td>
                 <td><a href="#" v-on:click="fetchAssignment(assignment)"><i class="fa fa-pencil-square-o"></i></a> &nbsp;
                     <a href="#" v-on:click="deleteAssignment(assignment)"><i class="fa fa-trash-o"></i></a>

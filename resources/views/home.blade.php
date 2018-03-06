@@ -33,6 +33,8 @@
                     </div>
                     <div class="tab-pane" id="assignment" role="tabpanel">
                         <h4>Enter your Assignment Code:</h4>
+                        <p class="small">If your lecturer/tutor has given you an Assignment Code for using AcaWriter, please paste it here and a new document will be created.
+                            The document’s name will default to the same name as the assignment, but you can change this if you want to, now or later. Ideally select a unique name for the document for easy self reference.</p>
                         <autocomplete></autocomplete>
                     </div>
                     <div class="tab-pane active" id="new" role="tabpanel">
@@ -140,7 +142,7 @@
             </div>
         </div>
     </div>
- -->
+
     <br />
     @if(in_array('admin', $data->roles))
     <div class="row">
@@ -215,6 +217,6 @@
 
     </div>
 
-
+ -->
 </div>
 @endsection
