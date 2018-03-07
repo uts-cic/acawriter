@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container" id="app">
+    @include('admin.flash')
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -27,7 +28,7 @@
 
                                 <div class="form-group">
                                     <label for="message" class="col-md-4 control-label">Comments</label>
-                                    <textarea id="message" class="form-control" name="message" required></textarea>
+                                    <textarea id="comment" class="form-control" name="comment" required></textarea>
                                 </div>
 
                                 <div class="form-group">
