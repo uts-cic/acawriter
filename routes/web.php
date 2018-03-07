@@ -21,6 +21,8 @@ Route::get('/', function () {
 
 Route::get('/page/{which}', 'PageController@page');
 
+Route::post('/page/contact', 'PageController@storeContact');
+
 Route::get('/log',function(){
    return view('log');
 });

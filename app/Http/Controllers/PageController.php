@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Crm;
+use Illuminate\Support\Facades\Mail;
+Use App\Mail\contactMailer;
+use Auth;
+
 
 class PageController extends Controller
 {
@@ -26,4 +31,48 @@ class PageController extends Controller
             return view ('welcome');
         }
     }
+
+    public function storeContact(Request $request) {
+        $this->validate($request, [
+            'name'      =>  'required',
+            'email'     =>  'required|email',
+            'comment'   =>  'required'
+        ]);
+
+        $crm = new Crm();
+
+        $crm->name      = $request->name;
+        $crm->email     = $request->email;
+        $crm->comment   = $request->comment;
+
+        /*if(Auth::user()->id) {
+            $crm->user_id=Auth::user()->id;
+        }*/
+
+        $crm->ref = '/page/contact';
+
+        $crm->save();
+
+
+        /*Mail::send('email',
+            array(
+                'name' => $request->get('name'),
+                'email' => $request->get('email'),
+                'comment' => $request->get('comment')
+            ), function($message)
+            {
+                $message->from('cicsysadmin@uts.edu.au');
+                $message->to('cicsysadmin@uts.edu.au', 'Admin')->subject('AcaWriter notification');
+            });*/
+
+            Mail::to('cicsysadmin@uts.edu.au')->send(new contactMailer($crm));
+
+
+
+
+        return redirect()->back()->with('success','Thanks for your feedback.');
+
+
+    }
+
 }
