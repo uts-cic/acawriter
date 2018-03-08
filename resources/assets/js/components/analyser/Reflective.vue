@@ -1,6 +1,8 @@
 <template>
     <div>
-        <ul class="nav nav-tabs bg-dark text-white">
+        <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
+        <h4>Reflective Feedback</h4>
+        <!--<ul class="nav nav-tabs bg-dark text-white">
             <li class="nav-item">
                 <a class="nav-link active" href="#analysed" data-toggle="tab">Feedback <small>(Reflective writing)</small></a>
             </li>
@@ -8,7 +10,7 @@
                 <a class="nav-link" href="#moreAna" data-toggle="tab">Extra</a>
             </li>
         </ul>
-        <div class="tab-content ref activeClass" id="legend">
+        <!-- <div class="tab-content ref activeClass" id="legend">
             <div class="tab-pane active" id="analysed" role="tabpanel">
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                     <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
@@ -26,7 +28,7 @@
             <div class="tab-pane" id="moreAna" role="tabpanel">
                 Some details here
             </div>
-        </div>
+        </div> -->
         <div class="col-md-12">
             <span v-if="processing!=''" class="text-danger">
                 <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>{{processing}}

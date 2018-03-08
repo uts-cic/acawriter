@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Crm;
 use Illuminate\Support\Facades\Mail;
 Use App\Mail\contactMailer;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 
 class PageController extends Controller
@@ -45,9 +45,14 @@ class PageController extends Controller
         $crm->email     = $request->email;
         $crm->comment   = $request->comment;
 
-        /*if(Auth::user()->id) {
+
+
+        if (Auth::guest()) {
+
+        } else {
             $crm->user_id=Auth::user()->id;
-        }*/
+        }
+
 
         $crm->ref = '/page/contact';
 
