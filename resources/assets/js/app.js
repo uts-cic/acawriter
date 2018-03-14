@@ -175,5 +175,7 @@ $(document).ready(function () {
         w.document.write(html);
     }
 
+    $('span[data-toggle=tooltip]').tooltip();
+
 
 });
