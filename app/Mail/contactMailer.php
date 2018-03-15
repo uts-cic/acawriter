@@ -34,7 +34,8 @@ class contactMailer extends Mailable
         return $this->view('email')
                     ->with([
                         'name' => $this->crm->name,
-                        'comment' => $this->crm->comment
+                        'comment' => $this->crm->comment,
+                        'email' => $this->crm->email
                     ]);
     }
 }

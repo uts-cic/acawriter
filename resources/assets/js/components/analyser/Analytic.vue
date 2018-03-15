@@ -1,5 +1,7 @@
 <template>
     <div>
+        <!--<p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>-->
+       <!-- <h4>Analytical Feedback</h4> -->
     <ul class="nav nav-tabs bg-dark text-white">
         <li class="nav-item">
             <a class="nav-link active" href="#analysed" data-toggle="tab">Feedback <small>(Analytical writing)</small></a>
@@ -10,23 +12,21 @@
     </ul>
     <div class="tab-content ana activeClass" id="legend">
         <div class="tab-pane active" id="analysed" role="tabpanel">
-            <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
+             <div class="col-md-12 col-xs-12 bg-primary" v-for="rule in feedback.rules">
+                <h6 class="card-subtitle " v-if="rule.custom">{{rule.custom}}</h6>
                 <ul class="list-inline">
                 <template v-for="msg in rule.message">
                      <li class="list-inline-item" v-for="(m,id) in msg">
-                        <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;
+                        <!--<input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;-->
                         <span v-bind:class="id"></span>&nbsp;<span v-html="m"></span>
                     </li>
                 </template>
                 </ul>
-                <hr />
             </div>
             <div class="col-md-12">
                 <span v-if="processing!==''"  class="text-success">
                     <i class="fa fa-spinner fa-spin"></i> {{processing}}
                     <span class="sr-only">Loading...</span>
-                     <hr />
                 </span>
             </div>
             <div class="col-md-12 wrapper">
@@ -42,14 +42,18 @@
                            <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAnnotation(ic)"></span>
                         </template>
                     </span>
-                    <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>&nbsp;
+                    <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"
+                          data-placement="top" data-toggle="tooltip" data-html="true"
+                          v-bind:title="getTitle(feed.css)"
+                          data-original-title="original">
+                    </span>&nbsp;
                 </span>
             </div>
         </div>
-        <div class="tab-pane" id="moreAna" role="tabpanel">
-            Some details here
-        </div>
+       <div class="tab-pane" id="moreAna" role="tabpanel">
+        Some details here
     </div>
+ </div>
     </div>
 </template>
 
@@ -102,6 +106,22 @@
                     }
                 });
                 return temp;
+            },
+            getTitle(css) {
+                var outer= this;
+                let title = '';
+                css.forEach(function(g){
+                    let a = outer.getAnnotation(g);
+                    console.log(a);
+                    outer.feedback.rules.forEach(function(t) {
+                        if(t.css.indexOf(a)!== -1) {
+                            console.log(t.custom);
+                            title = t.custom ? t.custom:'Sorry nothing defined in the rule';
+                        }
+                    });
+                });
+
+                return title;
             }
         },
         computed:{
