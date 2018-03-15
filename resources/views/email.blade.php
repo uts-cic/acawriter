@@ -4,3 +4,5 @@
 
 <p>Comment: {{$comment}}</p>
 
+<p>Sender's email: {{$email}}</p>
+

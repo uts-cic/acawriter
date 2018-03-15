@@ -1,11 +1,11 @@
 <template>
     <div class="container-fluid">
-      <!--   <div class="row">
-            <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-            <div class="col-md-4 text-success">
+        <!--   <div class="row">
+              <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
+              <div class="col-md-4 text-success">
 
-            </div>
-        </div> -->
+              </div>
+          </div> -->
         <div class="row">
             <div class="col-md-12">
                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="row editWrapper">
-             <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
+            <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                     <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>&nbsp;&nbsp;
@@ -50,30 +50,29 @@
 
             <!-- start content -->
             <div id="content" class="col-md-12">
-                <!-- <div class="card"> -->
-                    <!-- <div class="card-header bg-dark text-white"> -->
-                        <div class="row bg-dark text-white">
-                            <div class="col-md-3"><span v-if="preSetAssignment">{{preSetAssignment.name}}</span></div>
-                            <div class="col-md-3 text-right"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <div class="row">
+                            <div class="col-md-2"><span v-if="preSetAssignment">{{preSetAssignment.name}}</span></div>
+                            <div class="col-md-4 text-right"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
                                 <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
                             </div>
 
-                            <div class="col-md-6 text-right"><!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->&nbsp; &nbsp;
+                            <div class="col-md-6 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> &nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" class="btn btn-dark btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
-                                   <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
-                                    <button type="button" class="btn btn-dark btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
-                                  <!--  <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
+                                    <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
+                                    <button type="button" class="btn brand-btn-outline-secondary btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
+                                    <button type="button" id="sidebarCollapse" class="btn brand-btn-outline-secondary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
 
                                 </div>
                             </div>
-                    <!-- </div> -->
+                        </div>
 
                     </div>
-                <br />
-                    <!-- <div class="card-body"> -->
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 tab" id="original">
+                            <div class="col-md-6">
                                 <div id="editor">
                                     <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
                                     <p><small>AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</small></p>
@@ -81,7 +80,7 @@
                                 </div>
                             </div>
                             <!--- Reflective feedback --->
-                            <div class="col-md-6 tab" id="parsed">
+                            <div class="col-md-6 bg-light">
 
 
                                 <div v-if="this.attributes.grammar == 'reflective'">
@@ -95,62 +94,62 @@
 
 
 
-                          <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
-                                <ul class="nav nav-tabs card-header-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#ref_analysed" data-toggle="tab">Feedback</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#ref_moreAna" data-toggle="tab">Extra</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane" id="ref_analysed" role="tabpanel">
-                                        <reflective-result></reflective-result>
-                                    </div>
-                                    <div class="tab-pane" id="ref_moreAna" role="tabpanel">
-                                        Some details here
-                                    </div>
-                                </div>
+                            <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
+                                  <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
+                                  <ul class="nav nav-tabs card-header-tabs">
+                                      <li class="nav-item">
+                                          <a class="nav-link active" href="#ref_analysed" data-toggle="tab">Feedback</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="#ref_moreAna" data-toggle="tab">Extra</a>
+                                      </li>
+                                  </ul>
+                                  <div class="tab-content">
+                                      <div class="tab-pane" id="ref_analysed" role="tabpanel">
+                                          <reflective-result></reflective-result>
+                                      </div>
+                                      <div class="tab-pane" id="ref_moreAna" role="tabpanel">
+                                          Some details here
+                                      </div>
+                                  </div>
 
-                            </div> -->
+                              </div> -->
                             <!-- end of reflective -->
 
 
                             <!--- Analytic feedback --->
 
 
-                           <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytical'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytical'">
-                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
-                                <ul class="nav nav-tabs card-header-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#ana_analysed" data-toggle="tab">Feedback</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#ana_moreAna" data-toggle="tab">Extra</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane" id="ana_analysed" role="tabpanel">
-                                        <analytic-result></analytic-result>
-                                    </div>
-                                    <div class="tab-pane" id="ana_moreAna" role="tabpanel">
-                                        Some details here
-                                    </div>
-                                </div>
+                            <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytical'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytical'">
+                                 <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
+                                 <ul class="nav nav-tabs card-header-tabs">
+                                     <li class="nav-item">
+                                         <a class="nav-link active" href="#ana_analysed" data-toggle="tab">Feedback</a>
+                                     </li>
+                                     <li class="nav-item">
+                                         <a class="nav-link" href="#ana_moreAna" data-toggle="tab">Extra</a>
+                                     </li>
+                                 </ul>
+                                 <div class="tab-content">
+                                     <div class="tab-pane" id="ana_analysed" role="tabpanel">
+                                         <analytic-result></analytic-result>
+                                     </div>
+                                     <div class="tab-pane" id="ana_moreAna" role="tabpanel">
+                                         Some details here
+                                     </div>
+                                 </div>
 
 
 
 
 
 
-                            </div> -->
+                             </div> -->
                             <!-- end of analytics -->
 
                         </div>
-                    <!-- </div> -->
-                <!-- </div> -->
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -227,7 +226,7 @@
         created() {
             this.auto = '';
             //setInterval(this.storeAnalysedDrafts, 900000);
-           // setInterval(this.quickCheck, 300000);
+            // setInterval(this.quickCheck, 300000);
         },
         computed: {
             reflective: function() {
@@ -265,13 +264,13 @@
                         initFeedback:this.initFeedback
                     };
                 } else {
-                   return {
+                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytical',
                         feature:0,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
-                       initFeedback:this.initFeedback
-                   };
+                        initFeedback:this.initFeedback
+                    };
                 }
                 setInterval(this.storeAnalysedDrafts('auto'), 120000);
             },

@@ -81,7 +81,7 @@ class DocumentController extends Controller
         }
 
         //return view('/assignment');
-        return redirect()->back()->with('success','Document added successfully!');
+        return redirect('/analyse/'.$document->slug);
     }
 
 
