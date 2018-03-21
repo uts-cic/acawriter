@@ -80,6 +80,7 @@ class FeedbackController extends Controller
         $extra = $request["extra"];
         $result->status = array('message' => 'Success', 'code' => 200  );
         $result->rules = array();
+        $result->tabs= array();
         $jobRef= $extra['storeDraftJobRef'];
         if($extra['feature'] > 0 ) {
             $feed = $this->getFeedbackSchema('',$extra['feature']);
@@ -116,13 +117,40 @@ class FeedbackController extends Controller
         foreach($this->rules as $rule) {
             $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
             $name = $rule['name'];
-            if(method_exists($this, $method)) {
+            $tab = isset($rule['tab']) ? $rule['tab'] : 1;
+
+            if(method_exists($this, $method) && $tab==1) {
                $result->{$name} = $this->{$method}($tap, $rule);
             }
         }
 
         $final = $this->formatFeedback($tap, $result);
         $result->final = $final;
+
+        //evaluate for all other tabs
+        $tabbed = array();
+        foreach($this->rules as $rule) {
+            $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
+            $name = $rule['name'];
+            $tab = isset($rule['tab']) ? $rule['tab'] : 1;
+            $subTab = new \stdClass;
+
+            if(method_exists($this, $method) && $tab > 1) {
+                $subTab->{$name} = $this->{$method}($tap, $rule);
+                if(!isset($tabbed[$tab])) $tabbed[$tab] =array();
+                array_push($tabbed[$tab], $subTab);
+            }
+
+            // if(!isset($tabbed[$tab]) && $tab > 1) $tabbed[$tab] =array();
+
+        }
+
+        //now just append other tabs to the result
+        if(count($tabbed) >0 ) $result->tabs = $tabbed;
+
+
+
+
 
         /*
          * this is an extension applied to fetch feedback and save all at one go!
@@ -371,7 +399,87 @@ class FeedbackController extends Controller
         return $result;
     }
 
-    protected function formatFeedback($tap, $result) {
+
+    protected function enforced($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $tempo = 0;
+        $tags = $check['tags'];
+        $messages = $rule['message'];
+        if(count($tags) == 0) {
+            return $result;
+        }
+        $monitor = array();
+        $issues = array();
+
+
+        foreach($tap as $key => $data) {
+            $setFeed = new \stdClass();
+            $setFeed->str = $data->str;
+            $setFeed->message = array();
+            $setFeed->css = array();
+            $setFeed->interim = array();
+
+            $temp = array();
+            foreach($tags as $it => $case) {
+                foreach($case as $k=> $tag) {
+                    if (count(array_intersect($tag, $data->raw_tags)) > 0) {
+                        $temp[]= $k;
+                    }
+                }
+            }
+
+            if(count($temp) > 0) {
+                arsort($temp);
+                $sorted = array_unique($temp);
+               // print_r(current($sorted));
+                array_push($monitor, current($sorted));
+            }
+
+
+            //$result[] = $setFeed;
+        }
+        //print_r($monitor);
+
+        foreach ($monitor as $key => $d) {
+            if(isset($monitor[$key+1])) {
+                $pre = $monitor[$key];
+                $next = $monitor[$key+1];
+                if($pre > $next) {
+                    foreach ($messages as $msg) {
+                       if(isset($msg['problem' . $d])) array_push($issues, $msg['problem' . $d]);
+                    }
+                }
+            }
+        }
+
+
+        //check for missing moves
+        $unique_moves = array_unique($monitor);
+        //print_r($unique_moves);
+        foreach(array(1,2,3) as $move) {
+            if(!in_array($move, $unique_moves)) array_push($issues, "Move ".$move ." missing");
+        }
+
+
+        /*$tmp = new \stdClass;
+        $tmp->str = "";
+        $tmp->message = $issues;
+        $tmp->css = array();
+        if(isset($rule['tab'])) $tmp->tab = $rule['tab'];
+        */
+        array_push($result, $issues);
+
+
+        //print_r($result);
+
+        return $result;
+    }
+
+
+
+
+     protected function formatFeedback($tap, $result) {
         $final = array();
 
         foreach($tap as $key => $raw) {
@@ -393,6 +501,8 @@ class FeedbackController extends Controller
             $temp->css = $resCss;
             $final[]=$temp;
         }
+
+
         Log::info('feedback',['feed' =>'completed'.date('d/m/y:H:i:s') ]);
         return $final;
 

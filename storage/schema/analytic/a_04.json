@@ -61,15 +61,15 @@
           { "3" : ["novstat", "contribution"] }
         ],
         "conditions" : [
-          {"problem":  "2,1"},
-          {"problem1": "3,1"},
-          {"problem2": "3,2"}
+          {"problem1": "2,1"},
+          {"problem2": "3,1"},
+          {"problem3": "3,2"}
         ]
       },
       "message": [
-        {"problem" : "<span class=\"badge badge-pill badge-analytic\">Error</span>Missed your move 1, move 2 comes before move 1"},
-        {"problem1" : "<span class=\"badge badge-pill badge-analytic-green\">Error</span> Missed your move 1, move 3 comes before move 1"},
-        {"problem2" : "<span class=\"badge badge-pill badge-analytic-green\">Error</span> Missed your move , move 3 comes before move 1"}
+        {"problem1" : "Missed your move 1, move 2 comes before move 1"},
+        {"problem2" : "Missed your move 1, move 3 comes before move 2"},
+        {"problem3" : "Missed your move , move 3 comes before move 1"}
       ],
       "css": ["N", "S"],
       "custom" : "Feedback",

@@ -4,15 +4,19 @@
        <!-- <h4>Analytical Feedback</h4> -->
     <ul class="nav nav-tabs bg-dark text-white">
         <li class="nav-item">
-            <a class="nav-link active" href="#analysed" data-toggle="tab">Feedback <small>(Analytical writing)</small></a>
+            <a class="nav-link active" href="#analysed" data-toggle="tab">Analytical Report</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#moreAna" data-toggle="tab">Extra</a>
+            <a class="nav-link" href="#feedback" data-toggle="tab">Feedback</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#resources" data-toggle="tab">Resources</a>
         </li>
     </ul>
     <div class="tab-content ana activeClass" id="legend">
         <div class="tab-pane active" id="analysed" role="tabpanel">
              <div class="col-md-12 col-xs-12 bg-primary" v-for="rule in feedback.rules">
+                 <template v-if="rule.tab==1">
                 <h6 class="card-subtitle " v-if="rule.custom">{{rule.custom}}</h6>
                 <ul class="list-inline">
                 <template v-for="msg in rule.message">
@@ -22,6 +26,7 @@
                     </li>
                 </template>
                 </ul>
+                 </template>
             </div>
             <div class="col-md-12">
                 <span v-if="processing!==''"  class="text-success">
@@ -50,10 +55,18 @@
                 </span>
             </div>
         </div>
-       <div class="tab-pane" id="moreAna" role="tabpanel">
-        Some details here
+       <div class="tab-pane" id="feedback" role="tabpanel">
+            <template v-if="feedback.tabs">
+                <span v-for="(ref, idc) in feedback.tabs">
+                    <template v-for="msg in ref">
+                        <span v-for="feed in msg.customised">
+                            <div class="alert alert-info" role="alert" v-for="fin_data in feed">{{fin_data}}</div>
+                        </span>
+                    </template>
+                </span>
+            </template>
+        </div>
     </div>
- </div>
     </div>
 </template>
 
@@ -112,10 +125,10 @@
                 let title = '';
                 css.forEach(function(g){
                     let a = outer.getAnnotation(g);
-                    console.log(a);
+                    //console.log(a);
                     outer.feedback.rules.forEach(function(t) {
                         if(t.css.indexOf(a)!== -1) {
-                            console.log(t.custom);
+                            //console.log(t.custom);
                             title = t.custom ? t.custom:'Sorry nothing defined in the rule';
                         }
                     });

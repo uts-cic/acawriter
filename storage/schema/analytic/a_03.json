@@ -14,7 +14,8 @@
         {"tempstat" : "<span class=\"badge badge-pill badge-analytic-green\">B</span> Wide interest"}
       ],
       "css": ["E","B"],
-      "custom" : "move 1: Establishing a research territory"
+      "custom" : "move 1: Establishing a research territory",
+      "tab" :1
      },
     {
       "name": "moves2",
@@ -30,7 +31,8 @@
         {"nostat" : "<span class=\"badge badge-pill badge-analytic\">Q</span> Novelty improvements of ideas methods"}
       ],
       "css": ["C", "Q"],
-      "custom" : "move 2: Establishing a Niche"
+      "custom" : "move 2: Establishing a Niche",
+      "tab" :1
     },
     {
       "name": "moves3",
@@ -46,7 +48,8 @@
         {"contribution" : "<span class=\"badge badge-pill badge-analytic-green\">S</span> Summarises/signals author’s goals"}
       ],
       "css": ["N", "S"],
-      "custom" : "move 3: Occupying the Niche"
+      "custom" : "move 3: Occupying the Niche",
+      "tab" :1
     }
   ]
 }
