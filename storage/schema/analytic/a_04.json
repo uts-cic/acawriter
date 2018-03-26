@@ -13,9 +13,10 @@
         {"emph" : "<span class=\"badge badge-pill badge-analytic\">E</span> Studied extensively, received considerable attention"},
         {"tempstat" : "<span class=\"badge badge-pill badge-analytic-green\">B</span> Wide interest"}
       ],
-      "css": ["E","B"],
+      "css": ["move1"],
       "custom" : "move 1: Establishing a research territory",
-      "tab": 1
+      "tab": 1,
+      "tabName": "Analytical Feedback"
     },
     {
       "name": "moves2",
@@ -30,9 +31,10 @@
         {"contrast" : "<span class=\"badge badge-pill badge-analytic\">C</span> Disagreement, Tension, Options, Inconsistency"},
         {"nostat" : "<span class=\"badge badge-pill badge-analytic\">Q</span> Novelty improvements of ideas methods"}
       ],
-      "css": ["C", "Q"],
+      "css": ["move2"],
       "custom" : "move 2: Establishing a Niche",
-      "tab": 1
+      "tab": 1,
+      "tabName": "Analytical Feedback"
     },
     {
       "name": "moves3",
@@ -47,9 +49,29 @@
         {"novstat" : "<span class=\"badge badge-pill badge-analytic\">N</span> Novelty improvements of ideas methods"},
         {"contribution" : "<span class=\"badge badge-pill badge-analytic-green\">S</span> Summarises/signals author’s goals"}
       ],
-      "css": ["N", "S"],
+      "css": ["move3"],
       "custom" : "move 3: Occupying the Niche",
-      "tab": 1
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "alerts",
+      "method": "staticFeed",
+      "check": {
+        "tags": [
+        ],
+        "conditions" : [
+        ]
+      },
+      "message": [
+        {"txt" : "<div class=\"alert alert-danger\"><small>Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all three moves in the correct order.</small> <\/div>"},
+        {"txt" : "<div class=\"alert alert-success\" role=\"alert\">Thank you for submitting your draft to AcaWriter.Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing.<\/div>"}
+      ],
+      "css": ["msg1", "msg2"],
+      "custom" : "more feedback",
+      "tab" :2,
+      "tabName": "Feedback",
+      "tabEval": "static"
     },
     {
       "name": "customised",
@@ -61,19 +83,40 @@
           { "3" : ["novstat", "contribution"] }
         ],
         "conditions" : [
-          {"problem":  "2,1"},
-          {"problem1": "3,1"},
-          {"problem2": "3,2"}
+          {"problem1": "2,1"},
+          {"problem2": "3,1"},
+          {"problem3": "3,2"}
         ]
       },
       "message": [
-        {"problem" : "<span class=\"badge badge-pill badge-analytic\">Error</span>Missed your move 1, move 2 comes before move 1"},
-        {"problem1" : "<span class=\"badge badge-pill badge-analytic-green\">Error</span> Missed your move 1, move 3 comes before move 1"},
-        {"problem2" : "<span class=\"badge badge-pill badge-analytic-green\">Error</span> Missed your move , move 3 comes before move 1"}
+        {"problem1" : "Missed your move 1, move 2 comes before move 1"},
+        {"problem2" : "Missed your move 1, move 3 comes before move 2"},
+        {"problem3" : "Missed your move , move 3 comes before move 1"}
       ],
-      "css": ["N", "S"],
+      "css": ["enforced"],
       "custom" : "Feedback",
-      "tab" :2
+      "tab" :2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "faq",
+      "method": "staticFeed",
+      "check": {
+        "tags": [
+        ],
+        "conditions" : [
+        ]
+      },
+      "message": [
+        {"txt" : "<div class=\"alert alert-danger\"><small>Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all three moves in the correct order.</small> <\/div>"},
+        {"txt" : "<div class=\"alert alert-success\" role=\"alert\">Thank you for submitting your draft to AcaWriter.Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing.<\/div>"}
+      ],
+      "css": ["msg1", "msg2"],
+      "custom" : "more feedback",
+      "tab" :,
+      "tabName": "Resources",
+      "tabEval": "static"
     }
   ]
 }
