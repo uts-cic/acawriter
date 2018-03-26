@@ -32,7 +32,8 @@ class FeaturesAnalyticalUpdateSeeder extends Seeder
       ],
       \"css\": [\"E\",\"B\"],
       \"custom\" : \"move 1: Establishing a research territory\",
-      \"tab\": 1
+      \"tab\": 1,
+      \"tabName\": \"Analytical Feedback\"
     },
     {
       \"name\": \"moves2\",
@@ -49,7 +50,8 @@ class FeaturesAnalyticalUpdateSeeder extends Seeder
       ],
       \"css\": [\"C\", \"Q\"],
       \"custom\" : \"move 2: Establishing a Niche\",
-      \"tab\": 1
+      \"tab\": 1,
+      \"tabName\": \"Analytical Feedback\"
     },
     {
       \"name\": \"moves3\",
@@ -61,12 +63,32 @@ class FeaturesAnalyticalUpdateSeeder extends Seeder
         ]
       },
       \"message\": [
-        {\"novstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N</span> Novelty improvements of ideas methods\"},
+        {\"novstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N<\/span> Novelty improvements of ideas methods\"},
         {\"contribution\" : \"<span class=\\\"badge badge-pill badge-analytic-green\\\">S<\/span> Summarises/signals author’s goals\"}
       ],
       \"css\": [\"N\", \"S\"],
       \"custom\" : \"move 3: Occupying the Niche\",
-      \"tab\": 1
+      \"tab\": 1,
+      \"tabName\": \"Analytical Feedback\"
+    },
+    {
+      \"name\": \"alerts\",
+      \"method\": \"staticFeed\",
+      \"check\": {
+        \"tags\": [
+        ],
+        \"conditions\" : [
+        ]
+      },
+      \"message\": [
+        {\"txt\" : \"<div class=\\\"alert alert-success\\\" role=\\\"alert\\\">Thank you for submitting your draft to AcaWriter.Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing.<\/div>\"},
+        {\"txt\" : \"<div class=\\\"alert alert-danger\\\"><small>Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all three moves in the correct order.<\/small> <\/div>\"}
+      ],
+      \"css\": [\"msg1\", \"msg2\"],
+      \"custom\" : \"more feedback\",
+      \"tab\" :2,
+      \"tabName\": \"Feedback\",
+      \"tabEval\": \"static\"
     },
     {
       \"name\": \"customised\",
@@ -90,7 +112,28 @@ class FeaturesAnalyticalUpdateSeeder extends Seeder
       ],
       \"css\": [\"N\", \"S\"],
       \"custom\" : \"Feedback\",
-      \"tab\" :2
+      \"tab\" :2,
+      \"tabName\": \"Feedback\",
+      \"tabEval\": \"dynamic\"      
+    },
+    {
+      \"name\": \"faq\",
+      \"method\": \"staticFeed\",
+      \"check\": {
+        \"tags\": [
+        ],
+        \"conditions\" : [
+        ]
+      },
+      \"message\": [
+        {\"txt\" : \"<div class=\\\"alert alert-dark\\\" role=\\\"alert\\\">Thank you for submitting your draft to AcaWriter.Quality writing comes from revision. <a href=\\\"http:\/\/utscic.edu.au\\\">Research<\/a> shows that writing drafts and revising your text helps improve the quality of your writing.<\/div>\"},
+        {\"txt\" : \"<div class=\\\"alert alert-dark\\\"><small>Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all three moves in the correct order.<\/small> <\/div>\"}
+      ],
+      \"css\": [\"msg1\", \"msg2\"],
+      \"custom\" : \"more feedback\",
+      \"tab\" :3,
+      \"tabName\": \"Resources\",
+      \"tabEval\": \"static\"
     }
   ]
 }");

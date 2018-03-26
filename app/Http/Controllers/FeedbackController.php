@@ -97,8 +97,6 @@ class FeedbackController extends Controller
 
 
         //$result->rules= $this->rules = $feedbackSchema['rules'];
-
-
         //$result->rules = $feedbackSchema['rules'];
         if(count($this->rules) == 0 || count($tap) == 0) {
             $result->status['message'] = 'Error';
@@ -412,67 +410,130 @@ class FeedbackController extends Controller
         $monitor = array();
         $issues = array();
 
+        if($rule["tabEval"] === 'dynamic') {
 
-        foreach($tap as $key => $data) {
-            $setFeed = new \stdClass();
-            $setFeed->str = $data->str;
-            $setFeed->message = array();
-            $setFeed->css = array();
-            $setFeed->interim = array();
+
+            foreach ($tap as $key => $data) {
+                $setFeed = new \stdClass();
+                $setFeed->str = $data->str;
+                $setFeed->message = array();
+                $setFeed->css = array();
+                $setFeed->interim = array();
+
+                $temp = array();
+                foreach ($tags as $it => $case) {
+                    foreach ($case as $k => $tag) {
+                        if (count(array_intersect($tag, $data->raw_tags)) > 0) {
+                            $temp[] = $k;
+                        }
+                    }
+                }
+
+                if (count($temp) > 0) {
+                    arsort($temp);
+                    $sorted = array_unique($temp);
+                    // print_r(current($sorted));
+                    array_push($monitor, current($sorted));
+                }
+            }
+
+            foreach ($monitor as $key => $d) {
+                if (isset($monitor[$key + 1])) {
+                    $pre = $monitor[$key];
+                    $next = $monitor[$key + 1];
+                    if ($pre > $next) {
+                        foreach ($messages as $msg) {
+                            if (isset($msg['problem' . $d])) array_push($issues, $msg['problem' . $d]);
+                        }
+                    }
+                }
+            }
+
+
+            //check for missing moves
+            $unique_moves = array_unique($monitor);
+            //print_r($unique_moves);
+            foreach (array(1, 2, 3) as $move) {
+                if (!in_array($move, $unique_moves)) array_push($issues, "Move " . $move . " missing");
+            }
+
+
+        } else {
+            foreach($messages as $key => $msg) {
+                array_push($issues, $msg);
+            }
+        }
+
+        array_push($result, $issues);
+        //print_r($result);
+        return $result;
+    }
+
+    protected function missingTags($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $tempo = 0;
+        $tags = $check['tags'];
+        $messages = $rule['message'];
+        if(count($tags) == 0) {
+            return $result;
+        }
+        $monitor = array();
+        $issues = array();
+
+        if($rule["tabEval"] === 'dynamic') {
 
             $temp = array();
-            foreach($tags as $it => $case) {
-                foreach($case as $k=> $tag) {
-                    if (count(array_intersect($tag, $data->raw_tags)) > 0) {
-                        $temp[]= $k;
-                    }
-                }
+            foreach ($tap as $key => $data) {
+               $temp = array_merge($temp, $data->raw_tags);
             }
 
-            if(count($temp) > 0) {
-                arsort($temp);
-                $sorted = array_unique($temp);
-               // print_r(current($sorted));
-                array_push($monitor, current($sorted));
-            }
-
-
-            //$result[] = $setFeed;
-        }
-        //print_r($monitor);
-
-        foreach ($monitor as $key => $d) {
-            if(isset($monitor[$key+1])) {
-                $pre = $monitor[$key];
-                $next = $monitor[$key+1];
-                if($pre > $next) {
+            $monitor = array_unique($temp);
+            foreach ($tags as  $d) {
+                if (!in_array($d, $monitor)) {
                     foreach ($messages as $msg) {
-                       if(isset($msg['problem' . $d])) array_push($issues, $msg['problem' . $d]);
+                        if (isset($msg[$d])) array_push($issues, $msg[$d]);
                     }
                 }
             }
+
+
+        } else {
+            foreach($messages as $key => $msg) {
+                array_push($issues, $msg);
+            }
         }
 
-
-        //check for missing moves
-        $unique_moves = array_unique($monitor);
-        //print_r($unique_moves);
-        foreach(array(1,2,3) as $move) {
-            if(!in_array($move, $unique_moves)) array_push($issues, "Move ".$move ." missing");
-        }
-
-
-        /*$tmp = new \stdClass;
-        $tmp->str = "";
-        $tmp->message = $issues;
-        $tmp->css = array();
-        if(isset($rule['tab'])) $tmp->tab = $rule['tab'];
-        */
         array_push($result, $issues);
-
-
         //print_r($result);
+        return $result;
+    }
 
+
+
+
+
+
+
+
+    protected function staticFeed($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $tempo = 0;
+        $tags = $check['tags'];
+        $messages = $rule['message'];
+
+        $monitor = array();
+        $issues = array();
+
+        if($rule["tabEval"] === 'dynamic') {
+
+        } else {
+            foreach($messages as $key => $msg) {
+                array_push($issues, $msg['txt']);
+            }
+        }
+        array_push($result, $issues);
         return $result;
     }
 
