@@ -398,6 +398,14 @@ class FeedbackController extends Controller
     }
 
 
+    /**
+     * -- crafted this to cover sophies CARS rules, all the rules guided by features
+     * @param $tap - all tags per specified calls
+     * @param $rule - fulled from selected feature
+     * @return array - returns missing tags
+     *                         moves1, move2, move3 precedence orders and messages if not followed
+     */
+
     protected function enforced($tap, $rule) {
         $result = array();
         $check = $rule['check'];
@@ -454,7 +462,11 @@ class FeedbackController extends Controller
             $unique_moves = array_unique($monitor);
             //print_r($unique_moves);
             foreach (array(1, 2, 3) as $move) {
-                if (!in_array($move, $unique_moves)) array_push($issues, "Move " . $move . " missing");
+                if (!in_array($move, $unique_moves)) {
+                    foreach ($messages as $msg) {
+                        if (isset($msg['missing' . $move])) array_push($issues, $msg['missing' . $move]);
+                    }
+                }
             }
 
 

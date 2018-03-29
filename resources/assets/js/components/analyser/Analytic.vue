@@ -2,7 +2,7 @@
     <div>
         <!--<p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>-->
        <!-- <h4>Analytical Feedback</h4> -->
-    <ul class="nav nav-tabs bg-dark text-white">
+    <ul class="nav nav-pills nav-fill bg-dark text-white">
         <li class="nav-item">
             <a class="nav-link active" href="#analysed" data-toggle="tab">Analytical Report</a>
         </li>
@@ -17,7 +17,7 @@
             <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                 <template v-if="rule.tab==1 || !rule.tab">
                     <h5 class="card-subtitle " v-if="rule.custom">{{rule.custom}}</h5>
-                    <ul class="list-inline">
+                    <ul class="list-inline p-2" v-bind:class="rule.name">
                         <template v-for="msg in rule.message">
                             <li class="list-inline-item" v-for="(m,id) in msg">
                             <!--<input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;-->
@@ -125,11 +125,20 @@
             },
             inLineAnaClasses: function(data) {
                 var temp=  '';
+                let rname = '';
+                var out =this;
                 data.forEach(function( obj ) {
-                    if (obj ==='contribution') {
-                        temp = 'ana_bg_green';
-                    } else if(obj != 'metrics') {
-                        temp = 'ana_bg_yellow';
+                    //let a = outer.getAnnotation(g);
+                    /** all this hack jus tto harcode moves bg colors!!!! **/
+                    rname  = out.getRuleName(obj);
+                    if(rname !== '') {
+                        temp = rname;
+                    } else {
+                        if (obj === 'contribution') {
+                            temp = 'ana_bg_green';
+                        } else if (obj != 'metrics') {
+                            temp = 'ana_bg_yellow';
+                        }
                     }
                 });
                 return temp;
@@ -154,6 +163,27 @@
             },
             getLowerCase(str) {
                 return str.toLowerCase();
+            }
+            ,getRuleName(tag) {
+                let tabs = [];
+                let mv = [];
+                let name ='';
+                let rules = this.feedback.rules;
+
+                tabs = rules.filter(rule => rule.tab  == 1);
+                console.log(tabs);
+                tabs.forEach(function(item) {
+                    console.log(item);
+                    console.log(item.check.tags);
+                    if(item.check.tags.indexOf(tag)!== -1) mv.push(item.name);
+                });
+                //console.log(mv);
+                if(mv.indexOf('moves3')!== -1) name = 'moves3';
+                else if(mv.indexOf('moves2')!== -1) name = 'moves2';
+                else if(mv.indexOf('moves1')!== -1) name = 'moves1';
+                else name ='';
+
+                return name;
             }
         },
         computed:{

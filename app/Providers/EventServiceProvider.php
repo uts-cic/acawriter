@@ -16,6 +16,13 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserRegistered' => [
             'App\Listeners\AssignRole',
         ],
+        'App\Events\UserLog' => [
+            'App\Listeners\UpdateUserActivity',
+        ],
+        'Illuminate\Auth\Events\Logout' => [
+            'App\Listeners\UpdateUserLogoutActivity',
+        ],
+
     ];
 
     /**

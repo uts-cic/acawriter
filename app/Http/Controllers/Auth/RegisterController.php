@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 
+use App\Events\UserLog;
 use App\Events\UserRegistered;
 use App\Role;
 use App\User;
@@ -69,16 +70,19 @@ class RegisterController extends Controller
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
-                $message = "User login";
-                event(new OperationLog($user, $message));
+                $message = "login";
+                event(new OperationLog($user, $message)); // used for updating log file compared to the db entry
+                event(new UserLog($user, $message));
 
                 return redirect()->intended('/home');
             } else {
                 $user = $this->create($credentials);
                 Auth::login($user);
                 $message = "New user created";
+                $msg = 'login';
                 event(new OperationLog($user, $message));
                 event(new UserRegistered($user,$whatRole));
+                event(new UserLog($user, $msg)); // logs activity
 
                 return redirect()->intended('/home');
             }
