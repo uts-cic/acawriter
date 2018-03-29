@@ -24,6 +24,7 @@ class OperationLog implements ShouldBroadcast
      */
 
     public $details;
+    public $userId;
 
     public function __construct(User $user, $message=""){
         $status = $message!=="" ? $message :"";

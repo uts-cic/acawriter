@@ -58,12 +58,12 @@
                                 <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
                             </div>
 
-                            <div class="col-md-6 text-right">Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> &nbsp; &nbsp;
+                            <div class="col-md-6 text-right"><!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->&nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                                     <button type="button" class="btn btn-dark btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
                                    <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
                                     <button type="button" class="btn btn-dark btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
-                                    <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
+                                  <!--  <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
 
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                 <br />
                     <!-- <div class="card-body"> -->
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 tab" id="original">
                                 <div id="editor">
                                     <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
                                     <p><small>AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</small></p>
@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <!--- Reflective feedback --->
-                            <div class="col-md-6 bg-light">
+                            <div class="col-md-6 tab" id="parsed">
 
 
                                 <div v-if="this.attributes.grammar == 'reflective'">
