@@ -1,13 +1,11 @@
 <template>
     <div>
-        <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
-        <h4>Reflective Feedback</h4>
-        <ul class="nav nav-tabs bg-dark text-white">
+        <ul class="nav nav-pills nav-fill bg-dark text-white">
             <li class="nav-item">
-                <a class="nav-link active" href="#analysed" data-toggle="tab">Feedback <small>(Reflective writing)</small></a>
+                <a class="nav-link active" href="#analysed" data-toggle="tab">Reflective Report</small></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#moreAna" data-toggle="tab">Extra</a>
+           <li class="nav-item">
+                <a class="nav-link" href="#moreAna" data-toggle="tab">Feedback</a>
             </li>
         </ul>
          <div class="tab-content ref activeClass" id="legend">
@@ -42,7 +40,7 @@
             </div>
             </div>
              <div class="tab-pane" id="moreAna" role="tabpanel">
-                 Some details here
+                 <div class="alert alert-info"><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></div>
              </div>
          </div>
     </div>

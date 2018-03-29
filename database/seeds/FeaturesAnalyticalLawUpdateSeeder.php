@@ -92,6 +92,25 @@ class FeaturesAnalyticalLawUpdateSeeder extends Seeder
       \"tab\" :2,
       \"tabName\": \"Feedback\",
       \"tabEval\": \"dynamic\"
+    },
+    {
+      \"name\": \"faq\",
+      \"method\": \"staticFeed\",
+      \"check\": {
+        \"tags\": [
+        ],
+        \"conditions\" : [
+        ]
+      },
+      \"message\": [
+         {\"txt\":\"A list of sample sentences with rhetorical moves, mapped to your essay assessment rubric is provided below:\"},
+         {\"txt\" : \"<table class=\\\"table table-bordered\\\"><thead><tr class=\\\"table-secondary\\\"><th scope=\\\"col\\\">Sample Sentence<\/th><th scope=\\\"col\\\">Essay Assessment Rubric Element<\/th><th scope=\\\"col\\\">AcaWriter Move<\/th><\/tr><\/thead><tbody><tr><td scope=\\\"row\\\">The concept of good faith <strong>has previously been thought<\/strong> to be a work in progress in Australia.<\/td><td>Engagement with the law and scholarly literature<\/td><td>Background<\/td><\/tr><tr><td scope=\\\"row\\\"><strong>This article will trace<\/strong> the origins of good faith and its development in the common law. <strong>This essay contains three parts. The first part will talk about<\/strong> the origins of good faith.<\/td><td>Statement of thesis, Essay plan<\/td><td>Summary<\/td><\/tr><tr><td scope=\\\"row\\\"><strong>However<\/strong>, where the obligations are found in statute and they conflict with contractual obligations, <strong>it is important to note that<\/strong> the former must prevail.<\/td><td>Identification of relevant issues, Critical analysis and original insight<\/td><td>Contrast,Emphasis<\/td><\/tr><\/tbody><\/table>\"}
+       ],
+      \"css\": [\"msg1\", \"msg2\"],
+      \"custom\" : \"more feedback\",
+      \"tab\" :3,
+      \"tabName\": \"Examples\",
+      \"tabEval\": \"static\"
     }
   ]
 }");
