@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="row editWrapper">
-             <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
+             <!-- <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                     <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
                     <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>&nbsp;&nbsp;
@@ -31,9 +31,9 @@
                     </div>
                     <hr />
                 </div>
-            </div>
+            </div> -->
 
-            <div id="popup" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
+            <!-- <div id="popup" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
                 <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
                 </div>
                 <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
@@ -45,7 +45,7 @@
                     </div>
                     <hr />
                 </div>
-            </div>
+            </div> -->
 
 
             <!-- start content -->
