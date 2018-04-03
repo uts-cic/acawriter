@@ -136,7 +136,9 @@ class DocumentController extends Controller
             }
 
             $assignments = Assignment::whereIn('id',$assignmentIds)->with('feature')->get();
-            $list->documents = Document::whereIn('assignment_id',$assignmentIds)->with('assignment')->get();
+            $list->documents = Document::whereIn('assignment_id',$assignmentIds)
+                                        ->where('user_id',$user_id)
+                                        ->with('assignment')->get();
         }
 
         if(count($list->documents) > 0 && count($assignments) >0) {
