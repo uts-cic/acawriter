@@ -10,6 +10,7 @@ use App\Draft;
 use Illuminate\Support\Facades\DB;
 use App\Feature;
 use App\Document;
+use App\Example;
 
 
 class AssignmentController extends Controller
@@ -79,6 +80,7 @@ class AssignmentController extends Controller
             'list' => 'required'
         ]);
 
+        $document_id =0;
 
         $user_id = Auth::user()->id;
         if(count($request["list"]) > 0) {
@@ -92,6 +94,11 @@ class AssignmentController extends Controller
                     ['user_id', '=', $user_id],
                     ['assignment_id', '=', $a["id"]]
                 ])->count();
+                $selected_assignment = Assignment::find($a["id"]);
+
+                if(!is_null($selected_assignment->example_id)) {
+                    $example = Example::find($selected_assignment->example_id);
+                }
 
                 if($subscribed == 0) {
                     if(DB::table('user_subscription')->insert([
@@ -102,12 +109,20 @@ class AssignmentController extends Controller
                             'updated_at' => date('Y-m-d H:i:s')
                         ]
                     ])) {
-                        $up[]  = $this->addDocument($a) ? 0 :1 ;
+                        $document_id = $this->addDocument($a);
+                        $up[]  = $document_id > 0 ? 0 :1 ;
+                        if(isset($example) && $document_id > 0) {
+                            $up[] = $this->addDraft($example, $document_id, $selected_assignment) > 0 ? 0 :1;
+                        }
                     } else {
                         $up[]=1;
                     }
                 } else {
-                    $up[]  = $this->addDocument($a) ? 0 :1 ;
+                    $document_id = $this->addDocument($a);
+                    $up[]  = $document_id > 0 ? 0 :1 ;
+                    if(isset($example) && $document_id > 0) {
+                        $up[] = $this->addDraft($example, $document_id, $selected_assignment) > 0 ? 0 :1;
+                    }
                 }
             }
             if(in_array(1, $up)) {
@@ -151,7 +166,35 @@ class AssignmentController extends Controller
 
         $document->save();
 
-        return $document->id > 0 ? true: false;
+        return $document->id > 0 ? $document->id : 0;
+    }
+
+    /**
+     * called iff example_id is assignment_id is
+     * @param $data example
+     * @param $id document_id
+     * @param $assignment assignment
+     * @return draft_id
+     */
+
+
+
+    private function addDraft($data, $id, $assignment) {
+
+
+        $draft = new Draft();
+        $draft->text_input = $data->text_input;
+        $draft->feature_id = $assignment->feature_id;
+        $draft->document_id = $id;
+        $draft->raw_response = $data->raw_response; //already json_decoded
+        $draft->user_id = Auth::user()->id;
+        $draft->is_auto = 0;
+        $draft->created_at = date('Y-m-d H:i:s');
+        $draft->updated_at = date('Y-m-d H:i:s');
+
+        $draft->save();
+
+        return $draft->id > 0 ? $draft->id : 0;
     }
 
 
