@@ -16,7 +16,7 @@
         <div class="tab-pane active p-1" id="analysed" role="tabpanel">
             <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
                 <template v-if="rule.tab==1 || !rule.tab">
-                    <h5 class="card-subtitle " v-if="rule.custom">{{rule.custom}}</h5>
+                    <span class="card-subtitle " v-if="rule.custom" v-html="rule.custom"></span>
                     <ul class="list-inline p-2" v-bind:class="rule.name">
                         <template v-for="msg in rule.message">
                             <li class="list-inline-item" v-for="(m,id) in msg">
