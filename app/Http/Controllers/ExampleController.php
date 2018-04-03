@@ -81,6 +81,7 @@ class ExampleController extends Controller
         $example->faculty = $request['other']['faculty'];
         $example->text_input = $request['txt'];
         $example->raw_response = json_encode($request['feedback']);
+        $example->hide = 0;
 
         $example->save();
 
