@@ -28,7 +28,7 @@ class ExampleController extends Controller
     public function fetchExamples() {
         $list = new \stdClass;
 
-        $list->examples = Example::with('feature')->get();
+        $list->examples = Example::where('hide',0)->with('feature')->get();
         return response()->json($list);
 
     }

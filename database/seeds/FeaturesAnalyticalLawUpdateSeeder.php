@@ -44,7 +44,7 @@ class FeaturesAnalyticalLawUpdateSeeder extends Seeder
         {\"grow\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">T<\/span> Trend or tendency related to ideas\"}
       ],
       \"css\": [\"P\",\"E\", \"T\", \"S\", \"N\", \"C\", \"B\", \"S\"],
-      \"custom\" : \"Rhetorical Moves:\",
+      \"custom\" : \"<span class=\\\"small\\\">The analytical report highlights salient rhetorical moves AcaWriter identified in your essay for reflection. For more specific feedback, go to the Feedback tab.<\/span><h5>Rhetorical Moves<\/h5>\",
       \"tab\": 1,
       \"tabName\": \"Analytical Feedback\"
     },
