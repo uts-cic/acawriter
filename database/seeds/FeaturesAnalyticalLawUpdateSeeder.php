@@ -74,7 +74,6 @@ class FeaturesAnalyticalLawUpdateSeeder extends Seeder
           \"contribution\",
           \"tempstat\",
           \"nostat\",
-          \"contrast\",
           \"emph\"
         ],
         \"conditions\" : [
