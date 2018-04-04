@@ -337,7 +337,143 @@ class StoreDrafts implements ShouldQueue
         return $result;
     }
 
+    /**
+     * -- crafted this to cover sophies CARS rules, all the rules guided by features
+     * @param $tap - all tags per specified calls
+     * @param $rule - fulled from selected feature
+     * @return array - returns missing tags
+     *                         moves1, move2, move3 precedence orders and messages if not followed
+     */
 
+    protected function enforced($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $tempo = 0;
+        $tags = $check['tags'];
+        $messages = $rule['message'];
+        if(count($tags) == 0) {
+            return $result;
+        }
+        $monitor = array();
+        $issues = array();
+
+        if($rule["tabEval"] === 'dynamic') {
+
+
+            foreach ($tap as $key => $data) {
+                $setFeed = new \stdClass();
+                $setFeed->str = $data->str;
+                $setFeed->message = array();
+                $setFeed->css = array();
+                $setFeed->interim = array();
+
+                $temp = array();
+                foreach ($tags as $it => $case) {
+                    foreach ($case as $k => $tag) {
+                        if (count(array_intersect($tag, $data->raw_tags)) > 0) {
+                            $temp[] = $k;
+                        }
+                    }
+                }
+
+                if (count($temp) > 0) {
+                    arsort($temp);
+                    $sorted = array_unique($temp);
+                    // print_r(current($sorted));
+                    array_push($monitor, current($sorted));
+                }
+            }
+
+            foreach ($monitor as $key => $d) {
+                if (isset($monitor[$key + 1])) {
+                    $pre = $monitor[$key];
+                    $next = $monitor[$key + 1];
+                    if ($pre > $next) {
+                        foreach ($messages as $msg) {
+                            if (isset($msg['problem' . $d])) array_push($issues, $msg['problem' . $d]);
+                        }
+                    }
+                }
+            }
+
+
+            //check for missing moves
+            $unique_moves = array_unique($monitor);
+            //print_r($unique_moves);
+            foreach (array(1, 2, 3) as $move) {
+                if (!in_array($move, $unique_moves)) {
+                    foreach ($messages as $msg) {
+                        if (isset($msg['missing' . $move])) array_push($issues, $msg['missing' . $move]);
+                    }
+                }
+            }
+
+
+        } else {
+            foreach($messages as $key => $msg) {
+                array_push($issues, $msg);
+            }
+        }
+
+        array_push($result, $issues);
+        //print_r($result);
+        return $result;
+    }
+
+    protected function missingTags($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $tempo = 0;
+        $tags = $check['tags'];
+        $messages = $rule['message'];
+        if(count($tags) == 0) {
+            return $result;
+        }
+        $monitor = array();
+        $issues = array();
+
+        if($rule["tabEval"] === 'dynamic') {
+
+            $temp = array();
+            $temp_temp =array();
+            foreach ($tap as $key => $data) {
+                $temp_temp = array_merge($temp_temp, $data->raw_tags);
+            }
+
+            /***
+             * hacky stuff that violates the flow of rules - for Shibani....
+             * if contrast and question present add error
+             * else if either of them present don't add error
+             * solution replace all contrast tags to question and check question
+             * if present don't error else error!!!!
+             ***/
+
+            foreach($temp_temp as $v) {
+                if($v=='contrast') { array_push($temp, 'nostat');}
+                else { array_push($temp, $v); }
+            }
+
+
+            $monitor = array_unique($temp);
+            foreach ($tags as  $d) {
+                if (!in_array($d, $monitor)) {
+                    foreach ($messages as $msg) {
+                        if (isset($msg[$d])) array_push($issues, $msg[$d]);
+                    }
+                }
+            }
+
+
+        } else {
+            foreach($messages as $key => $msg) {
+                array_push($issues, $msg);
+            }
+        }
+
+        array_push($result, $issues);
+        //print_r($result);
+        return $result;
+    }
 
 
     protected function staticFeed($tap, $rule) {

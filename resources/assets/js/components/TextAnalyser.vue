@@ -165,7 +165,7 @@
             if(this.initFeedback) {
                 //this.fetchFeedback();
             }
-            this.autoStore();
+            /* this.autoStore(); */
         },
         created() {
             this.auto = '';
@@ -311,14 +311,14 @@
                 // this.$data.tap='';
                 //this.$data.auto='processing....';
                 let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':'auto', 'document':this.preSetAssignment.id};
-               /* axios.post('/feedback/store', data)
+                axios.post('/feedback/store', data)
                     .then(response => {
                         //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
                     })
                     .catch(e => {
                         this.$data.errors.push(e)
                     });
-               */
+
             },
             tokeniseTextInput() {
                 console.log("into tokenise");
