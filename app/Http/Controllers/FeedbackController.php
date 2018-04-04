@@ -503,7 +503,7 @@ class FeedbackController extends Controller
             $temp = array();
             $temp_temp =array();
             foreach ($tap as $key => $data) {
-                $temp_temp = array_merge($temp, $data->raw_tags);
+                $temp_temp = array_merge($temp_temp, $data->raw_tags);
             }
 
             /***
@@ -520,6 +520,8 @@ class FeedbackController extends Controller
             }
 
             $monitor = array_unique($temp);
+            print_r($monitor);
+            print_r($tags);
             foreach ($tags as  $d) {
                 if (!in_array($d, $monitor)) {
                     foreach ($messages as $msg) {
