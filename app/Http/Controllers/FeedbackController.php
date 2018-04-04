@@ -500,6 +500,25 @@ class FeedbackController extends Controller
                $temp = array_merge($temp, $data->raw_tags);
             }
 
+            $temp = array();
+            $temp_temp =array();
+            foreach ($tap as $key => $data) {
+                $temp_temp = array_merge($temp, $data->raw_tags);
+            }
+
+            /***
+             * hacky stuff that violates the flow of rules - for Shibani....
+             * if contrast and question present don't add error
+             * else if neither of them present show  error
+             * solution replace all contrast tags with question and check for question(nostat)
+             * if present don't error else error!!!!
+             ***/
+
+            foreach($temp_temp as $v) {
+                if($v=='contrast') { array_push($temp, 'nostat');}
+                else { array_push($temp, $v); }
+            }
+
             $monitor = array_unique($temp);
             foreach ($tags as  $d) {
                 if (!in_array($d, $monitor)) {

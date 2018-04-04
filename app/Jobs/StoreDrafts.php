@@ -77,14 +77,40 @@ class StoreDrafts implements ShouldQueue
 
         //go through and call each rule if the rule is defined
         foreach($this->rules as $rule) {
-            $method = $rule['name'];
-            if(method_exists($this, $method)) {
-                $result->{$method} = $this->{$method}($tap, $rule);
+            $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
+            $name = $rule['name'];
+            $tab = isset($rule['tab']) ? $rule['tab'] : 1;
+
+            if(method_exists($this, $method) && $tab==1) {
+                $result->{$name} = $this->{$method}($tap, $rule);
             }
         }
 
         $final = $this->formatFeedback($tap, $result);
         $result->final = $final;
+
+
+        //evaluate for all other tabs
+        $tabbed = array();
+        foreach($this->rules as $rule) {
+            $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
+            $name = $rule['name'];
+            $tab = isset($rule['tab']) ? $rule['tab'] : 1;
+            $subTab = new \stdClass;
+
+            if(method_exists($this, $method) && $tab > 1) {
+                $subTab->{$name} = $this->{$method}($tap, $rule);
+                if(!isset($tabbed[$tab])) $tabbed[$tab] =array();
+                array_push($tabbed[$tab], $subTab);
+            }
+
+            // if(!isset($tabbed[$tab]) && $tab > 1) $tabbed[$tab] =array();
+
+        }
+
+        //now just append other tabs to the result
+        if(count($tabbed) >0 ) $result->tabs = $tabbed;
+
 
         $draftNew = new Draft();
         $draftNew->text_input = $this->draft['txt'];
@@ -310,6 +336,37 @@ class StoreDrafts implements ShouldQueue
 
         return $result;
     }
+
+
+
+
+    protected function staticFeed($tap, $rule) {
+        $result = array();
+        $check = $rule['check'];
+        $tempo = 0;
+        $tags = $check['tags'];
+        $messages = $rule['message'];
+
+        $monitor = array();
+        $issues = array();
+
+        if($rule["tabEval"] === 'dynamic') {
+
+        } else {
+            foreach($messages as $key => $msg) {
+                array_push($issues, $msg['txt']);
+            }
+        }
+        array_push($result, $issues);
+        return $result;
+    }
+
+
+
+
+
+
+
 
     protected function formatFeedback($tap, $result) {
         $final = array();
