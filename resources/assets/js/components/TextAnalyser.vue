@@ -82,8 +82,6 @@
                             </div>
                             <!--- Reflective feedback --->
                             <div class="col-md-6 tab" id="parsed">
-
-
                                 <div v-if="this.attributes.grammar == 'reflective'">
                                     <reflective-result></reflective-result>
                                 </div>
@@ -91,62 +89,6 @@
                                     <analytic-result></analytic-result>
                                 </div>
                             </div>
-
-
-
-
-                          <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
-                                <ul class="nav nav-tabs card-header-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#ref_analysed" data-toggle="tab">Feedback</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#ref_moreAna" data-toggle="tab">Extra</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane" id="ref_analysed" role="tabpanel">
-                                        <reflective-result></reflective-result>
-                                    </div>
-                                    <div class="tab-pane" id="ref_moreAna" role="tabpanel">
-                                        Some details here
-                                    </div>
-                                </div>
-
-                            </div> -->
-                            <!-- end of reflective -->
-
-
-                            <!--- Analytic feedback --->
-
-
-                           <!--  <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytical'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytical'">
-                                <p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>
-                                <ul class="nav nav-tabs card-header-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#ana_analysed" data-toggle="tab">Feedback</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#ana_moreAna" data-toggle="tab">Extra</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane" id="ana_analysed" role="tabpanel">
-                                        <analytic-result></analytic-result>
-                                    </div>
-                                    <div class="tab-pane" id="ana_moreAna" role="tabpanel">
-                                        Some details here
-                                    </div>
-                                </div>
-
-
-
-
-
-
-                            </div> -->
-                            <!-- end of analytics -->
 
                         </div>
                     <!-- </div> -->
@@ -192,7 +134,7 @@
                 counter:0,
                 tempIds:[],
                 auto:'',
-                autosave:'',
+                autosave:false,
                 autofeedback:false,
                 splitText:[],
                 quickTags:'',
@@ -223,11 +165,13 @@
             if(this.initFeedback) {
                 //this.fetchFeedback();
             }
+            this.autoStore();
         },
         created() {
             this.auto = '';
             //setInterval(this.storeAnalysedDrafts, 900000);
            // setInterval(this.quickCheck, 300000);
+            //this.autoStore();
         },
         computed: {
             reflective: function() {
@@ -273,7 +217,7 @@
                        initFeedback:this.initFeedback
                    };
                 }
-                setInterval(this.storeAnalysedDrafts('auto'), 120000);
+
             },
             rulesClasses: function() {
                 let rules = [];
@@ -362,18 +306,19 @@
                     this.tokeniseTextInput();
                 }
             },
-            storeAnalysedDrafts(type) {
+            storeAnalysedDrafts() {
                 console.log("into auto store");
                 // this.$data.tap='';
-                this.$data.auto='processing....';
-                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
-                axios.post('/feedback/store', data)
+                //this.$data.auto='processing....';
+                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':'auto', 'document':this.preSetAssignment.id};
+               /* axios.post('/feedback/store', data)
                     .then(response => {
                         //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
                     })
                     .catch(e => {
                         this.$data.errors.push(e)
                     });
+               */
             },
             tokeniseTextInput() {
                 console.log("into tokenise");
@@ -399,6 +344,9 @@
                         this.intervalId =0;
                     }
                 }
+            },
+            autoStore(){
+                setInterval(this.storeAnalysedDrafts, 60000);
             }
         }
     }
