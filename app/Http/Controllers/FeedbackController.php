@@ -520,8 +520,7 @@ class FeedbackController extends Controller
             }
 
             $monitor = array_unique($temp);
-            print_r($monitor);
-            print_r($tags);
+            
             foreach ($tags as  $d) {
                 if (!in_array($d, $monitor)) {
                     foreach ($messages as $msg) {
