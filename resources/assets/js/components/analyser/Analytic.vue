@@ -14,8 +14,8 @@
     </ul>
     <div class="tab-content ana activeClass" id="legend">
         <div class="tab-pane active p-1" id="analysed" role="tabpanel">
-            <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                <template v-if="rule.tab==1 || !rule.tab">
+            <template v-for="rule in feedback.rules">
+            <div class="col-md-12 col-xs-12" v-if="rule.tab==1 || !rule.tab">
                     <span class="card-subtitle " v-if="rule.custom" v-html="rule.custom"></span>
                     <ul class="list-inline p-2" v-bind:class="rule.name">
                         <template v-for="msg in rule.message">
@@ -25,8 +25,8 @@
                             </li>
                         </template>
                     </ul>
-                </template>
             </div>
+            </template>
             <hr />
             <div class="col-md-12">
                     <span v-if="processing!==''"  class="text-success">
@@ -50,7 +50,7 @@
                         <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"
                               data-placement="top" data-toggle="tooltip" data-html="true"
                               v-bind:title="getTitle(feed.css)"
-                              data-original-title="original">
+                              data-original-title="">
                         </span>&nbsp;
                     </span>
                 </div>
