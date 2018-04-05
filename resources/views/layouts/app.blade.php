@@ -14,14 +14,14 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-2"><img src="/images/uts_logo_sm.png" alt="UTS"/></div>
         <div class="col-md-9"></div>
-    </div>
+    </div> -->
 
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/home') }}">
+            <a class="navbar-brand" href="{{ url('/home') }}"> <img src="/images/download.png"/>
                AcaWriter
             </a>  &nbsp;
             <!-- Collapsed Hamburger -->
@@ -97,6 +97,7 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     @include('layouts.footer')
 </body>
