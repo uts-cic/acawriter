@@ -22,11 +22,12 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <!-- Branding Image -->
             <a class="navbar-brand" href="{{ url('/home') }}"> <img src="/images/download.png"/>
-               AcaWriter
+                <span class="navhead">AcaWriter</span>
             </a>  &nbsp;
             <!-- Collapsed Hamburger -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
+
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <!-- Left Side Of Navbar -->
@@ -97,7 +98,7 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
     <script src="{{ asset('js/app.js') }}"></script>
     @include('layouts.footer')
 </body>

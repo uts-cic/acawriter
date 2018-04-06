@@ -62,7 +62,7 @@
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                                     <button type="button" class="btn btn-dark btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
                                    <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
-                                    <button type="button" class="btn btn-dark btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
+                                    <a href="/generate-pdf/378" class="btn btn-dark btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</a>&nbsp;
                                   <!--  <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
 
                                 </div>
@@ -158,14 +158,15 @@
                     {'attitude': 'P'},
                 ],
                 initFeedback:false,
-                intervalId:0
+                intervalId:0,
+                textChangeCounter:0
             }
         },
         mounted () {
             if(this.initFeedback) {
                 //this.fetchFeedback();
             }
-            /* this.autoStore(); */
+             this.autoStore();
         },
         created() {
             this.auto = '';
@@ -249,6 +250,9 @@
             },
         },
         watch :{
+            'editorContent': function(val, oldVal) {
+                this.textChangeCounter++;
+            }
         },
         methods: {
             computeText: function(nv, ov) {
@@ -307,17 +311,27 @@
                 }
             },
             storeAnalysedDrafts() {
-                console.log("into auto store");
+
                 // this.$data.tap='';
                 //this.$data.auto='processing....';
-                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':'auto', 'document':this.preSetAssignment.id};
-                axios.post('/feedback/store', data)
-                    .then(response => {
-                        //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
+                if (this.textChangeCounter > 0) {
+                    console.log("into auto store");
+                    this.textChangeCounter =0;
+                    let data = {
+                        'txt': this.editorContent,
+                        'action': 'store',
+                        'extra': this.attributes,
+                        'type': 'auto',
+                        'document': this.preSetAssignment.id
+                    };
+                    axios.post('/feedback/store', data)
+                        .then(response => {
+                            //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
+                        })
+                        .catch(e => {
+                            this.$data.errors.push(e)
+                        });
+                }
 
             },
             tokeniseTextInput() {
@@ -347,7 +361,8 @@
             },
             autoStore(){
                 setInterval(this.storeAnalysedDrafts, 60000);
-            }
+            },
+
         }
     }
 </script>
