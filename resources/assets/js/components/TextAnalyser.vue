@@ -158,14 +158,15 @@
                     {'attitude': 'P'},
                 ],
                 initFeedback:false,
-                intervalId:0
+                intervalId:0,
+                textChangeCounter:0
             }
         },
         mounted () {
             if(this.initFeedback) {
                 //this.fetchFeedback();
             }
-            /* this.autoStore(); */
+             this.autoStore();
         },
         created() {
             this.auto = '';
@@ -249,6 +250,9 @@
             },
         },
         watch :{
+            'editorContent': function(val, oldVal) {
+                this.textChangeCounter++;
+            }
         },
         methods: {
             computeText: function(nv, ov) {
@@ -307,21 +311,30 @@
                 }
             },
             storeAnalysedDrafts() {
-                console.log("into auto store");
                 // this.$data.tap='';
                 //this.$data.auto='processing....';
-                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes, 'type':'auto', 'document':this.preSetAssignment.id};
-                axios.post('/feedback/store', data)
-                    .then(response => {
-                        //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
+                if (this.textChangeCounter > 0) {
+                    console.log("into auto store");
+                    this.textChangeCounter =0;
+                    let data = {
+                        'txt': this.editorContent,
+                        'action': 'store',
+                        'extra': this.attributes,
+                        'type': 'auto',
+                        'document': this.preSetAssignment.id
+                    };
+                    axios.post('/feedback/store', data)
+                        .then(response => {
+                            //this.$data.auto = 'Draft saved : '+ moment().format('DD/MM/YYYY hh:mma');
+                        })
+                        .catch(e => {
+                            this.$data.errors.push(e)
+                        });
+                }
 
             },
             tokeniseTextInput() {
-                console.log("into tokenise");
+                //console.log("into tokenise");
                 //this.$data.autoCheckr =true;
                 this.$data.counter = 0;
                 axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
