@@ -449,14 +449,16 @@ class FeedbackController extends Controller
                 if (isset($monitor[$key + 1])) {
                     $pre = $monitor[$key];
                     $next = $monitor[$key + 1];
+                    $idx = $pre.$next;
                     if ($pre > $next) {
                         foreach ($messages as $msg) {
-                            if (isset($msg['problem' . $d])) array_push($issues, $msg['problem' . $d]);
+                            if (isset($msg['problem' . $idx])) array_push($issues, $msg['problem' . $idx]);
                         }
                     }
                 }
             }
 
+           // print_r($issues);
 
             //check for missing moves
             $unique_moves = array_unique($monitor);
