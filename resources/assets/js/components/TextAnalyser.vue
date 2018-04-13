@@ -60,7 +60,7 @@
 
                             <div class="col-md-6 text-right"><!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->&nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" class="btn btn-dark btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
+                                    <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-dark btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
                                    <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
                                     <button type="button" class="btn btn-dark btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
                                   <!--  <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
@@ -136,6 +136,7 @@
                 auto:'',
                 autosave:false,
                 autofeedback:false,
+                btnFeedback: false,
                 splitText:[],
                 quickTags:'',
                 customToolbar: [
@@ -166,7 +167,7 @@
             if(this.initFeedback) {
                 //this.fetchFeedback();
             }
-             this.autoStore();
+             /*this.autoStore();*/
         },
         created() {
             this.auto = '';
@@ -235,6 +236,7 @@
                 upd.message ='';
                 var s = this;
                 if(this.userActivity && this.preSetAssignment){
+                    this.btnFeedback = false;
                     //console.log(this.slogs.details.status);
                     this.userActivity.forEach(function(activity){
                         if(activity.data) {
@@ -248,6 +250,13 @@
 
                 return upd;
             },
+            getbtnStatus: function() {
+                if (this.btnFeedback) {
+                    return true;
+                }  else {
+                    return false;
+                }
+            }
         },
         watch :{
             'editorContent': function(val, oldVal) {
@@ -296,6 +305,7 @@
                 this.errors=[];
                 //this.autoCheck = true;
                 this.attributes.initFeedback = true;
+                this.btnFeedback = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
