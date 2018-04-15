@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\StoreDrafts;
+use App\Jobs\StoreDraftWithoutFeedback;
 use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -197,7 +198,8 @@ class FeedbackController extends Controller
     public function storeFeedback(Request $request) {
         $user_id = Auth::user()->id;
         $user = Auth::user();
-        StoreDrafts::dispatch($request->all(), $user)->onConnection('redis');
+        //StoreDrafts::dispatch($request->all(), $user)->onConnection('redis');
+        StoreDraftWithoutFeedback::dispatch($request->all(), $user)->onConnection('redis');
     }
 
 

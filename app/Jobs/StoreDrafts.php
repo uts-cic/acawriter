@@ -14,7 +14,6 @@ use App\Http\Controllers\StringTokenizer;
 use App\Draft;
 use App\Feature;
 use App\User;
-//use App\Events\OperationLog;
 use App\Events\UserActivity;
 
 
