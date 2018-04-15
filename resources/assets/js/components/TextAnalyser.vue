@@ -167,7 +167,7 @@
             if(this.initFeedback) {
                 //this.fetchFeedback();
             }
-             /*this.autoStore();*/
+             this.autoStore();
         },
         created() {
             this.auto = '';
