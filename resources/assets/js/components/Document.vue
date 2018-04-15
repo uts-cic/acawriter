@@ -19,7 +19,8 @@
 
         <tr v-for= "list in lists">
             <th scope="row">{{list.assignment.code}}</th>
-            <td><a href="/example" title="check out an example">{{list.grammar}}<small>({{list.feature_name}})</small></a></td>
+            <!-- <td><a href="/example" title="check out an example">{{list.grammar}}<small>({{list.feature_name}})</small></a></td> -->
+            <td>{{list.grammar}} ({{list.feature_name}})</td>
             <td>{{list.assignment.name}}</td>
             <!-- <td><a v-bind:href="'analyse/'+list.assignment.code">{{list.name}}</a></td> -->
             <td><a v-bind:href="'analyse/'+list.slug">{{list.name}}</a></td>
