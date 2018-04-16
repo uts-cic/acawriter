@@ -14,7 +14,6 @@ use App\Http\Controllers\StringTokenizer;
 use App\Draft;
 use App\Feature;
 use App\User;
-//use App\Events\OperationLog;
 use App\Events\UserActivity;
 
 
@@ -388,9 +387,10 @@ class StoreDrafts implements ShouldQueue
                 if (isset($monitor[$key + 1])) {
                     $pre = $monitor[$key];
                     $next = $monitor[$key + 1];
+                    $idx = $pre.$next;
                     if ($pre > $next) {
                         foreach ($messages as $msg) {
-                            if (isset($msg['problem' . $d])) array_push($issues, $msg['problem' . $d]);
+                            if (isset($msg['problem' . $idx])) array_push($issues, $msg['problem' . $idx]);
                         }
                     }
                 }
