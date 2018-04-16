@@ -80,4 +80,7 @@
   'raleway' => array(
     'normal' => $fontDir . '/b4947bfc07f9f11b363f4d7446cd3e99',
   ),
+  'fontawesome3' => array(
+    'normal' => $fontDir . '/79b165604c2795cff5e31845780a7600',
+  ),
 ) ?>
