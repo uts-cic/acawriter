@@ -201,6 +201,10 @@
                         let data = {'savedFeed':JSON.parse(this.preSetAssignment.draft.raw_response)};
                         this.$store.dispatch('PRELOAD_FEEDBACK',data);
                         this.initFeedback = false;
+                    } else if(this.preSetAssignment.textDraft) {
+
+                        this.editorContent = this.preSetAssignment.textDraft.text_input;
+                        this.initFeedback = false;
                     }
                     let feature = this.preSetAssignment.feature[0];
                     return {

@@ -8,6 +8,7 @@ use App\Document;
 use App\Draft;
 use App\Feature;
 use Auth;
+use App\TextDraft;
 
 class AnalyseController extends Controller
 {
@@ -26,6 +27,7 @@ class AnalyseController extends Controller
     public function index($code=NULL) {
 
         $user_id = Auth::user()->id;
+        $td = new TextDraft();
         if(isset($code)) {
 
             $this->ui->document = Document::where('slug', '=', $code)
@@ -38,12 +40,28 @@ class AnalyseController extends Controller
             }
             $this->ui->document[0]->feature = Feature::where('id',$this->ui->document[0]->assignment->feature_id)->get();
 
-            $this->ui->document[0]->draft = Draft::where('document_id',$this->ui->document[0]->id)->orderBy('created_at','desc')->first();
+            //$this->ui->document[0]->draft = Draft::where('document_id',$this->ui->document[0]->id)->orderBy('created_at','desc')->first();
             /* $this->ui->assignment = Assignment::where('code', '=', $code)
                                     ->with('feature')
                                     ->get();
             $this->ui->assignment_id = Assignment::where('code', '=', $code)->pluck('id');
             */
+
+            $draft = Draft::where('document_id',$this->ui->document[0]->id)->orderBy('created_at','desc')->first();
+            $textDraft = $td::where('document_id',$this->ui->document[0]->id)->orderBy('created_at','desc')->first();
+
+            if(isset($textDraft) && isset($draft)) {
+                if(strtotime($textDraft->created_at) > strtotime($draft->created_at)) {
+                    $this->ui->document[0]->textDraft = $textDraft;
+                } else {
+                    $this->ui->document[0]->draft = $draft;
+                }
+            }  else if(isset($textdraft)) {
+                $this->ui->document[0]->textdraft = $textdraft;
+            } else {
+                $this->ui->document[0]->draft = $draft;
+            }
+
         }
 
         return view('analyse', ['data' => $this->ui]);
