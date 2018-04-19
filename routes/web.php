@@ -106,3 +106,8 @@ Route::get('/admin/users', 'AdminController@showUsers');
 Route::post('/admin/users', 'AdminController@updateUserRoles');
 
 Route::post('/admin/addUser', 'AdminController@addUser');
+
+
+//Genaerate and download pdf
+
+Route::get('/generate-pdf/{draftId}', 'PdfGeneratorController@pdfview');
