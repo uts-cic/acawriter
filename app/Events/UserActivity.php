@@ -29,11 +29,14 @@ class UserActivity implements ShouldBroadcast
 
     public function __construct(User $user, $data)
     {
+
+
         $sockData = new \stdClass;
         $sockData->type = $data->type ? $data->type : 'General';
         //if draft is saved $data-ref has the new draft obj & $data->ref->id is the new draft id
             //if this is true then send the job ref back to Vue to verify action
         $sockData->ref= $data->ref ? $data->jobRef: '';
+        $sockData->msg= isset($data->msg) ? $data->msg: '';
 
         Log::info('activity',['draft' => $sockData]);
 

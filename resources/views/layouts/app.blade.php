@@ -14,19 +14,20 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-2"><img src="/images/uts_logo_sm.png" alt="UTS"/></div>
         <div class="col-md-9"></div>
-    </div>
+    </div> -->
 
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/home') }}">
-               AcaWriter
+            <a class="navbar-brand" href="{{ url('/home') }}"> <img src="/images/download.png"/>
+                <span class="navhead">AcaWriter</span>
             </a>  &nbsp;
             <!-- Collapsed Hamburger -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
+
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <!-- Left Side Of Navbar -->
@@ -97,6 +98,7 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+
     <script src="{{ asset('js/app.js') }}"></script>
     @include('layouts.footer')
 </body>

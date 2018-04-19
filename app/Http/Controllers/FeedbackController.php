@@ -196,6 +196,7 @@ class FeedbackController extends Controller
             } else {
                 $activityLog->status = 'error';
             }
+            $activityLog->msg = "Feedback and Draft Saved";
             $activityLog->user = $user;
             $activityLog->type = 'Draft';
             $activityLog->ref = $draftNew;

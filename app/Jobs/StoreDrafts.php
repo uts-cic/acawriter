@@ -129,6 +129,7 @@ class StoreDrafts implements ShouldQueue
         } else {
             $activityLog->status= 'error';
         }
+        $activityLog->msg = "Feedback and Draft Saved";
         $activityLog->user = $this->user;
         $activityLog->type = 'Draft';
         $activityLog->ref = $draftNew;

@@ -52,18 +52,17 @@
             <div id="content" class="col-md-12">
                 <!-- <div class="card"> -->
                     <!-- <div class="card-header bg-dark text-white"> -->
-                        <div class="row bg-dark text-white">
-                            <div class="col-md-3"><span v-if="preSetAssignment">{{preSetAssignment.name}}</span></div>
+                        <div class="row bg-default">
+                            <div class="col-md-3"><h4 v-if="preSetAssignment">{{preSetAssignment.name}}</h4></div>
                             <div class="col-md-3 text-right"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
-                                <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
+                                <span v-if="auto!=''"><small>{{auto}}</small></span>
                             </div>
 
                             <div class="col-md-6 text-right"><!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->&nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-dark btn-sm" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
-                                   <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp; -->
-                                    <button type="button" class="btn btn-dark btn-sm disabled"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export to PDF</button>&nbsp;
-                                  <!--  <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
+                                    <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-warning btn" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
+                                   <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
+                                   <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
 
                                 </div>
                             </div>
@@ -194,10 +193,10 @@
                 }
             },
             attributes: function() {
+                this.textChangeCounter =0;
                 if(this.preSetAssignment) {
                     if(this.preSetAssignment.draft) {
                         this.editorContent = this.preSetAssignment.draft.text_input;
-
                         let data = {'savedFeed':JSON.parse(this.preSetAssignment.draft.raw_response)};
                         this.$store.dispatch('PRELOAD_FEEDBACK',data);
                         this.initFeedback = false;
@@ -245,7 +244,7 @@
                     this.userActivity.forEach(function(activity){
                         if(activity.data) {
                             if(activity.data.type==='Draft' && activity.data.ref === s.attributes.storeDraftJobRef) {
-                                upd.message = "Draft Saved ";
+                                upd.message = activity.data.msg;
                                 s.auto = moment().format('DD/MM/YYYY hh:mma');
                             }
                         }
@@ -309,6 +308,7 @@
                 this.errors=[];
                 //this.autoCheck = true;
                 this.attributes.initFeedback = true;
+                this.textChangeCounter= 0;
                 this.btnFeedback = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
@@ -325,6 +325,7 @@
                 }
             },
             storeAnalysedDrafts() {
+
                 // this.$data.tap='';
                 //this.$data.auto='processing....';
                 if (this.textChangeCounter > 0) {
@@ -374,7 +375,8 @@
             },
             autoStore(){
                 setInterval(this.storeAnalysedDrafts, 60000);
-            }
+            },
+
         }
     }
 </script>

@@ -66,11 +66,13 @@ class StoreDraftWithoutFeedback implements ShouldQueue
         } else {
             $activityLog->status= 'error';
         }
+        $activityLog->msg = "Text Saved";
         $activityLog->user = $this->user;
         $activityLog->type = 'Draft';
         $activityLog->ref = $draftNew;
         $activityLog->jobRef = $jobRef;
 
+        print_r($activityLog);
 
         event(new UserActivity($this->user, $activityLog));
 
