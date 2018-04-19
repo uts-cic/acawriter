@@ -8,8 +8,8 @@
 }
 
 #navbarCollapse .nav-item {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
 .nav-link {
@@ -19,6 +19,13 @@
 #navbarCollapse .nav-link dropdown-toggle {
   background-color:#000000;
 }
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #FFFFFF;
+  background-color: #000000;
+}
+
+
 
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
@@ -45,6 +52,10 @@ a[aria-expanded="true"] {
 
   .navbar-dark .navbar-nav .nav-link{
     color: #FFFFFF;
+  }
+
+  .navbar-brand img{
+    margin-top:-6px;
   }
 
   .dashboard .nav-item .nav-link {
