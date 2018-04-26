@@ -173,6 +173,22 @@ $ npm run prod
 $ ./startup /* runs the node socket.js for webscokets to work */
 ```
 
+## Access control/Admin
+By default if AAF used for login, Acawriter will identify and allocate roles resp. as user (for students) and staff(staff) logins. However to create a super admin, you would need to manually login and set them up. To do so login to postgres db using the following
+```sh
+docker-compose exec postgres psql -U default -W -d default
+```
+and add superadmin (role=1) into user_role table
+
+```sh
+insert into user_role (user_id, role_id) values (1,1);
+```
+
+Super admin will allow for managing users as of now. (Other super admin feature & updates to follow)
+
+
+
+
 ## Known Issues
 
 * Error with the python version
