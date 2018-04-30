@@ -40,7 +40,7 @@ class FeedbackController extends Controller
 {
 
 
-    public  $graphQLURL = "http://tap-test.utscic.edu.au/graphql";
+    public  $graphQLURL = "";
     public  $client;
     private $metricsWordLength = 25;
     private $para = 3;
@@ -53,6 +53,7 @@ class FeedbackController extends Controller
         $this->middleware('auth');
         $this->client = new Client($this->graphQLURL);
         $this->stringTokeniser = new StringTokenizer();
+        $this->graphQLURL = env('TAP_API', ''). "/graphql";
     }
 
 
