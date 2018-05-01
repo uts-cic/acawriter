@@ -1,3 +1,5 @@
+<a href="https://snyk.io/test/github/uts-cic/acawriter?targetFile=package.json"><img src="https://snyk.io/test/github/uts-cic/acawriter/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/uts-cic/acawriter?targetFile=package.json" style="max-width:100%;"></a>
+
 # AcaWriter
 
 <strong>AcaWriter</strong> was created by the Academic Writing Analytics project, at the UTS Connected Intelligence Centre. The software is now being shared and improved across universities in Australia and beyond, as part of the Higher Education Text Analytics open source project.
