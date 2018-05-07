@@ -1,23 +1,4 @@
 <?php
-/**
- * Project: AcaWriter
- *
- * Copyright(c)2018 original University of Technology Sydney.
- * Licensed under the Apache License, Version2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *
- * See the License for the specific language governing permissions and limitations under the License.
- *
- *  Contributor(s):
- *  UTS Connected Intelligence Centre
- */
 
 namespace App\Http\Controllers;
 
@@ -40,7 +21,7 @@ class FeedbackController extends Controller
 {
 
 
-    public  $graphQLURL = "http://tap-test.utscic.edu.au/graphql";
+    public  $graphQLURL = "";
     public  $client;
     private $metricsWordLength = 25;
     private $para = 3;
@@ -53,6 +34,7 @@ class FeedbackController extends Controller
         $this->middleware('auth');
         $this->client = new Client($this->graphQLURL);
         $this->stringTokeniser = new StringTokenizer();
+        $this->graphQLURL = env('TAP_API', ''). "/graphql";
     }
 
 
@@ -91,7 +73,9 @@ class FeedbackController extends Controller
 
         } */
         else if($request['action'] == 'fetch') {
+            Log::info('moves',['execute time : ' =>'started'.date('d/m/y:H:i:s') ]);
             $tap = $this->stringTokeniser->preProcess($request);
+
             Log::info('tokeniser',['tokeniser' =>'completed'.date('d/m/y:H:i:s') ]);
         }
 
@@ -172,7 +156,7 @@ class FeedbackController extends Controller
 
         /*
          * this is an extension applied to fetch feedback and save all at one go!
-         * provided intitFeedback is set to true
+         * provided init Feedback is set to true
          *
          */
 
@@ -388,6 +372,7 @@ class FeedbackController extends Controller
 
 
     protected function moves($tap, $rule) {
+
         $result = array();
         $check = $rule['check'];
         $tempo = 0;

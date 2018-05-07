@@ -131,7 +131,7 @@ $(document).ready(function () {
 
 
     //manipulation of the checkbox fields on text analyser page
-    $(document).on('change', '#sidebar.ref input[type=checkbox]' , function () {
+    $(document).on('change', '#sidebar.ref input[type=checkbox], .ref_chk input[type=checkbox]' , function () {
         var r = $(this).val();
         /*if($(this).is(':checked')) {
             $('.wrapper .'+r).removeClass('hidemarkup');
@@ -154,7 +154,7 @@ $(document).ready(function () {
     });
 
     //manipulation of the checkbox fields on text analyser page
-    $(document).on('change', '#sidebar.ana input[type=checkbox]' , function () {
+    $(document).on('change', '#sidebar.ana input[type=checkbox], .ref_chk input[type=checkbox]' , function () {
         var r = $(this).val();
         if($(this).is(':checked')) {
             $('.wrapper .'+r).removeClass('hidemarkup');
@@ -176,6 +176,29 @@ $(document).ready(function () {
     }
 
     $('span[data-toggle=tooltip]').tooltip();
+
+
+    //assignment feature info show hide
+    let assignment_grammar = $("#grammar").val();
+
+    $('div[class="feature_info"]').each(function(index,item){
+        if(parseInt($(item).data('index')) === parseInt(assignment_grammar)){
+            $(item).removeClass('hidefeature');
+        } else {
+            $(item).addClass('hidefeature');
+        }
+    });
+    $("#grammar").change(function () {
+        let now_sel = $(this).val();
+        $('.feature_info').each(function(index,item){
+            if(parseInt($(item).data('index')) === parseInt(now_sel)){
+                $(item).removeClass('hidefeature');
+            } else {
+                $(item).addClass('hidefeature');
+            }
+        });
+    });
+
 
 
 });
