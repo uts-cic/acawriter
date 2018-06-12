@@ -27,7 +27,7 @@ use App\User;
 class StringTokenizer extends Controller
 {
     public $gResponse;
-    public $graphQLURL = "http://tap-test.utscic.edu.au/graphql";
+    public $graphQLURL = "";
     public $client;
     protected $query = "query 
                     CleanText(\$input: String!) {
@@ -138,6 +138,7 @@ class StringTokenizer extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->graphQLURL = env('TAP_API', ''). "/graphql";
         $this->client = new Client($this->graphQLURL);
     }
     /**
