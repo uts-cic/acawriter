@@ -15,7 +15,7 @@ class FeatureTableSeeder extends Seeder
         //
         $feature_a = new Feature();
         $feature_a->name = "Default-Rule";
-        $feature_a->grammar="Analytic";
+        $feature_a->grammar="Analytical";
         $feature_a->rules=json_encode("{
     \"rules\": [
       {
