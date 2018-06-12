@@ -4,6 +4,8 @@
 
 <strong>AcaWriter</strong> was created by the Academic Writing Analytics project, at the UTS Connected Intelligence Centre. The software is now being shared and improved across universities in Australia and beyond, as part of the Higher Education Text Analytics open source project.
 
+### AcaWriter requires TAP & Athanor installed. 
+
 ## Tech Stack
 
 Laravel, Postgres, GraphQL, Redis, node, socket.io, docker, docker-compose
@@ -172,7 +174,7 @@ For production environments...
 
 ```sh
 $ npm run prod
-$ ./startup /* runs the node socket.js for webscokets to work */
+$ ./startup.sh /* runs the node socket.js for webscokets to work */
 ```
 
 ## Access control/Admin
