@@ -110,4 +110,4 @@ Route::post('/admin/addUser', 'AdminController@addUser');
 
 //Genaerate and download pdf
 
-/* Route::get('/generate-pdf/{draftId}', 'PdfGeneratorController@pdfview'); */
+ Route::get('/generate-pdf/{draftId}', 'PdfGeneratorController@pdfview');

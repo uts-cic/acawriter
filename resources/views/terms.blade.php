@@ -12,9 +12,11 @@
                     <p class="card-text">
                         The Connected Intelligence Centre (CIC) complies with the UTS Governance strategy toward Privacy, as well as associated regulations and practices. See Privacy at UTS for more information.
                         In addition to the regular data collection associated with the normal running of a UTS teaching and research unit, CIC engages in activities across the University that will from time to time mean:
-                        The collection of additional data (eg student employment industry categories)
-                        Accessing existing data and reusing for a purpose not originally intended with its collection (eg, Learning Management System (LMS) logins)
-                        Combining more than one form of a data with another (eg LMS logins and grades)
+                        <ul>
+                        <li>The collection of additional data (eg student employment industry categories)</li>
+                        <li>Accessing existing data and reusing for a purpose not originally intended with its collection (eg, Learning Management System (LMS) logins)</li>
+                        <li>Combining more than one form of a data with another (eg LMS logins and grades)</li>
+                        </ul>
                     </p>
                     <h4>Collection</h4>
                     <p class="card-text">

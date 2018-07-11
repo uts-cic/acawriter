@@ -2,6 +2,14 @@
     <div>
         <!--<p><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></p>-->
        <!-- <h4>Analytical Feedback</h4> -->
+       <!-- <div class="row">
+            <div class="col-md-12">
+                <div class="progress" v-if="processing!==''">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 45%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div> -->
+        <br />
     <ul class="nav nav-pills nav-fill bg-dark text-white">
         <li class="nav-item">
             <a class="nav-link active" href="#analysed" data-toggle="tab">Analytical Report</a>
@@ -28,12 +36,7 @@
             </div>
             </template>
             <hr />
-            <div class="col-md-12">
-                    <span v-if="processing!==''"  class="text-success">
-                        <i class="fa fa-spinner fa-spin"></i> {{processing}}
-                        <span class="sr-only">Loading...</span>
-                    </span>
-                </div>
+
                 <div class="col-md-12 wrapper">
                     <span v-for="(feed,idx) in feedback.final">
                         <span v-for="ic in feed.css">
@@ -47,10 +50,7 @@
                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAnnotation(ic)"></span>
                             </template>
                         </span>
-                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"
-                              data-placement="top" data-toggle="tooltip" data-html="true"
-                              v-bind:title="getTitle(feed.css)"
-                              data-original-title="">
+                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]">
                         </span>&nbsp;
                     </span>
                 </div>
@@ -66,19 +66,7 @@
                        </span>
                    </template>
                </span>
-
-
-
-              <!-- <div class="col-md-12 p-2">
-                   <div class="alert alert-success" role="alert">
-                       Thank you for submitting your draft to AcaWriter.Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing.
-                   </div>
-                   <div class="alert alert-danger"><small>Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all three moves in the correct order.</small> </div>
-
-               </div> -->
             </div>
-
-
         </template>
     </div>
     </div>
@@ -96,31 +84,25 @@
         store,
         data() {
             return {
-                analytic_xlator:[
-                    {'metrics': 'metrics'},
-                    {'emph': 'E'},
-                    {'grow': 'T'},
-                    {'contrast': 'C'},
-                    {'contribution': 'S'},
-                    {'nostat': 'Q'},
-                    {'tempstat': 'B'},
-                    {'attitude': 'P'},
-                    {'novstat': 'N'},
-                    {'surprise':'S'}
-
-                ],
+                analytic_xlator: {
+                    metrics: 'metrics',
+                    emph: 'E',
+                    grow: 'T',
+                    contrast: 'C',
+                    contribution: 'S',
+                    nostat: 'Q',
+                    tempstat: 'B',
+                    attitude: 'P',
+                    novstat: 'N',
+                    surprise: 'S'
+                }
             }
         },
         mounted:function() {
         },
         methods:{
             getAnnotation(ic) {
-                let tg = '';
-                this.analytic_xlator.forEach(function(val){
-                    if(val[ic]) {
-                        tg = val[ic];
-                    }
-                });
+                let tg = typeof this.analytic_xlator[ic]!=='undefined' ? this.analytic_xlator[ic] : '';
                 return tg;
             },
             inLineAnaClasses: function(data) {
@@ -171,10 +153,8 @@
                 let rules = this.feedback.rules;
 
                 tabs = rules.filter(rule => rule.tab  == 1);
-                console.log(tabs);
+
                 tabs.forEach(function(item) {
-                    console.log(item);
-                    console.log(item.check.tags);
                     if(item.check.tags.indexOf(tag)!== -1) mv.push(item.name);
                 });
                 //console.log(mv);

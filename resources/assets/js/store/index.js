@@ -4,6 +4,15 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
+axios.interceptors.request.use(config => {
+    NProgress.start();
+    return config;
+});
+
+axios.interceptors.response.use(config => {
+    NProgress.done();
+    return config;
+});
 
 const store = new Vuex.Store({
     state: {

@@ -6,9 +6,9 @@
 
             </div>
         </div> -->
-        <div class="row">
+        <div class="row" v-if="errors && errors.length">
             <div class="col-md-12">
-                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                <div  class="col-md-12 alert alert-danger" role="alert">
                     <ul>
                         <li v-for="error in errors">{{error.message}}</li>
                     </ul>
@@ -16,43 +16,12 @@
             </div>
         </div>
         <div class="row editWrapper">
-             <!-- <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
-                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
-                    <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
-                    <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>&nbsp;&nbsp;
-                </div>
-                <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
-                    <div v-for="msg in rule.message">
-                        <div class="row" v-for="(m,id) in msg">
-                            <div class="col-md-1 col-xs-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
-                            <div class="col-md-10 col-xs-11"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
-                        </div>
-                    </div>
-                    <hr />
-                </div>
-            </div> -->
-
-            <!-- <div id="popup" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
-                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
-                </div>
-                <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
-                    <div v-for="msg in rule.message">
-                        <div class="row" v-for="(m,id) in msg">
-                            <div class="col-md-12 col-xs-12"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
-                        </div>
-                    </div>
-                    <hr />
-                </div>
-            </div> -->
-
 
             <!-- start content -->
             <div id="content" class="col-md-12">
                 <!-- <div class="card"> -->
                     <!-- <div class="card-header bg-dark text-white"> -->
-                        <div class="row bg-default">
+                        <div class="row shadow p-3 mb-5 bg-white rounded">
                             <div class="col-md-3"><h4 v-if="preSetAssignment">{{preSetAssignment.name}}</h4></div>
                             <div class="col-md-3 text-right"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
                                 <span v-if="auto!=''"><small>{{auto}}</small></span>
@@ -61,6 +30,7 @@
                             <div class="col-md-6 text-right"><!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->&nbsp; &nbsp;
                                 <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
                                     <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-warning btn" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
+                                    <a target="_blank" class="btn btn-warning btn" v-bind:href="getLink"><i class="fa fa-file-pdf-o"  aria-hidden="true"></i> Download PDF</a>&nbsp;
                                    <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
                                    <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
 
@@ -69,7 +39,7 @@
                     <!-- </div> -->
 
                     </div>
-                <br />
+
                     <!-- <div class="card-body"> -->
                         <div class="row">
                             <div class="col-md-6 tab" id="original">
@@ -259,6 +229,17 @@
                 }  else {
                     return false;
                 }
+            },
+            getLink:function() {
+                let link='/generate-pdf/';
+                let data ={};
+
+                if(this.preSetAssignment) {
+                    data.id = (this.preSetAssignment.id * 123456); //this is the document id
+                    data.grammar = this.preSetAssignment.feature[0].grammar.toLocaleLowerCase();
+                    data.name= this.preSetAssignment.name;
+                }
+                return link+ JSON.stringify(data);
             }
         },
         watch :{
@@ -312,7 +293,14 @@
                 this.btnFeedback = true;
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
-                    let data = {'txt':this.editorContent, 'action': 'fetch', 'extra': this.attributes, 'type':type, 'document':this.preSetAssignment.id};
+                    let data = {
+                        'txt':this.editorContent,
+                        'action': 'fetch',
+                        'extra': this.attributes,
+                        'type':type,
+                        'document':this.preSetAssignment.id,
+                        'currentFeedback': this.feedback
+                    };
                     this.$store.dispatch('LOAD_FEEDBACK',data);
                     //this.autoCheck = false;
                 } else {
@@ -374,8 +362,9 @@
                 }
             },
             autoStore(){
-                setInterval(this.storeAnalysedDrafts, 60000);
+                setInterval(this.storeAnalysedDrafts, 300000);
             },
+
 
         }
     }

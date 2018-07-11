@@ -58,7 +58,6 @@ Vue.component('example-text', require('./components/Example.vue'));
 Vue.component('ex-doc-editor', require('./components/ExampleAnalyser.vue'));
 
 
-
 var socket = io.connect(process.env.MIX_APP_SOCKET);
 import moment from 'moment';
 const app = new Vue({
@@ -78,17 +77,16 @@ const app = new Vue({
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\InternetConnection\\Heartbeat', function () {
-            //console.log("ok yes listened");
+  //          console.log("ok yes listened");
             return this.lastHeartBeatReceivedAt = moment().format('LLL');
         }.bind(this));
 
         socket.on('private-dashboard:App\\Events\\Tap\\Health', function (data) {
-            //console.log("ok yes listened tap health");
+//            console.log("ok yes listened tap health");
             return this.tapHealth=data.health.message;
         }.bind(this));
 
-        socket.on('private-user-activity:App\\Events\\UserActivity', function (data) {
-            console.log("into user activity");
+        socket.on('private-user-activity:App\\Events\\UserActivity', function (data, dd) {
             //console.log(data);
             return this.userActivity.push(data);
         }.bind(this));
@@ -176,7 +174,6 @@ $(document).ready(function () {
     }
 
     $('span[data-toggle=tooltip]').tooltip();
-
 
     //assignment feature info show hide
     let assignment_grammar = $("#grammar").val();

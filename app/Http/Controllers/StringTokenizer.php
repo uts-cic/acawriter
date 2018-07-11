@@ -1,27 +1,11 @@
 <?php
-/**
- * Copyright (c) 2018 original UTS CIC. Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Contributors:
- * UTS Connected Intelligence Centre
- */
-
 namespace App\Http\Controllers;
 use App\Jobs\StoreDrafts;
-use Illuminate\Http\Request;
 use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
 use Html2Text\Html2Text;
 use Auth;
+use Illuminate\Http\Request;
 use App\User;
 
 class StringTokenizer extends Controller
@@ -45,8 +29,16 @@ class StringTokenizer extends Controller
                                 analytics
                         }
                 }";
-    protected $queryOneR = "query RhetoricalMoves(\$input: String!) {
-                          moves(text:\$input,grammar:\"reflective\") {
+    protected $queryOneR = "query RhetoricalMoves(\$input: String!, \$parameters:String) {
+                          moves(text:\$input,parameters:\$parameters) {
+                            analytics
+                            message
+                            timestamp
+                            querytime
+                          }
+                        }";
+    protected $queryMoves = "query RhetoricalMoves(\$input: String, \$parameters:String) {
+                          moves(text:\$input,parameters:\$parameters) {
                             analytics
                             message
                             timestamp
@@ -54,7 +46,7 @@ class StringTokenizer extends Controller
                           }
                         }";
     protected $queryOneA = "query RhetoricalMoves(\$input: String!) {
-                          moves(text:\$input,grammar:\"analytic\") {
+                          moves(text:\$input,parameters:{\"grammar\": \"analytic\"}) {
                             analytics
                             message
                             timestamp
@@ -134,6 +126,27 @@ class StringTokenizer extends Controller
                                         }
                                     }                                
                                 }";
+    protected $queryAffectExpression= "query Affect(\$input: String, \$parameters:String) {
+                                    affectExpressions(text:\$input,parameters:\$parameters) {
+                                        message
+                                        timestamp
+                                        querytime
+                                        analytics {
+                                            affect {
+                                                text
+                                                valence
+                                                arousal
+                                                dominance
+                                                startIdx
+                                                endIdx
+                                            }
+                                        }
+                                    }                         
+                                }";
+
+
+
+
     //
     public function __construct()
     {
@@ -316,25 +329,38 @@ class StringTokenizer extends Controller
         }
         return $splitTxt;
     }
+
     //modified sentence level based on updated tokeniser query
+
     protected function rethoMoves($text, $grammar) {
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
         // $variables->input = strip_tags($text);
         $variables->input = $this->cleanText($text);
+        $params = new \StdClass();
         $tags = array();
         //get athanor rethmoves
-        if($grammar == 'analytical') {
-            $this->gResponse = $this->client->response($this->queryOneA, $variables);
-        } elseif($grammar == 'reflective') {
-            $this->gResponse = $this->client->response($this->queryOneR, $variables);
+        if($grammar == 'reflective') {
+            $params->grammar = "reflective";
+            $variables->parameters = json_encode($params);
+            $this->gResponse = $this->client->response($this->queryMoves, $variables);
+        }elseif($grammar == 'analytical') {
+            $params->grammar = "analytic";
+            $variables->parameters = json_encode($params);
+            $this->gResponse = $this->client->response($this->queryMoves, $variables);
+
+            //$this->gResponse = $this->client->response($this->queryOneA, $variables);
         }
+
+        //$this->gResponse = $this->client->response($this->queryMoves, $variables);
+
         if ($this->gResponse->hasErrors()) {
             dd($this->gResponse->errors());
         } else {
             $raw_tags = $this->gResponse->moves->analytics;
             foreach($raw_tags as $tag) {$tags = $tag;}
         }
+
         return $tags;
     }
     /*
@@ -374,26 +400,7 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
-    /*
-    * Used retrive expressions
-    * input: string single sentence
-     * normally only used for reflective feedback
-     * output is an array
-    */
-    public function expression($string) {
-        $apiResponse = new \StdClass();
-        $variables = new \stdClass();
-        //$variables->input = $this->cleanText($string);
-        $variables->input = $this->cleanText($string);
-        //get  metrics
-        $this->gResponse = $this->client->response($this->queryExpressions, $variables);
-        if ($this->gResponse->hasErrors()) {
-            $apiResponse = $this->gResponse->errors();
-        } else {
-            $apiResponse = $this->gResponse->expressions->analytics;
-        }
-        return $apiResponse;
-    }
+
     //quick sentence by sentence
     /*
         * Used retrive tags
@@ -429,25 +436,32 @@ class StringTokenizer extends Controller
 
     public function preProcess($data) {
         $results = array();
-
         $tokenisedText = $this->tapTokeniser($data);
+        $alreadyTapped = isset($data['currentFeedback']['tap'])? $data['currentFeedback']['tap']: array();
+        $loop = count($alreadyTapped) > 0 ? true : false;
+        $key =false;
         if(count($tokenisedText) >0 ) {
         //now go through each text and analyse
             foreach($tokenisedText as $txt) {
-                    $responseTxt = new \stdClass;
-                    $responseTxt->str= $txt->original;
+                $responseTxt = new \stdClass;
+                $responseTxt->str= $txt->original;
+                if($loop) {
+                    $key = array_search($responseTxt->str, array_column($alreadyTapped, 'str'));
+                }
+                if($key) {
+                    $responseTxt->raw_tags = $alreadyTapped[$key]['raw_tags'];
+                    $responseTxt->tags= $alreadyTapped[$key]['tags'];
+                } else {
                     $tags = $this->rethoMoves($txt->original, $data['extra']['grammar']);
                     $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
                     $responseTxt->tags= implode(', ',$tags);
-                    $results[]=$responseTxt;
+                }
+                $results[]=$responseTxt;
             }
         }
 
         return $results;
     }
-
-
-
 
 
 
