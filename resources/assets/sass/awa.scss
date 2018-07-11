@@ -22,10 +22,13 @@
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #FFFFFF;
-  background-color: #000000;
+ /* background-color: #000000; */
 }
 
-
+/* assignment */
+.hidefeature {
+  display: none;
+}
 
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
@@ -70,3 +73,24 @@ a[aria-expanded="true"] {
     clear: both;
     height: 60px;
   }
+
+#nprogress .bar {
+  background: #ffc107;
+
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 7px;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #ffc107, 0 0 5px #ffc107;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #ffc107;
+  border-left-color: #ffc107;
+}

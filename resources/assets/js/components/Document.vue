@@ -56,7 +56,7 @@
                 axios.get('/documents/all').then((response) => {
                     this.$data.lists = response.data.documents;
                 }, (err) => {
-                    this.$data.errors.push(e)
+                    this.$data.errors.push(err)
                 });
             },
             action(what, doc) {
@@ -70,7 +70,7 @@
                                 this.fetchDocuments();
                             }, 3000);
                         }, (err) => {
-                            this.$data.errors.push(e)
+                            this.$data.errors.push(err)
                         });
                     }
                 } else if(what === 'edit') {

@@ -49,6 +49,10 @@
 
 
                             <p class="card-text">
+                                <strong><em>General Enquiries: </em></strong><br />
+                                <a href="mailto:cic@uts.edu.au">cic@uts.edu.au </a>
+                                <br />
+                            <hr />
                                 <strong><em>Academic questions:</em></strong><br /> Prof. Simon Buckingham Shum (CIC Director)<br />
                                 <a href="mailto:Simon.BuckinghamShum@uts.edu.au">Simon.BuckinghamShum@uts.edu.au </a>
                                 <br />

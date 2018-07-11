@@ -1,4 +1,23 @@
 <?php
+/**
+ * Project: AcaWriter
+ *
+ * Copyright(c)2018 original University of Technology Sydney.
+ * Licensed under the Apache License, Version2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ *  Contributor(s):
+ *  UTS Connected Intelligence Centre
+ */
 
 namespace App\Http\Controllers;
 
@@ -10,15 +29,20 @@ use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
 use Auth;
 use App\User;
-use App\Http\Controllers\StringTokenizer;
+//use App\Http\Controllers\StringTokenizer;
+use App\Services\Analyser;
 use App\Feature;
 use App\Draft;
 use App\Events\UserActivity;
-
+use App\Traits\Profiler;
+use App\Traits\Analytical\Cars;
+use App\Traits\Analytical\Accounts;
+use App\Traits\Analytical\Law;
 
 
 class FeedbackController extends Controller
 {
+    use Profiler, Cars, Accounts, Law;
 
 
     public  $graphQLURL = "";
@@ -33,7 +57,8 @@ class FeedbackController extends Controller
     {
         $this->middleware('auth');
         $this->client = new Client($this->graphQLURL);
-        $this->stringTokeniser = new StringTokenizer();
+       // $this->stringTokeniser = new StringTokenizer();
+        $this->analyser = new Analyser();
         $this->graphQLURL = env('TAP_API', ''). "/graphql";
     }
 
@@ -52,6 +77,7 @@ class FeedbackController extends Controller
         $activityLog->status = 'success';
         $activityLog->data =[];
         $user_id = Auth::user()->id;
+        $result = new \stdClass();
 
         if($request['action'] == 'quick') {
             //single sentence change analysis
@@ -62,7 +88,7 @@ class FeedbackController extends Controller
             $data = array();
             $data['txt'] = $request['txt'];
             $data['grammar'] = $request['extra']['grammar'];
-            $temp = $this->stringTokeniser->quickTapMoves($data);
+            $temp = $this->analyser->quickTapMoves($data);
             $tt['str']= $temp->str ? $temp->str : '';
             $tt['raw_tags'] = $temp->raw_tags? $temp->raw_tags : array();
             $tt['tags'] = $temp->tags? $temp->tags:'';
@@ -74,13 +100,14 @@ class FeedbackController extends Controller
         } */
         else if($request['action'] == 'fetch') {
             Log::info('moves',['execute time : ' =>'started'.date('d/m/y:H:i:s') ]);
-            $tap = $this->stringTokeniser->preProcess($request);
+            $tap = $this->analyser->preProcess($request);
+            $result->tap = $tap;
 
             Log::info('tokeniser',['tokeniser' =>'completed'.date('d/m/y:H:i:s') ]);
         }
 
 
-        $result = new \stdClass();
+
         $extra = $request["extra"];
         $result->status = array('message' => 'Success', 'code' => 200  );
         $result->rules = array();
@@ -221,364 +248,9 @@ class FeedbackController extends Controller
     }
 
 
-
-    protected function background($tap, $rule) {
-        $result = array();
-        $check = $rule['check'];
-        $tempo = 0;
-
-        foreach($tap as $key => $data) {
-            $setFeed = new \stdClass();
-            $setFeed->str = $data->str;
-            $setFeed->message = array();
-            $setFeed->css = array();
-            if ($key < $check['paragraph'] && count($data->raw_tags) > 0) {
-                if (in_array($check['paragraph'], $data->raw_tags)) {
-                    $tempo++;
-                }
-            }
-        }
-
-        if ($tempo == 0 && $key == $this->para - 1) {
-            $setFeed->message['background'] = $rule['message'];
-            $setFeed->css[] = 'background';
-            $result[] = $setFeed;
-        }
-
-        return $result;
-    }
-
-    protected function metrics($tap, $rule) {
-        $result = array();
-        $check = $rule['check'];
-
-        foreach($tap as $key => $data) {
-            $tempStore = new \stdClass();
-            $tempStore->str = $data->str;
-            $tempStore->message = array();
-            $tempStore->css = array();
-            $returnData = $this->stringTokeniser->metrics($data->str);
-            if(isset($returnData->sentWordCounts)) {
-                //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
-                if($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
-                    //$tempStore->message = $rule['message'];
-                    foreach($rule['message'] as $msg) {
-                        if(isset($msg['metrics'])) {
-                            $tempStore->message['metrics'] = $msg['metrics'];
-                            array_push($tempStore->css, 'metrics');
-                        }
-                    }
-                }
-            }
-            $result[] = $tempStore;
-        }
-        return $result;
-
-    }
-
-
-    /*
-     * function works on the complete text at once, so input is not tokenised
-     * so str = append all tokenised tap outputs into one
-     */
-
-    protected function vocab($tap, $rule) {
-        $result = array();
-        $check = $rule['check'];
-        $termCount = 0;
-        $words = $check['words'];
-        $completeText = "";
-
-        foreach($tap as $key => $data) {
-            $completeText .= $data->str;
-        }
-        $tempStore = new \stdClass();
-        $tempStore->str = $completeText;
-        $tempStore->message = array();
-        $tempStore->css =array();
-
-            $returnData = $this->stringTokeniser->vocab($tempStore->str);
-            if(isset($returnData->terms)) {
-                $collection = collect($returnData->terms);
-
-                foreach($check['words'] as $word) {
-                    $filtered= $collection->where('term', $word);
-                    if(count($filtered->all()) == 0) $termCount++;
-                }
-
-                if($termCount > 0 ) {
-                    foreach($rule['message'] as $msg) {
-                        if(isset($msg['metrics'])) {
-                            $tempStore->message['vocab'] = $msg['vocab'];
-                            $tempStore->css[] = 'vocab';
-                        }
-                    }
-                    $result[] = $tempStore;
-                }
-            }
-
-        return $result;
-    }
-
-    /*
-     * *** applicable only for reflective feedback
-     */
-
-    protected function expression($tap, $rule) {
-        $result = array();
-        $check = $rule['check'];
-        $termCount = 0;
-        $all = $check['all'];
-
-
-        if(count($all) == 0) {
-            return $result;
-        }
-
-
-        foreach($tap as $key => $data) {
-            $tempStore = new \stdClass();
-            $tempStore->str = $data->str;
-            $tempStore->message = array();
-            $tempStore->affect=array();
-            $tempStore->epistemic=array();
-            $tempStore->modal=array();
-            $tempStore->css = array();
-
-            $returnData = $this->stringTokeniser->expression($data->str);
-            //$returnData is an array but since we are analysing tokenised strings we can safetly assume array[0]
-            $sanitizedResult = $returnData[0];
-            //$tempStore->raw = $sanitizedResult;
-            foreach($all as $exp) {
-
-                if (isset($sanitizedResult->{$exp}) && count($sanitizedResult->{$exp}) > 0) {
-                    $tempStore->{$exp} = $sanitizedResult->{$exp};
-                    foreach($rule['message'] as $msg) {
-                        if(isset($msg[$exp])) {
-                            $tempStore->message[$exp] = $msg[$exp];
-                            array_push($tempStore->css, $exp);
-                        }
-                    }
-                }
-            }
-
-            $result[] = $tempStore;
-        }
-
-
-        return $result;
-
-    }
-
-
-    protected function moves($tap, $rule) {
-
-        $result = array();
-        $check = $rule['check'];
-        $tempo = 0;
-        $tags = $check['tags'];
-        $messages = $rule['message'];
-        if(count($tags) == 0) {
-            return $result;
-        }
-
-        foreach($tap as $key => $data) {
-            $setFeed = new \stdClass();
-            $setFeed->str = $data->str;
-            $setFeed->message = array();
-            $setFeed->css = array();
-
-            foreach($tags as $tag) {
-                if(count(preg_grep("[^".$tag."]", $data->raw_tags)) > 0) {
-                    foreach($messages as $msg) {
-                        if(isset($msg[$tag])) {
-                            $setFeed->message[$tag] = $msg[$tag];
-                            array_push($setFeed->css,$tag);
-                        }
-                    }
-                }
-            }
-            $result[] = $setFeed;
-        }
-
-        return $result;
-    }
-
-
     /**
-     * -- crafted this to cover sophies CARS rules, all the rules guided by features
-     * @param $tap - all tags per specified calls
-     * @param $rule - fulled from selected feature
-     * @return array - returns missing tags
-     *                         moves1, move2, move3 precedence orders and messages if not followed
+     *  applicable only for reflective feedback
      */
-
-    protected function enforced($tap, $rule) {
-        $result = array();
-        $check = $rule['check'];
-        $tempo = 0;
-        $tags = $check['tags'];
-        $messages = $rule['message'];
-        if(count($tags) == 0) {
-            return $result;
-        }
-        $monitor = array();
-        $issues = array();
-
-        if($rule["tabEval"] === 'dynamic') {
-
-
-            foreach ($tap as $key => $data) {
-                $setFeed = new \stdClass();
-                $setFeed->str = $data->str;
-                $setFeed->message = array();
-                $setFeed->css = array();
-                $setFeed->interim = array();
-
-                $temp = array();
-                foreach ($tags as $it => $case) {
-                    foreach ($case as $k => $tag) {
-                        if (count(array_intersect($tag, $data->raw_tags)) > 0) {
-                            $temp[] = $k;
-                        }
-                    }
-                }
-
-                if (count($temp) > 0) {
-                    arsort($temp);
-                    $sorted = array_unique($temp);
-                    // print_r(current($sorted));
-                    array_push($monitor, current($sorted));
-                }
-            }
-
-            foreach ($monitor as $key => $d) {
-                if (isset($monitor[$key + 1])) {
-                    $pre = $monitor[$key];
-                    $next = $monitor[$key + 1];
-                    $idx = $pre.$next;
-                    if ($pre > $next) {
-                        foreach ($messages as $msg) {
-                            if (isset($msg['problem' . $idx])) array_push($issues, $msg['problem' . $idx]);
-                        }
-                    }
-                }
-            }
-
-           // print_r($issues);
-
-            //check for missing moves
-            $unique_moves = array_unique($monitor);
-            //print_r($unique_moves);
-            foreach (array(1, 2, 3) as $move) {
-                if (!in_array($move, $unique_moves)) {
-                    foreach ($messages as $msg) {
-                        if (isset($msg['missing' . $move])) array_push($issues, $msg['missing' . $move]);
-                    }
-                }
-            }
-
-
-        } else {
-            foreach($messages as $key => $msg) {
-                array_push($issues, $msg);
-            }
-        }
-
-        array_push($result, $issues);
-        //print_r($result);
-        return $result;
-    }
-
-    protected function missingTags($tap, $rule) {
-        $result = array();
-        $check = $rule['check'];
-        $tempo = 0;
-        $tags = $check['tags'];
-        $messages = $rule['message'];
-        if(count($tags) == 0) {
-            return $result;
-        }
-        $monitor = array();
-        $issues = array();
-
-        if($rule["tabEval"] === 'dynamic') {
-
-            $temp = array();
-            foreach ($tap as $key => $data) {
-               $temp = array_merge($temp, $data->raw_tags);
-            }
-
-            $temp = array();
-            $temp_temp =array();
-            foreach ($tap as $key => $data) {
-                $temp_temp = array_merge($temp_temp, $data->raw_tags);
-            }
-
-            /***
-             * hacky stuff that violates the flow of rules - for Shibani....
-             * if contrast and question present don't add error
-             * else if neither of them present show  error
-             * solution replace all contrast tags with question and check for question(nostat)
-             * if present don't error else error!!!!
-             ***/
-
-            foreach($temp_temp as $v) {
-                if($v=='contrast') { array_push($temp, 'nostat');}
-                else { array_push($temp, $v); }
-            }
-
-            $monitor = array_unique($temp);
-            
-            foreach ($tags as  $d) {
-                if (!in_array($d, $monitor)) {
-                    foreach ($messages as $msg) {
-                        if (isset($msg[$d])) array_push($issues, $msg[$d]);
-                    }
-                }
-            }
-
-
-        } else {
-            foreach($messages as $key => $msg) {
-                array_push($issues, $msg);
-            }
-        }
-
-        array_push($result, $issues);
-        //print_r($result);
-        return $result;
-    }
-
-
-
-
-
-
-
-
-    protected function staticFeed($tap, $rule) {
-        $result = array();
-        $check = $rule['check'];
-        $tempo = 0;
-        $tags = $check['tags'];
-        $messages = $rule['message'];
-
-        $monitor = array();
-        $issues = array();
-
-        if($rule["tabEval"] === 'dynamic') {
-
-        } else {
-            foreach($messages as $key => $msg) {
-                array_push($issues, $msg['txt']);
-            }
-        }
-        array_push($result, $issues);
-        return $result;
-    }
-
-
 
 
      protected function formatFeedback($tap, $result) {
@@ -607,8 +279,6 @@ class FeedbackController extends Controller
 
         Log::info('feedback',['feed' =>'completed'.date('d/m/y:H:i:s') ]);
         return $final;
-
-
 
 
     }

@@ -10,6 +10,11 @@
 
     <title>AcaWriter | University of Technology Sydney</title>
 
+
+   <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
+    <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -49,7 +54,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url('/home')}}">My Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{url('example')}}">Example Texts</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/assignment')}}">Manage Assignment</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/assignment')}}">Manage Users</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/admin/users')}}">Manage Users</a></li>
 
                         @elseif (Auth::user()->hasRole('staff'))
                         <li class="nav-item"><a class="nav-link" href="{{ url('/home')}}">My Dashboard</a></li>
@@ -100,6 +105,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
 
     <script src="{{ asset('js/app.js') }}"></script>
+
     @include('layouts.footer')
 </body>
 </html>

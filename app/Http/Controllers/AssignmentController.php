@@ -23,7 +23,7 @@ class AssignmentController extends Controller
 
     public function index(){
         //get all assignments belonging to the user
-        $assignments = User::find(Auth::user()->id)->assignments()->with('feature')->get();
+        $assignments = User::find(Auth::user()->id)->assignments()->with('feature')->orderBy('created_at','desc')->get();
         $features_all = Feature::all();
         $features = new \stdClass();
 

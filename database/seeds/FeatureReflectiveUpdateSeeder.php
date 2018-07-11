@@ -21,28 +21,17 @@ class FeatureReflectiveUpdateSeeder extends Seeder
       \"check\": {
         \"all\": [
           \"epistemic\",
-          \"modal\"
-        ]
+          \"modal\",
+          \"affect\"
+        ],
+        \"affectVal\": {\"arousal\": 4.95, \"valence\":0, \"dominance\":0}
       },
       \"message\": [
         {\"epistemic\" : \"<u>Expressions indicating belief, learning, or knowledge.</u>\"},
-        {\"modal\" : \"<span class=\\\"modall\\\">Expressions indicating self critique<\/span>\"}
+        {\"modal\" : \"<span class=\\\"modall\\\">Expressions indicating self critique<\/span>\"},
+        {\"affect\" :\"<span class=\\\"affect\\\">Words associated with strong feelings<\/span>\"}
       ],
-      \"css\": [\"epistemic\",\"affect\",\"modall\"]
-    },
-    {
-      \"name\": \"vocab\",
-      \"check\": {
-        \"words\": [
-          \"server\",
-          \"study\",
-          \"force\"
-        ]
-      },
-      \"message\": [
-        {\"vocab\" :\"One or more keywords missing\"}
-      ],
-      \"css\": [\"vocab\"]
+      \"css\": [\"epistemic\",\"modall\"]
     },
     {
       \"name\": \"metrics\",
@@ -53,6 +42,21 @@ class FeatureReflectiveUpdateSeeder extends Seeder
         {\"metrics\" :\"Sentence too long, might disengage the reader. Try breaking it into smaller sentences\"}
       ],
       \"css\": [\"metrics\"]
+    },
+    {
+      \"name\": \"filterWords\",
+      \"check\": {
+        \"list\": [
+            {
+            \"words\" : 
+                [\"preceptor\",\"supervisor\", \"hospital\", \"Community\", \"Pharmacy\", \"Placement\", \"site\", \"pharmacy\", \"pharmacist\",\"mentor\"], 
+            \"tags\" : 
+                [\"affect\"]
+            }
+        ]
+      },
+      \"message\": [],
+      \"css\": []
     },
     {
       \"name\": \"moves\",
