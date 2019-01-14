@@ -3,23 +3,22 @@
 use Illuminate\Database\Seeder;
 use App\Feature;
 
-class FeaturesAnalyticalAccounting extends Seeder
+class FeaturesAnalyticalLaw extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * Insert analytical accounting rule
      *
      * @return void
      */
     public function run()
     {
         //
+        //
         $feature_a = new Feature();
-        $feature_a->name = "Analytical Accounting";
+        $feature_a->id = 6;
+        $feature_a->name = "Law";
         $feature_a->grammar="Analytical";
-        $feature_a->id=7;
-        $feature_a->rules=json_encode("{
+        $feature_a->rules= json_encode("{
   \"rules\": [
     {
        \"name\": \"moves\",
@@ -43,12 +42,14 @@ class FeaturesAnalyticalAccounting extends Seeder
         {\"novstat\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">N<\/span> Novel improvements in ideas\"},
         {\"contrast\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">C</span> Contrasting idea, tension or critical insight\"},
         {\"tempstat\": \"<span class=\\\"badge badge-pill badge-analytic\\\">B</span> Background information and previous work\"},
-        {\"nostat\": \"<span class=\\\"badge badge-pill badge-analytic\\\">Q</span> Question or gap in previous knowledge\"}
+        {\"surprise\": \"<span class=\\\"badge badge-pill badge-analytic\\\">S</span> Surprising or unexpected finding\"},
+        {\"nostat\": \"<span class=\\\"badge badge-pill badge-analytic\\\">Q</span> Question or gap in previous knowledge\"},
+        {\"grow\" : \"<span class=\\\"badge badge-pill badge-analytic\\\">T<\/span> Trend or tendency related to ideas\"}
       ],
-      \"css\": [\"P\",\"E\", \"S\", \"N\", \"C\", \"B\"],
+      \"css\": [\"P\",\"E\", \"T\", \"S\", \"N\", \"C\", \"B\", \"S\"],
       \"custom\" : \"<span class=\\\"small\\\">The analytical report highlights salient rhetorical moves AcaWriter identified in your essay for reflection. For more specific feedback, go to the Feedback tab.<\/span><h5>Rhetorical Moves<\/h5>\",
       \"tab\": 1,
-      \"tabName\": \"Analytical Feedback\"`
+      \"tabName\": \"Analytical Feedback\"
     },
     {
       \"name\": \"alerts\",
@@ -70,26 +71,22 @@ class FeaturesAnalyticalAccounting extends Seeder
     },
     {
       \"name\": \"customised\",
-      \"method\": \"missingSwapTags\",
+      \"method\": \"missingTags\",
       \"check\": {
         \"tags\": [
           \"contribution\",
           \"tempstat\",
-          \"contrast\",
-          \"attitude\",
-          \"novstat\"
+          \"nostat\",
+          \"emph\"
         ],
         \"conditions\" : [
-            {\"emph\": \"attitude\"},
-            {\"nostat\" : \"contrast\"}
         ]
       },
       \"message\": [
         {\"contribution\": \"<div class=\\\"alert alert-info\\\"><i class=\\\"fa fa-exclamation-circle\\\"></i> It looks like you are missing a Summary move that highlights the purpose (thesis) statement of your essay and your essay plan. Try including linguistic cues to make this move clearer in your writing. Examples: This essay talks about.., In this essay, I analyse…, This essay consists of three parts… The first part talks about…, In conclusion,... <\/div>\"},
         {\"tempstat\": \"<div class=\\\"alert alert-info\\\"><i class=\\\"fa fa-exclamation-circle\\\"></i> It looks like you are missing a Background move in your text, which highlights background information and previous literature on the topic. Try including linguistic cues to make this move clearer in your writing. Examples: The past decade has seen ...., Recent studies indicate ... ,It is generally accepted that..., the concept has previously been thought to be... <\/div>\"},
-        {\"contrast\": \"<div class=\\\"alert alert-info\\\"><i class=\\\"fa fa-exclamation-circle\\\"></i> It looks like you are missing Contrast move, which highlights the critical insights in your essay. Try including linguistic cues to make this move clearer in your writing. Examples: However, the issue seems to be..., the study fails to consider, little research has been done..., ...raises various questions... <\/div>\"},
-        {\"attitude\": \"<div class=\\\"alert alert-info\\\"><i class=\\\"fa fa-exclamation-circle\\\"></i> If there is a key idea you did like to position in your essay try including linguistic cues to make this move clearer in your writing. Examples: It is important to note that ...., It makes a proper understanding important...\"}
-        {\"novstat\": \"<div class=\\\"alert alert-info\\\"><i class=\\\"fa fa-exclamation-circle\\\"></i> If there is a key idea you did like to novelty in your essay try including this move clearer in your writing. Examples: It is important to note that ...., It makes a proper understanding important...\"}
+        {\"nostat\": \"<div class=\\\"alert alert-info\\\"><i class=\\\"fa fa-exclamation-circle\\\"></i> It looks like you are missing Contrast\/Question move, which highlights the critical insights in your essay. Try including linguistic cues to make this move clearer in your writing. Examples: However, the issue seems to be..., the study fails to consider, little research has been done..., ...raises various questions... <\/div>\"},
+        {\"emph\": \"<div class=\\\"alert alert-info\\\"><i class=\\\"fa fa-exclamation-circle\\\"></i> If there is a key idea you did like to emphasises in your essay try including linguistic cues to make this move clearer in your writing. Examples: It is important to note that ...., It makes a proper understanding important...\"}
       ],
       \"css\": [\"mtags\"],
       \"custom\" : \"Feedback\",
@@ -118,6 +115,7 @@ class FeaturesAnalyticalAccounting extends Seeder
     }
   ]
 }");
+
         $feature_a->save();
     }
 }
