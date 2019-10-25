@@ -1,11 +1,5 @@
 <template>
-    <div class="container-fluid">
-      <!--   <div class="row">
-            <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-            <div class="col-md-4 text-success">
-
-            </div>
-        </div> -->
+    <div class="mb-5" data-ga-category="Feedback" v-bind:data-ga-label="preSetAssignment.assignment.code">
         <div class="row" v-if="errors && errors.length">
             <div class="col-md-12">
                 <div  class="col-md-12 alert alert-danger" role="alert">
@@ -15,59 +9,58 @@
                 </div>
             </div>
         </div>
-        <div class="row editWrapper">
 
+        <div class="row">
             <!-- start content -->
             <div id="content" class="col-md-12">
-                <!-- <div class="card"> -->
-                    <!-- <div class="card-header bg-dark text-white"> -->
-                        <div class="row shadow p-3 mb-5 bg-white rounded">
-                            <div class="col-md-3"><h4 v-if="preSetAssignment">{{preSetAssignment.name}}</h4></div>
-                            <div class="col-md-3 text-right"><span v-if="draftUpdate.message!=''">{{draftUpdate.message}}</span>
-                                <span v-if="auto!=''"><small>{{auto}}</small></span>
-                            </div>
+                <div class="subheader shadow">
+                    <div class="subheader-title"><h4 v-if="preSetAssignment">{{preSetAssignment.name}}</h4></div>
 
-                            <div class="col-md-6 text-right"><!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->&nbsp; &nbsp;
-                                <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-warning btn" v-on:click="fetchFeedback('manual')"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback & Save</button>&nbsp;
-                                    <a target="_blank" class="btn btn-warning btn" v-bind:href="getLink"><i class="fa fa-file-pdf-o"  aria-hidden="true"></i> Download PDF</a>&nbsp;
-                                   <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
-                                   <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
-
-                                </div>
-                            </div>
-                    <!-- </div> -->
-
+                    <div class="subheader-message">
+                        <div v-if="draftUpdate.message!=''">{{draftUpdate.message}}</div>
+                        <div class="small" v-if="auto!=''">{{auto}}</div>
                     </div>
 
-                    <!-- <div class="card-body"> -->
-                        <div class="row">
-                            <div class="col-md-6 tab" id="original">
-                                <div id="editor">
-                                    <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
-                                    <p><small>AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</small></p>
-                                    <vue-editor v-model="editorContent" :editorToolbar="customToolbar"></vue-editor>
-                                </div>
-                            </div>
-                            <!--- Reflective feedback --->
-                            <div class="col-md-6 tab" id="parsed">
-                                <div v-if="this.attributes.grammar == 'reflective'">
-                                    <reflective-result></reflective-result>
-                                </div>
-                                <div v-else-if="this.attributes.grammar == 'analytical'">
-                                    <analytic-result></analytic-result>
-                                </div>
-                            </div>
+                    <div class="subheader-action">
+                        <!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->
+                        <!-- <div class="btn-group pull-right" role="group" aria-label="Actions"> -->
+                            <a target="_blank" class="btn btn-primary" v-bind:href="getLink" v-if="feedback.rules" data-ga-action="download">Download PDF</a>
+                            <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button> -->
+                            <!-- <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
+                        <!-- </div> -->
+                    </div>
+                </div>
 
+                <div class="feedback">
+                    <div class="feedback-col" id="original">
+                        <p class="alert alert-success px-3">AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</p>
+
+                        <div id="editor">
+                            <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
+                            <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor>
                         </div>
-                    <!-- </div> -->
-                <!-- </div> -->
+                    </div>
+
+                    <div class="feedback-action">
+                        <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-primary" v-on:click="fetchFeedback('manual')">Get Feedback <i class="fa fa-angle-right"></i></button>
+                    </div>
+
+                    <!-- Reflective feedback -->
+                    <div class="feedback-col" id="parsed">
+                        <p class="alert alert-warning px-3">Computers don’t read writing like humans. So, if you’re sure your writing’s good, it's fine to disagree with AcaWriter's feedback, just like you’d ignore a poor grammar suggestion.</p>
+
+                        <div v-if="this.attributes.grammar == 'reflective'">
+                            <reflective-result></reflective-result>
+                        </div>
+
+                        <div v-else-if="this.attributes.grammar == 'analytical'">
+                            <analytic-result></analytic-result>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-
     </div>
-
 </template>
 
 <script>
@@ -96,28 +89,31 @@
         store,
         data () {
             return {
-                editorContent: 'Edit Your Content Here!',
+                editorContent: '',
                 loading: 0,
-                tap:[],
-                errors:[],
-                counter:0,
-                tempIds:[],
-                auto:'',
-                autosave:false,
-                autofeedback:false,
+                tap: [],
+                errors: [],
+                counter: 0,
+                tempIds: [],
+                auto: '',
+                autosave: false,
+                autofeedback: false,
                 btnFeedback: false,
-                splitText:[],
-                quickTags:'',
+                splitText: [],
+                quickTags: '',
                 customToolbar: [
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                 ],
                 cssSpec: {
                     inline :['link2me'],
-                    iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
-                    inText :['affect', 'epistemic','modall']
+                    // AI/2019-06-25: Removing affect analysis
+                    // iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
+                    // inText :['affect', 'epistemic','modall']
+                    iconic :['context', 'challenge', 'change', 'metrics'],
+                    inText :['epistemic','modall']
                 },
-                analytic_xlator:[
+                analytic_xlator: [
                     {'metrics': 'metrics'},
                     {'emph': 'E'},
                     {'vis': 'T'},
@@ -127,9 +123,9 @@
                     {'tempstat': 'B'},
                     {'attitude': 'P'},
                 ],
-                initFeedback:false,
-                intervalId:0,
-                textChangeCounter:0
+                initFeedback: false,
+                intervalId: 0,
+                editorStore: null
             }
         },
         mounted () {
@@ -163,7 +159,6 @@
                 }
             },
             attributes: function() {
-                this.textChangeCounter =0;
                 if(this.preSetAssignment) {
                     if(this.preSetAssignment.draft) {
                         this.editorContent = this.preSetAssignment.draft.text_input;
@@ -171,7 +166,6 @@
                         this.$store.dispatch('PRELOAD_FEEDBACK',data);
                         this.initFeedback = false;
                     } else if(this.preSetAssignment.textDraft) {
-
                         this.editorContent = this.preSetAssignment.textDraft.text_input;
                         this.initFeedback = false;
                     }
@@ -192,7 +186,6 @@
                        initFeedback:this.initFeedback
                    };
                 }
-
             },
             rulesClasses: function() {
                 let rules = [];
@@ -207,10 +200,9 @@
             draftUpdate: function() {
                 let upd = {};
                 upd.message ='';
-                var s = this;
+                var s = this;;
                 if(this.userActivity && this.preSetAssignment){
                     this.btnFeedback = false;
-                    //console.log(this.slogs.details.status);
                     this.userActivity.forEach(function(activity){
                         if(activity.data) {
                             if(activity.data.type==='Draft' && activity.data.ref === s.attributes.storeDraftJobRef) {
@@ -244,7 +236,7 @@
         },
         watch :{
             'editorContent': function(val, oldVal) {
-                this.textChangeCounter++;
+                //this.editorStore = val;
             }
         },
         methods: {
@@ -255,7 +247,6 @@
                 var feedbackQueue=[];
                 if(nv.length===0) return;
                 nv.forEach(function(item, idx) {
-                    //console.log(item);
                     if(typeof ov[idx]!=='undefined') {
                         if(ov[idx].str!= item) {
                             //str exits but str changed
@@ -269,7 +260,6 @@
                             self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
                         } else if(ov[idx].str == item) {
                             //feedbackQueue.push(ov[idx]);
-                            //console.log("283");
                         }
                     } else {
                         //new str added to the the editor so get analysis
@@ -289,8 +279,8 @@
                 this.errors=[];
                 //this.autoCheck = true;
                 this.attributes.initFeedback = true;
-                this.textChangeCounter= 0;
                 this.btnFeedback = true;
+                window.trackEvent('Feedback', 'get', this.preSetAssignment.assignment.code);
                 if(this.feedbackOpt!=='') {
                     // let data = {'tap': this.tap, 'txt':'', 'action': 'fetch', 'extra': this.attributes};
                     let data = {
@@ -313,12 +303,10 @@
                 }
             },
             storeAnalysedDrafts() {
-
                 // this.$data.tap='';
                 //this.$data.auto='processing....';
-                if (this.textChangeCounter > 0) {
-                    console.log("into auto store");
-                    this.textChangeCounter =0;
+                if (this.editorStore !== this.editorContent) {
+                    this.editorStore = this.editorContent;
                     let data = {
                         'txt': this.editorContent,
                         'action': 'store',
@@ -361,10 +349,9 @@
                     }
                 }
             },
-            autoStore(){
-                setInterval(this.storeAnalysedDrafts, 300000);
+            autoStore() {
+                setInterval(this.storeAnalysedDrafts, 5000);
             },
-
 
         }
     }

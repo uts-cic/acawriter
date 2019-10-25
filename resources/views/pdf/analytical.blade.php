@@ -76,11 +76,11 @@
 
 
         .ana_bg_green {
-            background-color: #00bfa5;
+            background-color: #c7e48d;
         }
 
         .ana_bg_yellow {
-            background-color:gold;
+            background-color: #f9d3c0;
         }
 
         .moves1 {
@@ -170,7 +170,7 @@
                             @if($name!== 'faq')
                                @foreach($b as $msg)
                                     @foreach($msg as $txt)
-                                    {!! $txt !!}
+                                    <p>{!! $txt !!}</p>
                                     @endforeach
                                 @endforeach
                             @endif

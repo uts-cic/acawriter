@@ -1,118 +1,55 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
-        </div>
-        <div class="row">
-            <div class="col-md-6"><small>This is an example piece of writing to experiment with. You can edit this text (nothing is saved).</small></div>
-            <div class="col-md-6"><small>Click Get Feedback to see the automatic feedback on the right: click the Key for more information about the icons and highlights.
-                When you're ready, go to <a href="/home">My Dashboard</a> and create your own document.</small></div>
-        </div>
-        <div v-if="admin" class="row">
+    <div class="mb-5" data-ga-category="Example">
+        <div class="row" v-if="errors && errors.length">
             <div class="col-md-12">
-                <div class="card bg-secondary text-white">
-                    <div class="card-block p-3">
-                        <div class="row">
-                            <div class="col-md-4"><label for="faculty">Faculty</label><input class="form-control" type="text" id="faculty" v-model="example.faculty" /></div>
-                            <div class="col-md-4"><label for="faculty">Title</label><input class="form-control" type="text" id="title" v-model="example.title" /></div>
-                            <div class="col-md-4"><label for="genre">Genre</label>
-                                <select class="form-control" id="genre" v-model="example.genre">
-                                    <optgroup v-for= "(item, key) in features" :label="key">
-                                        <option v-for = "val in item" :value="val.id">{{val.name}}</option>
-                                    </optgroup>
-
-                                <!-- <option value="">Select</option>
-                                <option value="2">Reflective</option>
-                                <option value="1">Analytic</option> -->
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><label for="summary">Summary</label><input class="form-control" type="text" v-model="example.summary" id="summary" /></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-12">
-                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
+                <div  class="col-md-12 alert alert-danger" role="alert">
                     <ul>
                         <li v-for="error in errors">{{error.message}}</li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="row editWrapper">
-            <div id="sidebar" class="active" v-bind:class="this.attributes.grammar == 'analytical'? 'ana' : 'ref'">
-                <div class="p-3 bg-uts-primary text-white"><i class="fa fa-info-circle" aria-hidden="true"></i> Key
-                    <i class="fa fa-times-circle pull-right" aria-hidden="true" id="sidebarCollapseTwice"></i>
-                    <i class="fa fa-window-restore pull-right" aria-hidden="true" id="extendOut"></i>
-                </div>
 
-                <div class="col-md-12 col-xs-12" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
-                    <div v-for="msg in rule.message">
-                        <div class="row" v-for="(m,id) in msg">
-                            <div class="col-md-1"><input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"></div>
-                            <div class="col-md-10"><span v-bind:class="id"></span>&nbsp;<span v-html="m"></span></div>
-                        </div>
-                    </div>
-                    <hr />
-                </div>
-            </div>
-
-
+        <div class="row">
             <!-- start content -->
             <div id="content" class="col-md-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <div class="row">
-                            <div class="col-md-2">Example Text Analyser</div>
-                            <div class="col-md-2 text-right">
-                                <span class="text-white" v-if="auto!=''"><small>{{auto}}</small></span>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="btn-group pull-right" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" class="btn btn-primary" v-on:click="fetchFeedback()"><i class="fa fa-cloud-download"  aria-hidden="true"></i> Get Feedback</button>&nbsp;
-                                    <button type="button" class="btn btn-primary btn-sm" v-if="admin" v-on:click="storeAnalysedDrafts()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>&nbsp;
-                                    <button type="button" id="sidebarCollapse" class="btn btn-primary"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button>
-                                </div>
-                            </div>
+                <div class="subheader shadow">
+                    <div class="subheader-title">
+                        <h4 v-if="preSetAssignment">Example: {{preSetAssignment.title}}</h4>
+                    </div>
+                </div>
 
+                <div v-if="auto!=''"><small>{{auto}}</small></div>
+                <p>This is an example piece of writing to experiment with. You can edit this text (nothing is saved).
+                    Click Get Feedback to see the automatic feedback on the right.
+                    <br>When you're ready, go to <a href="/home">My documents</a> and create your own document.</p>
+
+                <div class="feedback">
+                    <div class="feedback-col" id="original">
+                        <div id="editor">
+                            <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
+                            <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor>
+                        </div>
+                    </div>
+
+                    <div class="feedback-action">
+                        <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-primary" v-on:click="fetchFeedback('manual')">Get Feedback <i class="fa fa-angle-right"></i></button>
+                    </div>
+
+                    <!-- Reflective feedback -->
+                    <div class="feedback-col" id="parsed">
+                        <div v-if="this.attributes.grammar == 'reflective'">
+                            <reflective-result></reflective-result>
                         </div>
 
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div id="editor">
-                                    <vue-editor v-model="editorContent" :editorToolbar="customToolbar"></vue-editor>
-                                </div>
-                            </div>
-                            <!--- Reflective feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <reflective-result></reflective-result>
-                            </div>
-                            <!-- end of reflective -->
-
-
-                            <!--- Analytic feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytical'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytical'">
-                                <analytic-result></analytic-result>
-                            </div>
-                            <!-- end of analytics -->
-
+                        <div v-else-if="this.attributes.grammar == 'analytical'">
+                            <analytic-result></analytic-result>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
-
 </template>
 
 <script>
@@ -140,7 +77,7 @@
         store,
         data () {
             return {
-                editorContent: 'Edit Your Content Here!',
+                editorContent: '',
                 loading: 0,
                 tap:[],
                 errors:[],
@@ -162,8 +99,11 @@
                 ],
                 cssSpec: {
                     inline :['link2me'],
-                    iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
-                    inText :['affect', 'epistemic','modall']
+                    // AI/2019-06-25: Removing affect analysis
+                    // iconic :['context', 'challenge', 'change', 'metrics', 'affect'],
+                    // inText :['affect', 'epistemic','modall']
+                    iconic :['context', 'challenge', 'change', 'metrics'],
+                    inText :['epistemic','modall']
                 },
                 initFeedback:false
             }
@@ -193,6 +133,7 @@
                 return this.role;
             },
             preSetAssignment: function() {
+                console.log(JSON.parse(this.ex));
                 if(this.ex) {
                     return JSON.parse(this.ex);
                 } else {

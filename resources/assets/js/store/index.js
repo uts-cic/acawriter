@@ -4,14 +4,18 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
+const QUIET = ['/collect', '/feedback/store'];
+
 axios.interceptors.request.use(config => {
-    NProgress.start();
+    let quiet = QUIET.includes(config.url);
+    !quiet && NProgress.start();
     return config;
 });
 
-axios.interceptors.response.use(config => {
-    NProgress.done();
-    return config;
+axios.interceptors.response.use(response => {
+    let quiet = QUIET.includes(response.config.url);
+    !quiet && NProgress.done();
+    return response;
 });
 
 const store = new Vuex.Store({
@@ -67,8 +71,6 @@ const store = new Vuex.Store({
         SET_LOADING: (state, {status}) => {
             state.loading = status;
         }
-
-
     },
     getters: {
         currentFeedback: state => state.feedback,

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project: AcaWriter
  *
@@ -20,10 +21,9 @@
  */
 
 namespace App\Traits\Analytical;
-use App\Services\Analyser;
 
-trait Cars {
-
+trait Cars
+{
     /**
      * -- crafted this to cover sophies CARS rules, all the rules guided by features
      * @param $tap - all tags per specified calls
@@ -31,20 +31,20 @@ trait Cars {
      * @return array - returns missing tags
      *                         moves1, move2, move3 precedence orders and messages if not followed
      */
-
-    public function enforced($tap, $rule) {
+    public function enforced($tap, $rule, $extra = NULL)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
+        if ($rule["tabEval"] === 'dynamic') {
 
 
             foreach ($tap as $key => $data) {
@@ -66,7 +66,6 @@ trait Cars {
                 if (count($temp) > 0) {
                     arsort($temp);
                     $sorted = array_unique($temp);
-                    // print_r(current($sorted));
                     array_push($monitor, current($sorted));
                 }
             }
@@ -75,7 +74,7 @@ trait Cars {
                 if (isset($monitor[$key + 1])) {
                     $pre = $monitor[$key];
                     $next = $monitor[$key + 1];
-                    $idx = $pre.$next;
+                    $idx = $pre . $next;
                     if ($pre > $next) {
                         foreach ($messages as $msg) {
                             if (isset($msg['problem' . $idx])) array_push($issues, $msg['problem' . $idx]);
@@ -84,11 +83,8 @@ trait Cars {
                 }
             }
 
-            // print_r($issues);
-
             //check for missing moves
             $unique_moves = array_unique($monitor);
-            //print_r($unique_moves);
             foreach (array(1, 2, 3) as $move) {
                 if (!in_array($move, $unique_moves)) {
                     foreach ($messages as $msg) {
@@ -96,16 +92,13 @@ trait Cars {
                     }
                 }
             }
-
-
         } else {
-            foreach($messages as $key => $msg) {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
 
         array_push($result, $issues);
-        //print_r($result);
         return $result;
     }
 }

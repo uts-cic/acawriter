@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Australia/Sydney',
 
     /*
     |--------------------------------------------------------------------------
@@ -164,6 +164,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -178,7 +179,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-       // Folklore\GraphQL\ServiceProvider::class,
+        // Folklore\GraphQL\ServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
     ],
 
@@ -232,7 +234,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Input' => Illuminate\Support\Facades\Input::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-       // 'GraphQL' => Folklore\GraphQL\Support\Facades\GraphQL::class,
+        // 'GraphQL' => Folklore\GraphQL\Support\Facades\GraphQL::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
 
     ],
 

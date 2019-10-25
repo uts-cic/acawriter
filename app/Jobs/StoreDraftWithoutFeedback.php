@@ -3,17 +3,13 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Http\Request;
 use App\Events\UserActivity;
 use App\TextDraft;
-use App\User;
-
 
 class StoreDraftWithoutFeedback implements ShouldQueue
 {
@@ -43,12 +39,12 @@ class StoreDraftWithoutFeedback implements ShouldQueue
         //emit activity
         $activityLog = new \stdClass;
         $activityLog->status = 'success';
-        $activityLog->data =[];
+        $activityLog->data = [];
 
         $result = new \stdClass();
         $extra = $this->draft["extra"];
-        $result->status = array('message' => 'Success', 'code' => 200  );
-        $jobRef= $extra['storeDraftJobRef'];
+        $result->status = array('message' => 'Success', 'code' => 200);
+        $jobRef = $extra['storeDraftJobRef'];
 
         $draftNew = new TextDraft();
         $draftNew->text_input = $this->draft['txt'];
@@ -58,15 +54,12 @@ class StoreDraftWithoutFeedback implements ShouldQueue
 
         $draftNew->save();
 
-
-
-        if($draftNew->id > 0) {
-            $message = "Draft stored";
-            $activityLog->status= 'success';
+        if ($draftNew->id > 0) {
+            $activityLog->status = 'success';
         } else {
-            $activityLog->status= 'error';
+            $activityLog->status = 'error';
         }
-        $activityLog->msg = "Text Saved";
+        $activityLog->msg = "Draft saved";
         $activityLog->user = $this->user;
         $activityLog->type = 'Draft';
         $activityLog->ref = $draftNew;
@@ -76,7 +69,6 @@ class StoreDraftWithoutFeedback implements ShouldQueue
 
         event(new UserActivity($this->user, $activityLog));
 
-        Log::info('Stored draft with only text into db',['draft' => $draftNew]);
-
+        Log::info('Stored draft with only text into db', ['draft' => $draftNew]);
     }
 }

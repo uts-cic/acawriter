@@ -83,4 +83,13 @@
   'fontawesome3' => array(
     'normal' => $fontDir . '/79b165604c2795cff5e31845780a7600',
   ),
+  'font awesome 5 brands' => array(
+    'normal' => $fontDir . '/98cf4207a7a17d9b61d9f98ecbaa3620',
+  ),
+  'font awesome 5 free' => array(
+    'normal' => $fontDir . '/deaa39d71dc7086128716e3f013617c5',
+  ),
+  'fontawesome' => array(
+    'normal' => $fontDir . '/9073980450562dfe1aebd7f3e28b7eb6',
+  ),
 ) ?>

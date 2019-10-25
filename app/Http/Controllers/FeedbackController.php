@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project: AcaWriter
  *
@@ -23,13 +24,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\StoreDrafts;
 use App\Jobs\StoreDraftWithoutFeedback;
 use EUAutomation\GraphQL\Client;
-use Illuminate\Support\Facades\Hash;
 use Auth;
 use App\User;
-//use App\Http\Controllers\StringTokenizer;
 use App\Services\Analyser;
 use App\Feature;
 use App\Draft;
@@ -38,12 +36,14 @@ use App\Traits\Profiler;
 use App\Traits\Analytical\Cars;
 use App\Traits\Analytical\Accounts;
 use App\Traits\Analytical\Law;
+use App\Traits\Reflective\Pharmacy;
+use App\Traits\Reflective\IntlStudies;
+use App\Traits\Analytical\CarsAbs;
 
 
 class FeedbackController extends Controller
 {
-    use Profiler, Cars, Accounts, Law;
-
+    use Profiler, Cars, Accounts, Law, Pharmacy, IntlStudies, CarsAbs;
 
     public  $graphQLURL = "";
     public  $client;
@@ -51,17 +51,15 @@ class FeedbackController extends Controller
     private $para = 3;
     private $rules = array();
 
-
     //
     public function __construct()
     {
         $this->middleware('auth');
         $this->client = new Client($this->graphQLURL);
-       // $this->stringTokeniser = new StringTokenizer();
+        // $this->stringTokeniser = new StringTokenizer();
         $this->analyser = new Analyser();
-        $this->graphQLURL = env('TAP_API', ''). "/graphql";
+        $this->graphQLURL = env('TAP_API', '') . "/graphql";
     }
-
 
     /*
      * Input : $request
@@ -69,17 +67,15 @@ class FeedbackController extends Controller
      *      action - type: string value: fetch
      *      feddbackOpt - type: string : value :jsonfilename
      */
-
-    public function generateFeedback(Request $request) {
-
-
+    public function generateFeedback(Request $request)
+    {
         $activityLog = new \stdClass;
         $activityLog->status = 'success';
-        $activityLog->data =[];
+        $activityLog->data = [];
         $user_id = Auth::user()->id;
         $result = new \stdClass();
 
-        if($request['action'] == 'quick') {
+        if ($request['action'] == 'quick') {
             //single sentence change analysis
             //we need to send a request to get the tap raw tags
             // input is always going to be string as output by tokeniser
@@ -89,67 +85,59 @@ class FeedbackController extends Controller
             $data['txt'] = $request['txt'];
             $data['grammar'] = $request['extra']['grammar'];
             $temp = $this->analyser->quickTapMoves($data);
-            $tt['str']= $temp->str ? $temp->str : '';
-            $tt['raw_tags'] = $temp->raw_tags? $temp->raw_tags : array();
-            $tt['tags'] = $temp->tags? $temp->tags:'';
-            $tap[]=$temp;
-
+            $tt['str'] = $temp->str ? $temp->str : '';
+            $tt['raw_tags'] = $temp->raw_tags ? $temp->raw_tags : array();
+            $tt['tags'] = $temp->tags ? $temp->tags : '';
+            $tap[] = $temp;
         } /* else if($request['action'] == 'fetch') {
             //$tap = $request["tap"];
 
-        } */
-        else if($request['action'] == 'fetch') {
-            Log::info('moves',['execute time : ' =>'started'.date('d/m/y:H:i:s') ]);
+        } */ else if ($request['action'] == 'fetch') {
+            Log::info('moves', ['execute time : ' => 'started' . date('d/m/y:H:i:s')]);
             $tap = $this->analyser->preProcess($request);
             $result->tap = $tap;
 
-            Log::info('tokeniser',['tokeniser' =>'completed'.date('d/m/y:H:i:s') ]);
+            Log::info('tokeniser', ['tokeniser' => 'completed' . date('d/m/y:H:i:s')]);
         }
-
-
 
         $extra = $request["extra"];
-        $result->status = array('message' => 'Success', 'code' => 200  );
+        $result->status = array('message' => 'Success', 'code' => 200);
         $result->rules = array();
-        $result->tabs= array();
-        $jobRef= $extra['storeDraftJobRef'];
-        if($extra['feature'] > 0 ) {
-            $feed = $this->getFeedbackSchema('',$extra['feature']);
+        $result->tabs = array();
+        $jobRef = $extra['storeDraftJobRef'];
+        if ($extra['feature'] > 0) {
+            $feed = $this->getFeedbackSchema('', $extra['feature']);
             $feedbackSchema = json_decode($feed, true);
-            $result->rules= $this->rules = $feedbackSchema["rules"];
+            $result->rules = $this->rules = $feedbackSchema["rules"];
         } else {
             $path = storage_path() . '/schema/' . $extra['grammar'] . '/' . $extra['feedbackOpt'] . '.json';
-            $feedbackSchema = $this->getFeedbackSchema($path,0);
-            $result->rules= $this->rules = $feedbackSchema['rules'];
+            $feedbackSchema = $this->getFeedbackSchema($path, 0);
+            $result->rules = $this->rules = $feedbackSchema['rules'];
         }
-
-
-        //print_r($feedbackSchema);
-
 
         //$result->rules= $this->rules = $feedbackSchema['rules'];
         //$result->rules = $feedbackSchema['rules'];
-        if(count($this->rules) == 0 || count($tap) == 0) {
+        if (count($this->rules) == 0 || count($tap) == 0) {
             $result->status['message'] = 'Error';
-            $result->status['code'] = 500 ;
+            $result->status['code'] = 500;
             return response()->json($result);
         }
 
         //create something like // $result->temporality = array();
-        foreach($this->rules as $rule) {
+        foreach ($this->rules as $rule) {
             $result->{$rule['name']} = array();
             $methods[] = $rule['name'];
         }
 
-
         //go through and call each rule if the rule is defined
-        foreach($this->rules as $rule) {
+        foreach ($this->rules as $rule) {
             $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
             $name = $rule['name'];
+
             $tab = isset($rule['tab']) ? $rule['tab'] : 1;
 
-            if(method_exists($this, $method) && $tab==1) {
-               $result->{$name} = $this->{$method}($tap, $rule);
+            if (method_exists($this, $method) && $tab == 1) {
+                $result->{$name} = $this->{$method}($tap, $rule);
             }
         }
 
@@ -158,28 +146,27 @@ class FeedbackController extends Controller
 
         //evaluate for all other tabs
         $tabbed = array();
-        foreach($this->rules as $rule) {
+        foreach ($this->rules as $rule) {
             $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
             $name = $rule['name'];
             $tab = isset($rule['tab']) ? $rule['tab'] : 1;
             $subTab = new \stdClass;
 
-            if(method_exists($this, $method) && $tab > 1) {
-                $subTab->{$name} = $this->{$method}($tap, $rule);
-                if(!isset($tabbed[$tab])) $tabbed[$tab] =array();
+            if (method_exists($this, $method) && $tab > 1) {
+                $more = array();
+                if (isset($result->expression)) {
+                    if (count($result->expression) > 0) {
+                        array_push($more, array('expression' => $result->expression));
+                    }
+                }
+                $subTab->{$name} = $this->{$method}($tap, $rule, $more);
+                if (!isset($tabbed[$tab])) $tabbed[$tab] = array();
                 array_push($tabbed[$tab], $subTab);
             }
-
-            // if(!isset($tabbed[$tab]) && $tab > 1) $tabbed[$tab] =array();
-
         }
 
         //now just append other tabs to the result
-        if(count($tabbed) >0 ) $result->tabs = $tabbed;
-
-
-
-
+        if (count($tabbed) > 0) $result->tabs = $tabbed;
 
         /*
          * this is an extension applied to fetch feedback and save all at one go!
@@ -187,7 +174,7 @@ class FeedbackController extends Controller
          *
          */
 
-        if($request['extra']['initFeedback']) {
+        if ($request['extra']['initFeedback']) {
 
             $draftNew = new Draft();
             $draftNew->text_input = $request['txt'];
@@ -202,17 +189,15 @@ class FeedbackController extends Controller
             $user = User::find($user_id);
 
             if ($draftNew->id > 0) {
-                $message = "Draft stored";
                 $activityLog->status = 'success';
             } else {
                 $activityLog->status = 'error';
             }
-            $activityLog->msg = "Feedback and Draft Saved";
+            $activityLog->msg = "Draft saved";
             $activityLog->user = $user;
             $activityLog->type = 'Draft';
             $activityLog->ref = $draftNew;
             $activityLog->jobRef = $jobRef;
-
 
             event(new UserActivity($user, $activityLog));
             //event(new OperationLog($this->user, $message));
@@ -221,26 +206,23 @@ class FeedbackController extends Controller
         }
 
         return response()->json($result);
-
     }
 
-
     /* stores draft by generating a job **/
-    public function storeFeedback(Request $request) {
-        $user_id = Auth::user()->id;
+    public function storeFeedback(Request $request)
+    {
         $user = Auth::user();
         //StoreDrafts::dispatch($request->all(), $user)->onConnection('redis');
         StoreDraftWithoutFeedback::dispatch($request->all(), $user)->onConnection('redis');
     }
-
 
     protected function getFeedbackSchema($path, $id)
     {
         if ($path == '') {
             $features = Feature::find($id);
             $data = $features->rules;
-           // print_r($data);
-            $json= json_decode($data, true);
+            // print_r($data);
+            $json = json_decode($data, true);
         } else {
             $json = json_decode(file_get_contents($path), true);
         }
@@ -251,38 +233,29 @@ class FeedbackController extends Controller
     /**
      *  applicable only for reflective feedback
      */
-
-
-     protected function formatFeedback($tap, $result) {
+    protected function formatFeedback($tap, $result)
+    {
         $final = array();
 
-        foreach($tap as $key => $raw) {
+        foreach ($tap as $key => $raw) {
             $temp = new \stdClass();
-            $newLn=str_replace("[&][&]", "<br />", $raw->str);
+            $newLn = str_replace("[&][&]", "<br />", $raw->str);
             //$temp->str = nl2br($raw['str']);
             $temp->str = $newLn;
             $temp->css = array();
-            $resCss= array();
-           // $temp->str = $raw['str'];
-            foreach($this->rules as $rule) {
-                $tempcss= array();
-
-                if(isset($result->{$rule['name']}[$key])) {
+            $resCss = array();
+            // $temp->str = $raw['str'];
+            foreach ($this->rules as $rule) {
+                if (isset($result->{$rule['name']}[$key])) {
                     $temp->{$rule['name']} = $result->{$rule['name']}[$key];
-                    $resCss= array_merge($resCss, $result->{$rule['name']}[$key]->css);
+                    $resCss = array_merge($resCss, $result->{$rule['name']}[$key]->css);
                 }
             }
             $temp->css = $resCss;
-            $final[]=$temp;
+            $final[] = $temp;
         }
 
-
-        Log::info('feedback',['feed' =>'completed'.date('d/m/y:H:i:s') ]);
+        Log::info('feedback', ['feed' => 'completed' . date('d/m/y:H:i:s')]);
         return $final;
-
-
     }
-
-
-
 }

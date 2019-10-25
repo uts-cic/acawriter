@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Events\UserLog;
 use App\Events\UserRegistered;
-use App\Role;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -14,8 +13,6 @@ use Illuminate\Http\Request;
 use JWT\Authentication\JWT;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OperationLog;
-
-
 
 class RegisterController extends Controller
 {
@@ -49,7 +46,8 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function awt(Request $request){
+    public function awt(Request $request)
+    {
         $whatRole = 'student';
         $jws = $request->assertion;
 
@@ -62,7 +60,7 @@ class RegisterController extends Controller
         $attr = 'https://aaf.edu.au/attributes';
 
         //if($jwt->aud == "http://localhost:8000" && strtotime($jwt->exp) < $now && $now > strtotime($jwt->nbf)) {
-        if($jwt->aud == env('JWT_AUD', '')) {
+        if ($jwt->aud == env('JWT_AUD', '')) {
             $attr = $jwt->{$attr};
             $credentials = array('email' => $attr->mail, 'name' => $attr->displayname, 'password' => ' ');
             $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';
@@ -81,7 +79,7 @@ class RegisterController extends Controller
                 $message = "New user created";
                 $msg = 'login';
                 event(new OperationLog($user, $message));
-                event(new UserRegistered($user,$whatRole));
+                event(new UserRegistered($user, $whatRole));
                 event(new UserLog($user, $msg)); // logs activity
 
                 return redirect()->intended('/home');
@@ -107,9 +105,6 @@ class RegisterController extends Controller
             dd("error");
         }
     }
-
-
-
 
     /**
      * Get a validator for an incoming registration request.
@@ -141,5 +136,10 @@ class RegisterController extends Controller
         ]);
 
         return $user;
+    }
+
+    public function showRegistrationForm()
+    {
+        return redirect('login');
     }
 }

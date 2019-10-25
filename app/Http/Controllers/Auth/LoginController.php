@@ -41,9 +41,9 @@ class LoginController extends Controller
 
     protected function login(Request $request)
     {
-       //$request->email='x7xkql8v%c0%a7';
+        //$request->email='x7xkql8v%c0%a7';
 
-      // dd($request->email);
+        // dd($request->email);
 
         $this->validate($request, [
             'email'    => 'required|email',

@@ -1,12 +1,22 @@
-.wrapper {
+/*.wrapper {
   max-height:40rem;
   overflow-y: scroll;
 }
 
-
 .ql-container {
   max-height:40rem;
   overflow-y: scroll;
+}*/
+#original .ql-editor {
+  min-height: calc(100vh - 433px);
+}
+.ql-editor p {
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.quillWrapper .ql-snow.ql-toolbar {
+  background: #F3F5FE;
 }
 
 .vocab , .context, .challenge, .wordcount, .metrics, .change, .background{
@@ -56,9 +66,10 @@
   color: orangered;
 }
 
-.affect {
-  border-bottom: 1px dashed #ff0000;
-}
+// AI/2019-06-25: Removing affect analysis
+// .affect {
+//   border-bottom: 1px dashed #ff0000;
+// }
 
 .epistemic {
   text-decoration: underline;
@@ -72,16 +83,6 @@
   font-style:italic;
   color: darkgreen;
 }
-
-
-.activeClass{
-  display: inline;
-}
-
-.nonactive {
-  display:none;
-}
-
 
 /* analytical css */
 .badge-analytic {
@@ -100,11 +101,11 @@
 }
 
 .ana_bg_green {
-  background-color: #00bfa5;
+  background-color: #c7e48d;
 }
 
 .ana_bg_yellow {
-  background-color:gold;
+  background-color:#f9d3c0;
 }
 
 .moves1 {

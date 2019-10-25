@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Components\InternetConnection\SendHeartbeat::class,
-        \App\Console\Components\Tap\TapHealth::class
-
+        \App\Console\Components\Tap\TapHealth::class,
+        \App\Console\Components\Tap\TapLoadTest::class
     ];
 
     /**

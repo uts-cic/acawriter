@@ -16,7 +16,8 @@ class ExampleController extends Controller
         $this->middleware('auth');
     }
 
-    public function index() {
+    public function index()
+    {
         return view('example');
     }
 
@@ -25,16 +26,17 @@ class ExampleController extends Controller
      * get all examples
      */
 
-    public function fetchExamples() {
+    public function fetchExamples()
+    {
         $list = new \stdClass;
 
-        $list->examples = Example::where('hide',0)->with('feature')->get();
+        $list->examples = Example::where('hide', 0)->with('feature')->get();
         return response()->json($list);
-
     }
 
 
-    public function analyse($code=NULL) {
+    public function analyse($code = NULL)
+    {
 
         $result = new \stdClass;
         $details = array();
@@ -43,18 +45,19 @@ class ExampleController extends Controller
         $features_all = Feature::all();
         $features = new \stdClass();
 
-        foreach($features_all as $feature) {
-            if(!isset($features->{$feature->grammar})) {
+        foreach ($features_all as $feature) {
+            if (!isset($features->{$feature->grammar})) {
                 $features->{$feature->grammar} = array();
             }
             $tmp = new \stdClass();
-            $tmp->id = $feature->id; $tmp->name = $feature->name;
-            array_push($features->{$feature->grammar}, $tmp );
+            $tmp->id = $feature->id;
+            $tmp->name = $feature->name;
+            array_push($features->{$feature->grammar}, $tmp);
         }
         $result->features = json_encode($features);
 
-        if(isset($code)) {
-           $details = Example::where('id', $code)->with('feature')->get();
+        if (isset($code)) {
+            $details = Example::where('id', $code)->with('feature')->get();
         }
         $result->details = $details;
 
@@ -62,21 +65,22 @@ class ExampleController extends Controller
         return view('example.analyse', ['data' => $result]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $this->validate(request(), [
             'txt' => 'required',
-            'feedback' =>'required'
+            'feedback' => 'required'
         ]);
 
-        $status =array('success' => false, 'message' => 'Problem storing example');
+        $status = array('success' => false, 'message' => 'Problem storing example');
         $code = 500;
 
 
         $example = new Example();
 
         $example->feature_id = $request['extra']['feature'];
-        $example->title= $request['other']['title'];
+        $example->title = $request['other']['title'];
         $example->summary = $request['other']['summary'];
         $example->faculty = $request['other']['faculty'];
         $example->text_input = $request['txt'];
@@ -85,13 +89,12 @@ class ExampleController extends Controller
 
         $example->save();
 
-        if($example->id  >0 ) {
+        if ($example->id  > 0) {
             $status['message'] = 'Example text stored';
             $status['success'] = true;
             $code = 200;
         }
 
         return response()->json($status, $code);
-
     }
 }

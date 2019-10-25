@@ -3,24 +3,20 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Http\Request;
 use App\Http\Controllers\StringTokenizer;
 use App\Draft;
 use App\Feature;
-use App\User;
 use App\Events\UserActivity;
 
 
 class StoreDrafts implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
 
     protected $draft;
     protected $stringTokeniser;
@@ -44,43 +40,43 @@ class StoreDrafts implements ShouldQueue
         //emit activity
         $activityLog = new \stdClass;
         $activityLog->status = 'success';
-        $activityLog->data =[];
+        $activityLog->data = [];
         // get feedback
         $this->stringTokeniser = new StringTokenizer();
         $tap = $this->stringTokeniser->preProcess($this->draft);
-        Log::info('Drafts',['tokeniser' =>'completed'.date('d/m/y:H:i:s') ]);
+        Log::info('Drafts', ['tokeniser' => 'completed' . date('d/m/y:H:i:s')]);
 
         $result = new \stdClass();
         $extra = $this->draft["extra"];
-        $result->status = array('message' => 'Success', 'code' => 200  );
-        $jobRef= $extra['storeDraftJobRef'];
+        $result->status = array('message' => 'Success', 'code' => 200);
+        $jobRef = $extra['storeDraftJobRef'];
         $result->rules = array();
-        if($extra['feature'] > 0 ) {
-            $feed = $this->getFeedbackSchema('',$extra['feature']);
+        if ($extra['feature'] > 0) {
+            $feed = $this->getFeedbackSchema('', $extra['feature']);
             $feedbackSchema = json_decode($feed, true);
-            $result->rules= $this->rules = $feedbackSchema["rules"];
+            $result->rules = $this->rules = $feedbackSchema["rules"];
         }
 
-        if(count($this->rules) == 0 || count($tap) == 0) {
+        if (count($this->rules) == 0 || count($tap) == 0) {
             $result->status['message'] = 'Error';
-            $result->status['code'] = 500 ;
+            $result->status['code'] = 500;
             return response()->json($result);
         }
 
         //create something like // $result->temporality = array();
-        foreach($this->rules as $rule) {
+        foreach ($this->rules as $rule) {
             $result->{$rule['name']} = array();
             $methods[] = $rule['name'];
         }
 
 
         //go through and call each rule if the rule is defined
-        foreach($this->rules as $rule) {
+        foreach ($this->rules as $rule) {
             $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
             $name = $rule['name'];
             $tab = isset($rule['tab']) ? $rule['tab'] : 1;
 
-            if(method_exists($this, $method) && $tab==1) {
+            if (method_exists($this, $method) && $tab == 1) {
                 $result->{$name} = $this->{$method}($tap, $rule);
             }
         }
@@ -91,15 +87,15 @@ class StoreDrafts implements ShouldQueue
 
         //evaluate for all other tabs
         $tabbed = array();
-        foreach($this->rules as $rule) {
+        foreach ($this->rules as $rule) {
             $method = isset($rule["method"]) ? $rule["method"] : $rule['name'];
             $name = $rule['name'];
             $tab = isset($rule['tab']) ? $rule['tab'] : 1;
             $subTab = new \stdClass;
 
-            if(method_exists($this, $method) && $tab > 1) {
+            if (method_exists($this, $method) && $tab > 1) {
                 $subTab->{$name} = $this->{$method}($tap, $rule);
-                if(!isset($tabbed[$tab])) $tabbed[$tab] =array();
+                if (!isset($tabbed[$tab])) $tabbed[$tab] = array();
                 array_push($tabbed[$tab], $subTab);
             }
 
@@ -108,7 +104,7 @@ class StoreDrafts implements ShouldQueue
         }
 
         //now just append other tabs to the result
-        if(count($tabbed) >0 ) $result->tabs = $tabbed;
+        if (count($tabbed) > 0) $result->tabs = $tabbed;
 
 
         $draftNew = new Draft();
@@ -117,19 +113,17 @@ class StoreDrafts implements ShouldQueue
         $draftNew->document_id = $this->draft['document'];
         $draftNew->raw_response = json_encode($result);
         $draftNew->user_id = $this->user->id;
-        $draftNew->is_auto = $this->draft['type'] == 'manual' ? 0 :1;
+        $draftNew->is_auto = $this->draft['type'] == 'manual' ? 0 : 1;
 
         $draftNew->save();
 
 
-
-        if($draftNew->id > 0) {
-            $message = "Draft stored";
-            $activityLog->status= 'success';
+        if ($draftNew->id > 0) {
+            $activityLog->status = 'success';
         } else {
-            $activityLog->status= 'error';
+            $activityLog->status = 'error';
         }
-        $activityLog->msg = "Feedback and Draft Saved";
+        $activityLog->msg = "Draft saved";
         $activityLog->user = $this->user;
         $activityLog->type = 'Draft';
         $activityLog->ref = $draftNew;
@@ -139,8 +133,7 @@ class StoreDrafts implements ShouldQueue
         event(new UserActivity($this->user, $activityLog));
         //event(new OperationLog($this->user, $message));
 
-        Log::info('Stored draft into db',['draft' => $draftNew]);
-
+        Log::info('Stored draft into db', ['draft' => $draftNew]);
     }
 
     protected function getFeedbackSchema($path, $id)
@@ -149,19 +142,20 @@ class StoreDrafts implements ShouldQueue
             $features = Feature::find($id);
             $data = $features->rules;
             // print_r($data);
-            $json= json_decode($data, true);
+            $json = json_decode($data, true);
         } else {
             $json = json_decode(file_get_contents($path), true);
         }
         return $json;
     }
 
-    protected function background($tap, $rule) {
+    protected function background($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $setFeed = new \stdClass();
             $setFeed->str = $data->str;
             $setFeed->message = array();
@@ -182,22 +176,23 @@ class StoreDrafts implements ShouldQueue
         return $result;
     }
 
-    protected function metrics($tap, $rule) {
+    protected function metrics($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $tempStore = new \stdClass();
             $tempStore->str = $data->str;
             $tempStore->message = array();
             $tempStore->css = array();
             $returnData = $this->stringTokeniser->metrics($data->str);
-            if(isset($returnData->sentWordCounts)) {
+            if (isset($returnData->sentWordCounts)) {
                 //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
-                if($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
+                if ($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
                     //$tempStore->message = $rule['message'];
-                    foreach($rule['message'] as $msg) {
-                        if(isset($msg['metrics'])) {
+                    foreach ($rule['message'] as $msg) {
+                        if (isset($msg['metrics'])) {
                             $tempStore->message['metrics'] = $msg['metrics'];
                             array_push($tempStore->css, 'metrics');
                         }
@@ -207,7 +202,6 @@ class StoreDrafts implements ShouldQueue
             $result[] = $tempStore;
         }
         return $result;
-
     }
 
 
@@ -216,33 +210,34 @@ class StoreDrafts implements ShouldQueue
      * so str = append all tokenised tap outputs into one
      */
 
-    protected function vocab($tap, $rule) {
+    protected function vocab($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $termCount = 0;
         $words = $check['words'];
         $completeText = "";
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $completeText .= $data->str;
         }
         $tempStore = new \stdClass();
         $tempStore->str = $completeText;
         $tempStore->message = array();
-        $tempStore->css =array();
+        $tempStore->css = array();
 
         $returnData = $this->stringTokeniser->vocab($tempStore->str);
-        if(isset($returnData->terms)) {
+        if (isset($returnData->terms)) {
             $collection = collect($returnData->terms);
 
-            foreach($check['words'] as $word) {
-                $filtered= $collection->where('term', $word);
-                if(count($filtered->all()) == 0) $termCount++;
+            foreach ($check['words'] as $word) {
+                $filtered = $collection->where('term', $word);
+                if (count($filtered->all()) == 0) $termCount++;
             }
 
-            if($termCount > 0 ) {
-                foreach($rule['message'] as $msg) {
-                    if(isset($msg['metrics'])) {
+            if ($termCount > 0) {
+                foreach ($rule['message'] as $msg) {
+                    if (isset($msg['metrics'])) {
                         $tempStore->message['vocab'] = $msg['vocab'];
                         $tempStore->css[] = 'vocab';
                     }
@@ -258,37 +253,38 @@ class StoreDrafts implements ShouldQueue
      * *** applicable only for reflective feedback
      */
 
-    protected function expression($tap, $rule) {
+    protected function expression($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $termCount = 0;
         $all = $check['all'];
 
 
-        if(count($all) == 0) {
+        if (count($all) == 0) {
             return $result;
         }
 
-
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $tempStore = new \stdClass();
             $tempStore->str = $data->str;
             $tempStore->message = array();
-            $tempStore->affect=array();
-            $tempStore->epistemic=array();
-            $tempStore->modal=array();
+            // AI/2019-06-25: Removing affect analysis
+            // $tempStore->affect = array();
+            $tempStore->epistemic = array();
+            $tempStore->modal = array();
             $tempStore->css = array();
 
             $returnData = $this->stringTokeniser->expression($data->str);
             //$returnData is an array but since we are analysing tokenised strings we can safetly assume array[0]
             $sanitizedResult = $returnData[0];
             //$tempStore->raw = $sanitizedResult;
-            foreach($all as $exp) {
+            foreach ($all as $exp) {
 
                 if (isset($sanitizedResult->{$exp}) && count($sanitizedResult->{$exp}) > 0) {
                     $tempStore->{$exp} = $sanitizedResult->{$exp};
-                    foreach($rule['message'] as $msg) {
-                        if(isset($msg[$exp])) {
+                    foreach ($rule['message'] as $msg) {
+                        if (isset($msg[$exp])) {
                             $tempStore->message[$exp] = $msg[$exp];
                             array_push($tempStore->css, $exp);
                         }
@@ -299,34 +295,33 @@ class StoreDrafts implements ShouldQueue
             $result[] = $tempStore;
         }
 
-
         return $result;
-
     }
 
 
-    protected function moves($tap, $rule) {
+    protected function moves($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $setFeed = new \stdClass();
             $setFeed->str = $data->str;
             $setFeed->message = array();
             $setFeed->css = array();
 
-            foreach($tags as $tag) {
-                if(count(preg_grep("[^".$tag."]", $data->raw_tags)) > 0) {
-                    foreach($messages as $msg) {
-                        if(isset($msg[$tag])) {
+            foreach ($tags as $tag) {
+                if (count(preg_grep("[^" . $tag . "]", $data->raw_tags)) > 0) {
+                    foreach ($messages as $msg) {
+                        if (isset($msg[$tag])) {
                             $setFeed->message[$tag] = $msg[$tag];
-                            array_push($setFeed->css,$tag);
+                            array_push($setFeed->css, $tag);
                         }
                     }
                 }
@@ -345,19 +340,20 @@ class StoreDrafts implements ShouldQueue
      *                         moves1, move2, move3 precedence orders and messages if not followed
      */
 
-    protected function enforced($tap, $rule) {
+    protected function enforced($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
+        if ($rule["tabEval"] === 'dynamic') {
 
 
             foreach ($tap as $key => $data) {
@@ -388,7 +384,7 @@ class StoreDrafts implements ShouldQueue
                 if (isset($monitor[$key + 1])) {
                     $pre = $monitor[$key];
                     $next = $monitor[$key + 1];
-                    $idx = $pre.$next;
+                    $idx = $pre . $next;
                     if ($pre > $next) {
                         foreach ($messages as $msg) {
                             if (isset($msg['problem' . $idx])) array_push($issues, $msg['problem' . $idx]);
@@ -408,10 +404,8 @@ class StoreDrafts implements ShouldQueue
                     }
                 }
             }
-
-
         } else {
-            foreach($messages as $key => $msg) {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
@@ -421,22 +415,23 @@ class StoreDrafts implements ShouldQueue
         return $result;
     }
 
-    protected function missingTags($tap, $rule) {
+    protected function missingTags($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
+        if ($rule["tabEval"] === 'dynamic') {
 
             $temp = array();
-            $temp_temp =array();
+            $temp_temp = array();
             foreach ($tap as $key => $data) {
                 $temp_temp = array_merge($temp_temp, $data->raw_tags);
             }
@@ -449,9 +444,12 @@ class StoreDrafts implements ShouldQueue
              * if present don't error else error!!!!
              ***/
 
-            foreach($temp_temp as $v) {
-                if($v=='contrast') { array_push($temp, 'nostat');}
-                else { array_push($temp, $v); }
+            foreach ($temp_temp as $v) {
+                if ($v == 'contrast') {
+                    array_push($temp, 'nostat');
+                } else {
+                    array_push($temp, $v);
+                }
             }
 
 
@@ -463,10 +461,8 @@ class StoreDrafts implements ShouldQueue
                     }
                 }
             }
-
-
         } else {
-            foreach($messages as $key => $msg) {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
@@ -477,7 +473,8 @@ class StoreDrafts implements ShouldQueue
     }
 
 
-    protected function staticFeed($tap, $rule) {
+    protected function staticFeed($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
@@ -487,10 +484,8 @@ class StoreDrafts implements ShouldQueue
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
-
-        } else {
-            foreach($messages as $key => $msg) {
+        if ($rule["tabEval"] === 'dynamic') { } else {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg['txt']);
             }
         }
@@ -498,36 +493,30 @@ class StoreDrafts implements ShouldQueue
         return $result;
     }
 
-
-
-
-
-
-
-
-    protected function formatFeedback($tap, $result) {
+    protected function formatFeedback($tap, $result)
+    {
         $final = array();
 
-        foreach($tap as $key => $raw) {
+        foreach ($tap as $key => $raw) {
             $temp = new \stdClass();
-            $newLn=str_replace("[&][&]", "<br />", $raw->str);
+            $newLn = str_replace("[&][&]", "<br />", $raw->str);
             //$temp->str = nl2br($raw['str']);
             $temp->str = $newLn;
             $temp->css = array();
-            $resCss= array();
+            $resCss = array();
             // $temp->str = $raw['str'];
-            foreach($this->rules as $rule) {
-                $tempcss= array();
+            foreach ($this->rules as $rule) {
+                $tempcss = array();
 
-                if(isset($result->{$rule['name']}[$key])) {
+                if (isset($result->{$rule['name']}[$key])) {
                     $temp->{$rule['name']} = $result->{$rule['name']}[$key];
-                    $resCss= array_merge($resCss, $result->{$rule['name']}[$key]->css);
+                    $resCss = array_merge($resCss, $result->{$rule['name']}[$key]->css);
                 }
             }
             $temp->css = $resCss;
-            $final[]=$temp;
+            $final[] = $temp;
         }
-        Log::info('store',['feedback' =>'completed'.date('d/m/y:H:i:s') ]);
+        Log::info('store', ['feedback' => 'completed' . date('d/m/y:H:i:s')]);
         return $final;
     }
 }

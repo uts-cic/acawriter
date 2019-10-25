@@ -1,54 +1,66 @@
 <template>
-    <div>
-        <!-- <div class="row pbar">
-            <div class="col-md-12">
-                <div class="progress" v-if="processing!==''">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 45%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div> -->
-        <br />
-
-        <ul class="nav nav-pills nav-fill bg-dark text-white">
+    <div v-if="vtabs">
+        <ul class="nav nav-tabs nav-fill awa-tabs">
             <li class="nav-item">
-                <a class="nav-link active" href="#analysed" data-toggle="tab">Reflective Report</a>
+                <a class="nav-link active" href="#analysed" data-toggle="tab" data-ga-action="tab:report">Reflective Report</a>
             </li>
-           <li class="nav-item">
-                <a class="nav-link" href="#moreAna" data-toggle="tab">Feedback</a>
-            </li>
+            <template v-for="tab in vtabs">
+                <li class="nav-item">
+                    <a class="nav-link" v-bind:href="'#'+getLowerCase(tab.tabName)" data-toggle="tab" v-bind:data-ga-action="'tab:' + getLowerCase(tab.tabName)">{{tab.tabName}}</a>
+                </li>
+            </template>
         </ul>
 
-         <div class="tab-content ref activeClass" id="legend">
+        <div class="tab-content ref" id="legend">
             <div class="tab-pane active" id="analysed" role="tabpanel">
-               <div class="bg-light ref_chk" v-for="rule in feedback.rules">
-                    <h6 class="card-subtitle p-4" v-if="rule.custom">{{rule.custom}}</h6>
-                    <ul class="list-inline">
-                        <template v-for="msg in rule.message">
-                            <li class="list-inline-item" v-for="(m,id) in msg">
-                                <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;
-                                <span v-bind:class="id"></span>&nbsp;<span v-html="m"></span>
-                            </li>
-                        </template>
-                    </ul>
+                <template v-for="rule in feedback.rules">
+                    <div class="ref_chk" v-if="rule.tab==1 || !rule.tab">
+                        <span class="card-subtitle" v-if="rule.custom" v-html="rule.custom"></span>
+                        <ul class="list-unstyled">
+                            <template v-for="msg in rule.message">
+                                <li v-for="(m,id) in msg">
+                                    <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;
+                                    <span v-bind:class="id"></span>&nbsp;<span v-html="m"></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+
+                <hr>
+
+                <div class="wrapper">
+                    <span v-for="(feed,idx) in feedback.final">
+                        <span v-for="ic in feed.css">
+                            <!-- AI/2019-06-25: Removing affect analysis -->
+                            <!-- <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'"> -->
+                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics'">
+                                <span v-bind:class="getIcons(ic)"></span>
+                            </template>
+                        </span>
+                        <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>&nbsp;
+                    </span>
+                </div>
             </div>
-                <hr />
-            <div class="col-md-12 wrapper">
-                <span v-for="(feed,idx) in feedback.final">
-                    <span v-for="ic in feed.css">
-                        <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'">
-                            <span v-bind:class="getIcons(ic)"></span>
+
+            <template v-for="tab in vtabs">
+                <div class="tab-pane" v-bind:id="getLowerCase(tab.tabName)" role="tabpanel">
+                    <span v-for="(ref, idc) in feedback.tabs">
+                        <template v-if="idc==tab.tab" v-for="(msg, idm) in ref">
+                            <div class="bd-callout bd-callout-info" v-for="feed in msg">
+                                <span v-for="a in feed">
+                                    <ul class="list-unstyled">
+                                        <li class="list-group-flush" v-for="b in a" v-html="b"></li>
+                                    </ul>
+                                </span>
+                            </div>
                         </template>
                     </span>
-                    <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>&nbsp;
-                </span>
-            </div>
-            </div>
-             <div class="tab-pane" id="moreAna" role="tabpanel">
-                 <div class="alert alert-info"><small>Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar and plagiarism.</small></div>
-             </div>
-         </div>
-
+                </div>
+            </template>
+        </div>
     </div>
+    <div v-else class="feedback-placeholder"></div>
 </template>
 
 <script>
@@ -63,7 +75,7 @@
         store,
         data() {
             return {
-
+                customRules:[]
             }
         },
         mounted:function() {
@@ -86,17 +98,18 @@
                 //console.log(words);
                 if(data.str!=='' && typeof data.expression!== 'undefined') {
                     let str = data.str;
-                    if(data.expression.affect.length > 0 &&
-                        ( _.includes(data.css, "context")  || _.includes(data.css, "challenge") || _.includes(data.css, "change")
-                        )
-                    ) {
-                        data.expression.affect.forEach(function(word) {
-                            if(!self.checkStopWords('affect', word.text)) {
-                                str = str.replace(word.text, "<span class='stdaffect affect'>" + word.text + "</span>");
-                            }
-                        });
+                    // AI/2019-06-25: Removing affect analysis
+                    // if(data.expression.affect.length > 0 &&
+                    //     ( _.includes(data.css, "context")  || _.includes(data.css, "challenge") || _.includes(data.css, "change")
+                    //     )
+                    // ) {
+                    //     data.expression.affect.forEach(function(word) {
+                    //         if(!self.checkStopWords('affect', word.text)) {
+                    //             str = str.replace(word.text, "<span class='stdaffect affect'>" + word.text + "</span>");
+                    //         }
+                    //     });
 
-                    }
+                    // }
                     if(data.expression.epistemic.length > 0) {
                         data.expression.epistemic.forEach(function(word) {
                             str = str.replace(word.text, "<span class='stdepistemic epistemic'>"+word.text+"</span>");
@@ -131,6 +144,15 @@
                     });
                 }
                 return result;
+            },
+            getLowerCase(str) {
+                let ch= str.replace(' ', '-');
+                return ch.toLowerCase();
+            },
+            getFeedbackHeading(idm) {
+                //to sort out haven't had a chance to do so
+                let heading ='';
+                return heading;
             }
         },
         computed:{
@@ -138,7 +160,21 @@
                 feedback: 'currentFeedback',
                 processing: 'loadingStatus'
             }),
+            vtabs() {
+                if(this.feedback.rules) {
+                    let tabs = [];
+                    let rtabs = [];
+                    let rules = this.feedback.rules;
+                    tabs = rules.filter(rule => rule.tab  > 1);
+                    let curr = 0;
+                    tabs.forEach(function(item) {
+                        if(curr != item.tab)  rtabs.push(item);
+                        curr = item.tab;
+                    });
+                    return rtabs;
 
+                }
+            }
         }
     }
 </script>

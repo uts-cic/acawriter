@@ -6,43 +6,36 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-default"><h2>Terms of Use/ Privacy Policy</h2></div>
+                <div class="card-header bg-default"><h2>Terms of Use / Privacy Statement</h2></div>
                 <div class="card-block p-5">
-                    <h4>CIC Privacy Statement</h4>
+                    <h4>Purpose</h4>
                     <p class="card-text">
-                        The Connected Intelligence Centre (CIC) complies with the UTS Governance strategy toward Privacy, as well as associated regulations and practices. See Privacy at UTS for more information.
-                        In addition to the regular data collection associated with the normal running of a UTS teaching and research unit, CIC engages in activities across the University that will from time to time mean:
-                        <ul>
-                        <li>The collection of additional data (eg student employment industry categories)</li>
-                        <li>Accessing existing data and reusing for a purpose not originally intended with its collection (eg, Learning Management System (LMS) logins)</li>
-                        <li>Combining more than one form of a data with another (eg LMS logins and grades)</li>
-                        </ul>
+                        AcaWriter is provided to support students and staff of UTS. Its purpose is to provide feedback on academic writing. It works by looking for specific hallmarks of good academic writing that signal that there is a significant connection being made, or an important development or contrast in ideas. This helps to demonstrate your critical thinking, skill in argument, or development as a reflective professional.
                     </p>
-                    <h4>Collection</h4>
                     <p class="card-text">
-                        Where the data is collected centrally by UTS, eg student enrolment information, CIC will access the data through the student datamart, following ethics approval and any other administrative approvals required.
-                        Where CIC is responsible for the data collection, standard regulations will be followed by the responsible researcher and under the guidance of the Centre Director in consultation with the Senior Manager.
+                        To participate, you will need to register as a user of AcaWriter. Information collected will include name, email, course/subject identifies, documents uploaded for review and system activity logs.  Your uploaded documents and the reports from AcaWriter enable you to assess your academic writing progress overtime. Information collected through AcaWriter will also be used by UTS for quality improvement and planning purposes associated with the platform, and for associated research by the Connected Intelligence Centre. Aggregate data may be made available to other relevant UTS areas. Data collected from AcaWriter may also be used for research and statistical analysis, in either a de-identified form or in line with research ethics approval.
                     </p>
-                    <h4>Information being collected</h4>
                     <p class="card-text">
-                        When the data being collected relates to humans, the population under investigation will be made aware of why the project is being undertaken and the types of data that will be collected. The population will also be informed of how the information will be used.
-                        All CIC research projects, whether collecting data about humans or not, will be publicised on the CIC website, including details about who to contact for further information.
-                    </p>
-                    <h4>Disclosure</h4>
-                    <p class="card-text">
-                        All CIC research projects will clearly state who will see the data relating to a project, as well as the intended outcomes (eg reports and research papers). Wherever necessary, data will be de-identified before being released to a researcher and all reasonable steps taken to ensure that data cannot be re-identified. Outputs that will be distributed to a wider audience will refer to pseudonyms when discussing individual results. Individual results that refer to a small or vulnerable population will not be disseminated.
-                    </p>
-                    <h4>Accessing Data</h4>
-                    <p class="card-text">
-                        Individuals who know that CIC maintains data relating to them, such as students enrolled in CIC courses, may contact the centre at any time to update their personal data. It is likely that this will be data held centrally, in which case CIC staff will redirect the individual to the appropriate collection point.
-                    </p>
-                    <h4>Data Storage</h4>
-                    <p class="card-text">
-                        Any data held by CIC will be stored and maintained within the policies and directives of UTS. Data collected and maintained by CIC staff will be held for the published or appropriate length of time under relevant legislation (eg research data management plans or NSW/Australian Government legislation).
-                    </p>
+                        Information will only be disclosed in an anonymised format, or with your express consent, or if required or permitted by law.
 
-                    <h4>UTS web statements</h4>
-                    <p class="card-text"><a target="_blank" href="https://www.uts.edu.au/about/utsweb-statements/accessibility-statement">For more information</a></p>
+                    </p>
+                    <h4>Data Management</h4>
+                    <p class="card-text">
+                        Data held within the AcaWriter platform is stored in Australia with an external company under contract with UTS. Web Services, in accordance with UTS data management and privacy.
+                    </p>
+                    <p class="card-text">
+                        Data will be retained to support your academic writing development and for research purposes. Ongoing retention beyond this will be managed in accordance with the general retention and disposal authorities issued under the NSW State Records Act. If you leave UTS, you may continue to use of the AcaWriter platform.
+                    </p>
+                    <h4>Managing your information</h4>
+                    <p class="card-text">
+                        You can access the information relating to your academic writing. You can download your data in a pdf format at any time. </p>
+
+                    <h4>Unsubscribe</h4>
+                    <p class="card-text">
+                        If you wish to withdraw from using AcaWriter, or if you wish to have your profile and data removed, please contact cic@uts.edu.au.
+                    </p>
+                    <h4>About privacy at UTS</h4>
+                    <p class="card-text">This notice may be updated at any time and will be available when you log in. For further information about privacy and the University’s privacy contacts, see <a target="_blank" href="https://www.uts.edu.au/about/uts-governance/privacy-uts">privacy at UTS</a></p>
 
                 </div>
 

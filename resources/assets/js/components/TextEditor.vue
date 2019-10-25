@@ -53,11 +53,11 @@
                             <div class="col-md-6">
                                 <div id="editor">
                                <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
-                                    <vue-editor v-model="editorContent"></vue-editor>
+                                    <vue-editor v-model="editorContent" placeholder="Place your text here..."></vue-editor>
                                 </div>
                             </div>
-                            <!--- Reflective feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
+                            <!-- Reflective feedback -->
+                            <div class="col-md-6" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
                                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                                     <ul>
                                         <li v-for="error in errors">{{error.message}}</li>
@@ -83,8 +83,8 @@
                             <!-- end of reflective -->
 
 
-                            <!--- Analytic feedback --->
-                            <div class="col-md-6 bg-light" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
+                            <!-- Analytic feedback -->
+                            <div class="col-md-6" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
                                 <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
                                     <ul>
                                         <li v-for="error in errors">{{error.message}}</li>
@@ -174,7 +174,7 @@
                        }
                    }
                },
-               editorContent: 'Edit Your Content Here!',
+               editorContent: '',
                tmp: 'More text',
                viewer : {},
                loading: 0,
@@ -198,12 +198,6 @@
                }
            }
        },
-      /* apollo:{
-           viewer: {
-               query: POSTS_QUERY,
-               loadingKey: 'loading'
-           }
-       },*/
        mounted () {
            this.editLog.push(this.editorContent);
            this.fetchAnalysis();

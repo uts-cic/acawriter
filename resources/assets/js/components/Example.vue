@@ -1,80 +1,51 @@
 <template>
-    <div>
-        <div v-if="flash!=''" class="alert alert-info">
-            <button type="button" class="close" data-dismiss="alert">×</button>
-            <strong>{{flash}}</strong>
-        </div>
-        <table class="table">
-            <thead class="thead-dark">
+    <table class="table">
+        <thead class="thead-dark">
             <tr>
-                <th scope="col">Faculty</th>
+                <th scope="col">Document name</th>
                 <th scope="col">Genre</th>
-                <th scope="col">Title</th>
+                <th scope="col">Faculty</th>
                 <th scope="col">Summary</th>
-
             </tr>
-            </thead>
-            <tbody>
-
-            <tr v-for= "list in lists">
-                <th scope="row">{{list.faculty}}</th>
-                <td>{{list.feature.grammar}} ({{list.feature.name}})</td>
-                <td><a v-bind:href="'example/analyse/'+list.id">{{list.title}}</a></td>
-                <td><small>{{list.summary}}</small></td>
+        </thead>
+        <tbody>
+            <tr v-for="example in examples">
+                <th scope="row"><a v-bind:href="'example/analyse/' + example.id">{{example.title}}</a></th>
+                <td>{{example.feature.grammar}} ({{example.feature.name}})</td>
+                <td>{{example.faculty}}</td>
+                <td>{{example.summary}}</td>
             </tr>
-
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
 </template>
 
 <script>
-
     export default {
         name: "exampleText",
         data() {
             return {
-                lists: [],
-                errors: [],
-                flash:''
-
-            }
+                examples: []
+            };
         },
-        mounted:function() {
+        mounted: function() {
             this.fetchExamples();
         },
         methods:{
             fetchExamples() {
                 axios.get('/example/all').then((response) => {
-                    this.$data.lists = response.data.examples;
-                }, (err) => {
-                    this.$data.errors.push(e)
-                });
+                    this.$data.examples = response.data.examples.sort(function(a, b) {
+                        var nameA = (a.feature.grammar + a.feature.name).toUpperCase();
+                        var nameB = (b.feature.grammar + b.feature.name).toUpperCase();
+                        if (nameA < nameB) {
+                            return -1;
+                        }
+                        if (nameA > nameB) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                }, (err) => {});
             }
-           /* action(what, doc) {
-                if(what === 'delete') {
-                    let data = {'action': what, 'id': doc.id};
-                    if (confirm("All feedback associated with the document will be deleted. Do you wish to proceed?")) {
-                        axios.post('documents/action', data).then((response) => {
-                            this.$data.flash = response.data.message;
-                            setTimeout(() => {
-                                this.$data.flash = '';
-                                this.fetchDocuments();
-                            }, 3000);
-                        }, (err) => {
-                            this.$data.errors.push(e)
-                        });
-                    }
-                } else if(what === 'edit') {
-                    let data = {'id':doc.id, 'name': doc.name };
-                    this.$modal.show('edit-document', {'data':data} );
-                }
-            }*/
-        },
-        computed:{
-
         }
     }
 </script>
-
-

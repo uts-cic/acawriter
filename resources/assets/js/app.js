@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -7,38 +6,12 @@
 
 require('./bootstrap');
 
-
 window.Vue = require('vue');
-//import Vue from 'vue';
-
-
-
-
-import { ApolloClient, createNetworkInterface } from 'apollo-client';
-import VueApollo from 'vue-apollo';
 
 //import modals lib
 import VModal from 'vue-js-modal';
 
 Vue.use(VModal);
-
-
-// Create the apollo client
-const apolloClient = new ApolloClient({
-    networkInterface: createNetworkInterface({
-        //uri: 'http://localhost:3020/graphql',
-        uri: 'https://graphql-compose.herokuapp.com/northwind/',
-    }),
-    connectToDevTools: true,
-})
-
-// Install the vue plugin
-Vue.use(VueApollo)
-
-const apolloProvider = new VueApollo({
-    defaultClient: apolloClient,
-})
-
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -46,23 +19,23 @@ const apolloProvider = new VueApollo({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('log-status', require('./components/lstatus.vue'));
-Vue.component('doc-editor', require('./components/TextAnalyser.vue'));
-Vue.component('internet-connection', require('./components/InternetConnection.vue'));
-Vue.component('tap-status', require('./components/TapHealth.vue'));
-Vue.component('autocomplete', require('./components/Autocomplete.vue'));
-Vue.component('assignment-list', require('./components/Assignment.vue'));
-Vue.component('documents', require('./components/Document.vue'));
-Vue.component('edit-document', require('./components/modal/EditDocument.vue'));
-Vue.component('example-text', require('./components/Example.vue'));
-Vue.component('ex-doc-editor', require('./components/ExampleAnalyser.vue'));
+Vue.component('form-new', require('./components/forms/FormNew.vue').default);
+Vue.component('form-subscribe', require('./components/forms/FormSubscribe.vue').default);
+Vue.component('log-status', require('./components/lstatus.vue').default);
+Vue.component('doc-editor', require('./components/TextAnalyser.vue').default);
+Vue.component('internet-connection', require('./components/InternetConnection.vue').default);
+Vue.component('tap-status', require('./components/TapHealth.vue').default);
+Vue.component('assignment-list', require('./components/Assignment.vue').default);
+Vue.component('documents', require('./components/Document.vue').default);
+Vue.component('edit-document', require('./components/modal/EditDocument.vue').default);
+Vue.component('example-text', require('./components/Example.vue').default);
+Vue.component('ex-doc-editor', require('./components/ExampleAnalyser.vue').default);
 
+var socket = io.connect(window.location.protocol + '//' + window.location.hostname);
 
-var socket = io.connect(process.env.MIX_APP_SOCKET);
 import moment from 'moment';
 const app = new Vue({
     el: '#app',
-    apolloProvider,
     data: {
         slogs: [],
         lastHeartBeatReceivedAt: moment(),
@@ -99,37 +72,44 @@ const app = new Vue({
     }
 });
 
-/*(function ($) {
-
-    'use strict';
-
-    // Toggle classes in body for syncing sliding animation with other elements
-    $('#bs-example-navbar-collapse-2')
-        .on('show.bs.collapse', function (e) {
-            $('#app').addClass('menu-slider');
-        })
-        .on('shown.bs.collapse', function (e) {
-            $('#app').addClass('in');
-        })
-        .on('hide.bs.collapse', function (e) {
-            $('#app').removeClass('menu-slider');
-        })
-        .on('hidden.bs.collapse', function (e) {
-            $('#app').removeClass('in');
-        });
-
-
-})(jQuery);
-*/
+window.trackEvent = function (category, action, label) {
+    var params = {
+        event_category: category,
+        event_label: label
+    };
+    if (ROLE) {
+        params.role = ROLE;
+    }
+    // console.log(params);
+    // alert([category, action, label].join(', '));
+    gtag('event', action, params);
+    window.axios.post('/collect', {
+        category: category,
+        action: action,
+        label: label
+    });
+}
 
 $(document).ready(function () {
-    $('#sidebarCollapse, #sidebarCollapseTwice').on('click', function () {
-        $('#sidebar').toggleClass('active');
+
+    $('a[data-ga-label],a[data-ga-action]').click(function (event) {
+        var action = $(event.target).closest('[data-ga-action]').data('ga-action');
+        var label = $(event.target).closest('[data-ga-label]').data('ga-label');
+        var category = $(event.target).closest('[data-ga-category]').data('ga-category');
+        trackEvent(category, action || 'click', label);
     });
 
+    $('#add_assignment').submit(function (event) {
+        if (!$('[name="name"]', this).val()) {
+            return false;
+        }
+        var selected = $('[name="grammar"] option:selected', this);
+        var label = selected.closest('[label]').attr('label') + ': ' + selected.text();
+        trackEvent('Assignment', 'create', label);
+    });
 
     //manipulation of the checkbox fields on text analyser page
-    $(document).on('change', '#sidebar.ref input[type=checkbox], .ref_chk input[type=checkbox]' , function () {
+    $(document).on('change', '.ref_chk input[type=checkbox]' , function () {
         var r = $(this).val();
         /*if($(this).is(':checked')) {
             $('.wrapper .'+r).removeClass('hidemarkup');
@@ -152,7 +132,7 @@ $(document).ready(function () {
     });
 
     //manipulation of the checkbox fields on text analyser page
-    $(document).on('change', '#sidebar.ana input[type=checkbox], .ref_chk input[type=checkbox]' , function () {
+    $(document).on('change', '.ref_chk input[type=checkbox]' , function () {
         var r = $(this).val();
         if($(this).is(':checked')) {
             $('.wrapper .'+r).removeClass('hidemarkup');
@@ -160,18 +140,6 @@ $(document).ready(function () {
             $('.wrapper .'+r).addClass('hidemarkup');
         }
     });
-
-    $('#extendOut').on('click', openWindow);
-
-
-    function openWindow(){
-        $('#sidebar').toggleClass('active');
-        var w = window.open('','AWA3 key','width=500, height=600, toolbar=no,location=no,status=no,menubar=no,addressbar=0');
-        var html = "<html><head><title>AWA3 Key</title><link rel=\"stylesheet\" type=\"text/css\" href='/css/app.css'></head><body>";
-        html +=  $('#popup').html();
-        html += '</body></html>';
-        w.document.write(html);
-    }
 
     $('span[data-toggle=tooltip]').tooltip();
 
@@ -196,6 +164,14 @@ $(document).ready(function () {
         });
     });
 
-
+    $('#refresh').click(function(){
+        $.ajax({
+            type:'GET',
+            url:'/page/contact/refreshcaptcha',
+            success:function(data){
+                $(".captcha span").html(data.captcha);
+            }
+        });
+    });
 
 });

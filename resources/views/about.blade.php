@@ -8,21 +8,18 @@
                 <div class="card-header bg-default"><h2>About</h2></div>
                 <div class="card-block p-5">
                     <p class="card-text">
-                        <strong>Welcome to <em>AcaWriter!</em></strong>
-                        This website provides automated feedback on academic writing. A lot of research into writing shows that many students find it tough to express their ideas in formal academic language, and wish they had better, quicker feedback.
+                        <strong><em>AcaWriter</em></strong> provides automated feedback on academic writing. Research shows many students find it tough to express their ideas in formal academic language, and would benefit from faster, more actionable feedback.
                     </p>
                     <p class="card-text">
-                        <strong><em>AcaWriter</em> works by looking for specific hallmarks of good academic writing</strong> that signal (to your audience, the reader) that there's a significant connection being made, or an important development or contrast in ideas. This helps to demonstrate your critical thinking, skill in argument, or development as a reflective professional.
+                        <strong><em>AcaWriter</em></strong> works by looking for hallmarks of good academic writing that signal (to your audience) that you’re developing ideas. This helps demonstrate your critical thinking, your ability to put forward an argument, and your development as a reflective professional.
                     </p>
                     <p class="card-text">
-                        <strong><em>AcaWriter</em> is not grading your writing.</strong> Instead, it gives you feedback to improve your draft. Nobody will see your documents other than you, and the UTS research team who is continually analysing AcaWriter. So please revise your draft and get feedback as many times as you want!
+                        <strong><em>AcaWriter</em></strong> gives you feedback to help you improve your draft. Nobody will see your documents other than you and the UTS team developing the tool. We encourage you to revise your draft and get feedback as many times as you want. REMEMBER, AcaWriter is not grading your work!
                     </p>
                     <p class="card-text">
-                        <strong>Just give it a go</strong> and Create a new document! Or to learn more about the website, browse the AcaWriter Guide.
+                        To find out more, visit the <a href="https://www.uts.edu.au/acawriter" target="_blank">AcaWriter support website</a>.
                     </p>
-                    <p class="card-text">
-                        <strong><em>AcaWriter</em> was created by</strong> the <a href="https://utscic.edu.au/tools/awa/">Academic Writing Analytics</a> project, at the UTS Connected Intelligence Centre. Go there to learn about the ideas and tech behind the scenes, and what we're learning as we test it with staff and students. The software is now being shared and improved across universities in Australia and beyond, as part of the Higher Education Text Analytics open source project.
-                    </p>
+
                 </div>
 
                 </div>

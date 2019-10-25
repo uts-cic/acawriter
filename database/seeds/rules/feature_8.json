@@ -1,0 +1,225 @@
+{
+    "rules": [
+        {
+            "name": "moves",
+            "check": {
+                "tags": [
+                    "context",
+                    "challenge",
+                    "link2me",
+                    "change"
+                ]
+            },
+            "message": [
+                {
+                    "context": "Initial thoughts and feelings about a significant experience."
+                },
+                {
+                    "challenge": "The challenge of new surprising or unfamiliar ideas, problems or learning experiences."
+                },
+                {
+                    "link2me": "<span class=\"link2me\">Deeper reflection, personally applied.<\/span>"
+                },
+                {
+                    "change": "How new knowledge can lead to a change"
+                }
+            ],
+            "css": [
+                "context",
+                "challenge",
+                "link2me",
+                "change"
+            ],
+            "custom": "",
+            "tab": 1,
+            "tabName": "Reflective Feedback",
+            "tabEval": "dynamic"
+        },
+        {
+            "name": "expression",
+            "check": {
+                "all": [
+                    "epistemic",
+                    "modal"
+                ]
+            },
+            "message": [
+                {
+                    "epistemic": "<u>Expressions indicating belief, learning, or knowledge.</u>"
+                },
+                {
+                    "modal": "<span class=\"modall\">Expressions indicating self critique<\/span>"
+                }
+            ],
+            "css": [
+                "epistemic",
+                "modall"
+            ]
+        },
+        {
+            "name": "metrics",
+            "check": {
+                "sentenceWordCount": "35"
+            },
+            "message": [
+                {
+                    "metrics": "Sentence too long, might disengage the reader. Try breaking it into smaller sentences"
+                }
+            ],
+            "css": [
+                "metrics"
+            ]
+        },
+        {
+            "name": "filterWords",
+            "check": {
+                "list": [
+                    {
+                        "words": [
+                            "preceptor",
+                            "supervisor",
+                            "hospital",
+                            "Community",
+                            "Pharmacy",
+                            "Placement",
+                            "site",
+                            "pharmacy",
+                            "pharmacist",
+                            "mentor"
+                        ],
+                        "tags": []
+                    }
+                ]
+            },
+            "message": [],
+            "css": []
+        },
+        {
+            "name": "customised",
+            "method": "paragraphFeedback",
+            "check": {
+                "tags": [
+                    "context",
+                    "change"
+                ],
+                "conditions": [
+                    {
+                        "terms": [
+                            "change_without_context"
+                        ]
+                    },
+                    {
+                        "para_chk": "1"
+                    }
+                ]
+            },
+            "message": [
+                {
+                    "context": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you’ve acknowledged your first thoughts, feelings and\/or reactions to an incident, or learning task, within the first paragraph."
+                },
+                {
+                    "context_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> Perhaps consider introducing your first thoughts, feelings and\/or reactions to an incident, or learning task, within the first paragraph. AcaWriter couldn’t spot this within first paragraph"
+                },
+                {
+                    "change": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Well done, it appears that you’ve reflected on how you would change\/prepare for the future. Is there anything further to say about these new insights that have led to change."
+                },
+                {
+                    "change_without_context": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> While it appears that you’ve reported on how you would change\/prepare for the future, you dont seem to have described your thoughts, feelings and\/or reactions to an incident, or learning task."
+                }
+            ],
+            "css": [
+                "mtags"
+            ],
+            "custom": "Feedback",
+            "tab": 2,
+            "tabName": "Feedback",
+            "tabEval": "dynamic"
+        },
+        {
+            "name": "customised",
+            "method": "expressionsFeedback",
+            "check": {
+                "tags": [
+                    "epistemic",
+                    "modal",
+                    "link2me",
+                    "challenge",
+                    "change"
+                ],
+                "conditions": [
+                    "challenge",
+                    "change"
+                ]
+            },
+            "message": [
+                {
+                    "epistemic": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> You have reflected on your beliefs\/learning\/knowledge."
+                },
+                {
+                    "modal": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> You seem to have incorporated a deeper reflection indicating self-critique."
+                },
+                {
+                    "epistemic_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> You seem not to have reflected on your beliefs\/learning\/knowledge. If that’s the case, then please think about this (e.g. including cultural, religious or family values\/assumptions)."
+                },
+                {
+                    "modal_m": "<span class=\"text-danger\"> You seem not to have incorporated a deeper reflection indicating self-critique. Consider how this could improve reflection on your strengths and weaknesses."
+                },
+                {
+                    "link2me": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you have reflected in a deeper way about how your experiences connect with your professional development."
+                },
+                {
+                    "challenge": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you’ve reported on something you found challenging. <\/span>"
+                },
+                {
+                    "change": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you’ve reflected on how you would change/prepare for the future. Is there anything further to say about these new insights that have led to change."
+                },
+                {
+                    "link2me_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> You seem not to have reflected in a deeper way about your experiences. Consider applying your insights to how you can develop professionally."
+                },
+                {
+                    "challenge_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It appears that you haven’t commented on anything you found challenging. If you did find something challenging, please expand on this."
+                },
+                {
+                    "change_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It appears that you haven’t commented on what you would do differently should the same event occur in the future. Perhaps think about changes in perspectives\/strategies\/tools\/ideas\/behaviour and\/or approach."
+                },
+                {
+                    "double_challenge": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you may have expanded the detail on the challenge you faced. (#cnt)"
+                },
+                {
+                    "double_change": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you have expanded the detail on how you would change\/prepare for the future. (#cnt)"
+                },
+                {
+                    "order_tag_err": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> While it appears that you’ve reported on how you would change\/prepare for the future, you don’t seem to have reported first on what you found challenging. Perhaps you’ve reflected only on the positive aspects in your report?. "
+                }
+            ],
+            "css": [
+                "mtags"
+            ],
+            "custom": "Feedback",
+            "tab": 2,
+            "tabName": "Feedback",
+            "tabEval": "dynamic"
+        },
+        {
+            "name": "faq",
+            "method": "staticFeed",
+            "check": {
+                "tags": [],
+                "conditions": []
+            },
+            "message": [
+                {
+                    "txt": "AcaWriter tags (elements of reflective thinking processes) will guide your reflection. You are able to adjust your writing according to the feedback of AcaWriter. As you write your reflection please consider the following: <br />Throughout the reflection there may words that are bolded according to AcaWriter feedback, which will indicate a “deeper reflection, personally applied”. This is something that you should aspire to achieve in your reflective statement. <br \/>1. A short description of the incident and how it came about (Related to Stage 1 of rubric)<br \/> 2. Your thoughts, feelings, reactions to the incident (initial thoughts, feelings, reactions and if those change as a result of the incident then this should also be addressed in the reflective statement). As your initial thoughts, feelings and reactions are required to be addressed, it is likely that they would be initially addressed within the first paragraph of the statement and any changes to that may be addressed later in the statement.  (Related to Stage 2 of Rubric). <br \/>3. Make associations with your prior studies, experience (personal and\/or professional).(Related to Stage 3 of Rubric, and possibly addressing the <u>Underline expressions related to learning and knowledge<\/u> as in AcaWriter) <br \/>4. How do those associations relate to the incident and how it has impacted on you and your learning drawing on the integration of that knowledge? (Related to Stage 4 of Rubric, and possibly addressing the <u>Underline expressions indicating belief, learning or knowledge<\/u> as in AcaWriter).<br \/>5. Address any firmly held beliefs, assumptions, approaches you may have had and if these have changed as a result of the incident, explain how and why? (Related to Stage 5 of rubric, some issues may be challenging and therefore relate to the “Pink circle tag” in AcaWriter, and <span class=\"modall\">green italics expressing indicating self critique</span> may be addressed here as in AcaWriter. <br \/>6. Address why you think your belief and\/or value system is as it is? Were there any reasons that you can think of that made you think the way you do? (cultural, hereditary, family related, history etc) (Related to Stage 6 of Rubric, this may be confronting and something unfamiliar, related to <span class=\"challenge\"></span>  in AcaWriter)<br \/>7. Address the outcomes of the reflection in terms of how things may have changed or should change for better future performance, practice, outcomes etc. Also drawing on your experiences, different viewpoints and previous knowledge leading to change. It is important to address how this has guided you to attain the relevant clinical competency standard and why? (Related to Stage 7 of Rubric and <span class=\"change\"></span> in AcaWriter) <br \/>Unfortunately, AcaWriter cannot comment on your poor spelling, grammar and incorrect drug names. This you will have to critique for yourself. My suggestion is peer review on your statement before you submit it for the summative assessment. Significant marks are deducted as indicated in the reflective rubric, for poor attention to detail such as poor spelling and errors in grammar. You are Masters of Pharmacy students and therefore a critical mind is essential. Please ensure you write and read carefully your submissions, critique it for accuracy and detail, providing the examples and integrated knowledge from your placement site. AcaWriter although a fabulous tool, has its limitations, it cannot replace your critical mind."
+                }
+            ],
+            "css": [
+                "msg1",
+                "msg2"
+            ],
+            "custom": "more feedback",
+            "tab": 3,
+            "tabName": "Examples",
+            "tabEval": "static"
+        }
+    ]
+}

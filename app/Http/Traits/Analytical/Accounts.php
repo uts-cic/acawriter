@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project: AcaWriter
  *
@@ -20,39 +21,36 @@
  */
 
 namespace App\Traits\Analytical;
-use App\Services\Analyser;
 
-trait Accounts {
-
+trait Accounts
+{
     /**
      * @param $tap
      * @param $rule --- accounting moves swap
      * @return array
      */
-
-    public function amoves($tap, $rule) {
-
+    public function amoves($tap, $rule, $extra = array())
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $setFeed = new \stdClass();
             $setFeed->str = $data->str;
             $setFeed->message = array();
             $setFeed->css = array();
 
-            $temp_tap_raw_tags =array();
-
+            $temp_tap_raw_tags = array();
 
             $filtered = array();
-            foreach($data->raw_tags as $raw) {
-                if($raw == 'nostat') {
+            foreach ($data->raw_tags as $raw) {
+                if ($raw == 'nostat') {
                     array_push($temp_tap_raw_tags, 'contrast');
                 } else {
                     array_push($temp_tap_raw_tags, $raw);
@@ -61,13 +59,13 @@ trait Accounts {
 
             $filtered = array_unique($temp_tap_raw_tags);
 
-            foreach($tags as $tag) {
+            foreach ($tags as $tag) {
 
-                if(count(preg_grep("[^".$tag."]", $filtered)) > 0) {
-                    foreach($messages as $msg) {
-                        if(isset($msg[$tag])) {
+                if (count(preg_grep("[^" . $tag . "]", $filtered)) > 0) {
+                    foreach ($messages as $msg) {
+                        if (isset($msg[$tag])) {
                             $setFeed->message[$tag] = $msg[$tag];
-                            if(!in_array($tag,$setFeed->css)) {
+                            if (!in_array($tag, $setFeed->css)) {
                                 array_push($setFeed->css, $tag);
                             }
                         }
@@ -86,32 +84,30 @@ trait Accounts {
      * @param $rule -- used for accounting rules
      * @return array
      */
-
-    public function missingSwapTags($tap, $rule) {
+    public function missingSwapTags($tap, $rule, $extra = array())
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
         $conditions = $check['conditions'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
+        if ($rule["tabEval"] === 'dynamic') {
 
             $temp = array();
-            $temp_temp =array();
+            $temp_temp = array();
             foreach ($tap as $key => $data) {
                 $temp_temp = array_merge($temp_temp, $data->raw_tags);
             }
 
-            //print_r($temp_temp);
-
-            foreach($temp_temp as $raw) {
-                if($raw == 'nostat' || $raw == 'emph') {
+            foreach ($temp_temp as $raw) {
+                if ($raw == 'nostat' || $raw == 'emph') {
                     if ($raw == 'nostat') {
                         array_push($temp, 'contrast');
                     }
@@ -124,7 +120,6 @@ trait Accounts {
             }
 
             $monitor = array_unique($temp);
-            //print_r($monitor);
 
             foreach ($tags as  $d) {
                 if (!in_array($d, $monitor)) {
@@ -135,22 +130,20 @@ trait Accounts {
             }
 
             //check for any conditional positive feedback - true iff all the tags are added
-            if(count($conditions) > 0 && count($issues) == 0) {
+            if (count($conditions) > 0 && count($issues) == 0) {
                 //will be positive in case of accounts
-                $cond_value= $conditions[0];
+                $cond_value = $conditions[0];
                 foreach ($messages as $msg) {
                     if (isset($msg[$cond_value])) array_push($issues, $msg[$cond_value]);
                 }
             }
-
         } else {
-            foreach($messages as $key => $msg) {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
 
         array_push($result, $issues);
-        //print_r($result);
         return $result;
     }
 
@@ -160,32 +153,30 @@ trait Accounts {
      * @param $rule -- used for accounting positive feedback
      * @return array
      */
-
-    public function positiveFeed($tap, $rule) {
+    public function positiveFeed($tap, $rule, $extra = array())
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
         $conditions = $check['conditions'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
+        if ($rule["tabEval"] === 'dynamic') {
 
             $temp = array();
-            $temp_temp =array();
+            $temp_temp = array();
             foreach ($tap as $key => $data) {
                 $temp_temp = array_merge($temp_temp, $data->raw_tags);
             }
 
-            //print_r($temp_temp);
-
-            foreach($temp_temp as $raw) {
-                if($raw == 'nostat' || $raw == 'emph') {
+            foreach ($temp_temp as $raw) {
+                if ($raw == 'nostat' || $raw == 'emph') {
                     if ($raw == 'nostat') {
                         array_push($temp, 'contrast');
                     }
@@ -198,7 +189,6 @@ trait Accounts {
             }
 
             $monitor = array_unique($temp);
-            //print_r($monitor);
             $aggregate_tags = array();
 
             foreach ($tags as  $d) {
@@ -208,23 +198,16 @@ trait Accounts {
                     }
                 }
             }
-            if(count($aggregate_tags) >0) {
-                $issues[] = "<div class=\"alert alert-info small\"><i class=\"fa fa fa-thumbs-up text-success\"></i> Good job! AcaWriter spotted these key moves: " . implode(',', $aggregate_tags) . "</div>";
+            if (count($aggregate_tags) > 0) {
+                $issues[] = "<i class=\"fa fa-2x fa-check-circle-o text-success\"></i> Good job! AcaWriter spotted these key moves: " . implode(', ', $aggregate_tags);
             }
         } else {
-            foreach($messages as $key => $msg) {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
 
         array_push($result, $issues);
-        //print_r($result);
         return $result;
     }
-
-
-
-
-
-
 }

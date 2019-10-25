@@ -8,10 +8,6 @@
 </template>
 
 <script>
-
-    import moment from 'moment';
-    var socket = io.connect('http://localhost:3000');
-
     export default {
         props: ['tapHealth'],
         data() {
@@ -36,8 +32,6 @@
         mounted() {
 
         }
-
-
     }
 
 </script>
