@@ -51,7 +51,7 @@ class RegisterController extends Controller
         $whatRole = 'student';
         $jws = $request->assertion;
 
-        $jwt = JWT::decode($jws, env('JWT_SECRET', ''));
+        $jwt = JWT::decode($jws, env('AAF_SECRET', ''));
 
 
         # In a complete app we'd also store and validate the jti value to ensure there is no reply on this unique token ID
@@ -60,7 +60,7 @@ class RegisterController extends Controller
         $attr = 'https://aaf.edu.au/attributes';
 
         //if($jwt->aud == "http://localhost:8000" && strtotime($jwt->exp) < $now && $now > strtotime($jwt->nbf)) {
-        if ($jwt->aud == env('JWT_AUD', '')) {
+        if ($jwt->aud == env('AAF_AUD', '')) {
             $attr = $jwt->{$attr};
             $credentials = array('email' => $attr->mail, 'name' => $attr->displayname, 'password' => ' ');
             $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';

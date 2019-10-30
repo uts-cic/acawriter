@@ -4,7 +4,7 @@
 
 <strong>AcaWriter</strong> was created by the Academic Writing Analytics project, at the UTS Connected Intelligence Centre. The software is now being shared and improved across universities in Australia and beyond, as part of the Higher Education Text Analytics open source project.
 
-### AcaWriter requires TAP & Athanor installed. 
+### AcaWriter requires TAP & Athanor installed.
 
 ## Tech Stack
 
@@ -35,7 +35,7 @@ $ docker-compose --version
 docker-compose version 1.21.0, build 5920eb0
 ```
 - Install laradock (ref: http://laradock.io)
-    -- remove laradock empty folder from git repo 
+    -- remove laradock empty folder from git repo
 ```sh
 $ cd acawriter/
 $ rm -rf laradock
@@ -62,23 +62,23 @@ $ cp .env.example .env
 		APP_DEBUG=true
 		APP_LOG_LEVEL=debug
 		APP_URL=/** your url **/
-		
+
 		DB_CONNECTION=pgsql
 		DB_HOST=postgres
 		DB_PORT=5432
 		DB_DATABASE=default /** must match laradock psql setting **/
 		DB_USERNAME=default /** must match laradock psql setting **/
 		DB_PASSWORD=secret /** must match laradock psql setting  **/
-		
+
 		BROADCAST_DRIVER=redis
 		CACHE_DRIVER=redis
 		SESSION_DRIVER=redis
 		QUEUE_DRIVER=redis
-		
+
 		REDIS_HOST=redis
 		REDIS_PASSWORD=null
 		REDIS_PORT=6379
-		
+
 		MAIL_DRIVER=smtp
 		MAIL_HOST= /**  your host name (works with AWS SES) **/
 		MAIL_PORT=587
@@ -87,16 +87,16 @@ $ cp .env.example .env
 		MAIL_ENCRYPTION=tls
 		MAIL_FROM_ADDRESS=/** from email **/
 		MAIL_FROM_NAME=/** from name **/
-		
+
 		PUSHER_APP_ID=
 		PUSHER_APP_KEY=
 		PUSHER_APP_SECRET=
-		
+
 		/** 3 options below are for AAF integration **/
-		JWT_SECRET=
-		JWT_AUD=
+		AAF_SECRET=
+		AAF_AUD=
 		AAF_LINK=
-		
+
 		TAP_API=/** tap URL to query **/
 		MIX_APP_SOCKET= /** socket.io url & port **/
 ```
@@ -114,19 +114,19 @@ ensure following are set to true`
     WORKSPACE_INSTALL_NODE=true
     WORKSPACE_INSTALL_YARN=true
     PHP_WORKER_INSTALL_PGSQL=true
-    
+
 ```
 
 #### AAF Settings
 
 - Update the following values in .env
 - Production link will need SSL
-- Redirect path for AAF : https://your-acawriter-url/auth/jwt 
+- Redirect path for AAF : https://your-acawriter-url/auth/jwt
 [refer] https://github.com/uts-cic/acawriter/blob/dfd164f1524c055ebddecf6df5530fd62172e1f9/routes/web.php#L38 should you wish to update the link
 
 ```sh
-JWT_SECRET=
-JWT_AUD=
+AAF_SECRET=
+AAF_AUD=
 AAF_LINK=
 ```
 
@@ -200,7 +200,7 @@ Super admin will allow for managing users as of now. (Other super admin feature 
 * Unable to save binary /var/www/node_modules/node-sass/vendor/linux-x64-59
 * node-sass@4.7.2 postinstall /var/www/node_modules/node-sass
 #### Possible solutions
-The following would need to be installed into the docker workspace container, cmd to login to container 
+The following would need to be installed into the docker workspace container, cmd to login to container
 ```sh
 $ docker docker-compose exec workspace bash
 ```

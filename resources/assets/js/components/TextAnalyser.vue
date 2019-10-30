@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="feedback-action">
-                        <button type="button" v-bind:disabled="getbtnStatus" class="btn btn-primary" v-on:click="fetchFeedback('manual')">Get Feedback <i class="fa fa-angle-right"></i></button>
+                        <button type="button" class="btn btn-primary" v-on:click="fetchFeedback('manual')">Get Feedback <i class="fa fa-angle-right"></i></button>
                     </div>
 
                     <!-- Reflective feedback -->

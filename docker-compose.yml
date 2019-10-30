@@ -1,0 +1,146 @@
+version: '3'
+
+services:
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: ./docker/app.dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./storage:/var/www/storage
+    restart: unless-stopped
+    environment:
+      APP_NAME: ${APP_NAME}
+      APP_ENV: ${APP_ENV}
+      APP_KEY: ${APP_KEY}
+      APP_DEBUG: ${APP_DEBUG}
+      APP_LOG_LEVEL: ${APP_LOG_LEVEL}
+      APP_URL: ${APP_URL}
+
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      BROADCAST_DRIVER: ${BROADCAST_DRIVER}
+      CACHE_DRIVER: ${CACHE_DRIVER}
+      SESSION_DRIVER: ${SESSION_DRIVER}
+      QUEUE_DRIVER: ${QUEUE_DRIVER}
+
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PORT: ${REDIS_PORT}
+
+      MAIL_DRIVER: ${MAIL_DRIVER}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_ENCRYPTION: ${MAIL_ENCRYPTION}
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+
+      PUSHER_APP_ID: ${PUSHER_APP_ID}
+      PUSHER_APP_KEY: ${PUSHER_APP_KEY}
+      PUSHER_APP_SECRET: ${PUSHER_APP_SECRET}
+
+      TAP_API: ${TAP_API}
+
+      AAF_SECRET: ${AAF_SECRET}
+      AAF_AUD: ${AAF_AUD}
+      AAF_LINK: ${AAF_LINK}
+
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - app-network
+      - tap-network
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    build:
+      context: .
+      dockerfile: ./docker/nginx.dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+      - socketio
+    networks:
+      - app-network
+      - socket-network
+
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+        - ${DATA_PATH_HOST}/redis:/data
+    networks:
+      - app-network
+      - socket-network
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    volumes:
+        - ${DATA_PATH_HOST}/postgres:/data
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - app-network
+
+  socketio:
+    container_name: socketio
+    image: socketio
+    build:
+      context: .
+      dockerfile: ./docker/socketio.dockerfile
+    depends_on:
+      - redis
+    networks:
+      - socket-network
+
+  tap:
+    container_name: tap
+    image: utscichub/tap:3.2.2
+    environment:
+      ATHANOR_URL: ${ATHANOR_URL}
+      TAP_HOSTS: ${TAP_HOSTS}
+      TAP_SECRET: ${TAP_SECRET}
+    ports:
+      - '9000:9000'
+    networks:
+      - tap-network
+
+  athanor:
+    container_name: athanor
+    image: utscichub/athanor:0.9.4.1
+    environment:
+      GRAMMAR_PATH: /opt/docker/grammar
+    ports:
+      - '8083:8083'
+    networks:
+      - tap-network
+
+networks:
+  app-network:
+    driver: bridge
+  socket-network:
+    driver: bridge
+  tap-network:
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
+  redis:
+    driver: local
