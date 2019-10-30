@@ -10,9 +10,11 @@ Laravel, Postgres, GraphQL, Redis, node, socket.io, docker, docker-compose
 
 ## Requirements
 
+At least 8GB of free RAM is required, recommended 16GB.
+
 Install the following software in your environment:
 - <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">GIT</a>
-- <a href="https://docs.docker.com/compose/install/">Docker</a>
+- <a href="https://docs.docker.com/install/">Docker</a>
 - <a href="https://docs.docker.com/compose/install/">Docker Compose</a>
 
 Check the following:
