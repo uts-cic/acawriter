@@ -9,12 +9,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Redis = require('ioredis');
 
-
-/** non redis
- var redis   = new Redis();
- **/
-
-var redis = new Redis({ host: 'redis' });
+var redis = new Redis({
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
+    password: process.env.REDIS_PASSWORD
+});
 
 
 http.listen(3000, function () {

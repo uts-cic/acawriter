@@ -105,6 +105,10 @@ services:
     build:
       context: .
       dockerfile: ./docker/socketio.dockerfile
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PORT: ${REDIS_PORT}
     depends_on:
       - redis
     networks:
