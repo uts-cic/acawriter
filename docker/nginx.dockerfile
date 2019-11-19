@@ -8,7 +8,8 @@ RUN npm run prod
 
 FROM nginx:1.17-alpine
 WORKDIR /var/www
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+ARG network_driver
+COPY docker/nginx.$network_driver.conf /etc/nginx/conf.d/default.conf
 COPY public/favicon.ico ./
 COPY public/robots.txt ./
 COPY public/images ./images

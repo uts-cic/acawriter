@@ -9,8 +9,8 @@ services:
       context: .
       dockerfile: ./docker/app.dockerfile
     working_dir: /var/www
-    volumes:
-      - ./storage:/var/www/storage
+    # volumes:
+    #   - ./storage:/var/www/storage
     restart: unless-stopped
     environment:
       APP_NAME: ${APP_NAME}
@@ -68,12 +68,11 @@ services:
     build:
       context: .
       dockerfile: ./docker/nginx.dockerfile
+      args:
+        network_driver: bridge
     restart: unless-stopped
     ports:
       - "80:80"
-    depends_on:
-      - app
-      - socketio
     networks:
       - app-network
       - socket-network
@@ -81,8 +80,8 @@ services:
   redis:
     container_name: redis
     image: redis
-    volumes:
-        - ${DATA_PATH_HOST}/redis:/data
+    # volumes:
+    #     - ${DATA_PATH_HOST}/redis:/data
     networks:
       - app-network
       - socket-network
@@ -90,8 +89,8 @@ services:
   postgres:
     container_name: postgres
     image: postgres
-    volumes:
-        - ${DATA_PATH_HOST}/postgres:/data
+    # volumes:
+    #     - ${DATA_PATH_HOST}/postgres:/data
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
