@@ -69,7 +69,7 @@ services:
       context: .
       dockerfile: ./docker/nginx.dockerfile
       args:
-        network_driver: bridge
+        network_driver: awsvpc
     restart: unless-stopped
     ports:
       - "80:80"
