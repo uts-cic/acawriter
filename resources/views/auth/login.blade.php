@@ -10,7 +10,7 @@
     </div>
     <div class="row">
         <div class="col-md-7 col-xs-12">
-            <a href="https://www.uts.edu.au/acawriter" target="_blank"><img src="/images/acaWriter.jpg" alt="more information on acawriter" /></a>
+            <a href="https://www.uts.edu.au/acawriter" target="_blank"><img src="/images/acaWriter.jpg" alt="Visit the information website to find out more!"></a>
         </div>
         <div class="col-md-5 col-xs-12">
             <div class="alert alert-secondary p-4">
