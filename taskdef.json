@@ -157,7 +157,7 @@
           "value": "$TAP_API"
         }
       ],
-      "essential": false
+      "essential": true
     },
     {
       "name": "nginx",
@@ -172,9 +172,9 @@
       },
       "portMappings": [
         {
-          "hostPort": 80,
+          "hostPort": 443,
           "protocol": "tcp",
-          "containerPort": 80
+          "containerPort": 443
         }
       ],
       "dependsOn": [
@@ -221,7 +221,7 @@
           "value": "$REDIS_PORT"
         }
       ],
-      "essential": false
+      "essential": true
     }
   ],
   "requiresCompatibilities": [

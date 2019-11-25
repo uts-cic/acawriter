@@ -10,6 +10,8 @@ FROM nginx:1.17-alpine
 WORKDIR /var/www
 ARG network_mode
 COPY docker/nginx/nginx.$network_mode.conf /etc/nginx/conf.d/default.conf
+COPY acawriter.crt /etc/nginx/acawriter.crt
+COPY acawriter.key /etc/nginx/acawriter.key
 COPY public/favicon.ico ./
 COPY public/robots.txt ./
 COPY public/images ./images
