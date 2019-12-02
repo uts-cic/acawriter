@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use App\Assignment;
 use App\Document;
 use App\Draft;
@@ -31,7 +32,7 @@ class DocumentController extends Controller
         $assignment = new Assignment();
         $assignment->name = 'NA';
         $assignment->feature_id = $request->doc_type;
-        $assignment->code = str_random(8);
+        $assignment->code = Str::random(8);
         $assignment->user_id = Auth::user()->id;
         $assignment->keywords = '';
         $assignment->published = 0;
@@ -65,7 +66,7 @@ class DocumentController extends Controller
             $document = new Document();
             $document->name = $request->doc_name;
             $document->user_id = Auth::user()->id;
-            $document->slug = strtolower(str_random(22));
+            $document->slug = strtolower(Str::random(22));
             $document->assignment_id = $assignment->id;
             $document->created_at = date('Y-m-d H:i:s');
             $document->updated_at = date('Y-m-d H:i:s');

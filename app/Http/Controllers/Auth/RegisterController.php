@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use JWT\Authentication\JWT;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OperationLog;
 
@@ -63,8 +64,7 @@ class RegisterController extends Controller
         if ($jwt->aud == env('AAF_AUD', '')) {
             $attr = $jwt->{$attr};
             $credentials = array('email' => $attr->mail, 'name' => $attr->displayname, 'password' => ' ');
-            $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';
-
+            $whatRole = Str::is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();

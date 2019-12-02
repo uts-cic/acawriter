@@ -22,7 +22,7 @@
 namespace App\Services;
 
 use EUAutomation\GraphQL\Client;
-use Html2Text\Html2Text;
+use Soundasleep\Html2Text;
 
 class Analyser
 {

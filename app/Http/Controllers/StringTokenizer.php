@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\StoreDrafts;
 use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
-use Html2Text\Html2Text;
+use Soundasleep\Html2Text;
 use Auth;
 use Illuminate\Http\Request;
 

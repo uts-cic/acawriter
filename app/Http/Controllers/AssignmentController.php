@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+
 use Auth;
+
 use App\User;
 use App\Assignment;
 use App\Draft;
-use Illuminate\Support\Facades\DB;
 use App\Feature;
 use App\Document;
 use App\Example;
@@ -57,7 +60,7 @@ class AssignmentController extends Controller
         $assignment = new Assignment();
         $assignment->name = $request->name;
         $assignment->feature_id = $request->grammar;
-        $assignment->code = str_random(8);
+        $assignment->code = Str::random(8);
         $assignment->user_id = Auth::user()->id;
         $assignment->keywords = $request->keywords;
         $assignment->published = 0;
@@ -144,7 +147,7 @@ class AssignmentController extends Controller
         $document = new Document();
         $document->name = $assignment->name;
         $document->user_id = Auth::user()->id;
-        $document->slug = strtolower(str_random(22));
+        $document->slug = strtolower(Str::random(22));
         $document->assignment_id = $assignment->id;
         $document->created_at = date('Y-m-d H:i:s');
         $document->updated_at = date('Y-m-d H:i:s');
