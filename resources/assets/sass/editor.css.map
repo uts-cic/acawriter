@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,QAAS;EACP,MAAM,EAAE,KAAK;EACb,OAAO,EAAE,IAAI;EACb,SAAS,EAAE,MAAM;;AAGnB,QAAS;EACP,UAAU,EAAE,MAAM",
-"sources": ["editor.scss"],
-"names": [],
-"file": "editor.css"
-}

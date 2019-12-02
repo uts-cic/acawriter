@@ -14,9 +14,7 @@
 use Illuminate\Support\Facades\Artisan;
 
 // Anonymous pages
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', 'IndexController@index');
 
 Route::get('/page/{which}', 'PageController@page');
 Route::get('/page/contact/refreshcaptcha', 'PageController@refreshCaptcha');

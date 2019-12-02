@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,OAAQ;EACN,QAAQ,EAAE,QAAQ;EAClB,MAAM,EAAE,CAAC;EACT,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;EAAE,6CAA6C;EAC3D,WAAW,EAAE,IAAI;EAAE,sCAAsC;EACzD,gBAAgB,EAAE,OAAO",
-"sources": ["awa.scss"],
-"names": [],
-"file": "awa.css"
-}

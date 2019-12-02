@@ -45,16 +45,28 @@
           "value": "$APP_KEY"
         },
         {
-          "name": "APP_LOG_LEVEL",
-          "value": "$APP_LOG_LEVEL"
-        },
-        {
           "name": "APP_NAME",
           "value": "$APP_NAME"
         },
         {
           "name": "APP_URL",
           "value": "$APP_URL"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "value": "$AWS_ACCESS_KEY_ID"
+        },
+        {
+          "name": "AWS_BUCKET",
+          "value": "$AWS_BUCKET"
+        },
+        {
+          "name": "AWS_DEFAULT_REGION",
+          "value": "$AWS_DEFAULT_REGION"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "value": "$AWS_SECRET_ACCESS_KEY"
         },
         {
           "name": "BROADCAST_DRIVER",
@@ -89,6 +101,10 @@
           "value": "$DB_USERNAME"
         },
         {
+          "name": "LOG_CHANNEL",
+          "value": "$LOG_CHANNEL"
+        },
+        {
           "name": "MAIL_DRIVER",
           "value": "$MAIL_DRIVER"
         },
@@ -121,8 +137,20 @@
           "value": "$MAIL_USERNAME"
         },
         {
+          "name": "MIX_PUSHER_APP_CLUSTER",
+          "value": "$MIX_PUSHER_APP_CLUSTER"
+        },
+        {
+          "name": "MIX_PUSHER_APP_KEY",
+          "value": "$MIX_PUSHER_APP_KEY"
+        },
+        {
           "name": "PUSHER_APP_ID",
           "value": "$PUSHER_APP_ID"
+        },
+        {
+          "name": "PUSHER_APP_CLUSTER",
+          "value": "$PUSHER_APP_CLUSTER"
         },
         {
           "name": "PUSHER_APP_KEY",
@@ -133,8 +161,8 @@
           "value": "$PUSHER_APP_SECRET"
         },
         {
-          "name": "QUEUE_DRIVER",
-          "value": "$QUEUE_DRIVER"
+          "name": "QUEUE_CONNECTION",
+          "value": "$QUEUE_CONNECTION"
         },
         {
           "name": "REDIS_HOST",
@@ -151,6 +179,10 @@
         {
           "name": "SESSION_DRIVER",
           "value": "$SESSION_DRIVER"
+        },
+        {
+          "name": "SESSION_LIFETIME",
+          "value": "$SESSION_LIFETIME"
         },
         {
           "name": "TAP_API",

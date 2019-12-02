@@ -3,7 +3,8 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 COPY webpack.mix.js ./
-COPY resources/assets ./resources/assets
+COPY resources/js ./resources/js
+COPY resources/sass ./resources/sass
 RUN npm run prod
 
 FROM nginx:1.17-alpine
