@@ -108,28 +108,11 @@ return [
 
         'client' => 'predis',
 
-        'cluster' => env('REDIS_CLUSTER', false),
-
-        'clusters' => [
-            'default' => [
-                [
-                    'scheme'   => env('REDIS_SCHEME', 'tcp'),
-                    'host'     => env('REDIS_HOST', 'localhost'),
-                    'password' => env('REDIS_PASSWORD', null),
-                    'port'     => env('REDIS_PORT', 6379),
-                    'database' => env('REDIS_DATABASE', 0),
-                ],
-            ],
-            'options' => [ // Clustering specific options
-                'cluster' => 'redis', // This tells Redis Client lib to follow redirects (from cluster)
-            ]
-        ],
-        'options' => [
-            'parameters' => [ // Parameters provide defaults for the Connection Factory
-                'password' => env('REDIS_PASSWORD', null), // Redirects need PW for the other nodes
-                'scheme'   => env('REDIS_SCHEME', 'tcp'),  // Redirects also must match scheme
-            ],
-            'ssl'    => ['verify_peer' => false], // Since we dont have TLS cert to verify
+        'default' => [
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 0,
         ],
 
     ],
