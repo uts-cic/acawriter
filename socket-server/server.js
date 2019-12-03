@@ -9,13 +9,15 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Redis = require('ioredis');
 
-var pwd = process.env.REDIS_PASSWORD;
+var host = process.env.REDIS_HOST || '127.0.0.1';
+var password = process.env.REDIS_PASSWORD || null;
+var port = process.env.REDIS_PORT || 6379;
+var db = process.env.REDIS_DB || 0;
+var scheme = host.startsWith('tls://') ? 'rediss://' : 'redis://';
+var pwd = password && password !== 'null' ? ':' + password + '@' : '';
+var uri = scheme + pwd + host.replace('tls://', '') + ':' + port + '/' + db;
 
-var redis = new Redis({
-    port: process.env.REDIS_PORT,
-    host: process.env.REDIS_HOST,
-    password: pwd && pwd !== 'null' ? pwd : null
-});
+var redis = new Redis(uri);
 
 http.listen(3000, function () {
     console.log('Listening on port 3000');
