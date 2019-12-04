@@ -12,32 +12,38 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        //demo
-        $role_demo = new Role();
-        $role_demo->name ='demo';
-        $role_demo->description = "Role for Students";
-        $role_demo->save();
+        $roles = array(
+            array(
+                'id' => 1,
+                'name' => 'demo',
+                'description' => 'Demo user'
+            ),
+            array(
+                'id' => 2,
+                'name' => 'user',
+                'description' => 'Student'
+            ),
+            array(
+                'id' => 3,
+                'name' => 'staff',
+                'description' => 'Staff'
+            ),
+            array(
+                'id' => 4,
+                'name' => 'admin',
+                'description' => 'Administrator'
+            ),
+        );
 
-        //student
-        $role_student = new Role();
-        $role_student->name ='user';
-        $role_student->description = "Role for Students";
-        $role_student->save();
-
-        //staff
-        $role_staff = new Role();
-        $role_staff->name ='staff';
-        $role_staff->description = "Role for Staff";
-        $role_staff->save();
-
-        //admin
-        $role_admin = new Role();
-        $role_admin->name ='admin';
-        $role_admin->description = "Role for Admin";
-        $role_admin->save();
-
-
-
-
+        foreach ($roles as $data) {
+            $role = Role::find($data['id']);
+            if (!$role) {
+                $role = new Role();
+            }
+            $role->id = $data['id'];
+            $role->name = $data['name'];
+            $role->description = $data['description'];
+            $role->save();
+        }
     }
 }

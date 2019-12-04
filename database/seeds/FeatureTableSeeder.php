@@ -12,149 +12,82 @@ class FeatureTableSeeder extends Seeder
      */
     public function run()
     {
-        //
-        $feature_a = new Feature();
-        $feature_a->name = "Default-Rule";
-        $feature_a->grammar="Analytical";
-        $feature_a->rules=json_encode("{
-    \"rules\": [
-      {
-        \"name\": \"background\",
-        \"check\": {
-          \"paragraph\": \"3\",
-          \"tag\":\"temporality\"
-        },
-        \"message\": [
-          {\"background\" : \"Background information missing in first paragraph\"}
-        ],
-        \"css\": \"temporality\"
-      },
-      {
-        \"name\": \"vocab\",
-        \"check\": {
-          \"words\": [
-            \"server\",
-            \"study\",
-            \"force\"
-          ]
-        },
-        \"message\": [
-          {\"vocab\" :\"One or more keywords missing\"}
-        ],
-        \"css\": \"vocab\"
-      },
-      {
-        \"name\": \"metrics\",
-        \"check\": {
-          \"sentenceWordCount\": \"35\"
-        },
-        \"message\": [
-          {\"metrics\" :\"Sentence too long, might disengage the reader. Try breaking it into smaller sentences\"}
-        ],
-        \"css\": \"metrics\"
-      },
-      {
-        \"name\": \"moves\",
-        \"check\": {
-          \"tags\": [
-            \"attitude\",
-            \"emph\",
-            \"vis\",
-            \"contribution\",
-            \"novstat\",
-            \"contrast\",
-            \"tempstat\",
-            \"surprise\"
-          ]
-        },
-        \"message\": [
-          {\"attitude\" : \"P\"},
-          {\"emph\" : \"E\"},
-          {\"vis\" : \"T\"},
-          {\"contribution\" : \"S\"},
-          {\"novstat\" : \"N\"},
-          {\"contrast\" : \"C\"},
-          {\"tempstat\": \"B\"}
-        ],
-        \"css\": [\"P\",\"E\", \"T\",\"N\", \"C\", \"B\"]
-      }
-    ]
-}
-        ");
-        $feature_a->save();
+        $features = array(
+            array(
+                'id' => 1,
+                'name' => 'Standard',
+                'grammar' => 'Analytical',
+                'info' => 'Highlights sentences that appear to show hallmarks of good analytical academic writing. For <a href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-5" target="_blank">more info</a>',
+            ),
+            array(
+                'id' => 2,
+                'name' => 'Standard',
+                'grammar' => 'Reflective',
+                'info' => 'Highlights sentences that appear to show hallmarks of good reflective writing. <a target="_blank" href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-0">More Info</a>',
+            ),
+            array(
+                'id' => 5,
+                'name' => 'Research Introduction',
+                'grammar' => 'Analytical',
+                'info' => 'Highlights sentences that appear to show hallmarks of good academic writing specifically for Research Abstracts and Introductions. <a target="_blank" href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-4">More info</a>',
+            ),
+            array(
+                'id' => 6,
+                'name' => 'Law Essay Feedback',
+                'grammar' => 'Analytical',
+                'info' => 'This genre highlights sentences where AcaWriter detects rhetorical moves in a law essay writing context. These rhetorical moves when used explicitly guide the reader with the flow of the text and are hallmarks of good academic writing. The genre also includes specific feedback on possible improvements that can be made in that essay writing context. <a target="_blank" href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-3">More Info</a>',
+            ),
+            array(
+                'id' => 7,
+                'name' => 'Analytical Accounting',
+                'grammar' => 'Analytical',
+                'info' => 'Highlights sentences that appear to show the hallmarks of good academic writing for a UTS business report and provides specific feedback on possible improvements that can be made within this context. <a target="_blank" href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-2">More info</a>',
+            ),
+            array(
+                'id' => 8,
+                'name' => 'Pharmacy',
+                'grammar' => 'Reflective',
+                'info' => 'Reflective writing is your response to experience, opinions, events or new information as well as your response to your thoughts and feelings. Reflective writing allows you explore your learning and to make meaning out of what you study. It also gives you the opportunity to gain self-knowledge, as well as better understanding what you are learning. <a target="_blank" href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-0">More info</a>',
+            ),
+            array(
+                'id' => 9,
+                'name' => 'International Studies',
+                'grammar' => 'Reflective',
+                'info' => 'A deep reflection on your learning as well as an analysis of cultural aspects of the host culture and its relevance in the home cultures is required. The aim of a reflection is to make you sensitive to new experiences, what is confronting/ interesting/ different and how does this makes you rethink your assumptions. <a target="_blank" href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-0">More info</a>',
+            ),
+            array(
+                'id' => 10,
+                'name' => 'Research Abstract',
+                'grammar' => 'Analytical',
+                'info' => 'Highlights sentences that appear to show hallmarks of good academic writing specifically for Research Abstracts. <a target="_blank" href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/educators/how-acawriter-being-4">More Info</a>',
+            ),
+            array(
+                'id' => 11,
+                'name' => 'DCE',
+                'grammar' => 'Reflective',
+                'info' => '',
+            ),
+        );
 
-        $feature_b = new Feature();
-        $feature_b->grammar="Reflective";
-        $feature_b->name = "Default-Rule";
-        $feature_b->rules=json_encode("{
-  \"rules\": [
-    {
-      \"name\": \"expression\",
-      \"check\": {
-        \"all\": [
-          \"affect\",
-          \"epistemic\",
-          \"modal\"
-        ]
-      },
-      \"message\": [
-        {\"affect\" : \"Words associated with strong feelings\"},
-        {\"epistemic\" : \"<u>Expressions indicating belief, learning, or knowledge.<\/u>\"},
-        {\"modal\" : \"Expressions indicating self critique\"}
-      ],
-      \"css\": [\"epistemic\",\"affect\",\"modall\"]
-    },
-    {
-      \"name\": \"vocab\",
-      \"check\": {
-        \"words\": [
-          \"server\",
-          \"study\",
-          \"force\"
-        ]
-      },
-      \"message\": [
-        {\"vocab\" :\"One or more keywords missing\"}
-      ],
-      \"css\": [\"vocab\"]
-    },
-    {
-      \"name\": \"metrics\",
-      \"check\": {
-        \"sentenceWordCount\": \"35\"
-      },
-      \"message\": [
-        {\"metrics\" :\"Sentence too long, might disengage the reader. Try breaking it into smaller sentences\"}
-      ],
-      \"css\": [\"metrics\"]
-    },
-    {
-      \"name\": \"moves\",
-      \"check\": {
-        \"tags\": [
-          \"context\",
-          \"challenge\",
-          \"link2me\",
-          \"change\"
-        ]
-      },
-      \"message\": [
-        {\"context\" : \"Initial thoughts and feelings about a significant experience.\"},
-        {\"challenge\" : \"The challenge of new surprising or unfamiliar ideas, problems or learning experiences.\"},
-        {\"link2me\" : \"<b>Deeper reflection, personally applied.</b>\"},
-        {\"change\": \"How new knowledge can lead to a change\"}
-      ],
-      \"css\": [\"context\",\"challenge\",\"link2me\", \"change\"]
-    }
+        foreach ($features as $data) {
+            $rules = file_get_contents(__DIR__ . '/rules/feature_' . $data['id'] . '.json');
+            if (!$rules) {
+                continue;
+            }
 
-  ]
-}
-        ");
+            // compress rules JSON string
+            $rules = json_encode(json_decode($rules));
 
-$feature_b->save();
-
-
-
-
+            $feature = Feature::find($data['id']);
+            if (!$feature) {
+                $feature = new Feature();
+            }
+            $feature->id = $data['id'];
+            $feature->name = $data['name'];
+            $feature->grammar = $data['grammar'];
+            $feature->rules = json_encode($rules);
+            $feature->info = $data['info'];
+            $feature->save();
+        }
     }
 }

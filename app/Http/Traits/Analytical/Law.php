@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project: AcaWriter
  *
@@ -20,29 +21,28 @@
  */
 
 namespace App\Traits\Analytical;
-use App\Services\Analyser;
 
-trait Law {
-
+trait Law
+{
     /**
      * @param $tap
      * @param $rule -- used for shibani's law abstract rules
      * @return array
      */
-
-    public function missingTags($tap, $rule) {
+    public function missingTags($tap, $rule, $extra = array())
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
+        if ($rule["tabEval"] === 'dynamic') {
 
             $temp = array();
             foreach ($tap as $key => $data) {
@@ -50,7 +50,7 @@ trait Law {
             }
 
             $temp = array();
-            $temp_temp =array();
+            $temp_temp = array();
             foreach ($tap as $key => $data) {
                 $temp_temp = array_merge($temp_temp, $data->raw_tags);
             }
@@ -63,9 +63,12 @@ trait Law {
              * if present don't error else error!!!!
              ***/
 
-            foreach($temp_temp as $v) {
-                if($v=='contrast') { array_push($temp, 'nostat');}
-                else { array_push($temp, $v); }
+            foreach ($temp_temp as $v) {
+                if ($v == 'contrast') {
+                    array_push($temp, 'nostat');
+                } else {
+                    array_push($temp, $v);
+                }
             }
 
             $monitor = array_unique($temp);
@@ -77,17 +80,13 @@ trait Law {
                     }
                 }
             }
-
-
         } else {
-            foreach($messages as $key => $msg) {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
 
         array_push($result, $issues);
-        //print_r($result);
         return $result;
     }
-
 }

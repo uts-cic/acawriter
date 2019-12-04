@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-
+use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use App\Events\UserLog;
 use App\Events\UserRegistered;
-use App\Role;
-use App\User;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use JWT\Authentication\JWT;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OperationLog;
-
-
 
 class RegisterController extends Controller
 {
@@ -49,11 +47,12 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function awt(Request $request){
+    public function awt(Request $request)
+    {
         $whatRole = 'student';
         $jws = $request->assertion;
 
-        $jwt = JWT::decode($jws, env('JWT_SECRET', ''));
+        $jwt = JWT::decode($jws, env('AAF_SECRET', ''));
 
 
         # In a complete app we'd also store and validate the jti value to ensure there is no reply on this unique token ID
@@ -62,11 +61,10 @@ class RegisterController extends Controller
         $attr = 'https://aaf.edu.au/attributes';
 
         //if($jwt->aud == "http://localhost:8000" && strtotime($jwt->exp) < $now && $now > strtotime($jwt->nbf)) {
-        if($jwt->aud == env('JWT_AUD', '')) {
+        if ($jwt->aud == env('AAF_AUD', '')) {
             $attr = $jwt->{$attr};
             $credentials = array('email' => $attr->mail, 'name' => $attr->displayname, 'password' => ' ');
-            $whatRole = str_is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';
-
+            $whatRole = Str::is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
@@ -81,7 +79,7 @@ class RegisterController extends Controller
                 $message = "New user created";
                 $msg = 'login';
                 event(new OperationLog($user, $message));
-                event(new UserRegistered($user,$whatRole));
+                event(new UserRegistered($user, $whatRole));
                 event(new UserLog($user, $msg)); // logs activity
 
                 return redirect()->intended('/home');
@@ -108,9 +106,6 @@ class RegisterController extends Controller
         }
     }
 
-
-
-
     /**
      * Get a validator for an incoming registration request.
      *
@@ -120,9 +115,9 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -134,12 +129,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user =  User::create([
+        return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
         ]);
+    }
 
-        return $user;
+    public function showRegistrationForm()
+    {
+        return redirect('login');
     }
 }

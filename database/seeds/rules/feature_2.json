@@ -1,0 +1,228 @@
+{
+    "rules": [
+        {
+            "name": "moves",
+            "check": {
+                "tags": [
+                    "context",
+                    "challenge",
+                    "link2me",
+                    "change"
+                ]
+            },
+            "message": [
+                {
+                    "context": "Initial thoughts and feelings about a significant experience."
+                },
+                {
+                    "challenge": "The challenge of new surprising or unfamiliar ideas, problems or learning experiences."
+                },
+                {
+                    "link2me": "<span class=\"link2me\">Deeper reflection, personally applied.<\/span>"
+                },
+                {
+                    "change": "How new knowledge can lead to a change"
+                }
+            ],
+            "css": [
+                "context",
+                "challenge",
+                "link2me",
+                "change"
+            ],
+            "custom": "",
+            "tab": 1,
+            "tabName": "Reflective Feedback",
+            "tabEval": "dynamic"
+        },
+        {
+            "name": "expression",
+            "check": {
+                "all": [
+                    "epistemic",
+                    "modal"
+                ]
+            },
+            "message": [
+                {
+                    "epistemic": "<u>Expressions indicating belief, learning, or knowledge.</u>"
+                },
+                {
+                    "modal": "<span class=\"modall\">Expressions indicating self critique<\/span>"
+                }
+            ],
+            "css": [
+                "epistemic",
+                "modall"
+            ]
+        },
+        {
+            "name": "metrics",
+            "check": {
+                "sentenceWordCount": "35"
+            },
+            "message": [
+                {
+                    "metrics": "Sentence too long, might disengage the reader. Try breaking it into smaller sentences"
+                }
+            ],
+            "css": [
+                "metrics"
+            ]
+        },
+        {
+            "name": "filterWords",
+            "check": {
+                "list": [
+                    {
+                        "words": [
+                            "preceptor",
+                            "supervisor",
+                            "hospital",
+                            "Community",
+                            "Pharmacy",
+                            "Placement",
+                            "site",
+                            "pharmacy",
+                            "pharmacist",
+                            "mentor"
+                        ],
+                        "tags": []
+                    }
+                ]
+            },
+            "message": [],
+            "css": []
+        },
+        {
+            "name": "customised",
+            "method": "paragraphFeedback",
+            "check": {
+                "tags": [
+                    "context",
+                    "change"
+                ],
+                "conditions": [
+                    {
+                        "terms": [
+                            "change_without_context"
+                        ]
+                    },
+                    {
+                        "para_chk": "1"
+                    }
+                ]
+            },
+            "message": [
+                {
+                    "context": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you’ve acknowledged your first thoughts, feelings and\/or reactions to an incident, or learning task, within the first paragraph."
+                },
+                {
+                    "context_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> Perhaps consider introducing your first thoughts, feelings and\/or reactions to an incident, or learning task, within the first paragraph. AcaWriter couldn’t spot this within first paragraph"
+                },
+                {
+                    "change": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Well done, it appears that you’ve reflected on how you would change\/prepare for the future. Is there anything further to say about these new insights that have led to change."
+                },
+                {
+                    "change_without_context": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> While it appears that you’ve reported on how you would change\/prepare for the future, you dont seem to have described your thoughts, feelings and\/or reactions to an incident, or learning task."
+                }
+            ],
+            "css": [
+                "mtags"
+            ],
+            "custom": "Feedback",
+            "tab": 2,
+            "tabName": "Feedback",
+            "tabEval": "dynamic"
+        },
+        {
+            "name": "customised",
+            "method": "expressionsFeedback",
+            "check": {
+                "tags": [
+                    "epistemic",
+                    "modal",
+                    "link2me",
+                    "challenge",
+                    "change"
+                ],
+                "conditions": [
+                    "challenge",
+                    "change"
+                ]
+            },
+            "message": [
+                {
+                    "epistemic": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> You have reflected on your beliefs\/learning\/knowledge."
+                },
+                {
+                    "modal": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> You seem to have incorporated a deeper reflection indicating self-critique."
+                },
+                {
+                    "epistemic_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> You seem not to have reflected on your beliefs\/learning\/knowledge. If that’s the case, then please think about this (e.g. including cultural, religious or family values\/assumptions)."
+                },
+                {
+                    "modal_m": "<span class=\"text-danger\"> You seem not to have incorporated a deeper reflection indicating self-critique. Consider how this could improve reflection on your strengths and weaknesses."
+                },
+                {
+                    "link2me": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you have reflected in a deeper way about how your experiences connect with your professional development."
+                },
+                {
+                    "challenge": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you’ve reported on something you found challenging. <\/span>"
+                },
+                {
+                    "change": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you’ve reflected on how you would change/prepare for the future. Is there anything further to say about these new insights that have led to change."
+                },
+                {
+                    "link2me_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> You seem not to have reflected in a deeper way about your experiences. Consider applying your insights to how you can develop professionally."
+                },
+                {
+                    "challenge_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It appears that you haven’t commented on anything you found challenging. If you did find something challenging, please expand on this."
+                },
+                {
+                    "change_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It appears that you haven’t commented on what you would do differently should the same event occur in the future. Perhaps think about changes in perspectives\/strategies\/tools\/ideas\/behaviour and\/or approach."
+                },
+                {
+                    "double_challenge": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you may have expanded the detail on the challenge you faced. (#cnt)"
+                },
+                {
+                    "double_change": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you have expanded the detail on how you would change\/prepare for the future. (#cnt)"
+                },
+                {
+                    "order_tag_err": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> While it appears that you’ve reported on how you would change\/prepare for the future, you don’t seem to have reported first on what you found challenging. Perhaps you’ve reflected only on the positive aspects in your report?. "
+                }
+            ],
+            "css": [
+                "mtags"
+            ],
+            "custom": "Feedback",
+            "tab": 2,
+            "tabName": "Feedback",
+            "tabEval": "dynamic"
+        },
+        {
+            "name": "faq",
+            "method": "staticFeed",
+            "check": {
+                "tags": [],
+                "conditions": []
+            },
+            "message": [
+                {
+                    "txt": "Reflective writing is your response to experience, opinions, events or new information as well as your response to your thoughts and feelings. Reflective writing allows you explore your learning and to make meaning out of what you study. It also gives you the opportunity to gain self-knowledge, as well as better understanding what you are learning. AcaWriter draws attention to sentences that appear to show the three key reflective writing moves (context, challenge and change), as well as four additional features of reflective writing. The system then provides specific feedback on possible improvements that can be made within this context. Three rhetorical moves are:"
+                },
+                {
+                    "txt": "<span class=\"context\"><\/span> Initial thoughts and feelings about a significant experience.(context) <\/br><span class=\"challenge\"><\/span>The challenge of new surprising or unfamiliar ideas, problems or learning experiences (Challenge)<\/br><span class=\"change\"><\/span> How new knowledge can lead to a change (Change)<\/br><\/br>Four additional features may be signalled by font, in combination with the above: <br \/><br \/><strong>refers to oneself <\/strong> <br \/><span class=\"modall\"> Expressions indicating self critique.<\/span><br \/> <u> Expressions indicating belief, learning, or knowledge.</u>"
+                }
+            ],
+            "css": [
+                "msg1",
+                "msg2"
+            ],
+            "custom": "more feedback",
+            "tab": 3,
+            "tabName": "Resources",
+            "tabEval": "static"
+        }
+    ]
+}

@@ -5,7 +5,6 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Crm;
 
 class contactMailer extends Mailable
@@ -21,7 +20,7 @@ class contactMailer extends Mailable
      */
     public function __construct(Crm $crm)
     {
-        $this->crm =$crm;
+        $this->crm = $crm;
     }
 
     /**
@@ -32,10 +31,10 @@ class contactMailer extends Mailable
     public function build()
     {
         return $this->view('email')
-                    ->with([
-                        'name' => $this->crm->name,
-                        'comment' => $this->crm->comment,
-                        'email' => $this->crm->email
-                    ]);
+            ->with([
+                'name' => $this->crm->name,
+                'comment' => $this->crm->comment,
+                'email' => $this->crm->email
+            ]);
     }
 }

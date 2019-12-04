@@ -1,0 +1,125 @@
+/*.wrapper {
+  max-height:40rem;
+  overflow-y: scroll;
+}
+
+.ql-container {
+  max-height:40rem;
+  overflow-y: scroll;
+}*/
+#original .ql-editor {
+  min-height: calc(100vh - 433px);
+}
+.ql-editor p {
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.quillWrapper .ql-snow.ql-toolbar {
+  background: #F3F5FE;
+}
+
+.vocab , .context, .challenge, .wordcount, .metrics, .change, .background{
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding:1px;
+}
+
+
+.vocab:before {
+  content: "\f05b";  /* this is your text. You can also use UTF-8 character codes as I do here */
+}
+
+
+.challenge:before {
+  content: "\f111";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:#C000C0;
+}
+
+.context:before {
+  content: "\f0c8";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:#0000FF;
+
+}
+
+.change:before {
+  content: "\f04b";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color:#008300;
+}
+
+.wordcount:before {
+  content: "\f096";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color: #721c24;
+}
+
+.background:before {
+  content: "\f06a";  /* this is your text. You can also use UTF-8 character codes as I do here */
+  color: #721c24;
+}
+
+.metrics:before {
+  content: "\f0e7";
+  color: orangered;
+}
+
+// AI/2019-06-25: Removing affect analysis
+// .affect {
+//   border-bottom: 1px dashed #ff0000;
+// }
+
+.epistemic {
+  text-decoration: underline;
+}
+
+.link2me {
+  font-weight:bold;
+}
+
+.modall {
+  font-style:italic;
+  color: darkgreen;
+}
+
+/* analytical css */
+.badge-analytic {
+  color:black;
+  background-color: darkorange;
+}
+
+.badge-analytic-green {
+  color:white;
+  background-color: darkgreen;
+}
+
+
+.hidemarkup {
+  display:none !important;
+}
+
+.ana_bg_green {
+  background-color: #c7e48d;
+}
+
+.ana_bg_yellow {
+  background-color:#f9d3c0;
+}
+
+.moves1 {
+  background-color: #FFC1A3;
+}
+
+.moves3 {
+  background-color: #ADD164;
+}
+
+.moves2 {
+  background-color: #CBE3F5;
+}
+
+
+
+.formattt + .tooltip > .tooltip-inner {background-color: #f00;}

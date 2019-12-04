@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by IntelliJ IDEA.
  * User: Developer CIC: Radhika Mogarkar
@@ -11,15 +12,13 @@ namespace App\Events\Tap;
 use App\Events\DashboardEvent;
 use Illuminate\Support\Facades\Log;
 
-class Health extends DashboardEvent {
-
-
+class Health extends DashboardEvent
+{
     public $health;
 
-    public function __construct($status) {
-        Log::info('into Event health',['eventH' => $status]);
+    public function __construct($status)
+    {
+        Log::info('into Event health', ['eventH' => $status]);
         $this->health = $status;
     }
-
-
 }

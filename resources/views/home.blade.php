@@ -1,222 +1,92 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" id="app">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>My Dashboard </h2>
-            <small><em>AcaWriter</em> provides feedback on your analytical or reflective writing.</small>
+<main id="app" class="container-fluid" data-ga-category="Home">
+    @if ($docs)
+        <div class="subheader shadow mb-5">
+            <div class="subheader-title mb-0">
+                <h4>My documents</h4>
+            </div>
+            <div role="group" class="ml-auto">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#add" aria-expanded="false" aria-controls="add" data-ga-label="Add document"><i class="fa fa-plus-circle"></i> Add document</button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-        <div class="card dashboard">
-            <div class="card-header bg-dark text-white">
-                <ul class="nav nav-tabs card-header-tabs">
+    @else
+        <div class="jumbotron mb-5">
+            <h1>Welcome to AcaWriter!</h1>
+            <p class="lead">AcaWriter is a website that gives you automated feedback on your draft writing.</p>
+            <p class="lead mb-0">
+                Make sure you’ve checked out the <a href="https://www.uts.edu.au/acawriter">information website</a> <sup class="fa fa-external-link"></sup> so you understand what it can (and can’t) do.
+                <br>
+                Feel free to explore <a href="{{url('example')}}">examples of writing</a> that demonstrate how AcaWriter gives feedback.
+                <br>
+                To create a new document, choose one of the two options below.
+            </p>
+        </div>
+    @endif
+
+    @if (\Session::has('error'))
+        <p class="alert alert-danger">
+            {!! \Session::get('error') !!}
+        </p>
+    @endif
+
+    <div id="add" class="{{ $docs ? 'collapsible collapse' : '' }}">
+
+        <div class="row">
+
+            <div class="col-xl-4">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/BeAIt_oVecQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen" class="mb-5" style="width: 100%;"></iframe>
+            </div>
+
+            <div class="col-xl-8">
+                <ul class="nav nav-tabs awa-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#new" data-toggle="tab">Create a new document</a>
+                        <a href="#assignment" id="tab_assignment" data-toggle="tab" data-ga-label="Enter my assignment code" class="nav-link active show">Create using assignment code</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#assignment" data-toggle="tab">Enter my assignment code</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#document" data-toggle="tab">View my documents</a>
+                        <a href="#new" id="tab_new" data-toggle="tab" data-ga-label="Create a new document" class="nav-link">Create a new document</a>
                     </li>
                 </ul>
-            </div>
 
-            <div class="card-block">
-                <div class="tab-content p-5">
-                    <div class="tab-pane" id="document" role="tabpanel">
-                        <h4 class="card-title">My Documents</h4>
-                        <documents></documents>
-                    </div>
-                    <div class="tab-pane" id="assignment" role="tabpanel">
-                        <h4>Enter your Assignment Code:</h4>
-                        <p class="small">If your lecturer/tutor has given you an Assignment Code for using AcaWriter, please paste it here and a new document will be created.
-                            The document’s name will default to the same name as the assignment, but you can change this if you want to, now or later. Ideally select a unique name for the document for easy self reference.</p>
-                        <autocomplete></autocomplete>
-                    </div>
-                    <div class="tab-pane active" id="new" role="tabpanel">
-                        <h4>Add a Document</h4>
-                        <form class="form" method="POST" action="/document">
-                            {{ csrf_field() }}
+                <div class="tab-content mb-5" style="min-height: 272px;">
+                    <div id="assignment" role="tabpanel" class="tab-pane fade active show">
+                        <h5 style="margin-bottom: 20px;">Create a new document using assignment code</h5>
                         <div class="row">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="doc_title" name="docu_name" placeholder="document title" />
+                            <div class="col-lg-4">
+                                <form-subscribe class="mb-4" csrf="{{ csrf_token() }}"></form-subscribe>
                             </div>
-                            <div class="col-md-6">
-                                <input type="radio" id="doc_grammar_ana" name="doc_grammar" checked="checked" value="1" /> Analytical Writing
-                                <input type="radio" id="doc_grammar_ref" name="doc_grammar" value="2" /> Reflective Writing
+                            <div class="col-lg-8">
+                                <p class="font-italic mb-0">What is my assignment code?..</p>
+                                <p>An assignment code is usually provided by your lecturer/tutor, and takes you to the right version of AcaWriter for your assignment.</p>
+                                <p>If you don't have an assignment code, then use the tab <a href="javascript:document.getElementById('tab_new').click()" data-ga-label="Create a new document [link]">Create a new document</a> where you’ll tell AcaWriter which kind of writing you’re working on.</p>
                             </div>
                         </div>
-                        <br />
+                    </div>
+
+                    <div id="new" role="tabpanel" class="tab-pane fade">
+                        <h5 class="mb-4">Create a new document</h5>
                         <div class="row">
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-dark">Add</button>
+                            <div class="col-lg-4">
+                                <form-new class="mb-4" csrf="{{ csrf_token() }}"></form-new>
                             </div>
-                            <div class="col-md-6">
-
+                            <div class="col-lg-8">
+                                <p class="font-italic">Choose the right document type for your writing…</p>
+                                <p>Feedback in <a href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/students/what-kind-writing-0" target="_blank" data-ga-label="Analytical Essay/Report">Analytical Essay/Report</a> <sup class="fa fa-external-link"></sup> is tuned for essays and reports where you’re demonstrating your critical, analytical thinking, such as your ability to analyse or construct arguments. This includes literature reviews, scientific/technical reports and persuasive essays.</p>
+                                <p>Feedback in <a href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/students/what-kind-writing-1" target="_blank" data-ga-label="Reflective Journal/Report">Reflective Journal/Report</a> <sup class="fa fa-external-link"></sup> is tuned to writing in the first person about a learning experience (e.g. an internship; working as a team), the thoughts, feelings and emotions they provoked, and how you’re developing as a learner/professional.</p>
+                                <p>Feedback in <a href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/students/what-kind-writing-0" target="_blank" data-ga-label="Research Abstract/Intro">Research Abstract</a> <sup class="fa fa-external-link"></sup> is tuned for the Abstract to your research report/article. You can use this in addition to the above to clarify right from the start if you have explained the topic, stated the aim of the research, identified the issue you’re trying to solve and presented the findings.</p>
+                                <p>Feedback in <a href="https://www.uts.edu.au/research-and-teaching/teaching-and-research-integration/acawriter/students/what-kind-writing-0" target="_blank" data-ga-label="Research Abstract/Intro">Research Introduction</a> <sup class="fa fa-external-link"></sup> is tuned for the introduction to your research report/article. You can use this in addition to the above to clarify right from the start how important the topic is, what problem you’ve identified, and what your contribution is.</p>
                             </div>
                         </div>
-                        </form>
                     </div>
-
-                </div>
-
-            </div>
-        </div>
-
-        </div>
-
-
-
-
-
-        <!--    <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-block">
-                        <h3 class="card-title">Already have your document</h3>
-                        <p class="card-text">click on the document and start analysis.</p>
-                        <a href="#" class="btn btn-primary">Click here</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <i class="fa fa-3x fa-angle-double-right pull-left" aria-hidden="true"></i><p>Have an assignment code - add to my documents by entering the code & then start analysis</p>
-            </div>
-            <div class="col-md-4">
-                <i class="fa fa-3x fa-question-circle pull-left" aria-hidden="true"></i><p>Alternatively create a new document and start analysis</p>
-            </div> -->
-    </div>
-
-
-    <!-- <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header"> <h5>Enter Assignment code</h5></div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <autocomplete></autocomplete>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header"> <h5>Add a Document</h5></div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" id="doc_title" placeholder="document title" />
-                        </div>
-                        <div class="col-md-6">
-                            <input type="radio" id="doc_grammar_ana" name="doc_grammar" /> Analytical
-                            <input type="radio" id="doc_grammar_ref" name="doc_grammar" /> Reflective
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <button type="submit" class="btn btn-dark">Add</button>
-                        </div>
-                        <div class="col-md-6">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card ">
-                <div class="card-header bg-dark text-white">My Documents</div>
-                <div class="card-body">
-
                 </div>
             </div>
         </div>
     </div>
 
-    <br />
-    @if(in_array('admin', $data->roles))
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-dark text-white">System Status</div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        @if (session('status'))
-                        <li class="list-group-item list-group-item-success">
-                            {{ session('status') }}
-                        </li>
-                        @endif
-                        <li class="list-group-item list-group-item-info" role="alert">You are logged in!</li>
-                        <internet-connection :last-heart-beat-received-at="lastHeartBeatReceivedAt"></internet-connection>
-                        <tap-status :tap-health="tapHealth"></tap-status>
-                        <log-status :slogs="slogs"></log-status>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    @if ($docs)
+        <documents id="documents" class="mb-5"></documents>
+    @endif
 
-
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-dark text-white">System Admin</div>
-                <div class="card-body">
-                    <a href="/admin/users" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>  Manage Users</a>
-                    <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-cog"></i>  Manage Features</a>
-                    <a href="/assignment" class="list-group-item list-group-item-action"><i class="fa fa-clone"></i>  Manage Assignments</a>
-                </div>
-            </div>
-        </div>
-
-
-
-        @elseif(in_array('staff', $data->roles))
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-dark text-white">System Status</div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            @if (session('status'))
-                            <li class="list-group-item list-group-item-success">
-                                {{ session('status') }}
-                            </li>
-                            @endif
-                            <li class="list-group-item list-group-item-info" role="alert">You are logged in!</li>
-                            <internet-connection :last-heart-beat-received-at="lastHeartBeatReceivedAt"></internet-connection>
-                            <tap-status :tap-health="tapHealth"></tap-status>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-dark text-white">Admin</div>
-                    <div class="card-body">
-                        <a href="/assignment" class="list-group-item list-group-item-action"><i class="fa fa-clone"></i>  Manage Assignments</a>
-                    </div>
-                </div>
-            </div>
-            @endif
-
-
-
-
-    </div>
-
- -->
-</div>
+</main>
 @endsection

@@ -1,24 +1,10 @@
 <?php
-/**
- * Copyright (c) 2018 original UTS CIC. Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Contributors:
- * UTS Connected Intelligence Centre
- */
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -42,16 +28,27 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
-    public function roles() {
+    public function roles()
+    {
         return $this->belongsToMany('App\Role', 'user_role');
     }
 
-    public function assignments() {
+    public function assignments()
+    {
         return $this->hasMany('App\Assignment');
     }
 
-    public function documents() {
+    public function documents()
+    {
         return $this->hasMany('App\Document');
     }
 
@@ -88,6 +85,14 @@ class User extends Authenticatable
     }
 
 
-
-
+    public function getRole()
+    {
+        $sequence = array('admin', 'staff', 'user', 'demo');
+        foreach ($sequence as $role) {
+            if ($this->hasRole($role)) {
+                return $role;
+            }
+        }
+        return false;
+    }
 }

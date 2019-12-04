@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
@@ -11,50 +10,50 @@ use App\Events\UserRegistered;
 class AdminController extends Controller
 {
     public $data;
-    //
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    public function showUsers() {
+    public function showUsers()
+    {
         $data = new \stdClass;
-        $users = User::all();
+        $users = User::where('email', 'like', '%@uts.edu.au')->paginate(50);
         $data->users = $users;
         $roles = Role::all();
         $data->roles = $roles;
         return view('admin.user', ['data' => $data]);
     }
 
-    public function updateUserRoles(Request $request){
+    public function updateUserRoles(Request $request)
+    {
         $roles = array();
-        if(isset($request["roles"])) {
+        if (isset($request["roles"])) {
             $roles = $request["roles"];
         }
         $user = User::find($request["user_id"]);
         $user->roles()->sync($roles);
 
-        return redirect()->back()->with('success','Roles updated successfully!');;
+        return redirect()->back()->with('success', 'Roles updated successfully!');;
     }
 
-    public function addUser(Request $request){
-
-        if($this->userExists($request)) {
-            return redirect()->back()->with('error','User already exists');
+    public function addUser(Request $request)
+    {
+        if ($this->userExists($request)) {
+            return redirect()->back()->with('error', 'User already exists');
         }
 
-
         $credentials = array(
-                    'email' => $request["new_email"],
-                    'name' => $request["new_name"],
-                    'password' => $request["new_password"]
+            'email' => $request["new_email"],
+            'name' => $request["new_name"],
+            'password' => $request["new_password"]
         );
         $whatRole = 'user';
         $userAdded = $this->create($credentials);
-        event(new UserRegistered($userAdded,$whatRole));
+        event(new UserRegistered($userAdded, $whatRole));
 
-
-        return redirect()->back()->with('success','User added successfully!');
+        return redirect()->back()->with('success', 'User added successfully!');
     }
 
     /**
@@ -75,11 +74,12 @@ class AdminController extends Controller
     }
 
 
-    protected function userExists($data) {
+    protected function userExists($data)
+    {
         $userFound = User::where('email', $data["new_email"])->first();
-        if($userFound) {return true;}
+        if ($userFound) {
+            return true;
+        }
         return false;
     }
-
-
 }

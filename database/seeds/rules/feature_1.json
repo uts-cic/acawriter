@@ -1,0 +1,113 @@
+{
+  "rules": [
+    {
+      "name": "moves",
+      "check": {
+        "tags": [
+          "attitude",
+          "emph",
+          "contribution",
+          "novstat",
+          "contrast",
+          "tempstat",
+          "surprise",
+          "nostat",
+          "grow"
+        ]
+      },
+      "message": [
+        {
+          "attitude": "<span class=\"badge badge-pill badge-analytic\">P<\/span> A perspective or stance"
+        },
+        {
+          "emph": "<span class=\"badge badge-pill badge-analytic\">E<\/span> Emphasis to highlight key ideas"
+        },
+        {
+          "contribution": "<span class=\"badge badge-pill badge-analytic-green\">S<\/span> Summarises or signals the authors goals"
+        },
+        {
+          "novstat": "<span class=\"badge badge-pill badge-analytic\">N<\/span> Novelty improvements in ideas and methods"
+        },
+        {
+          "contrast": "<span class=\"badge badge-pill badge-analytic\">C</span> Contrast: Disagreement, Tension, Inconsistency"
+        },
+        {
+          "tempstat": "<span class=\"badge badge-pill badge-analytic\">B</span> Background: generally accepted work"
+        },
+        {
+          "surprise": "<span class=\"badge badge-pill badge-analytic\">S</span> Surprising"
+        },
+        {
+          "nostat": "<span class=\"badge badge-pill badge-analytic\">Q</span> Question"
+        },
+        {
+          "grow": "<span class=\"badge badge-pill badge-analytic\">T<\/span> A trend or tendency related to ideas approaches and methods"
+        }
+      ],
+      "css": [
+        "P",
+        "E",
+        "T",
+        "S",
+        "N",
+        "C",
+        "B",
+        "S"
+      ]
+    },
+    {
+      "name": "alerts",
+      "method": "staticFeed",
+      "check": {
+        "tags": [],
+        "conditions": []
+      },
+      "message": [
+        {
+          "txt": "<i class=\"fa fa-2x fa-info-circle text-success\"><\/i> The rhetorical moves highlighted by AcaWriter are used in good academic writing but use them with caution according to the context. Remember, AcaWriter does not really understand your writing, the way people do. You may have written beautifully crafted nonsense - that's for you to decide! Moreover, writing is complex, and AcaWriter will get it wrong sometimes. If you think it got it wrong, that's fine - now you're thinking about more than spelling, grammar, and plagiarism."
+        }
+      ],
+      "css": [
+        "msg1"
+      ],
+      "custom": "more feedback",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "static"
+    },
+    {
+      "name": "customised",
+      "method": "missingTags",
+      "check": {
+        "tags": [
+          "contribution",
+          "tempstat",
+          "nostat",
+          "emph"
+        ],
+        "conditions": []
+      },
+      "message": [
+        {
+          "contribution": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you are missing a Summary move that highlights the purpose (thesis) statement of your essay and your essay plan. Try including linguistic cues to make this move clearer in your writing. Examples: This essay talks about.., In this essay, I analyse…, This essay consists of three parts… The first part talks about…, In conclusion,... "
+        },
+        {
+          "tempstat": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you are missing a Background move in your text, which highlights background information and previous literature on the topic. Try including linguistic cues to make this move clearer in your writing. Examples: The past decade has seen ...., Recent studies indicate ... ,It is generally accepted that..., the concept has previously been thought to be... "
+        },
+        {
+          "nostat": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you are missing Contrast\/Question move, which highlights the critical insights in your essay. Try including linguistic cues to make this move clearer in your writing. Examples: However, the issue seems to be..., the study fails to consider, little research has been done..., ...raises various questions..."
+        },
+        {
+          "emph": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> If there is a key idea you did like to emphasises in your essay try including linguistic cues to make this move clearer in your writing. Examples: It is important to note that ...., It makes a proper understanding important..."
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "Feedback",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    }
+  ]
+}

@@ -7,7 +7,8 @@ use Illuminate\Console\Command;
 use App\Services\Tap;
 use Illuminate\Support\Facades\Log;
 
-class TapHealth extends Command {
+class TapHealth extends Command
+{
 
     protected $signature = 'dashboard:tap-health';
 
@@ -20,10 +21,11 @@ class TapHealth extends Command {
      *
      * @return mixed
      */
-    public function handle() {
+    public function handle()
+    {
         $tap = new Tap();
         $tapHealth = $tap->getRequest($this->service);
-        Log::info('health',['dataTap' => $tapHealth]);
+        Log::info('health', ['dataTap' => $tapHealth]);
         event(new Health($tapHealth));
     }
 }

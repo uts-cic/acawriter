@@ -1,0 +1,30 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+    commands:
+      - aws --version
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - export IMAGE_TAG=${COMMIT_ID:0:7}
+  build:
+    commands:
+      - echo Build started on `date`
+      - docker build --build-arg network_mode=awsvpc -t $REPOSITORY_URI:latest -t $REPOSITORY_URI:$IMAGE_TAG -f docker/$SERVICE/Dockerfile .
+      - echo Build completed on `date`
+  post_build:
+    commands:
+      - echo ECR update for $SERVICE started on `date`
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo ECR update for $SERVICE completed on `date`
+
+      - echo Writing image definitions file...
+      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+
+artifacts:
+  files: imageDetail.json

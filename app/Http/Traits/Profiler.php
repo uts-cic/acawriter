@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project: AcaWriter
  *
@@ -20,33 +21,35 @@
  */
 
 namespace App\Traits;
+
 use App\Services\Analyser;
 
-trait Profiler {
+trait Profiler
+{
 
-    public function moves($tap, $rule) {
-
+    public function moves($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
-        if(count($tags) == 0) {
+        if (count($tags) == 0) {
             return $result;
         }
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $setFeed = new \stdClass();
             $setFeed->str = $data->str;
             $setFeed->message = array();
             $setFeed->css = array();
 
-            foreach($tags as $tag) {
-                if(count(preg_grep("[^".$tag."]", $data->raw_tags)) > 0) {
-                    foreach($messages as $msg) {
-                        if(isset($msg[$tag])) {
+            foreach ($tags as $tag) {
+                if (count(preg_grep("/" . $tag . "/m", $data->raw_tags)) > 0) {
+                    foreach ($messages as $msg) {
+                        if (isset($msg[$tag])) {
                             $setFeed->message[$tag] = $msg[$tag];
-                            array_push($setFeed->css,$tag);
+                            array_push($setFeed->css, $tag);
                         }
                     }
                 }
@@ -62,8 +65,8 @@ trait Profiler {
      * @param $rule --- added to display static msg into the tab's
      * @return array
      */
-
-    public function staticFeed($tap, $rule) {
+    public function staticFeed($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
@@ -73,10 +76,8 @@ trait Profiler {
         $monitor = array();
         $issues = array();
 
-        if($rule["tabEval"] === 'dynamic') {
-
-        } else {
-            foreach($messages as $key => $msg) {
+        if ($rule["tabEval"] === 'dynamic') { } else {
+            foreach ($messages as $key => $msg) {
                 array_push($issues, $msg['txt']);
             }
         }
@@ -84,12 +85,13 @@ trait Profiler {
         return $result;
     }
 
-    public function background($tap, $rule) {
+    public function background($tap, $rule)
+    {
         $result = array();
         $check = $rule['check'];
         $tempo = 0;
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $setFeed = new \stdClass();
             $setFeed->str = $data->str;
             $setFeed->message = array();
@@ -110,23 +112,24 @@ trait Profiler {
         return $result;
     }
 
-    public function metrics($tap, $rule) {
+    public function metrics($tap, $rule)
+    {
         $analyser = new Analyser();
         $result = array();
         $check = $rule['check'];
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $tempStore = new \stdClass();
             $tempStore->str = $data->str;
             $tempStore->message = array();
             $tempStore->css = array();
             $returnData = $analyser->metrics($data->str);
-            if(isset($returnData->sentWordCounts)) {
+            if (isset($returnData->sentWordCounts)) {
                 //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
-                if($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
+                if ($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
                     //$tempStore->message = $rule['message'];
-                    foreach($rule['message'] as $msg) {
-                        if(isset($msg['metrics'])) {
+                    foreach ($rule['message'] as $msg) {
+                        if (isset($msg['metrics'])) {
                             $tempStore->message['metrics'] = $msg['metrics'];
                             array_push($tempStore->css, 'metrics');
                         }
@@ -136,15 +139,14 @@ trait Profiler {
             $result[] = $tempStore;
         }
         return $result;
-
     }
 
     /**
-        * function works on the complete text at once, so input is not tokenised
-        * so str = append all tokenised tap outputs into one
-    */
-
-    public function vocab($tap, $rule) {
+     * function works on the complete text at once, so input is not tokenised
+     * so str = append all tokenised tap outputs into one
+     */
+    public function vocab($tap, $rule)
+    {
         $analyser = new Analyser();
         $result = array();
         $check = $rule['check'];
@@ -152,26 +154,26 @@ trait Profiler {
         $words = $check['words'];
         $completeText = "";
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $completeText .= $data->str;
         }
         $tempStore = new \stdClass();
         $tempStore->str = $completeText;
         $tempStore->message = array();
-        $tempStore->css =array();
+        $tempStore->css = array();
 
         $returnData = $analyser->vocab($tempStore->str);
-        if(isset($returnData->terms)) {
+        if (isset($returnData->terms)) {
             $collection = collect($returnData->terms);
 
-            foreach($check['words'] as $word) {
-                $filtered= $collection->where('term', $word);
-                if(count($filtered->all()) == 0) $termCount++;
+            foreach ($check['words'] as $word) {
+                $filtered = $collection->where('term', $word);
+                if (count($filtered->all()) == 0) $termCount++;
             }
 
-            if($termCount > 0 ) {
-                foreach($rule['message'] as $msg) {
-                    if(isset($msg['metrics'])) {
+            if ($termCount > 0) {
+                foreach ($rule['message'] as $msg) {
+                    if (isset($msg['metrics'])) {
                         $tempStore->message['vocab'] = $msg['vocab'];
                         $tempStore->css[] = 'vocab';
                     }
@@ -188,9 +190,9 @@ trait Profiler {
      * input: string single sentence
      * normally only used for reflective feedback
      * output is an array
-    */
-
-    protected function expression($tap, $rule) {
+     */
+    protected function expression($tap, $rule)
+    {
 
         $analyser = new Analyser();
         $result = array();
@@ -198,31 +200,36 @@ trait Profiler {
         $termCount = 0;
         $all = $check['all'];
         //fetch affect values
-        $affectValues = $check["affectVal"]? $check["affectVal"] :'';
+        // AI/2019-06-25: Removing affect analysis
+        // $affectValues = $check["affectVal"] ? $check["affectVal"] : '';
 
-        if(count($all) == 0) {
+        if (count($all) == 0) {
             return $result;
         }
 
-        foreach($tap as $key => $data) {
+        foreach ($tap as $key => $data) {
             $tempStore = new \stdClass();
             $tempStore->str = $data->str;
             $tempStore->message = array();
-            $tempStore->affect=array();
-            $tempStore->epistemic=array();
-            $tempStore->modal=array();
+            // AI/2019-06-25: Removing affect analysis
+            // $tempStore->affect = array();
+            $tempStore->epistemic = array();
+            $tempStore->modal = array();
             $tempStore->css = array();
 
-            $returnData = $analyser->expression($data->str, $affectValues);
+            // AI/2019-06-25: Removing affect analysis
+            // $returnData = $analyser->expression($data->str, $affectValues);
+            $returnData = $analyser->expression($data->str);
+
             //$returnData is an array but since we are analysing tokenised strings we can safely assume array[0]
             $sanitizedResult = $returnData[0];
             //$tempStore->raw = $sanitizedResult;
-            foreach($all as $exp) {
+            foreach ($all as $exp) {
 
                 if (isset($sanitizedResult->{$exp}) && count($sanitizedResult->{$exp}) > 0) {
                     $tempStore->{$exp} = $sanitizedResult->{$exp};
-                    foreach($rule['message'] as $msg) {
-                        if(isset($msg[$exp])) {
+                    foreach ($rule['message'] as $msg) {
+                        if (isset($msg[$exp])) {
                             $tempStore->message[$exp] = $msg[$exp];
                             array_push($tempStore->css, $exp);
                         }

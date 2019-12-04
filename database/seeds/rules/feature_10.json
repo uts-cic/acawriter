@@ -1,0 +1,247 @@
+{
+  "rules": [
+    {
+      "name": "moves1",
+      "method": "moves",
+      "check": {
+        "tags": [
+          "emph",
+          "tempstat"
+        ]
+      },
+      "message": [
+        {
+          "emph": "<span class=\"badge badge-pill badge-analytic\">E<\/span> Emphasis of a significant or an important idea "
+        },
+        {
+          "tempstat": "<span class=\"badge badge-pill badge-analytic\">B<\/span> Background information and previous work"
+        },
+        {
+          "contribution": "<span class=\"badge badge-pill badge-analytic-green\">S<\/span> Summary of the author’s goal or stating the nature of the research"
+        }
+      ],
+      "css": [
+        "E",
+        "B"
+      ],
+      "custom": "Background\/Context\/Purpose of research move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "moves2",
+      "method": "moves",
+      "check": {
+        "tags": [
+          "contrast",
+          "nostat"
+        ]
+      },
+      "message": [
+        {
+          "contrast": "<span class=\"badge badge-pill badge-analytic\">C<\/span> Contrasting idea, issues, disagreement or critical insight "
+        },
+        {
+          "nostat": "<span class=\"badge badge-pill badge-analytic\">Q<\/span> Question or gap in previous knowledge"
+        }
+      ],
+      "css": [
+        "C",
+        "Q"
+      ],
+      "custom": "Problem\/ Gap in the literature move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "moves3",
+      "method": "moves",
+      "check": {
+        "tags": [
+          "novstat",
+          "contribution"
+        ]
+      },
+      "message": [
+        {
+          "novstat": "<span class=\"badge badge-pill badge-analytic\">N<\/span> Novelty and value of the research "
+        },
+        {
+          "contribution": "<span class=\"badge badge-pill badge-analytic-green\">S<\/span>Summary of the author’s goal or stating the nature of the research"
+        }
+      ],
+      "css": [
+        "N",
+        "S"
+      ],
+      "custom": "Purpose of research\/ Results move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "alerts",
+      "method": "staticFeed",
+      "check": {
+        "tags": [],
+        "conditions": []
+      },
+      "message": [
+        {
+          "txt": "<i class=\"fa fa-2x fa-info-circle text-success\"><\/i> Thank you for submitting your draft to AcaWriter. Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing. <br />Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all the moves in your abstract."
+        }
+      ],
+      "css": [
+        "msg1",
+        "msg2"
+      ],
+      "custom": "more feedback",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "static"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
+          "emph",
+          "tempstat",
+          "contribution"
+        ],
+        "conditions": [
+          {
+            "terms": [
+              "top"
+            ]
+          },
+          {
+            "per_chk": "10"
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you’re missing Background / Purpose sentences in the beginning of your abstract. Here you explain why your research is important <span class=\"badge badge-pill badge-analytic\">E<\/span> or provide background information on your research <span class=\"badge badge-pill badge-analytic\">B<\/span> or state the purpose of your research <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. To achieve this move try including <span class=\"badge badge-pill badge-analytic\">E<\/span> sentences, for example: x is an important feature in y., Substantial evidence in x suggests that…, The study of x is important because x impacts y. Or <span class=\"badge badge-pill badge-analytic\">B<\/span> sentences: X has been previously proposed…, Recent, literature concerning x has reported that…, Recent studies indicate that…, It is widely agreed that… Or <span class=\"badge badge-pill badge-analytic-green\">S<\/span> sentences: The purpose of this paper is to…, In this study we focus on…, The aim of this research is to... Check if you have included these sentences near the start of your abstract. "
+        },
+        {
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Context, Background and Purpose / Summary, sentences in your abstract. You have explained why your research topic is important <span class=\"badge badge-pill badge-analytic\">E<\/span>, provided background information <span class=\"badge badge-pill badge-analytic\">B<\/span> and stated the purpose of your research <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. These sentences will make it easier for your reader to understand why your research is significant and the goal of your research."
+        },
+        {
+          "emph_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Significance sentences in the beginning of your abstract. You have explained why your research topic is important  <span class=\"badge badge-pill badge-analytic\">E<\/span>. This will help readers understand why your research is significant. "
+        },
+        {
+          "tempstat_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Background sentences in the beginning of your abstract. You have provided background information on your research topic <span class=\"badge badge-pill badge-analytic\">B<\/span>. This will help readers understand the context of your research."
+        },
+        {
+          "contribution_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Purpose / Summary sentences in the beginning of your abstract. You have stated the purpose of your research, and/or what the paper will contribute <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. This will make it easier for your reader to understand the goal of your research."
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "top text",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
+          "contrast",
+          "nostat"
+        ],
+        "conditions": [
+          {
+            "terms": [
+              "middle_range",
+              "10",
+              "5"
+            ]
+          },
+          {
+            "per_chk": "0"
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you’re missing Problem / Gap sentences in the middle of your abstract. Here you indicate a gap in knowledge, or identify issues in the literature: <span class=\"badge badge-pill badge-analytic\">C<\/span> and <span class=\"badge badge-pill badge-analytic\">Q<\/span> sentences. To achieve this move try including sentences like these: The problem of x has not been widely studied., This approach fails to address the issue of x., However, limited research has been conducted in x., Despite earlier studies x remains unknown. Check if you have included these sentences in your abstract. "
+        },
+        {
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Problem / Gap sentences in your abstract. You have indicated a gap in knowledge <span class=\"badge badge-pill badge-analytic\">Q<\/span> or identified issues in the literature <span class=\"badge badge-pill badge-analytic\">C<\/span> By including these sentences your readers will know what problem you are trying to solve. "
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "bottom text",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
+          "novstat",
+          "contribution"
+        ],
+        "conditions": [
+          {
+            "terms": [
+              "bottom"
+            ]
+          },
+          {
+            "per_chk": "5"
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you’re missing  Summary / Novelty sentences towards the end. Here you summarise your research <span class=\"badge badge-pill badge-analytic-green\">S<\/span>, and/or explain a new finding, approach, or insight in your research <span class=\"badge badge-pill badge-analytic\">N<\/span>. To achieve this move try including <span class=\"badge badge-pill badge-analytic-green\">S<\/span> sentences, for example: In  this paper, we have…, In this study we..., The aim of this research was to... Or <span class=\"badge badge-pill badge-analytic\">N<\/span>  sentences: Significant improvements in x have been developed, This paper builds on previously published work in this area by adding new insight/data..., We present a new method/approach/model/framework…, X reveals major improvements in y. The major innovation of x is its ability to identify/detect y. Check if you have included these sentences at the end of your abstract. "
+        },
+        {
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i>  Great work, it looks like you have Summary / Novelty sentences towards the end of your abstract. You have stated what the purpose of your research and/or paper is <span class=\"badge badge-pill badge-analytic-green\">S<\/span> and explained a new finding, approach, and/or insight in your research <span class=\"badge badge-pill badge-analytic\">N<\/span>. "
+        },
+        {
+          "novstat_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Novelty sentences towards the end of your abstract. You have explained a new finding, approach, and/or insight in your research <span class=\"badge badge-pill badge-analytic\">N<\/span>."
+        },
+        {
+          "contribution_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Summary sentences towards the end of your abstract. You have stated what the purpose of your research and/or paper is <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. This will make it easier for your reader to understand the goal of your research. "
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "top text",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "faq",
+      "method": "staticFeed",
+      "check": {
+        "tags": [],
+        "conditions": []
+      },
+      "message": [
+        {
+          "txt": "Abstracts are important standalone texts that provide readers an overview of your research project. Although an abstract is quite brief (between 150-300 words) it must concisely explain to the reader what your research is about, its findings and contribution to your field. Abstracts contain certain ‘moves’  which helps guide the reader. These resources will provide more information on the moves that are often found in Abstracts. <a target=\"_blank\" href=\"http:\/\/sophieabel.net\/resources\/\">Click here<\/a> for an explanation of the moves and sentence stems to help you with your Abstract writing!"
+        }
+      ],
+      "css": [
+        "msg1",
+        "msg2"
+      ],
+      "custom": "more feedback",
+      "tab": 3,
+      "tabName": "Resources",
+      "tabEval": "static"
+    }
+  ]
+}

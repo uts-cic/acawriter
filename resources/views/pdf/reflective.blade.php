@@ -63,9 +63,10 @@
             color: orangered;
         }
 
+        /* AI/2019-06-25: Removing affect analysis
         .affect {
             border-bottom: 1px dashed #ff0000;
-        }
+        }*/
 
         .epistemic {
             text-decoration: underline;
@@ -117,11 +118,29 @@
 <div class="row">
     <div class="col-md-12">
         @foreach($draft->raw->rules as $rule)
-            @foreach($rule->message as $msg)
-                @foreach($msg as $key => $desc)
-                    <span class="{{$key}}"></span>&nbsp;{!!$desc!!} <br />
+            @if(!isset($rule->tab))
+                @if(isset($rule->custom) )
+                    <strong>{!!$rule->custom!!}</strong><br />
+                @endif
+                @foreach($rule->message as $msg)
+                    @foreach($msg as $key => $desc)
+                        <span class="{{$key}}"></span><p>{!!$desc!!}</p>
+                    @endforeach
                 @endforeach
-            @endforeach
+            @elseif($rule->tab==1)
+                @if(isset($rule->custom) )
+                    <strong>{!! $rule->custom!!}</strong><br />
+                @endif
+                @foreach($rule->message as $msg)
+                    @foreach($msg as $key => $desc)
+                        @if(in_array($key, array('context','change','challenge')))
+                            <span class="{{$key}}"></span> {!!$desc!!} <br />
+                        @else
+                            <p class="{{$rule->name}}">{!!$desc!!}</p>
+                        @endif
+                    @endforeach
+                @endforeach
+            @endif
         @endforeach
     </div>
 </div>
@@ -143,21 +162,31 @@
 
 <br />
 
+<div class="row">
+    <div class="col-md-12">
+        <strong><u>Feedback about your writing</u></strong>
+        <br />
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-12">
 
-        @foreach($draft->raw->tabs as $tab)
-        @foreach($tab as $tabContent)
-        @foreach($tabContent as $b)
-        @foreach($b as $msg)
-        @foreach($msg as $txt)
-        {!! $txt !!}
-        @endforeach
-        @endforeach
-        @endforeach
-        @endforeach
-        @endforeach
+        @if(isset($draft->raw->tabs))
+            @foreach($draft->raw->tabs as $tab)
+                @foreach($tab as $tabContent)
+                    @foreach($tabContent as $name => $b)
+                        @if($name!== 'faq')
+                            @foreach($b as $msg)
+                                @foreach($msg as $txt)
+                                    <p>{!! $txt !!}</p>
+                                @endforeach
+                            @endforeach
+                         @endif
+                    @endforeach
+                @endforeach
+            @endforeach
+        @endif
 
     </div>
 </div>

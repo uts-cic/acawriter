@@ -19,16 +19,27 @@
 
                                 <div class="form-group">
                                     <label for="name" class="col-md-4 control-label">Name</label>
-                                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                                    <input id="name" type="text" class="form-control" name="name" value="{{ $contact->name }}" required autofocus>
                                 </div>
                                 <div class="form-group">
                                     <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ $contact->email }}" required autofocus>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="message" class="col-md-4 control-label">Comments</label>
                                     <textarea id="comment" class="form-control" name="comment" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="captcha">
+                                        <span>{!! captcha_img() !!}</span>
+                                        <button type="button" class="btn btn-success"><i class="fa fa-refresh" id="refresh"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
                                 </div>
 
                                 <div class="form-group">
@@ -38,27 +49,17 @@
                                                 Send
                                             </button>
                                         </div>
-
                                     </div>
                                 </div>
-
-
                             </form>
                         </div>
                         <div class="col-md-6">
 
 
                             <p class="card-text">
-                                <strong><em>General Enquiries: </em></strong><br />
-                                <a href="mailto:cic@uts.edu.au">cic@uts.edu.au </a>
-                                <br />
-                            <hr />
-                                <strong><em>Academic questions:</em></strong><br /> Prof. Simon Buckingham Shum (CIC Director)<br />
-                                <a href="mailto:Simon.BuckinghamShum@uts.edu.au">Simon.BuckinghamShum@uts.edu.au </a>
-                                <br />
-                                <hr />
-                                <strong><em>Technical questions:</em></strong><br /> Radhikar Mogarkar (CIC Web Developer) <br />
-                                <a href="mailto:RadhikaVijay.Mogarkar@uts.edu.au">RadhikaVijay.Mogarkar@uts.edu.au </a>
+                                <strong>General Enquiries and Technical Enquires </strong><br /><em>(including from academics wishing to use AcaWriter)</em><br /><br />
+                                Email: <a href="mailto:cic@uts.edu.au">cic@uts.edu.au </a>
+
                             </p>
                         </div>
                     </div>

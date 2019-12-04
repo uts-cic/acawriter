@@ -1,19 +1,20 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Jobs\StoreDrafts;
 use EUAutomation\GraphQL\Client;
 use Illuminate\Support\Facades\Hash;
-use Html2Text\Html2Text;
+use Soundasleep\Html2Text;
 use Auth;
 use Illuminate\Http\Request;
-use App\User;
 
 class StringTokenizer extends Controller
 {
     public $gResponse;
     public $graphQLURL = "";
     public $client;
-    protected $query = "query 
+    protected $query = "query
                     CleanText(\$input: String!) {
                         clean(text:\$input) {
                                 analytics
@@ -108,13 +109,14 @@ class StringTokenizer extends Controller
                                       timestamp
                                   }
                                 }";
-    protected $queryExpressions= "query Expressions(\$input: String!) {
+    protected $queryExpressions = "query Expressions(\$input: String!) {
                                     expressions(text:\$input) {
                                         analytics {
                                             sentIdx
-                                            affect {
-                                                text
-                                            }
+                                            # AI/2019-06-25: Removing affect analysis
+                                            # affect {
+                                            #    text
+                                            # }
                                             epistemic {
                                                 text
                                                 startIdx
@@ -124,36 +126,35 @@ class StringTokenizer extends Controller
                                                 text
                                             }
                                         }
-                                    }                                
+                                    }
                                 }";
-    protected $queryAffectExpression= "query Affect(\$input: String, \$parameters:String) {
-                                    affectExpressions(text:\$input,parameters:\$parameters) {
-                                        message
-                                        timestamp
-                                        querytime
-                                        analytics {
-                                            affect {
-                                                text
-                                                valence
-                                                arousal
-                                                dominance
-                                                startIdx
-                                                endIdx
-                                            }
-                                        }
-                                    }                         
-                                }";
-
-
-
+    // AI/2019-06-25: Removing affect analysis
+    // protected $queryAffectExpression = "query Affect(\$input: String, \$parameters:String) {
+    //                                 affectExpressions(text:\$input,parameters:\$parameters) {
+    //                                     message
+    //                                     timestamp
+    //                                     querytime
+    //                                     analytics {
+    //                                         affect {
+    //                                             text
+    //                                             valence
+    //                                             arousal
+    //                                             dominance
+    //                                             startIdx
+    //                                             endIdx
+    //                                         }
+    //                                     }
+    //                                 }
+    //                             }";
 
     //
     public function __construct()
     {
         $this->middleware('auth');
-        $this->graphQLURL = env('TAP_API', ''). "/graphql";
+        $this->graphQLURL = env('TAP_API', '') . "/graphql";
         $this->client = new Client($this->graphQLURL);
     }
+
     /**
      * Show the application dashboard.
      *
@@ -163,6 +164,7 @@ class StringTokenizer extends Controller
     {
         return view('home');
     }
+
     public function process(Request $request)
     {
         $results = new \stdClass();
@@ -170,22 +172,22 @@ class StringTokenizer extends Controller
         if ($request["action"] == 'athanor') {
             $results->athanor = array();
             $tokenisedText = $this->tapTokeniser($request);
-            if(count($tokenisedText) >0 ) {
+            if (count($tokenisedText) > 0) {
                 //now go through each text and analyse
-                foreach($tokenisedText as $txt) {
+                foreach ($tokenisedText as $txt) {
                     $responseTxt = new \stdClass;
-                    $responseTxt->str= $txt->original;
+                    $responseTxt->str = $txt->original;
                     $tags = $this->rethoMoves($txt->original, $request['grammar']);
-                    $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
-                    $responseTxt->tags= implode(', ',$tags);
-                    $results->athanor[]=$responseTxt;
+                    $responseTxt->raw_tags = count($tags) > 0 ? $tags : array();
+                    $responseTxt->tags = implode(', ', $tags);
+                    $results->athanor[] = $responseTxt;
                 }
             }
         }
         if ($request["action"] == 'tokenise') {
             $tokenisedText = $this->tapTokeniser($request);
-            foreach($tokenisedText as $txt) {
-                $results->tokenised[]=$txt->original;
+            foreach ($tokenisedText as $txt) {
+                $results->tokenised[] = $txt->original;
             }
         }
         if ($request["action"] == 'vocab') {
@@ -196,8 +198,8 @@ class StringTokenizer extends Controller
         }
         if ($request["action"] == 'auto') {
             $results->auto = $this->analyseAuto($request);
-            $draft->response= $results->auto;
-            $draft->original_text= $request["txt"];
+            $draft->response = $results->auto;
+            $draft->original_text = $request["txt"];
             $draft->feature = '1';
             $draft->document_id = $request["document_id"];
             $draft->user_id = Auth::user()->id;
@@ -205,8 +207,10 @@ class StringTokenizer extends Controller
         }
         return response()->json($results);
     }
+
     //full text analysis
-    protected function analyseAthanor(Request $request) {
+    protected function analyseAthanor(Request $request)
+    {
         $apiResponse = new \StdClass();
         $collection = collect($request['txt']);
         $unique = $collection->unique();
@@ -230,7 +234,9 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
-    protected function analyseAuto(Request $request) {
+
+    protected function analyseAuto(Request $request)
+    {
         $apiResponse = new \StdClass();
         //$queryTxt = strip_tags($request['txt']);
         $queryTxt = $this->cleanText($request['txt']);
@@ -245,7 +251,9 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
-    protected function analyseVocab(Request $request) {
+
+    protected function analyseVocab(Request $request)
+    {
         $apiResponse = new \StdClass();
         $collection = collect($request['txt']);
         $unique = $collection->unique();
@@ -260,7 +268,7 @@ class StringTokenizer extends Controller
         if ($originalHash != $responseHash) {
             //get vocabulary
             $this->gResponse = $this->client->response($this->queryTwo, $variables);
-            if($this->gResponse->hasErrors()) {
+            if ($this->gResponse->hasErrors()) {
                 dd($this->gResponse->errors());
             } else {
                 $apiResponse = $this->gResponse->vocabulary->analytics;
@@ -268,8 +276,10 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
+
     //quick sentence by sentence
-    protected function qanalyseAthanor(Request $request) {
+    protected function qanalyseAthanor(Request $request)
+    {
         $apiResponse = new \StdClass();
         //$queryTxt = strip_tags($request['txt']);
         $queryTxt = $this->cleanText($request['txt']);
@@ -283,28 +293,30 @@ class StringTokenizer extends Controller
             $res = $this->gResponse->moves->analytics;
             foreach ($res as $rest) {
                 $apiResponse->str = $queryTxt;
-                $apiResponse->raw_tags =count($rest) > 0? $rest:array();
+                $apiResponse->raw_tags = count($rest) > 0 ? $rest : array();
                 $apiResponse->tags = implode(", ", $rest);
             }
         }
         return $apiResponse;
     }
-    protected function aggregateData(array $original, array $res) {
+
+    protected function aggregateData(array $original, array $res)
+    {
         $result = new \stdClass();
         $result->responseTxt = [];
         $result->status = false;
-        if(!is_array($original) || !is_array($res)) {
+        if (!is_array($original) || !is_array($res)) {
             return $result;
-        } elseif(count($original) == 0 || count($res)== 0) {
+        } elseif (count($original) == 0 || count($res) == 0) {
             return $result;
         } else {
             foreach ($original as $key => $txt) {
                 $tempTxt = new \stdClass();
-                if ($txt!="") {
+                if ($txt != "") {
                     $tempTxt->str = $txt;
-                    $tempTxt->tags= "";
-                    if(isset($res[$key]) ){
-                        $tempTxt->tags = $res[$key]!= "" ? ( implode(", ", $res[$key])) : "";
+                    $tempTxt->tags = "";
+                    if (isset($res[$key])) {
+                        $tempTxt->tags = $res[$key] != "" ? (implode(", ", $res[$key])) : "";
                     }
                     $result->responseTxt[] = $tempTxt;
                     $result->status = true;
@@ -313,8 +325,10 @@ class StringTokenizer extends Controller
             return $result;
         }
     }
+
     //full text analyer based on tap tokening and then send it via analyser
-    protected function tapTokeniser($request) {
+    protected function tapTokeniser($request)
+    {
         $splitTxt = array();
         $variables = new \stdClass();
         //$variables->input = strip_tags($request['txt']);
@@ -331,8 +345,8 @@ class StringTokenizer extends Controller
     }
 
     //modified sentence level based on updated tokeniser query
-
-    protected function rethoMoves($text, $grammar) {
+    protected function rethoMoves($text, $grammar)
+    {
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
         // $variables->input = strip_tags($text);
@@ -340,11 +354,11 @@ class StringTokenizer extends Controller
         $params = new \StdClass();
         $tags = array();
         //get athanor rethmoves
-        if($grammar == 'reflective') {
+        if ($grammar == 'reflective') {
             $params->grammar = "reflective";
             $variables->parameters = json_encode($params);
             $this->gResponse = $this->client->response($this->queryMoves, $variables);
-        }elseif($grammar == 'analytical') {
+        } elseif ($grammar == 'analytical') {
             $params->grammar = "analytic";
             $variables->parameters = json_encode($params);
             $this->gResponse = $this->client->response($this->queryMoves, $variables);
@@ -358,16 +372,20 @@ class StringTokenizer extends Controller
             dd($this->gResponse->errors());
         } else {
             $raw_tags = $this->gResponse->moves->analytics;
-            foreach($raw_tags as $tag) {$tags = $tag;}
+            foreach ($raw_tags as $tag) {
+                $tags = $tag;
+            }
         }
 
         return $tags;
     }
+
     /*
      * Used to retrive sentence level metrics
      * input: string single sentence
      */
-    public function metrics($string) {
+    public function metrics($string)
+    {
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
         //$variables->input = strip_tags($string);
@@ -382,11 +400,13 @@ class StringTokenizer extends Controller
         }
         return $apiResponse;
     }
+
     /*
      * Used to retrive sentence level metrics
      * input: string single sentence
      */
-    public function vocab($string) {
+    public function vocab($string)
+    {
         $apiResponse = new \StdClass();
         $variables = new \stdClass();
         //$variables->input = strip_tags($string);
@@ -408,16 +428,17 @@ class StringTokenizer extends Controller
         * normally only used for reflective feedback
         * output is an array
     */
-    public function quickTapMoves($data) {
+    public function quickTapMoves($data)
+    {
         $apiResponse = new \StdClass();
         //$queryTxt = $this->cleanText($data['txt']);
         $queryTxt = $data['txt'];
         $variables = new \stdClass();
         $variables->input = $queryTxt;
         //get athanor
-        if($data['grammar'] == 'analytical') {
+        if ($data['grammar'] == 'analytical') {
             $this->gResponse = $this->client->response($this->queryOneA, $variables);
-        } elseif($data['grammar'] == 'reflective') {
+        } elseif ($data['grammar'] == 'reflective') {
             $this->gResponse = $this->client->response($this->queryOneR, $variables);
         }
         if ($this->gResponse->hasErrors()) {
@@ -426,46 +447,45 @@ class StringTokenizer extends Controller
             $res = $this->gResponse->moves->analytics;
             foreach ($res as $rest) {
                 $apiResponse->str = $queryTxt;
-                $apiResponse->raw_tags =count($rest) > 0? $rest:array();
+                $apiResponse->raw_tags = count($rest) > 0 ? $rest : array();
                 $apiResponse->tags = implode(", ", $rest);
             }
         }
         return $apiResponse;
     }
 
-
-    public function preProcess($data) {
+    public function preProcess($data)
+    {
         $results = array();
         $tokenisedText = $this->tapTokeniser($data);
-        $alreadyTapped = isset($data['currentFeedback']['tap'])? $data['currentFeedback']['tap']: array();
+        $alreadyTapped = isset($data['currentFeedback']['tap']) ? $data['currentFeedback']['tap'] : array();
         $loop = count($alreadyTapped) > 0 ? true : false;
-        $key =false;
-        if(count($tokenisedText) >0 ) {
-        //now go through each text and analyse
-            foreach($tokenisedText as $txt) {
+        $key = false;
+        if (count($tokenisedText) > 0) {
+            //now go through each text and analyse
+            foreach ($tokenisedText as $txt) {
                 $responseTxt = new \stdClass;
-                $responseTxt->str= $txt->original;
-                if($loop) {
+                $responseTxt->str = $txt->original;
+                if ($loop) {
                     $key = array_search($responseTxt->str, array_column($alreadyTapped, 'str'));
                 }
-                if($key) {
+                if ($key) {
                     $responseTxt->raw_tags = $alreadyTapped[$key]['raw_tags'];
-                    $responseTxt->tags= $alreadyTapped[$key]['tags'];
+                    $responseTxt->tags = $alreadyTapped[$key]['tags'];
                 } else {
                     $tags = $this->rethoMoves($txt->original, $data['extra']['grammar']);
-                    $responseTxt->raw_tags = count($tags)>0 ? $tags : array();
-                    $responseTxt->tags= implode(', ',$tags);
+                    $responseTxt->raw_tags = count($tags) > 0 ? $tags : array();
+                    $responseTxt->tags = implode(', ', $tags);
                 }
-                $results[]=$responseTxt;
+                $results[] = $responseTxt;
             }
         }
 
         return $results;
     }
 
-
-
-    protected function cleanText($string) {
+    protected function cleanText($string)
+    {
         //$pattern = array('/<\/p>/' , '/<br\ \/>/', '/&nbsp;/');
         //$replace = array('\n', '\n', '');
         //$replace = preg_replace($pattern, "\n", $string);
