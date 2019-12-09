@@ -187,6 +187,10 @@
         {
           "name": "TAP_API",
           "value": "$TAP_API"
+        },
+        {
+          "name": "CACHE_BUST",
+          "value": "$COMMIT_ID"
         }
       ],
       "essential": true
