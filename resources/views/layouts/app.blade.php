@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}?v5" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}{{ env('CACHE_BUST', '') ? '?' . env('CACHE_BUST', '') : '' }}" rel="stylesheet">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77076723-6"></script>
@@ -105,7 +105,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.min.js"></script>
 
-    <script src="{{ asset('js/app.js') }}?v5"></script>
+    <script src="{{ asset('js/app.js') }}{{ env('CACHE_BUST', '') ? '?' . env('CACHE_BUST', '') : '' }}"></script>
 
     @include('layouts.footer')
 </body>
