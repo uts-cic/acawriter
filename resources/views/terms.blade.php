@@ -32,7 +32,7 @@
 
                     <h4>Unsubscribe</h4>
                     <p class="card-text">
-                        If you wish to withdraw from using AcaWriter, or if you wish to have your profile and data removed, please contact cic@uts.edu.au.
+                        If you wish to withdraw from using AcaWriter, or if you wish to have your profile and data removed, please contact us using using the <a href="/page/contact">contact form</a>.
                     </p>
                     <h4>About privacy at UTS</h4>
                     <p class="card-text">This notice may be updated at any time and will be available when you log in. For further information about privacy and the University’s privacy contacts, see <a target="_blank" href="https://www.uts.edu.au/about/uts-governance/privacy-uts">privacy at UTS</a></p>
