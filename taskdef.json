@@ -7,7 +7,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/$TASKDEF_NAME/app",
+          "awslogs-group": "/ecs/acawriter-dev/app",
           "awslogs-region": "$AWS_DEFAULT_REGION",
           "awslogs-stream-prefix": "app"
         }
@@ -201,7 +201,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/$TASKDEF_NAME/nginx",
+          "awslogs-group": "/ecs/acawriter-dev/nginx",
           "awslogs-region": "ap-southeast-2",
           "awslogs-stream-prefix": "nginx"
         }
@@ -231,7 +231,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/$TASKDEF_NAME/socketio",
+          "awslogs-group": "/ecs/acawriter-dev/socketio",
           "awslogs-region": "ap-southeast-2",
           "awslogs-stream-prefix": "socketio"
         }
