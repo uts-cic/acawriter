@@ -15,7 +15,7 @@
         "aws/aws-sdk-php-laravel": "^3.4",
         "barryvdh/laravel-dompdf": "^0.8",
         "doctrine/dbal": "^2.10",
-        "euautomation/graphql-client": "^0.2",
+        "euautomation/graphql-client": "^0.3",
         "guzzlehttp/guzzle": "^6.4",
         "laravelcollective/html": "^6.0",
         "league/flysystem-aws-s3-v3": "^1.0",
