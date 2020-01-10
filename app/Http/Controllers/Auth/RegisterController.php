@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OperationLog;
 
+use OAuthProvider;
+
 class RegisterController extends Controller
 {
     /*
@@ -89,21 +91,56 @@ class RegisterController extends Controller
             return redirect()->intended('/');
         }
     }
-    /**
-     * Handle an authentication attempt.
-     *
-     * @return Response
-     */
-    public function awtAuth($attr)
-    {
-        $password = '';
-        if (Auth::attempt(['email' => $attr->mail, 'password' => $password])) {
-            // Authentication passed...
 
-            return redirect('home');
-        } else {
-            dd("error");
+    public function lti(Request $request)
+    {
+        try {
+            $provider = new OAuthProvider();
+            $provider->consumerHandler(function($p) {
+                $p->consumer_secret = 'This-is-the-secret';
+                return OAUTH_OK;
+            });
+            $provider->timestampNonceHandler(function() {
+                return OAUTH_OK;
+            });
+            $provider->isRequestTokenEndpoint(true);
+            $provider->setParam('url', NULL);
+        
+            $uri = 'https://acawriter-dev.utscic.edu.au/auth/lti';
+            $check = $provider->checkOAuthRequest($uri, OAUTH_HTTP_METHOD_POST);
+
+        } catch (OAuthException $e) {
+            switch ($e->getCode()) {
+                case OAUTH_BAD_NONCE:
+                    die('This LTI request has expired. Please return to your application and restart the launch process.');
+                    break;
+                case OAUTH_BAD_TIMESTAMP:
+                    die('This request is too old. Please return to your application and restart the launch process.');
+                    break;
+                case OAUTH_CONSUMER_KEY_UNKNOWN:
+                    die('Consumer key is unknown, or has been temporarily disabled. Please check your consumer key settings and restart the launch process.');
+                    break;
+                case OAUTH_CONSUMER_KEY_REFUSED:
+                    die('The consumer key was refused. Please check your configuration and follow up with the LTI provider for support.');
+                    break;
+                case OAUTH_INVALID_SIGNATURE:
+                    die('The request signature is invalid, or does not match the signature computed.');
+                    break;
+                case OAUTH_PARAMETER_ABSENT:
+                    die('A required launch parameter was not provided.');
+                    break;
+                case OAUTH_SIGNATURE_METHOD_REJECTED:
+                    die('The signature method was not accepted by the service provider.');
+                    break;
+                default:
+                    // We really shouldn't get any of the other OAuthProvider error codes.
+                    // log this.
+                    die('General launch error. Please follow up with the tool provider to consult any logs to further diagnose the issue.');
+                    break;
+            }
         }
+
+        return 'Success!';
     }
 
     /**

@@ -3,6 +3,7 @@ FROM php:7.3-fpm
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    libpcre3-dev \
     libzip-dev \
     postgresql-client \
     libpng-dev \
@@ -22,7 +23,8 @@ RUN docker-php-ext-install pdo pgsql pdo_pgsql zip exif pcntl
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
 
-RUN pecl install -o -f redis &&  rm -rf /tmp/pear &&  docker-php-ext-enable redis
+RUN pecl install -o -f redis && rm -rf /tmp/pear && docker-php-ext-enable redis
+RUN pecl install -o -f oauth-2.0.4 && rm -rf /tmp/pear && docker-php-ext-enable oauth
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 

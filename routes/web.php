@@ -28,6 +28,7 @@ Auth::routes();
 
 // Authenticated pages
 Route::post('/auth/jwt', 'Auth\RegisterController@awt');
+Route::post('/auth/lti', 'Auth\RegisterController@lti');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
