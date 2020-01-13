@@ -58,7 +58,7 @@ class LoginController extends Controller
             return redirect()->back()
                 ->withInput($request->only('login', 'remember'))
                 ->withErrors([
-                    'login' => "Incorrect login",
+                    'login' => "Your username and/or password do not match.",
                 ]);
         }
     }
