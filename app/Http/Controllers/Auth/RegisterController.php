@@ -42,16 +42,20 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * AAF callback
+     */
     public function awt(Request $request)
     {
         $jwt = JWT::decode($request->assertion, env('AAF_SECRET', ''));
-
-        # In a complete app we'd also store and validate the jti value to ensure there is no reply on this unique token ID
-        $now = strtotime("now");
-
-        //if($jwt->aud == "http://localhost:8000" && strtotime($jwt->exp) < $now && $now > strtotime($jwt->nbf)) {
-        if ($jwt->aud !== env('AAF_AUD', '')) {
-            return redirect()->to('/')->withErrors(['AAF authentication failed.']);
+        $now = time();
+        switch (true) {
+            case $jwt->iss !== 'https://rapid.aaf.edu.au':
+            case $jwt->aud !== env('AAF_AUD', ''):
+            case $jwt->nbf > $now:
+            case $jwt->exp <= $now:
+            #TODO: case jtiExists($jwt->jti):
+                return redirect()->to('/')->withErrors(['AAF authentication failed.']);
         }
 
         $attr = $jwt->{'https://aaf.edu.au/attributes'};
@@ -66,12 +70,15 @@ class RegisterController extends Controller
         return redirect()->intended('/home');
     }
 
+    /**
+     * LTI callback
+     */
     public function lti(Request $request)
     {
         try {
             $provider = new OAuthProvider();
             $provider->consumerHandler(function($p) {
-                $p->consumer_secret = 'This-is-the-secret';
+                $p->consumer_secret = env('LTI_SECRET', '');
                 return OAUTH_OK;
             });
             $provider->timestampNonceHandler(function($p) {
@@ -82,9 +89,7 @@ class RegisterController extends Controller
                 return OAUTH_OK;
             });
             $provider->isRequestTokenEndpoint(true);
-
-            $uri = 'https://acawriter-dev.utscic.edu.au/auth/lti';
-            $provider->checkOAuthRequest($uri, OAUTH_HTTP_METHOD_POST);
+            $provider->checkOAuthRequest();
         } catch (OAuthException $e) {
             switch ($e->getCode()) {
                 case OAUTH_BAD_NONCE:
@@ -128,7 +133,13 @@ class RegisterController extends Controller
     }
 
     /**
+     * Attempt authentication with provided email and
+     * update name if it has changed since last login
      *
+     * @param string $name
+     * @param string $email
+     *
+     * @return bool Success
      */
     protected function authenticate($name, $email)
     {

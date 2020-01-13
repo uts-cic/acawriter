@@ -105,6 +105,10 @@
           "value": "$LOG_CHANNEL"
         },
         {
+          "name": "LTI_SECRET",
+          "value": "$LTI_SECRET"
+        },
+        {
           "name": "MAIL_DRIVER",
           "value": "$MAIL_DRIVER"
         },
