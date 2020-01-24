@@ -95,6 +95,24 @@
   background-color: darkgreen;
 }
 
+.badge-moves1, .badge-moves2, .badge-moves3, .badge-moves4 {
+  padding: 0.2rem 0.6rem;
+  border-radius: 10rem;
+  color: #fff;
+  font-weight: normal;
+  font-size: 0.875rem;
+
+  .wrapper & {
+    padding: 0.3rem 0.6rem;
+    margin-left: 0.25rem;
+    position: relative;
+    top: -0.0625rem;
+
+    &:first-child {
+      margin-left: -0.625rem;
+    }
+  }
+}
 
 .hidemarkup {
   display:none !important;
@@ -109,17 +127,70 @@
 }
 
 .moves1 {
-  background-color: #FFC1A3;
+  background-color: #f9d3c0;
 }
-
-.moves3 {
-  background-color: #ADD164;
+.badge-moves1 {
+  background-color: #ff8c00;
 }
 
 .moves2 {
-  background-color: #CBE3F5;
+  background-color: #c7e48d;
+}
+.badge-moves2 {
+  background-color: #739a24;
 }
 
+.moves3 {
+  background-color: #cbe3f5;
+}
+.badge-moves3 {
+  background-color: #77b6ed;
+}
 
+.moves4 {
+  background-color: #ffe28c;
+}
+.badge-moves4 {
+  background-color: #a57b00;
+}
+
+.legend .legend-button {
+  margin-left: auto;
+  display: block;
+  margin-top: -20px;
+}
+
+.card-moves {
+  border-radius: 0;
+  border: 0;
+  margin-bottom: 5px;
+  transition: margin .3s ease;
+
+  &.expanded {
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    padding: 5px 10px;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .card-body {
+    padding: 5px 10px;
+  }
+
+  #legend & .rules-list {
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: list-item;
+      width: 100%;
+      padding-left: 40px;
+    }
+  }
+}
 
 .formattt + .tooltip > .tooltip-inner {background-color: #f00;}

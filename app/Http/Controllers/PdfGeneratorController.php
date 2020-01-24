@@ -56,7 +56,8 @@ class PdfGeneratorController extends Controller
         $this->checks->analytical->moves_css = array(
             "moves1",
             "moves2",
-            "moves3"
+            "moves3",
+            "moves4"
         );
     }
 
@@ -187,7 +188,9 @@ class PdfGeneratorController extends Controller
             }
         }
 
-        if (in_array('moves3', $css)) {
+        if (in_array('moves4', $css)) {
+            $name = "moves4";
+        } elseif (in_array('moves3', $css)) {
             $name = "moves3";
         } elseif (in_array('moves2', $css)) {
             $name = "moves2";

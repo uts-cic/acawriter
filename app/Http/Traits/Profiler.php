@@ -34,8 +34,51 @@ trait Profiler
         $tempo = 0;
         $tags = $check['tags'];
         $messages = $rule['message'];
+        $conditions = isset($check['conditions']) ? $check['conditions'] : array();
+
         if (count($tags) == 0) {
             return $result;
+        }
+
+        $temp = array();
+        $check_data = array();
+        $slice_at = 0;
+        $total = count($tap);
+
+        //check the conditions array as well
+        if (count($conditions) > 0) {
+            foreach ($conditions as $condition) {
+                $check_data = isset($condition['terms']) ? $condition['terms'][0] : null;
+                $percent = isset($condition['per_chk']) ? $condition['per_chk'] / 100 : 0;
+                $number = isset($condition['num_chk']) ? intval($condition['num_chk']) : 0;
+                break;
+            }
+
+            if ($check_data === 'top') {
+                if ($percent && $percent < 1) {
+                    $tr = floor($total * $percent);
+                    $slice_at = $tr ? $tr - 1 : 0;
+                    $keys = range(0, $slice_at);
+                }
+                elseif ($number > 0 && $number <= $total) {
+                    $keys = range(0, $number - 1);
+                }
+                elseif ($number < 0) {
+                    $keys = $total + $number > 0 ? range(0, $total + $number - 1) : array();
+                }
+            } elseif ($check_data === 'bottom') {
+                if ($percent && $percent < 1) {
+                    $tr = ceil($total * $percent);
+                    $slice_at = $tr < $total ? $tr + 1 : $total - 1;
+                    $keys = range($slice_at, $total - 1);
+                }
+                elseif ($number > 0 && $number < $total) {
+                    $keys = range($total - $number, $total - 1);
+                }
+                elseif ($number < 0) {
+                    $keys = $total + $number > 0 ? range($number * -1, $total - 1) : array();
+                }
+            }
         }
 
         foreach ($tap as $key => $data) {
@@ -44,7 +87,12 @@ trait Profiler
             $setFeed->message = array();
             $setFeed->css = array();
 
-            foreach ($tags as $tag) {
+            if (isset($keys) && !in_array($key, $keys)) {
+                $result[] = $setFeed;
+                continue;
+            }
+
+            foreach ($tags as $key => $tag) {
                 if (count(preg_grep("/" . $tag . "/m", $data->raw_tags)) > 0) {
                     foreach ($messages as $msg) {
                         if (isset($msg[$tag])) {
@@ -56,7 +104,6 @@ trait Profiler
             }
             $result[] = $setFeed;
         }
-
         return $result;
     }
 

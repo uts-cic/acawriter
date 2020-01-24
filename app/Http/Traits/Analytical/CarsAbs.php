@@ -56,101 +56,82 @@ trait CarsAbs
             //check the conditions array as well
             if (count($conditions) > 0) {
                 foreach ($conditions as $condition) {
-                    if (isset($condition['terms'])) {
-                        $check_data = $condition['terms'];
-                    }
-                    if (isset($condition['per_chk'])) {
-                        $percent = $condition['per_chk'];
-                    }
+                    $check_data = isset($condition['terms']) ? $condition['terms'][0] : null;
+                    $percent = isset($condition['per_chk']) ? $condition['per_chk'] / 100 : 0;
+                    $number = isset($condition['num_chk']) ? intval($condition['num_chk']) : 0;
+                    break;
                 }
-
-                if ($check_data[0] === 'top') {
-                    //picks top percent of sentences
-                    $tr = round($total * $percent / 100);
-                    $slice_at = $tr <= 1 ? 0 : $tr - 1;
-
-                    foreach ($tap as $key => $data) {
-                        if ($key <= $slice_at) {
-                            $temp = array_merge($temp, $data->raw_tags);
-                        }
+                if ($check_data === 'top') {
+                    if ($percent && $percent < 1) {
+                        $tr = floor($total * $percent);
+                        $slice_at = $tr ? $tr - 1 : 0;
+                        $keys = range(0, $slice_at);
                     }
-                } elseif ($check_data[0] === 'bottom') {
-                    $tr = (round($total * $percent / 100));
-                    $tg = $tr <= 1 ? 1 : $tr - 1;
-                    $slice_at = $total - $tg;
-
-                    foreach ($tap as $key => $data) {
-                        if ($key >= $slice_at) {
-                            $temp = array_merge($temp, $data->raw_tags);
-                        }
+                    elseif ($number > 0 && $number <= $total) {
+                        $keys = range(0, $number - 1);
                     }
-                } elseif ($check_data[0] === 'middle_range') {
-
-                    $up = round($total * $check_data[1] / 100);
-                    $top = $up <= 1 ? 0 : $up - 1;
-
-                    $dw = (round($total * $check_data[1] / 100));
-                    $dwr = $dw <= 1 ? 1 : $dw - 1;
-                    $bottom = $total - $dwr;
-
-                    foreach ($tap as $key => $data) {
-                        if ($key > $top && $key < $bottom) {
-                            $temp = array_merge($temp, $data->raw_tags);
-                        }
+                    elseif ($number < 0) {
+                        $keys = $total + $number > 0 ? range(0, $total + $number - 1) : array();
                     }
-                }
-
-
-                $monitor = array_unique($temp);
-
-                $collect_tags = array();
-                foreach ($tags as $d) {
-                    //now check if either of the tags exist
-                    if (in_array($d, $monitor)) {
-                        array_push($collect_tags, $d);
+                } elseif ($check_data === 'bottom') {
+                    if ($percent && $percent < 1) {
+                        $tr = ceil($total * $percent);
+                        $slice_at = $tr < $total ? $tr + 1 : $total - 1;
+                        $keys = range($slice_at, $total - 1);
                     }
-                }
-                $cnt = count($collect_tags);
-                //add appropriate messages based on the counts if they exist
-                if ($check_data[0] === 'middle_range') {
-                    if ($cnt === 0) {
-                        foreach ($messages as $msg) {
-                            $ref = 'tag_m';
-                            if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
-                        }
-                    } else {
-                        foreach ($messages as $msg) {
-                            $ref = 'exists';
-                            if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
-                        }
+                    elseif ($number > 0 && $number < $total) {
+                        $keys = range($total - $number, $total - 1);
                     }
-                } else {
-                    if ($cnt === 0) {
-                        foreach ($messages as $msg) {
-                            $ref = 'tag_m';
-                            if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
-                        }
-                    } elseif ($cnt >= 2) {
-                        foreach ($messages as $msg) {
-                            $ref = 'exists';
-                            if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
-                        }
-                    } else {
-                        foreach ($collect_tags as $d) {
-                            foreach ($messages as $msg) {
-                                $ref = $d . "_e";
-                                if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
-                            }
-                        }
+                    elseif ($number < 0) {
+                        $keys = $total + $number > 0 ? range($number * -1, $total - 1) : array();
                     }
                 }
             }
+
+            foreach ($tap as $key => $data) {
+                if (isset($keys) && !in_array($key, $keys)) {
+                    continue;
+                }
+                $temp = array_merge($temp, $data->raw_tags);
+            }
+
+            $monitor = array_unique($temp);
+
+            $collect_tags = array();
+            foreach ($tags as $d) {
+                //now check if either of the tags exist
+                if (in_array($d, $monitor)) {
+                    array_push($collect_tags, $d);
+                }
+            }
+            $cnt = count($collect_tags);
+
+            //add appropriate messages based on the counts if they exist
+            if ($cnt === 0) {
+                foreach ($messages as $msg) {
+                    $ref = 'tag_m';
+                    if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
+                }
+            } else {
+                foreach ($messages as $msg) {
+                    $ref = 'exists';
+                    if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
+                }
+            }
+            // else {
+            //     foreach ($collect_tags as $d) {
+            //         foreach ($messages as $msg) {
+            //             $ref = $d . "_e";
+            //             if (isset($msg[$ref])) array_push($issues, $msg[$ref]);
+            //         }
+            //     }
+            // }
+
         } else {
             foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
-
         array_push($result, $issues);
         return $result;
     }

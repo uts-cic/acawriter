@@ -84,16 +84,33 @@
         }
 
         .moves1 {
-            background-color: #FFC1A3;
+            background-color: #f9d3c0;
         }
-
-        .moves3 {
-            background-color: #ADD164;
+        .badge-moves1 {
+            background-color: #ff8c00;
         }
 
         .moves2 {
-            background-color: #CBE3F5;
+            background-color: #c7e48d;
         }
+        .badge-moves2 {
+            background-color: #739a24;
+        }
+
+        .moves3 {
+            background-color: #cbe3f5;
+        }
+        .badge-moves3 {
+            background-color: #77b6ed;
+        }
+
+        .moves4 {
+            background-color: #ffe28c;
+        }
+        .badge-moves4 {
+            background-color: #a57b00;
+        }
+
 
 
     </style>

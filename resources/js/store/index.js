@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const QUIET = ['/collect', '/feedback/store'];
 
@@ -27,6 +27,9 @@ const store = new Vuex.Store({
         LOAD_FEEDBACK: function ({ commit, state }, params) {
             commit( 'SET_LOADING', {status:'Processing - step 1 of 2 completed'} );
             axios.post('/feedback', params).then((response) => {
+                if (!response.data.rules) {
+                    return alert('An error occured during your request. Please try again. If this happens repeatedly, reduce the amount of text being processed and try again.');;
+                }
                 commit( 'SET_LOADING', {status:'Processing - step  2 of 2 completed'} );
                 commit('UPDATE_FEEDBACK', { feedback: response.data })
             }, (err) => {
@@ -52,7 +55,7 @@ const store = new Vuex.Store({
         },
     },
     mutations: {
-        UPDATE_FEEDBACK: (state, {feedback }) => {
+        UPDATE_FEEDBACK: (state, { feedback }) => {
             state.feedback = feedback;
             state.loading = '';
         },

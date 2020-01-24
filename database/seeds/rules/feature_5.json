@@ -11,10 +11,10 @@
       },
       "message": [
         {
-          "emph": "<span class=\"badge badge-pill badge-analytic\">E<\/span>Emphasis of a significant or an important idea "
+          "emph": "<span class=\"badge badge-moves1\">E<\/span> Emphasis of a significant or an important idea "
         },
         {
-          "tempstat": "<span class=\"badge badge-pill badge-analytic\">B<\/span>Background information and reviewing previous work"
+          "tempstat": "<span class=\"badge badge-moves1\">B<\/span> Background information and reviewing previous work"
         }
       ],
       "css": [
@@ -36,10 +36,10 @@
       },
       "message": [
         {
-          "contrast": "<span class=\"badge badge-pill badge-analytic\">C<\/span>Contrasting idea, tension, disagreement or critical insight "
+          "contrast": "<span class=\"badge badge-moves2\">C<\/span> Contrasting idea, tension, disagreement or critical insight "
         },
         {
-          "nostat": "<span class=\"badge badge-pill badge-analytic\">Q<\/span>Question or gap in previous knowledge"
+          "nostat": "<span class=\"badge badge-moves2\">Q<\/span> Question or gap in previous knowledge"
         }
       ],
       "css": [
@@ -61,10 +61,10 @@
       },
       "message": [
         {
-          "novstat": "<span class=\"badge badge-pill badge-analytic\">N<\/span>Novelty and value of your research "
+          "novstat": "<span class=\"badge badge-moves3\">N<\/span>Novelty and value of your research "
         },
         {
-          "contribution": "<span class=\"badge badge-pill badge-analytic-green\">S<\/span>Summary of the author’s goal or nature of the research, or structure of the paper"
+          "contribution": "<span class=\"badge badge-moves3\">S<\/span>Summary of the author’s goal or nature of the research, or structure of the paper"
         }
       ],
       "css": [
