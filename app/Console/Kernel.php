@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         \App\Console\Components\InternetConnection\SendHeartbeat::class,
         \App\Console\Components\Tap\TapHealth::class,
         \App\Console\Components\Tap\TapLoadTest::class,
-        \App\Console\Commands\CreateUserCommand::class
+        \App\Console\Commands\CreateUserCommand::class,
+        \App\Console\Commands\UpdatePasswordCommand::class
     ];
 
     /**
