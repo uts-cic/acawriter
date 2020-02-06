@@ -84,6 +84,15 @@ AAF_AUD=
 AAF_LINK=
 ```
 
+### LTI Integration
+
+AcaWriter supports LTI integration.
+- LTI callback URL: https://your-acawriter-url/auth/lti
+- Update the following value in .env
+
+```sh
+LTI_SECRET=
+```
 
 ## Build and run docker containers
 
