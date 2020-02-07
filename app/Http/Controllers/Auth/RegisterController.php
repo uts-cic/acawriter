@@ -78,6 +78,9 @@ class RegisterController extends Controller
         try {
             $provider = new OAuthProvider();
             $provider->consumerHandler(function($p) {
+                if ($p->consumer_key !== env('LTI_KEY', '')) {
+                    return OAUTH_CONSUMER_KEY_UNKNOWN;
+                }
                 $p->consumer_secret = env('LTI_SECRET', '');
                 return OAUTH_OK;
             });

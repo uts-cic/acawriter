@@ -105,6 +105,10 @@
           "value": "$LOG_CHANNEL"
         },
         {
+          "name": "LTI_KEY",
+          "value": "$LTI_KEY"
+        },
+        {
           "name": "LTI_SECRET",
           "value": "$LTI_SECRET"
         },
