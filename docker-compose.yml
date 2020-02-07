@@ -66,6 +66,7 @@ services:
       AAF_AUD: ${AAF_AUD}
       AAF_LINK: ${AAF_LINK}
 
+      LTI_KEY: ${LTI_KEY}
       LTI_SECRET: ${LTI_SECRET}
 
     depends_on:

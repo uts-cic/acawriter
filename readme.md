@@ -91,6 +91,7 @@ AcaWriter supports LTI integration.
 - Update the following value in .env
 
 ```sh
+LTI_KEY=
 LTI_SECRET=
 ```
 
