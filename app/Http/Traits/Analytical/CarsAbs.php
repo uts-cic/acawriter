@@ -33,63 +33,29 @@ trait CarsAbs
 
     public function percentFeedback($tap, $rule, $extra = array())
     {
-        $result = array();
-        $check = $rule['check'];
-        $tempo = 0;
-        $tags = $check['tags'];
-        $messages = $rule['message'];
-        $conditions = $check['conditions'];
-        $startOf = 0; //start index (from the end) to check change tag
-
-        if (count($tags) == 0) {
-            return $result;
-        }
-        $monitor = array();
         $issues = array();
 
+        $check = $rule['check'];
+        $tags = $check['tags'];
+        if (count($tags) == 0) {
+            return array();
+        }
+
+        $messages = $rule['message'];
+
         if ($rule["tabEval"] === 'dynamic') {
+            $conditions = isset($check['conditions']) ? $check['conditions'] : array();
+            $exclude = isset($check['exclude']) ? $check['exclude'] : array();
+
+            $keys = $this->getConditionKeys($tap, $conditions);
+            $excludeKeys = $this->getExcludeKeys($tap, $exclude);
+
             $temp = array();
-            $check_data = array();
-            $slice_at = 0;
-            $total = count($tap);
-
-            //check the conditions array as well
-            if (count($conditions) > 0) {
-                foreach ($conditions as $condition) {
-                    $check_data = isset($condition['terms']) ? $condition['terms'][0] : null;
-                    $percent = isset($condition['per_chk']) ? $condition['per_chk'] / 100 : 0;
-                    $number = isset($condition['num_chk']) ? intval($condition['num_chk']) : 0;
-                    break;
-                }
-                if ($check_data === 'top') {
-                    if ($percent && $percent < 1) {
-                        $tr = floor($total * $percent);
-                        $slice_at = $tr ? $tr - 1 : 0;
-                        $keys = range(0, $slice_at);
-                    }
-                    elseif ($number > 0 && $number <= $total) {
-                        $keys = range(0, $number - 1);
-                    }
-                    elseif ($number < 0) {
-                        $keys = $total + $number > 0 ? range(0, $total + $number - 1) : array();
-                    }
-                } elseif ($check_data === 'bottom') {
-                    if ($percent && $percent < 1) {
-                        $tr = ceil($total * $percent);
-                        $slice_at = $tr < $total ? $tr + 1 : $total - 1;
-                        $keys = range($slice_at, $total - 1);
-                    }
-                    elseif ($number > 0 && $number < $total) {
-                        $keys = range($total - $number, $total - 1);
-                    }
-                    elseif ($number < 0) {
-                        $keys = $total + $number > 0 ? range($number * -1, $total - 1) : array();
-                    }
-                }
-            }
-
             foreach ($tap as $key => $data) {
                 if (isset($keys) && !in_array($key, $keys)) {
+                    continue;
+                }
+                if (in_array($key, $excludeKeys)) {
                     continue;
                 }
                 $temp = array_merge($temp, $data->raw_tags);
@@ -98,6 +64,7 @@ trait CarsAbs
             $monitor = array_unique($temp);
 
             $collect_tags = array();
+
             foreach ($tags as $d) {
                 //now check if either of the tags exist
                 if (in_array($d, $monitor)) {
@@ -127,12 +94,80 @@ trait CarsAbs
             //     }
             // }
 
-        } else {
+        }
+        else {
             foreach ($messages as $key => $msg) {
                 array_push($issues, $msg);
             }
         }
-        array_push($result, $issues);
-        return $result;
+
+        // if ($rule['custom'] === 'Move 3') {
+        //     print_r($rule);print_r($issues);die();
+        // }
+
+        return array($issues);
+    }
+
+    private function getConditionKeys($tap, $conditions)
+    {
+        $check_data = array();
+        $slice_at = 0;
+        $total = count($tap);
+        //check the conditions array as well
+        if (count($conditions) > 0) {
+            foreach ($conditions as $condition) {
+                $check_data = isset($condition['terms']) ? $condition['terms'][0] : null;
+                $percent = isset($condition['per_chk']) ? $condition['per_chk'] / 100 : 0;
+                $number = isset($condition['num_chk']) ? intval($condition['num_chk']) : 0;
+                break;
+            }
+            if ($check_data === 'top') {
+                if ($percent && $percent < 1) {
+                    $tr = floor($total * $percent);
+                    $slice_at = $tr ? $tr - 1 : 0;
+                    return range(0, $slice_at);
+                }
+                if ($number > 0 && $number <= $total) {
+                    return range(0, $number - 1);
+                }
+                if ($number < 0) {
+                    return $total + $number > 0 ? range(0, $total + $number - 1) : array();
+                }
+            } elseif ($check_data === 'bottom') {
+                if ($percent && $percent < 1) {
+                    $tr = ceil($total * $percent);
+                    $slice_at = $tr < $total ? $tr + 1 : $total - 1;
+                    return range($slice_at, $total - 1);
+                }
+                if ($number > 0 && $number < $total) {
+                    return range($total - $number, $total - 1);
+                }
+                if ($number < 0) {
+                    return $total + $number > 0 ? range($number * -1, $total - 1) : array();
+                }
+            }
+        }
+        return null;
+    }
+
+    private function getExcludeKeys($tap, $exclude)
+    {
+        $excludeKeys = array();
+        foreach ($exclude as $check) {
+            $tags = $check['tags'];
+            $conditions = isset($check['conditions']) ? $check['conditions'] : array();
+            $keys = $this->getConditionKeys($tap, $conditions);
+
+            foreach ($tap as $key => $data) {
+                if (isset($keys) && !in_array($key, $keys)) {
+                    continue;
+                }
+
+                if ($data->raw_tags && array_intersect($tags, $data->raw_tags)) {
+                    $excludeKeys[] = $key;
+                }
+            }
+        }
+        return $excludeKeys;
     }
 }

@@ -146,7 +146,43 @@
           "tempstat",
           "grow"
         ],
-        "conditions": []
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": [
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "top"
+                ],
+                "num_chk": "-3"
+              }
+            ]
+          },
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
+          },
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
       },
       "message": [
         {
@@ -175,6 +211,29 @@
             ],
             "num_chk": "-3"
           }
+        ],
+        "exclude": [
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
+          },
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
         ]
       },
       "message": [
@@ -198,7 +257,23 @@
           "contrast",
           "nostat"
         ],
-        "conditions": []
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
       },
       "message": [
         {
@@ -252,7 +327,43 @@
           "tempstat",
           "grow"
         ],
-        "conditions": []
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": [
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "top"
+                ],
+                "num_chk": "-3"
+              }
+            ]
+          },
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
+          },
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
       },
       "message": [
         {
@@ -281,6 +392,29 @@
             ],
             "num_chk": "-3"
           }
+        ],
+        "exclude": [
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
+          },
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
         ]
       },
       "message": [
@@ -304,7 +438,23 @@
           "contrast",
           "nostat"
         ],
-        "conditions": []
+        "conditions": [],
+        "exclude": [
+            {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
       },
       "message": [
         {
