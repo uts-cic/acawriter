@@ -24,7 +24,7 @@ Route::get('/log', function () {
     return view('log');
 });
 
-Auth::routes();
+Auth::routes(['register' => false, 'reset' => false]);
 
 // Authenticated pages
 Route::post('/auth/jwt', 'Auth\RegisterController@awt');
