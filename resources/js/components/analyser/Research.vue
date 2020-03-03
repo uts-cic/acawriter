@@ -146,7 +146,6 @@
                 processing: 'loadingStatus'
             }),
             vtabs() {
-                console.log(this.feedback);
                 if(this.feedback.rules) {
                     let tabs = [];
                     let rtabs = [];
