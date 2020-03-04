@@ -176,7 +176,7 @@
                         this.initFeedback = false;
                     }
                     let feature = this.preSetAssignment.feature[0];
-                    let hasMoves = feature.grammar.toLowerCase() == 'analytical' && feature.rules.search(',\"method\":\"moves\",') > 0;
+                    let hasMoves = feature.id === 10 || feature.id === 5;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
