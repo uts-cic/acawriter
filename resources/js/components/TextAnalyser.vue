@@ -53,6 +53,10 @@
                             <reflective-result></reflective-result>
                         </div>
 
+                        <div v-else-if="this.attributes.grammar == 'analytical' && this.attributes.hasMoves">
+                            <research-result></research-result>
+                        </div>
+
                         <div v-else-if="this.attributes.grammar == 'analytical'">
                             <analytic-result></analytic-result>
                         </div>
@@ -77,12 +81,14 @@
     import { mapState, mapActions, mapGetters} from 'vuex';
     import  Reflective from './analyser/Reflective.vue';
     import  Analytic from './analyser/Analytic.vue';
+    import  Research from './analyser/Research.vue';
 
     export default {
         components: {
             VueEditor,
             reflectiveResult: Reflective,
-            analyticResult: Analytic
+            analyticResult: Analytic,
+            researchResult: Research
         },
         name: 'editor',
         props:['document', 'userActivity'],
@@ -170,20 +176,23 @@
                         this.initFeedback = false;
                     }
                     let feature = this.preSetAssignment.feature[0];
+                    let hasMoves = feature.id === 10 || feature.id === 5;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
+                        hasMoves: hasMoves,
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
-                        initFeedback:this.initFeedback
+                        initFeedback: this.initFeedback
                     };
                 } else {
                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytical',
-                        feature:0,
+                        hasMoves: false,
+                        feature: 0,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
-                       initFeedback:this.initFeedback
+                        initFeedback: this.initFeedback
                    };
                 }
             },

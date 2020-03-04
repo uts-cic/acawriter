@@ -64,7 +64,7 @@ class RegisterController extends Controller
         $role = Str::is('staff@*', $attr->edupersonscopedaffiliation) ? 'staff' : 'user';
 
         if (!$this->authenticate($name, $email)) {
-            $this->create($name, $email, $role);
+            $this->create(['name' => $name, 'email' => $email, 'role' => $role]);
         }
 
         return redirect()->intended('/home');
@@ -129,7 +129,7 @@ class RegisterController extends Controller
         $role = 'user';
 
         if (!$this->authenticate($name, $email)) {
-            $this->create($name, $email, $role);
+            $this->create(['name' => $name, 'email' => $email, 'role' => $role]);
         }
 
         return redirect()->intended('/home');
@@ -179,15 +179,22 @@ class RegisterController extends Controller
      *
      * @return \App\User
      */
-    protected function create($name, $email, $role)
+    protected function create($params)
     {
-        $data = array(
+        $name = isset($params['name']) ? $params['name'] : null;
+        $email = isset($params['email']) ? $params['email'] : null;
+        $password = isset($params['password']) ? $params['password'] : ' ';
+        $role = isset($params['role']) ? $params['role'] : 'user';
+
+        if (empty($name) || empty($email)) {
+            return false;
+        }
+
+        $user = User::create([
             'name' => $name,
             'email' => $email,
-            'password' => Hash::make(' '),
-        );
-
-        $user = User::create($data);
+            'password' => Hash::make($password),
+        ]);
         Auth::login($user);
 
         $message = "New user created";
@@ -214,8 +221,4 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function showRegistrationForm()
-    {
-        return redirect('login');
-    }
 }

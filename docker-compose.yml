@@ -9,8 +9,8 @@ services:
       context: .
       dockerfile: ./docker/app/Dockerfile
     working_dir: /var/www
-    # volumes:
-    #   - .:/var/www
+    volumes:
+      - .:/var/www
     restart: unless-stopped
     environment:
       APP_NAME: ${APP_NAME}
@@ -33,6 +33,7 @@ services:
       QUEUE_CONNECTION: ${QUEUE_CONNECTION}
       SESSION_DRIVER: ${SESSION_DRIVER}
       SESSION_LIFETIME: ${SESSION_LIFETIME}
+      SESSION_SECURE_COOKIE: ${SESSION_SECURE_COOKIE}
 
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
@@ -84,6 +85,9 @@ services:
       dockerfile: ./docker/nginx/Dockerfile
       args:
         network_mode: bridge
+    volumes:
+      - ./public/css:/var/www/css
+      - ./public/js:/var/www/js
     restart: unless-stopped
     ports:
       - "80:80"
@@ -94,8 +98,8 @@ services:
   redis:
     container_name: redis
     image: redis
-    # volumes:
-    #     - ${DATA_PATH_HOST}/redis:/data
+    volumes:
+        - ${DATA_PATH_HOST}/redis:/data
     networks:
       - app-network
       - socket-network
@@ -103,8 +107,8 @@ services:
   postgres:
     container_name: postgres
     image: postgres
-    # volumes:
-    #     - ${DATA_PATH_HOST}/postgres:/data
+    volumes:
+        - ${DATA_PATH_HOST}/postgres:/data
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
