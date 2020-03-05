@@ -38,7 +38,11 @@
 
                     <!-- Reflective feedback -->
                     <div class="feedback-col" id="parsed">
-                        <div v-if="this.attributes.grammar == 'reflective'">
+                        <div v-if="this.attributes.isResearch">
+                            <research-result></research-result>
+                        </div>
+
+                        <div v-else-if="this.attributes.grammar == 'reflective'">
                             <reflective-result></reflective-result>
                         </div>
 
@@ -168,6 +172,7 @@
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
+                        isResearch: feature.id === 10 || feature.id === 5,
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
                         initFeedback:this.initFeedback
@@ -175,12 +180,12 @@
                     };
                 } else {
                     return {
-                        feedbackOpt:this.example.genre== 1 ? 'a_01' : 'r_01',
-                       // grammar: this.example.genre == 1 ? 'analytic' : 'reflective',
-                        grammar: this.grammar,
-                        feature:this.example.genre,
+                        feedbackOpt:'a_01',
+                        grammar: 'analytical',
+                        isResearch: false,
+                        feature: 0,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
-                        initFeedback:this.initFeedback
+                        initFeedback: this.initFeedback
                     };
                 }
                 //setInterval(this.storeAnalysedDrafts('auto'), 900000);

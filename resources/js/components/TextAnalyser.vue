@@ -49,12 +49,12 @@
                     <div class="feedback-col" id="parsed">
                         <p class="alert alert-warning px-3">Computers don’t read writing like humans. So, if you’re sure your writing’s good, it's fine to disagree with AcaWriter's feedback, just like you’d ignore a poor grammar suggestion.</p>
 
-                        <div v-if="this.attributes.grammar == 'reflective'">
-                            <reflective-result></reflective-result>
+                        <div v-if="this.attributes.isResearch">
+                            <research-result></research-result>
                         </div>
 
-                        <div v-else-if="this.attributes.grammar == 'analytical' && this.attributes.hasMoves">
-                            <research-result></research-result>
+                        <div v-else-if="this.attributes.grammar == 'reflective'">
+                            <reflective-result></reflective-result>
                         </div>
 
                         <div v-else-if="this.attributes.grammar == 'analytical'">
@@ -176,11 +176,10 @@
                         this.initFeedback = false;
                     }
                     let feature = this.preSetAssignment.feature[0];
-                    let hasMoves = feature.id === 10 || feature.id === 5;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
-                        hasMoves: hasMoves,
+                        isResearch: feature.id === 10 || feature.id === 5,
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
                         initFeedback: this.initFeedback
@@ -189,7 +188,7 @@
                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytical',
-                        hasMoves: false,
+                        isResearch: false,
                         feature: 0,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
                         initFeedback: this.initFeedback
