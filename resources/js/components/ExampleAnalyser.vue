@@ -69,12 +69,14 @@
     import { mapState, mapActions, mapGetters} from 'vuex';
     import  Reflective from './analyser/Reflective.vue';
     import  Analytic from './analyser/Analytic.vue';
+    import  Research from './analyser/Research.vue';
 
     export default {
         components: {
             VueEditor,
             reflectiveResult: Reflective,
-            analyticResult: Analytic
+            analyticResult: Analytic,
+            researchResult: Research
         },
         name: 'editor',
         props:['ex', 'role', 'ext'],
