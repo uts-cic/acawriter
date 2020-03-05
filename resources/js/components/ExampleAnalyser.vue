@@ -74,7 +74,8 @@
         components: {
             VueEditor,
             reflectiveResult: Reflective,
-            analyticResult: Analytic
+            analyticResult: Analytic,
+            researchResult: Research
         },
         name: 'editor',
         props:['ex', 'role', 'ext'],
