@@ -21,20 +21,20 @@ class DiffController extends Controller
         $this->middleware('auth');
     }
 
-    public function showDrafts($query)
+    public function showDrafts(Request $request)
     {
         $data = new \stdClass;
         $data->documents = array();
         $drafts = array();
         $drafts_users = array();
-        $drafts = Draft::where('document_id', $query->id)->orderBy('created_at', 'desc')->get();
+        $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get();
         foreach ($drafts as $draft) {
         	$user = showUsers($draft->user_id);
         	$draft->user = $user;
         	array_push($drafts_users, $draft);
         }
         $data->documents = $drafts_users;
-
+        return view('admin.report', ['data' => $data]);
         return response()->json($data);
     }
 
@@ -43,6 +43,7 @@ class DiffController extends Controller
     	$data = new \stdClass;
         $users = User::where('user_id', id);
         $data->users = $users;
+        // return view('admin.report', ['data' => $data]);
         return response()->json($data);
     }
 }
