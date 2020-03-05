@@ -33,7 +33,7 @@
                         <div class="card">
                             <div class="card-header">Search Documents</div>
                             <div class="card-body">
-                                <form action="/admin/documents" method="post">
+                                <form action="/admin/diffDocuments" method="post">
                                     <div class="row">
                                         <div class="form-group col-sm-12 col-md-3">
                                             <input type="text"  class="form-control" name="document_id" placeholder="enter document id" />
