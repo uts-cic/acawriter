@@ -24,7 +24,8 @@ class DiffController extends Controller
     public function showDrafts(Request $request)
     {
         $data = new \stdClass;
-        $data->documents = array();
+        $data->documents = new \stdClass;
+        $data->documents->drafts = array();
         $drafts = array();
         $drafts_users = array();
         $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get(['document_id', 'text_input', 'user_id']);
@@ -33,7 +34,7 @@ class DiffController extends Controller
         	$draft->user = $user;
         	array_push($drafts_users, $draft);
         }
-        $data->documents = $drafts_users;
+        $data->documents->drafts = $drafts_users;
         return view('admin.report', ['data' => $data]);
     }
 
