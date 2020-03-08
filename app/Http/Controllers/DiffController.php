@@ -28,7 +28,7 @@ class DiffController extends Controller
         $data->documents->drafts = array();
         $drafts = array();
         $drafts_users = array();
-        $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'text_input', 'user_id']);
+        $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'text_input', 'user_id', 'created_at']);
         foreach ($drafts as $draft) {
         	$user = $this->showUsers($draft->user_id);
         	$draft->user = $user;
@@ -44,6 +44,11 @@ class DiffController extends Controller
         $users = User::where('id', $id)->first('name');
         $data->users = $users;
         return $data;
+    }
+
+    public function produceReport($id)
+    {
+
     }
 }
 ?>
