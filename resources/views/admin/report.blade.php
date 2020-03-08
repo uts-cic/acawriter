@@ -126,6 +126,26 @@
                                 @endif
                                 </tbody>
                             </table>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Document Id</th>
+                                    <th scope="col">Text</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if(isset($data->documents))
+                                @foreach($data->documents as $document)
+                                    <tr>
+                                        <th scope="row">{{$document->user->users->name}}</th>
+                                        <td>{{$document->document_id}}</td>
+                                        <td>({{$document->text_input}})</td>
+                                    </tr>
+                                @endforeach
+                                @endif
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
