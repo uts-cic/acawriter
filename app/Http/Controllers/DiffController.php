@@ -35,7 +35,6 @@ class DiffController extends Controller
         }
         $data->documents = $drafts_users;
         return view('admin.report', ['data' => $data]);
-        // return response()->json($data);
     }
 
     public function showUsers($id)
@@ -43,8 +42,6 @@ class DiffController extends Controller
     	$data = new \stdClass;
         $users = User::where('id', $id)->first('name');
         $data->users = $users;
-        // return view('admin.report', ['data' => $data]);
-        // return response()->json($data);
         return $data;
     }
 }
