@@ -135,12 +135,12 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if(isset($data->documents))
-                                @foreach($data->documents as $document)
+                                @if(isset($data->documents->drafts))
+                                @foreach($data->documents->drafts as $document)
                                     <tr>
                                         <th scope="row">{{$document->user->users->name}}</th>
                                         <td>{{$document->document_id}}</td>
-                                        <td>{{$document->text_input}}</td>
+                                        <td><a href="/admin/diffreport/{{$document->uid}}"><i class="fa fa-cogs"></i> Link</td>
                                     </tr>
                                 @endforeach
                                 @endif
