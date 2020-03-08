@@ -86,7 +86,7 @@
                                         </div>
                                         <div class="form-group col-sm-12 col-md-9">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button href="#" class="btn btn-primary" type="submit" name="action" value="show"><i class="fa fa-search" aria-hidden="true"></i>Documents</button>
+                                                <button href="#" class="btn btn-primary" type="submit" name="action" value="show"><i class="fa fa-search" aria-hidden="true"></i> Documents</button>
                                             </div>
                                         </div>
 
