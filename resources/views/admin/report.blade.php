@@ -140,7 +140,7 @@
                                     <tr>
                                         <th scope="row">{{$document->user->users->name}}</th>
                                         <td>{{$document->document_id}}</td>
-                                        <td>({{$document->text_input}})</td>
+                                        <td>{{$document->text_input}}</td>
                                     </tr>
                                 @endforeach
                                 @endif
