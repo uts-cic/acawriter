@@ -131,6 +131,7 @@
                                 <tr>
                                     <th scope="col">User</th>
                                     <th scope="col">Document Id</th>
+                                    <th score="col">Version</th>
                                     <th scope="col">Text</th>
                                 </tr>
                                 </thead>
@@ -140,7 +141,8 @@
                                     <tr>
                                         <th scope="row">{{$document->user->users->name}}</th>
                                         <td>{{$document->document_id}}</td>
-                                        <td><a href="/admin/diffreport/{{$document->uid}}"><i class="fa fa-cogs"></i> Link</td>
+                                        <td>1</td>
+                                        <td><a href="/admin/diffreport/{{$document->id}}"><i class="fa fa-cogs"></i> Link</td>
                                     </tr>
                                 @endforeach
                                 @endif
