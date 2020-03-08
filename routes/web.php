@@ -83,6 +83,7 @@ Route::post('/admin/users', 'AdminController@updateUserRoles');
 Route::post('/admin/addUser', 'AdminController@addUser');
 Route::post('/admin/report', 'ReportController@fetchDocs');
 Route::post('/admin/diffDocuments', 'DiffController@showDrafts');
+Route::post('/admin/diffreport/{id}', 'DiffController@produceReport');
 
 
 // Generate and download pdf
