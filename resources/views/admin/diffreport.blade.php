@@ -27,14 +27,23 @@
         @include('admin.flash')
         <div class="row">
             <div class="col-md-12">
-                <textarea rows="4", cols="54" id="first_draft" name="first_draft" style="resize:none, ">{{ $data->draft_first->text_input }}</textarea>
-                <textarea rows="4", cols="54" id="second_draft" name="second_draft" style="resize:none, ">{{ $data->draft_second->text_input }}</textarea>
+                <textarea rows="4", cols="54" style="resize:none, ">{{ $data->draft_first->text_input }}</textarea>
+                <textarea rows="4", cols="54" style="resize:none, ">{{ $data->draft_second->text_input }}</textarea>
+                <textarea rows="4", cols="54" style="resize:none, ">{{ $diff ?? '' }}</textarea>
             </div>
         </div>
     </div>
 </div>
 @endsection
 
+@section('scripts')
+<!-- API Documentation: https://github.com/google/diff-match-patch/wiki/API -->
+    <script src="js/diff_match_patch.js"></script>
+    var dmp = new diff_match_patch();
+    var diff = dmp.diff_main($data->draft_first->text_input, $data->draft_second->text_input);
+    dmp.diff_cleanupSemantic(diff);
+    pretty_diff = diff_prettyHtml(diff)
+@endsection
 
 @section('footer')
 
