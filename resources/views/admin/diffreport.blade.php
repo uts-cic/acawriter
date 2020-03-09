@@ -25,43 +25,10 @@
 <div id="app">
     <div class="container">
         @include('admin.flash')
-        <hr />
         <div class="row">
             <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">Results</div>
-                            <table class="table">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Document Id</th>
-                                    <th scope="col">Text</th>
-                                    <th scope="col">Last Updated Date</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @if(isset($data->documents->list))
-                                @foreach($data->documents->list as $document)
-                                    <tr>
-                                        <th scope="row">{{$document->code}}</th>
-                                        <td>{{$document->email}}</td>
-                                        <td>{{$document->name}}</td>
-                                        <td><a href="/admin/download/csv/txt/{{$document->docid}}/{{$document->uid}}"><i class="fa fa-download"></i> Text ({{$document->txtcount}})</td>
-                                        <td><a href="/admin/download/csv/feed/{{$document->docid}}/{{$document->uid}}"><i class="fa fa-download"></i> Feed ({{$document->dcount}})</td>
-                                    </tr>
-                                @endforeach
-                                @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <textarea rows="4", cols="54" id="first_draft" name="first_draft" style="resize:none, ">{{ $data->draft_first->text_input }}</textarea>
+                <textarea rows="4", cols="54" id="second_draft" name="second_draft" style="resize:none, ">{{ $data->draft_second->text_input }}</textarea>
             </div>
         </div>
     </div>
