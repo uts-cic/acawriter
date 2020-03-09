@@ -30,25 +30,6 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">Search Documents</div>
-                            <div class="card-body">
-                                <form action="/admin/diffDocuments" method="post">
-                                    <div class="row">
-                                        <div class="form-group col-sm-12 col-md-3">
-                                            <input type="text"  class="form-control" name="document_id" placeholder="enter document id" />
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-9">
-                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button href="#" class="btn btn-primary" type="submit" name="action" value="show"><i class="fa fa-search" aria-hidden="true"></i> Show Documents</button>&nbsp; or &nbsp;
-                                            </div>
-                                        </div>
-
-                                        {{ csrf_field() }}
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="row">
