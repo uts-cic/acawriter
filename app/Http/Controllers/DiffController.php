@@ -56,7 +56,7 @@ class DiffController extends Controller
     	$data->draft_first = $draft_first[0];
     	$data->draft_second = $draft_second;
 
-    	return response()->json($data);
+    	return view('admin.diffreport', ['data' => $data]);
     }
 }
 ?>
