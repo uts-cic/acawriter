@@ -79,11 +79,11 @@ Route::post('/assignments/action', 'AssignmentController@action');
 Route::get('/admin/users', 'AdminController@showUsers');
 Route::get('/admin/reports', 'ReportController@index');
 Route::get('/admin/download/{type}/{what}/{did}/{uid}', 'ReportController@export');
+Route::get('/admin/diffreport/{id}', 'DiffController@produceReport');
 Route::post('/admin/users', 'AdminController@updateUserRoles');
 Route::post('/admin/addUser', 'AdminController@addUser');
 Route::post('/admin/report', 'ReportController@fetchDocs');
 Route::post('/admin/diffDocuments', 'DiffController@showDrafts');
-Route::post('/admin/diffreport/{id}', 'DiffController@produceReport');
 
 
 // Generate and download pdf
