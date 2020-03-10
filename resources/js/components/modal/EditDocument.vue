@@ -9,8 +9,8 @@
         <div class="px-3 mt-4">
             <div class="form-group mb-4">
                 <label for="document-name">Document name</label>
-                <input type="text" class="form-control" id="document-name" v-model="m_document.name" />
-                <input type="hidden" name="document_id" v-model="m_document.id" />
+                <input type="text" class="form-control" id="document-name" v-model="document.name" />
+                <input type="hidden" name="document_id" v-model="document.id" />
             </div>
             <button class="btn btn-primary" v-on:click="saveModalDocument()">Save</button>
             <button class="btn btn-secondary ml-2" v-on:click="close()">Cancel</button>
@@ -25,7 +25,7 @@
         data() {
             return {
                 modalWidth: MODAL_WIDTH,
-                m_document: {
+                document: {
                     id: 0,
                     name: ''
                 },
@@ -40,19 +40,16 @@
         methods: {
             beforeOpen(event) {
                 if(event) {
-                    this.m_document.id = event.params.document.id;
-                    this.m_document.name = event.params.document.name;
+                    this.document = event.params.document;
                     this.parent = event.params.parent;
                 }
             },
             saveModalDocument() {
-                if (this.m_document.name === '') {
+                if (this.document.name === '') {
                     this.errors.push({'message': 'Document name cannot be empty'});
                     return false;
                 }
-
-                let data = {'action': 'edit', 'doc': this.m_document};
-                axios.post('/documents/action', data).then((response) => {
+                axios.post('/document/update', this.document).then((response) => {
                     this.parent.onDocumentUpdate(response.data.message);
                     this.$modal.hide("edit-document");
                 }, (err) => {

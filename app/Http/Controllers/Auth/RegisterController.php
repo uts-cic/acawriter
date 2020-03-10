@@ -67,7 +67,7 @@ class RegisterController extends Controller
             $this->create(['name' => $name, 'email' => $email, 'role' => $role]);
         }
 
-        return redirect()->intended('/home');
+        return redirect()->intended('/');
     }
 
     /**
@@ -132,7 +132,7 @@ class RegisterController extends Controller
             $this->create(['name' => $name, 'email' => $email, 'role' => $role]);
         }
 
-        return redirect()->intended('/home');
+        return redirect()->intended('/');
     }
 
     /**

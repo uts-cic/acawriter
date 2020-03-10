@@ -22,11 +22,8 @@
 
 namespace App\Traits;
 
-use App\Services\Analyser;
-
 trait Profiler
 {
-
     public function moves($tap, $rule)
     {
         $result = array();
@@ -150,7 +147,7 @@ trait Profiler
             }
         }
 
-        if ($tempo == 0 && $key == $this->para - 1) {
+        if ($tempo == 0 && $key == 2) {
             $setFeed->message['background'] = $rule['message'];
             $setFeed->css[] = 'background';
             $result[] = $setFeed;
@@ -161,7 +158,6 @@ trait Profiler
 
     public function metrics($tap, $rule)
     {
-        $analyser = new Analyser();
         $result = array();
         $check = $rule['check'];
 
@@ -170,7 +166,7 @@ trait Profiler
             $tempStore->str = $data->str;
             $tempStore->message = array();
             $tempStore->css = array();
-            $returnData = $analyser->metrics($data->str);
+            $returnData = $this->analyser->metrics($data->str);
             if (isset($returnData->sentWordCounts)) {
                 //sentWordCounts is always an array e.g. [5,6] if two sentences sent here we send only one at a time though
                 if ($returnData->sentWordCounts[0] > $check['sentenceWordCount']) {
@@ -194,7 +190,6 @@ trait Profiler
      */
     public function vocab($tap, $rule)
     {
-        $analyser = new Analyser();
         $result = array();
         $check = $rule['check'];
         $termCount = 0;
@@ -209,7 +204,7 @@ trait Profiler
         $tempStore->message = array();
         $tempStore->css = array();
 
-        $returnData = $analyser->vocab($tempStore->str);
+        $returnData = $this->analyser->vocab($tempStore->str);
         if (isset($returnData->terms)) {
             $collection = collect($returnData->terms);
 
@@ -240,8 +235,6 @@ trait Profiler
      */
     protected function expression($tap, $rule)
     {
-
-        $analyser = new Analyser();
         $result = array();
         $check = $rule['check'];
         $termCount = 0;
@@ -265,8 +258,8 @@ trait Profiler
             $tempStore->css = array();
 
             // AI/2019-06-25: Removing affect analysis
-            // $returnData = $analyser->expression($data->str, $affectValues);
-            $returnData = $analyser->expression($data->str);
+            // $returnData = $this->analyser->expression($data->str, $affectValues);
+            $returnData = $this->analyser->expression($data->str);
 
             //$returnData is an array but since we are analysing tokenised strings we can safely assume array[0]
             $sanitizedResult = $returnData[0];

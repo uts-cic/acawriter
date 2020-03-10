@@ -127,8 +127,8 @@
 </head>
 <body>
     <div class="row">
-        <div class="col-md-12"><h2>{{$draft->name}}</h2>
-            <strong>Genre: {{$draft->grammar}}&nbsp;</strong>
+        <div class="col-md-12"><h2>{{ $draft->name }}</h2>
+            <strong>Genre: {{ $draft->grammar }}&nbsp;</strong>
             Date: &nbsp;{!! $draft->created_at !!}
         </div>
     </div>
@@ -136,23 +136,23 @@
 
     <div class="row">
         <div class="col-md-12">
-            @foreach($draft->raw->rules as $rule)
-                @if(!isset($rule->tab))
-                    @if(isset($rule->custom) )
-                        <strong>{!!$rule->custom!!}</strong><br />
+            @foreach ($draft->raw->rules as $rule)
+                @if (!isset($rule->tab))
+                    @if (isset($rule->custom))
+                        <strong>{!! $rule->custom !!}</strong><br />
                     @endif
-                    @foreach($rule->message as $msg)
-                        @foreach($msg as $key => $desc)
-                            <p>{!!$desc!!}</p>
+                    @foreach ($rule->message as $msg)
+                        @foreach ($msg as $key => $desc)
+                            <p>{!! $desc !!}</p>
                         @endforeach
                     @endforeach
-                @elseif($rule->tab==1)
-                    @if(isset($rule->custom) )
-                        <strong>{!! $rule->custom!!}</strong><br />
+                @elseif ($rule->tab == 1)
+                    @if (isset($rule->custom))
+                        <strong>{!! $rule->custom !!}</strong><br />
                     @endif
-                    @foreach($rule->message as $msg)
-                        @foreach($msg as $key => $desc)
-                            <p class="{{$rule->name}}">{!!$desc!!}</p>
+                    @foreach ($rule->message as $msg)
+                        @foreach ($msg as $key => $desc)
+                            <p class="{{ $rule->name }}">{!! $desc !!}</p>
                         @endforeach
                     @endforeach
                 @endif
@@ -180,13 +180,13 @@
 
     <div class="row">
         <div class="col-md-12">
-            @if(isset($draft->raw->tabs))
-                @foreach($draft->raw->tabs as $tab)
-                    @foreach($tab as $tabContent)
-                        @foreach($tabContent as $name => $b)
-                            @if($name!== 'faq')
-                               @foreach($b as $msg)
-                                    @foreach($msg as $txt)
+            @if (isset($draft->raw->tabs))
+                @foreach ($draft->raw->tabs as $tab)
+                    @foreach ($tab as $tabContent)
+                        @foreach ($tabContent as $name => $b)
+                            @if ($name!== 'faq')
+                               @foreach ($b as $msg)
+                                    @foreach ($msg as $txt)
                                     <p>{!! $txt !!}</p>
                                     @endforeach
                                 @endforeach

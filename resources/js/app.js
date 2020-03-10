@@ -21,7 +21,6 @@ Vue.use(VModal);
 
 Vue.component('form-new', require('./components/forms/FormNew.vue').default);
 Vue.component('form-subscribe', require('./components/forms/FormSubscribe.vue').default);
-Vue.component('log-status', require('./components/lstatus.vue').default);
 Vue.component('doc-editor', require('./components/TextAnalyser.vue').default);
 Vue.component('internet-connection', require('./components/InternetConnection.vue').default);
 Vue.component('tap-status', require('./components/TapHealth.vue').default);
@@ -166,10 +165,10 @@ $(document).ready(function () {
 
     $('#refresh').click(function(){
         $.ajax({
-            type:'GET',
-            url:'/page/contact/refreshcaptcha',
+            type: 'GET',
+            url: '/contact/refreshcaptcha',
             success:function(data){
-                $(".captcha span").html(data.captcha);
+                $('.captcha span').html(data.captcha);
             }
         });
     });

@@ -1,5 +1,5 @@
 <template>
-    <form method="POST" action="/document" class="form" @submit="onSubmit">
+    <form method="POST" action="/document/create" class="form" @submit="onSubmit" autocomplete="off">
         <input type="hidden" name="_token" :value="csrf">
         <div class="form-group">
             <label for="doc_title">Document name</label>

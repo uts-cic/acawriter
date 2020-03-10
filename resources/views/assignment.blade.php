@@ -34,7 +34,7 @@
                 <div class="card">
                     <div class="card-header bg-dark text-white">Create a new assignment</div>
                     <div class="card-body">
-                        <form class="form" method="POST" id="add_assignment" action="/assignment">
+                        <form class="form" method="POST" id="add_assignment" action="/assignment/create" autocomplete="off">
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -48,12 +48,12 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="feedbackOpt">Genre</label> <a href="/example" target="_blank"><i class="fa fa-question-circle"></i></a>
+                                    <label for="feedbackOpt">Genre</label> <a href="{{ url('example') }}" target="_blank"><i class="fa fa-question-circle"></i></a>
                                     <select class="form-control" id="grammar" name="grammar">
-                                        @foreach($features as $key => $value)
-                                        <optgroup label ="{{$key}}">
-                                            @foreach($value as $feature)
-                                            <option value="{{$feature->id}}">{{$feature->name}}</option>
+                                        @foreach ($features as $grammar => $featureGroup)
+                                        <optgroup label ="{{ $grammar }}">
+                                            @foreach ($featureGroup as $feature)
+                                            <option value="{{ $feature->id }}">{{ $feature->name }}</option>
                                             @endforeach
                                         </optgroup>
                                         @endforeach
@@ -61,9 +61,9 @@
                                 </div>
                                 <div class="form-group col-md-8">
                                     <label for="featureInfo">Information about the genre</label><br />
-                                    @foreach($features as $key => $value)
-                                        @foreach($value as $feature)
-                                            <div class="feature_info" data-index="{{$feature->id}}"><small>{!! $feature->info !!}</small></div>
+                                    @foreach ($features as $featureGroup)
+                                        @foreach ($featureGroup as $feature)
+                                            <div class="feature_info" data-index="{{ $feature->id }}"><small>{!! $feature->info !!}</small></div>
                                         @endforeach
                                     @endforeach
                                 </div>
@@ -74,8 +74,8 @@
                         <div class="col-md-12">
                             <div class="alert alert-danger">
                                 <ul>
-                                    @foreach($errors->all() as $error)
-                                    <li>{{$error}}</li>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -87,7 +87,7 @@
         </div>
     </div>
 
-    <assignment-list assignments="{{($assignments)}}" class="mb-5"></assignment-list>
+    <assignment-list assignments="{{ $assignments }}" class="mb-5"></assignment-list>
 
 </main>
 @endsection

@@ -8,15 +8,9 @@ use Illuminate\Support\Facades\Response;
 
 class ReportController extends Controller
 {
-    //
-    private $ui;
-
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->ui = new \stdClass();
-        $this->ui->general = new \stdClass();
-        $this->ui->documents = new \stdClass();
+        $this->middleware(['auth', 'can:access-reports']);
     }
 
     public function index()
@@ -25,12 +19,11 @@ class ReportController extends Controller
         //$this->ui->general->m_new_users = User::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
         //$this->ui->general->m_feedback = Draft::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
         //$this->ui->general->m_user_activity = Activity::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
-        return view('admin.report', ['data' => $this->ui]);
+        return view('admin.report', ['data' => []]);
     }
 
     public function fetchDocs(Request $request)
     {
-
         if (!isset($request->assignment_code)) {
             return redirect()->back()->with('error', 'Please enter an assignment code');
         }
@@ -42,7 +35,7 @@ class ReportController extends Controller
 
         switch ($request->input('action')) {
             case 'show':
-                $this->ui->documents->list = DB::table('documents')
+                $documents = DB::table('documents')
                     ->select(DB::raw('
                                     (select count(id) from drafts drf where drf.document_id= documents.id) as dCount,
                                     documents.id as docId,
@@ -78,7 +71,7 @@ class ReportController extends Controller
                 //     ->groupBy('documents.id', 'assignments.code', 'users.id')
                 //     ->toSql();
 
-                return view('admin.report', ['data' => $this->ui]);
+                return view('admin.report', ['documents' => $documents]);
                 break;
 
             case 'download_feed':

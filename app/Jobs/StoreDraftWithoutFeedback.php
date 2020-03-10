@@ -15,17 +15,17 @@ class StoreDraftWithoutFeedback implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $draft;
-    private $user;
+    protected $data;
+    protected $user;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($draft, $user)
+    public function __construct($data, $user)
     {
-        $this->draft = $draft;
+        $this->data = $data;
         $this->user = $user;
     }
 
@@ -36,39 +36,25 @@ class StoreDraftWithoutFeedback implements ShouldQueue
      */
     public function handle()
     {
+        $textDraft = new TextDraft();
+        $textDraft->text_input = $this->data['txt'];
+        $textDraft->feature_id = $this->data['extra']['feature'];
+        $textDraft->document_id = $this->data['document'];
+        $textDraft->user_id = $this->user->id;
+        $textDraft->save();
+
         //emit activity
         $activityLog = new \stdClass;
-        $activityLog->status = 'success';
+        $activityLog->status = $textDraft->id ? 'success' : 'error';
         $activityLog->data = [];
-
-        $result = new \stdClass();
-        $extra = $this->draft["extra"];
-        $result->status = array('message' => 'Success', 'code' => 200);
-        $jobRef = $extra['storeDraftJobRef'];
-
-        $draftNew = new TextDraft();
-        $draftNew->text_input = $this->draft['txt'];
-        $draftNew->feature_id = $this->draft['extra']['feature'];
-        $draftNew->document_id = $this->draft['document'];
-        $draftNew->user_id = $this->user->id;
-
-        $draftNew->save();
-
-        if ($draftNew->id > 0) {
-            $activityLog->status = 'success';
-        } else {
-            $activityLog->status = 'error';
-        }
         $activityLog->msg = "Draft saved";
         $activityLog->user = $this->user;
         $activityLog->type = 'Draft';
-        $activityLog->ref = $draftNew;
-        $activityLog->jobRef = $jobRef;
-
-        //print_r($activityLog);
+        $activityLog->ref = $textDraft;
+        $activityLog->jobRef = $this->data['extra']['storeDraftJobRef'];
 
         event(new UserActivity($this->user, $activityLog));
 
-        Log::info('Stored draft with only text into db', ['draft' => $draftNew]);
+        Log::info('Stored draft with only text into db', ['draft' => $textDraft]);
     }
 }

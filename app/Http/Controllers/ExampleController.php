@@ -10,10 +10,9 @@ use Auth;
 
 class ExampleController extends Controller
 {
-    //
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'can:view-examples']);
     }
 
     public function index()
@@ -21,11 +20,9 @@ class ExampleController extends Controller
         return view('example');
     }
 
-
     /*
      * get all examples
      */
-
     public function fetchExamples()
     {
         $list = new \stdClass;
@@ -34,10 +31,8 @@ class ExampleController extends Controller
         return response()->json($list);
     }
 
-
     public function analyse($code = NULL)
     {
-
         $result = new \stdClass;
         $details = array();
         $user_id = Auth::user()->id;
@@ -67,7 +62,6 @@ class ExampleController extends Controller
 
     public function store(Request $request)
     {
-
         $this->validate(request(), [
             'txt' => 'required',
             'feedback' => 'required'
@@ -76,9 +70,7 @@ class ExampleController extends Controller
         $status = array('success' => false, 'message' => 'Problem storing example');
         $code = 500;
 
-
         $example = new Example();
-
         $example->feature_id = $request['extra']['feature'];
         $example->title = $request['other']['title'];
         $example->summary = $request['other']['summary'];

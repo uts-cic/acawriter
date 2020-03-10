@@ -3,27 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Role;
 use App\Events\UserRegistered;
 
 class AdminController extends Controller
 {
-    public $data;
-
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'can:manage-users']);
     }
 
-    public function showUsers()
+    public function showUsers(Request $request)
     {
-        $data = new \stdClass;
-        $users = User::where('email', 'like', '%@uts.edu.au')->paginate(50);
-        $data->users = $users;
+        $search = $request->input('search');
+        $users = $search ? User::whereLike(['name', 'email'], $search)->paginate(100) : User::paginate(100);
         $roles = Role::all();
-        $data->roles = $roles;
-        return view('admin.user', ['data' => $data]);
+        return view('admin.user', [
+            'users' => $users,
+            'roles' => $roles,
+            'search' => $search,
+        ]);
     }
 
     public function updateUserRoles(Request $request)
@@ -40,18 +43,28 @@ class AdminController extends Controller
 
     public function addUser(Request $request)
     {
-        if ($this->userExists($request)) {
-            return redirect()->back()->with('error', 'User already exists');
+        $validator = Validator::make(Input::all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        if ($validator->fails()) {
+            $messages = $validator->messages()->all();
+            return redirect()->back()->with('error', implode("\n", $messages));
         }
 
-        $credentials = array(
-            'email' => $request["new_email"],
-            'name' => $request["new_name"],
-            'password' => $request["new_password"]
-        );
-        $whatRole = 'user';
-        $userAdded = $this->create($credentials);
-        event(new UserRegistered($userAdded, $whatRole));
+        $email = $request->input('email');
+        $name = $request->input('name');
+        $password = $request->input('password');
+        $role = 'user';
+
+        $user = $this->create([
+            'email' => $email,
+            'name' => $name,
+            'password' => $password,
+            'role' => $role
+        ]);
 
         return redirect()->back()->with('success', 'User added successfully!');
     }
@@ -59,27 +72,20 @@ class AdminController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array  $params
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create(array $params)
     {
         $user =  User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'name' => $params['name'],
+            'email' => $params['email'],
+            'password' => Hash::make($params['password']),
         ]);
+
+        event(new UserRegistered($user, $params['role']));
 
         return $user;
     }
 
-
-    protected function userExists($data)
-    {
-        $userFound = User::where('email', $data["new_email"])->first();
-        if ($userFound) {
-            return true;
-        }
-        return false;
-    }
 }

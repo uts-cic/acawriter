@@ -2,36 +2,36 @@
 
 @section('content')
 <main id="app" class="container-fluid" data-ga-category="Home">
-    @if ($docs)
-        <div class="subheader shadow mb-5">
-            <div class="subheader-title mb-0">
-                <h4>My documents</h4>
-            </div>
-            <div role="group" class="ml-auto">
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#add" aria-expanded="false" aria-controls="add" data-ga-label="Add document"><i class="fa fa-plus-circle"></i> Add document</button>
-            </div>
+    @if ($hasDocuments)
+    <div class="subheader shadow mb-5">
+        <div class="subheader-title mb-0">
+            <h4>My documents</h4>
         </div>
+        <div role="group" class="ml-auto">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#add" aria-expanded="false" aria-controls="add" data-ga-label="Add document"><i class="fa fa-plus-circle"></i> Add document</button>
+        </div>
+    </div>
     @else
-        <div class="jumbotron mb-5">
-            <h1>Welcome to AcaWriter!</h1>
-            <p class="lead">AcaWriter is a website that gives you automated feedback on your draft writing.</p>
-            <p class="lead mb-0">
-                Make sure you’ve checked out the <a href="https://www.uts.edu.au/acawriter">information website</a> <sup class="fa fa-external-link"></sup> so you understand what it can (and can’t) do.
-                <br>
-                Feel free to explore <a href="{{url('example')}}">examples of writing</a> that demonstrate how AcaWriter gives feedback.
-                <br>
-                To create a new document, choose one of the two options below.
-            </p>
-        </div>
+    <div class="jumbotron mb-5">
+        <h1>Welcome to AcaWriter!</h1>
+        <p class="lead">AcaWriter is a website that gives you automated feedback on your draft writing.</p>
+        <p class="lead mb-0">
+            Make sure you’ve checked out the <a href="https://www.uts.edu.au/acawriter">information website</a> <sup class="fa fa-external-link"></sup> so you understand what it can (and can’t) do.
+            <br>
+            Feel free to explore <a href="{{ url('example') }}">examples of writing</a> that demonstrate how AcaWriter gives feedback.
+            <br>
+            To create a new document, choose one of the two options below.
+        </p>
+    </div>
     @endif
 
     @if (\Session::has('error'))
-        <p class="alert alert-danger">
-            {!! \Session::get('error') !!}
-        </p>
+    <p class="alert alert-danger">
+        {!! \Session::get('error') !!}
+    </p>
     @endif
 
-    <div id="add" class="{{ $docs ? 'collapsible collapse' : '' }}">
+    <div id="add" class="{{ $hasDocuments ? 'collapsible collapse' : '' }}">
 
         <div class="row">
 
@@ -84,8 +84,8 @@
         </div>
     </div>
 
-    @if ($docs)
-        <documents id="documents" class="mb-5"></documents>
+    @if ($hasDocuments)
+    <documents id="documents" class="mb-5"></documents>
     @endif
 
 </main>

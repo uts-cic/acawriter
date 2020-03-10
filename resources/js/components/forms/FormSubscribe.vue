@@ -1,5 +1,5 @@
 <template>
-    <form method="POST" action="/subscribe" class="form" @submit="onSubmit">
+    <form method="POST" action="/subscribe" class="form" @submit="onSubmit" autocomplete="off">
         <input type="hidden" name="_token" :value="csrf">
         <div class="form-group">
             <label for="assignment_code">Enter your assignment code</label>

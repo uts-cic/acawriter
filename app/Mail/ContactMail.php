@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Crm;
 
-class contactMailer extends Mailable
+class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
 

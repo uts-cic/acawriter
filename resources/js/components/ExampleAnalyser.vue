@@ -22,7 +22,7 @@
                 <div v-if="auto!=''"><small>{{auto}}</small></div>
                 <p>This is an example piece of writing to experiment with. You can edit this text (nothing is saved).
                     Click Get Feedback to see the automatic feedback on the right.
-                    <br>When you're ready, go to <a href="/home">My documents</a> and create your own document.</p>
+                    <br>When you're ready, go to <a href="/">My documents</a> and create your own document.</p>
 
                 <div class="feedback">
                     <div class="feedback-col" id="original">

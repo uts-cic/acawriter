@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade as PDF;
+use Auth;
 use App\Draft;
-
 
 class PdfGeneratorController extends Controller
 {
@@ -12,6 +12,8 @@ class PdfGeneratorController extends Controller
 
     public function __construct()
     {
+        $this->middleware(['auth', 'can:export-pdf']);
+
         $this->checks = new \stdClass();
         $this->checks->reflective = new \stdClass();
         $this->checks->analytical = new \stdClass();
@@ -68,7 +70,8 @@ class PdfGeneratorController extends Controller
         if ($ref) {
             $encoded_data = json_decode($ref);
             $document_id = $encoded_data->id / 123456; //document Id
-            $id = Draft::where('document_id', $document_id)->get()->max('id');
+            $user_id = Auth::user()->id;
+            $id = Draft::where('document_id', $document_id)->where('user_id', $user_id)->get()->max('id');
 
             if (!$id) {
                 return redirect()->back()->with('error', 'This document does not have any feedback associated with it.');
