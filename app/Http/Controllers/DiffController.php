@@ -50,11 +50,13 @@ class DiffController extends Controller
     {
     	$draft_first = new \stdClass;
     	$draft_second = new \stdClass;
-    	$draft_first = Draft::where('id', '=', $request->id)->get(['id', 'document_id', 'text_input', 'user_id', 'created_at']);
-    	$draft_second = Draft::where([['id', '!=', $request->id], ['user_id', '=', $draft_first[0]->user_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'text_input', 'user_id', 'created_at']);
+    	$draft_first = Draft::where('id', '=', $request->id)->get(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at']);
+    	$draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at']);
     	$data = new \stdClass;
     	$data->draft_first = $draft_first[0];
-    	$data->draft_second = $draft_second;
+        $data->draft_second = $draft_second;
+        $data->draft_first->raw_response = json_decode($draft_first[0]->raw_response);
+    	$data->draft_second->raw_response = json_decode($draft_second->raw_response);
 
     	return view('admin.diffreport', ['data' => $data]);
     }
