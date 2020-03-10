@@ -65,7 +65,7 @@ Route::get('/admin/download/{type}/{what}/{did}/{uid}', 'ReportController@export
 Route::post('/admin/reports', 'ReportController@fetchDocs');
 
 // Generate and download pdf
-Route::get('/generate-pdf/{draftId}', 'PdfGeneratorController@pdfview');
+Route::get('/analyse/{code}/pdf', 'PdfGeneratorController@pdfview');
 
 // Activity logger
 Route::post('/collect', 'ActivityController@collect');

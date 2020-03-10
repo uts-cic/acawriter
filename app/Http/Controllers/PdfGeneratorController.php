@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade as PDF;
 use Auth;
+use App\Document;
 use App\Draft;
 
 class PdfGeneratorController extends Controller
@@ -63,44 +64,45 @@ class PdfGeneratorController extends Controller
         );
     }
 
-    public function pdfview($ref = NULL)
+    public function pdfview($code = NULL)
     {
-        PDF::setOptions(['dpi' => 96, 'defaultFont' => 'arial']);
+        $user_id = Auth::user()->id;
+        $document = Document::where('slug', '=', $code)
+            ->where('user_id', $user_id)
+            ->first();
 
-        if ($ref) {
-            $encoded_data = json_decode($ref);
-            $document_id = $encoded_data->id / 123456; //document Id
-            $user_id = Auth::user()->id;
-            $id = Draft::where('document_id', $document_id)->where('user_id', $user_id)->get()->max('id');
+        $id = $document ? Draft::where('document_id', $document->id)->get()->max('id') : null;
 
-            if (!$id) {
-                return redirect()->back()->with('error', 'This document does not have any feedback associated with it.');
-            }
+        if ($id) {
+            $draft = Draft::with('feature')->find($id);
+            $grammar = $draft->feature->grammar;
+            $raw = json_decode($draft->raw_response);
 
-            $draft = Draft::where('id', $id)->get();
-            $draft[0]->raw = json_decode($draft[0]->raw_response);
-            // dd($draft[0]->raw);
             $pdfOut = new \stdClass();
-            $pdfOut->raw = $draft[0]->raw;
-            $pdfOut->annotated = $this->getAnnotation($draft[0]->raw, $encoded_data->grammar);
-            $pdfOut->name = $encoded_data->name;
-            $pdfOut->grammar = strtoupper($encoded_data->grammar);
-            $pdfOut->original = $draft[0]->text_input;
-            $pdfOut->created_at = $draft[0]->created_at;
-
-            //dd($pdfOut);
+            $pdfOut->raw = $raw;
+            $pdfOut->annotated = $this->getAnnotation($raw, $grammar);
+            $pdfOut->name = $document->name;
+            $pdfOut->grammar = $grammar;
+            $pdfOut->original = $draft->text_input;
+            $pdfOut->created_at = $draft->created_at;
 
             view()->share('draft', $pdfOut);
-            if ($encoded_data->grammar == 'analytical') {
+
+            PDF::setOptions(['dpi' => 96, 'defaultFont' => 'arial']);
+
+            $grammar = strtolower($grammar);
+            if ($grammar == 'analytical') {
                 $pdf = PDF::loadView('pdf.analytical');
             }
-            if ($encoded_data->grammar == 'reflective') {
+            if ($grammar == 'reflective') {
                 $pdf = PDF::loadView('pdf.reflective');
             }
-            return $pdf->download('feedback.pdf');
-        } else {
-            return redirect()->back()->with('error', 'Error generating the Pdf, there are no drafts for this document');
         }
+
+        if (!isset($pdf)) {
+            return redirect('/analyse/' . $code)->withError('This document does not have any feedback associated with it.');
+        }
+        return $pdf->download('feedback.pdf');
     }
 
 

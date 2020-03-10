@@ -2,25 +2,12 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-
     <title>AcaWriter: PDF</title>
-
-    <!-- bootstrap styles -->
-    <!-- Latest compiled and minified CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- fontawesome
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    -->
-
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-    <!-- customised css -->
-    <link href="/css/app.css" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style type="text/css">
 
         @font-face {
@@ -110,28 +97,17 @@
         .badge-moves4 {
             background-color: #a57b00;
         }
-
-
-
     </style>
-
-
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
-
-
-
-    <!-- Styles -->
 </head>
 <body>
     <div class="row">
-        <div class="col-md-12"><h2>{{ $draft->name }}</h2>
+        <div class="col-md-12">
+            <h2>{{ $draft->name }}</h2>
             <strong>Genre: {{ $draft->grammar }}&nbsp;</strong>
             Date: &nbsp;{!! $draft->created_at !!}
         </div>
     </div>
+
     <hr />
 
     <div class="row">
@@ -159,13 +135,12 @@
             @endforeach
         </div>
     </div>
-    <hr />
 
+    <hr />
 
     <div class="row">
         <div class="col-md-12">
             <strong><u>Feedback with Annotations</u></strong>
-
         </div>
     </div>
 
@@ -175,8 +150,7 @@
         </div>
     </div>
 
-<br />
-
+    <br />
 
     <div class="row">
         <div class="col-md-12">
@@ -184,7 +158,7 @@
                 @foreach ($draft->raw->tabs as $tab)
                     @foreach ($tab as $tabContent)
                         @foreach ($tabContent as $name => $b)
-                            @if ($name!== 'faq')
+                            @if ($name !== 'faq')
                                @foreach ($b as $msg)
                                     @foreach ($msg as $txt)
                                     <p>{!! $txt !!}</p>
@@ -198,11 +172,9 @@
         </div>
     </div>
 
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
-
-<script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

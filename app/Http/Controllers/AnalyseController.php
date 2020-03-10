@@ -17,10 +17,6 @@ class AnalyseController extends Controller
 
     public function index($code = NULL)
     {
-        if (empty($code)) {
-            return redirect('/');
-        }
-
         $user_id = Auth::user()->id;
         $document = Document::where('slug', '=', $code)
             ->where('user_id', $user_id)
