@@ -108,6 +108,8 @@ services:
     image: postgres
     # volumes:
     #     - ${DATA_PATH_HOST}/postgres:/data
+    ports:
+      - "5433:5432"
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
