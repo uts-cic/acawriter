@@ -90,12 +90,13 @@ class PdfGeneratorController extends Controller
 
             PDF::setOptions(['dpi' => 96, 'defaultFont' => 'arial']);
 
-            $grammar = strtolower($grammar);
-            if ($grammar == 'analytical') {
-                $pdf = PDF::loadView('pdf.analytical');
-            }
-            if ($grammar == 'reflective') {
-                $pdf = PDF::loadView('pdf.reflective');
+            switch (strtolower($grammar)) {
+                case 'reflective':
+                    $pdf = PDF::loadView('pdf.reflective');
+                    break;
+                case 'analytical':
+                    $pdf = PDF::loadView('pdf.analytical');
+                    break;
             }
         }
 
@@ -110,7 +111,7 @@ class PdfGeneratorController extends Controller
     {
         $txt = '';
 
-        switch ($grammar) {
+        switch (strtolower($grammar)) {
             case 'reflective':
                 $inlineClass = "";
                 $inlineText = "";
