@@ -37,7 +37,6 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         $gate->define('administer-users', function ($user) {
-            return true;
             return $user->hasRole('admin');
         });
 
