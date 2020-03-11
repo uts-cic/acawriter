@@ -21,10 +21,10 @@
                         <div class="small" v-if="auto!=''">{{auto}}</div>
                     </div>
 
-                    <div class="subheader-action">
-                        <!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->
+                    <div class="subheader-action" v-if="preSetAssignment">
+                        <!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"> -->
                         <!-- <div class="btn-group pull-right" role="group" aria-label="Actions"> -->
-                            <a target="_blank" class="btn btn-primary" v-bind:href="getLink" v-if="feedback.rules" data-ga-action="download">Download PDF</a>
+                            <a target="_blank" class="btn btn-primary" v-if="preSetAssignment" v-bind:href="'/analyse/' + preSetAssignment.slug + '/pdf'" data-ga-action="download">Download PDF</a>
                             <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button> -->
                             <!-- <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
                         <!-- </div> -->
@@ -220,26 +220,7 @@
                         }
                     });
                 }
-
                 return upd;
-            },
-            getbtnStatus: function() {
-                if (this.btnFeedback) {
-                    return true;
-                }  else {
-                    return false;
-                }
-            },
-            getLink:function() {
-                let link='/generate-pdf/';
-                let data ={};
-
-                if(this.preSetAssignment) {
-                    data.id = (this.preSetAssignment.id * 123456); //this is the document id
-                    data.grammar = this.preSetAssignment.feature[0].grammar.toLocaleLowerCase();
-                    data.name= this.preSetAssignment.name;
-                }
-                return link+ JSON.stringify(data);
             }
         },
         watch :{

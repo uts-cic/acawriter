@@ -155,16 +155,6 @@ class StringTokenizer extends Controller
         $this->client = new Client($this->graphQLURL);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('home');
-    }
-
     public function process(Request $request)
     {
         $results = new \stdClass();

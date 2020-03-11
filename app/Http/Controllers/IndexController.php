@@ -2,19 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use App\Document;
+
 class IndexController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
     /**
      * Show the application dashboard.
      *
@@ -22,6 +14,23 @@ class IndexController extends Controller
      */
     public function index()
     {
-        return view('auth.login');
+        if (Auth::guest()) {
+            return view('auth.login');
+        }
+
+        $this->authorize('manage-documents');
+
+        $hasDocuments = Document::where('user_id', Auth::id())->count();
+        return view('index', ['hasDocuments' => $hasDocuments]);
+    }
+
+    public function about()
+    {
+        return view('about');
+    }
+
+    public function terms()
+    {
+        return view('terms');
     }
 }

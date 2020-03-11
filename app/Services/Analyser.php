@@ -160,7 +160,6 @@ class Analyser
 
     public function __construct()
     {
-        //$this->middleware('auth');
         $this->graphQLURL = env('TAP_API', '') . "/graphql";
         $this->client = new Client($this->graphQLURL);
     }

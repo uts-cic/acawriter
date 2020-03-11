@@ -13,7 +13,7 @@
 
                     <div class="card-body collapse" id="a">
                         <p class="card-text">
-                        <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
+                        <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br>
                         <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
                         </p>
                     </div>
@@ -111,7 +111,8 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-12">
-                                Feedback <hr />
+                                Feedback
+                                <hr>
                             </div>
                         </div>
                         <div class="row">
@@ -119,7 +120,8 @@
                                 <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
                                 <div v-for="msg in rule.message">
                                     <span v-for="(m,id) in msg">
-                                        <span v-bind:class="id"></span> - <small>{{m}}</small><br />
+                                        <span v-bind:class="id"></span> - <small>{{m}}</small>
+                                        <br>
                                     </span>
                                 </div>
                             </div>

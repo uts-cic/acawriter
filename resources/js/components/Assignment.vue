@@ -40,8 +40,8 @@
             deleteAssignment(assignment) {
                 var r = confirm("Students will no longer be able to use this assignment code. Are you sure?");
                 if (r) {
-                    let data = { 'action': 'delete', 'id': assignment.id }
-                    axios.post('/assignments/action', data).then((response) => {
+                    let data = { 'id': assignment.id }
+                    axios.post('/assignment/delete', data).then((response) => {
                         response.data.status = this.$data.status;
                         let assignments = JSON.parse(this.assignments);
                         this.assignments = JSON.stringify(assignments.filter(a => a.id !== assignment.id));

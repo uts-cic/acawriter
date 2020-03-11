@@ -4,15 +4,15 @@
             <div class="col-lg-12 h-100 text-center my-auto">
                 <ul class="list-inline mb-2 mt-4">
                     <li class="list-inline-item">
-                        <a href="/page/about" data-ga-label="About">About</a>
+                        <a href="{{ url('about') }}" data-ga-label="About">About</a>
                     </li>
 
                     <li class="list-inline-item">
-                        <a href="/page/contact" data-ga-label="Contact">Contact</a>
+                        <a href="{{ url('contact') }}" data-ga-label="Contact">Contact</a>
                     </li>
 
                     <li class="list-inline-item">
-                        <a href="/page/terms" data-ga-label="Term">Terms of Use / Privacy policy</a>
+                        <a href="{{ url('terms') }}" data-ga-label="Term">Terms of Use / Privacy policy</a>
                     </li>
 
                 </ul>

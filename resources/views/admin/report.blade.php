@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project: AcaWriter
  * Copyright (c) 2018 original University of Technology Sydney. Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,26 +28,26 @@
         @include('admin.flash')
          <div class="row">
             <div class="col-12 col-lg-6 col-xl-3 text-center">
-                <div class="bg-primary p-2 text-center text-white"><strong>-</strong><br /><small>Total users</small>
+                <div class="bg-primary p-2 text-center text-white"><strong>-</strong><br><small>Total users</small>
                 </div>
             </div>
             <div class="col-12 col-lg-6 col-xl-3">
                 <div class="bg-primary p-2 text-center text-white">
-                    <strong>-</strong><br /><small>Monthly New Users</small>
+                    <strong>-</strong><br><small>Monthly New Users</small>
                 </div>
             </div>
             <div class="col-12 col-lg-6 col-xl-3">
                 <div class="bg-primary p-2 text-center text-white">
-                    <strong>-</strong><br /><small>Monthly User Activity</small>
+                    <strong>-</strong><br><small>Monthly User Activity</small>
                 </div>
             </div>
             <div class="col-12 col-lg-6 col-xl-3">
                 <div class="bg-primary p-2 text-center text-white">
-                    <strong>-</strong><br /><small>Monthly Feedback</small>
+                    <strong>-</strong><br><small>Monthly Feedback</small>
                 </div>
             </div>
         </div>
-        <hr />
+        <hr>
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
@@ -54,10 +55,10 @@
                         <div class="card">
                             <div class="card-header">Search by Assignment Code</div>
                             <div class="card-body">
-                                <form action="/admin/report" method="post">
+                                <form action="/admin/reports" method="post" autocomplete="off">
                                     <div class="row">
                                         <div class="form-group col-sm-12 col-md-3">
-                                            <input type="text"  class="form-control" name="assignment_code" placeholder="enter assignment code" />
+                                            <input type="text"  class="form-control" name="assignment_code" placeholder="enter assignment code">
                                         </div>
                                         <div class="form-group col-sm-12 col-md-9">
                                             <div class="btn-group" role="group" aria-label="Basic example">
@@ -80,27 +81,26 @@
                             <div class="card-header">Results</div>
                             <table class="table">
                                 <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Code</th>
-                                    <th scope="col">Student</th>
-                                    <th scope="col">Document Name</th>
-                                    <th scope="col">Text</th>
-                                    <th scope="col">Feedback</th>
-
-                                </tr>
+                                    <tr>
+                                        <th scope="col">Code</th>
+                                        <th scope="col">Student</th>
+                                        <th scope="col">Document Name</th>
+                                        <th scope="col">Text</th>
+                                        <th scope="col">Feedback</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @if(isset($data->documents->list))
-                                @foreach($data->documents->list as $document)
+                                    @if (isset($documents))
+                                    @foreach ($documents as $document)
                                     <tr>
-                                        <th scope="row">{{$document->code}}</th>
-                                        <td>{{$document->email}}</td>
-                                        <td>{{$document->name}}</td>
-                                        <td><a href="/admin/download/csv/txt/{{$document->docid}}/{{$document->uid}}"><i class="fa fa-download"></i> Text ({{$document->txtcount}})</td>
-                                        <td><a href="/admin/download/csv/feed/{{$document->docid}}/{{$document->uid}}"><i class="fa fa-download"></i> Feed ({{$document->dcount}})</td>
+                                        <th scope="row">{{ $document->code }}</th>
+                                        <td>{{ $document->email }}</td>
+                                        <td>{{ $document->name }}</td>
+                                        <td><a href="/admin/download/csv/txt/{{ $document->docid }}/{{ $document->uid }}"><i class="fa fa-download"></i> Text ({{ $document->txtcount }})</td>
+                                        <td><a href="/admin/download/csv/feed/{{ $document->docid }}/{{ $document->uid }}"><i class="fa fa-download"></i> Feed ({{ $document->dcount }})</td>
                                     </tr>
-                                @endforeach
-                                @endif
+                                    @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -111,7 +111,6 @@
     </div>
 </div>
 @endsection
-
 
 @section('footer')
 

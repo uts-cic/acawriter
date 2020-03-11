@@ -117,7 +117,7 @@
                 this.fetchDocuments();
             },
             fetchDocuments() {
-                axios.get('/documents/all').then((response) => {
+                axios.get('/documents').then((response) => {
                     this.$data.documents = response.data.documents;
                     this.sort();
                 }, (err) => {
@@ -129,7 +129,7 @@
 
                 if (what === 'delete') {
                     if (confirm("All drafts and feedback associated with the document will be deleted. Do you wish to proceed?")) {
-                        axios.post('/documents/action', { action: what, id: doc.id }).then((response) => {
+                        axios.post('/document/delete', { id: doc.id }).then((response) => {
                             this.$data.flash = response.data.message;
                             this.$data.documents = this.$data.documents.filter(d => d.id !== doc.id);
                             setTimeout(() => {

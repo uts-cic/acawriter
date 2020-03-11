@@ -22,7 +22,7 @@
                 <div v-if="auto!=''"><small>{{auto}}</small></div>
                 <p>This is an example piece of writing to experiment with. You can edit this text (nothing is saved).
                     Click Get Feedback to see the automatic feedback on the right.
-                    <br>When you're ready, go to <a href="/home">My documents</a> and create your own document.</p>
+                    <br>When you're ready, go to <a href="/">My documents</a> and create your own document.</p>
 
                 <div class="feedback">
                     <div class="feedback-col" id="original">
@@ -121,8 +121,6 @@
         },
         created() {
             this.auto = '';
-            //setInterval(this.storeAnalysedDrafts, 900000);
-            // setInterval(this.quickCheck, 300000);
         },
         computed: {
             reflective: function() {
@@ -219,17 +217,6 @@
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
-            },storeAnalysedDrafts() {
-                this.$data.auto='processing....';
-                this.attributes.initFeedback = true;
-                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes,'feedback':this.feedback, 'other':this.example};
-                axios.post('/example/store', data)
-                    .then(response => {
-                        this.$data.auto = 'Stored : '+ moment().format('DD/MM/YYYY hh:mma');
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
             },
             getGrammar: function(idx) {
                 for( var [k ,v] of Object.entries(this.features)) {
