@@ -1,326 +1,322 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card bg-info">
-                    <div class="card-header">
-                        <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="collapseExample">
-                            Status
-                        </button>&nbsp;<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="collapseExample">
-                        Feedback
-                        </button>
-                    </div>
-
-                    <div class="card-body collapse" id="a">
-                        <p class="card-text">
-                        <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br/>
-                        <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
-                        </p>
-                    </div>
-                    <div class="collapse" id="b">
-                    <div class="card card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="grammar">Grammar</label>
-                                <select class="form-control" id="grammar" v-model="attributes.grammar">
-                                    <option value="">Select</option>
-                                    <option value="reflective">Reflective</option>
-                                    <option value="analytic">Analytic</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="feedbackOpt">Feedback Rules</label>
-                                <select class="form-control" id="feedbackOpt" v-model="attributes.feedbackOpt">
-                                    <option value="feedback">Reflective01</option>
-                                    <option value="feedback">Analytic01</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        <div class="row">
+    <div class="mb-5" data-ga-category="Feedback" v-bind:data-ga-label="preSetAssignment.assignment.code">
+        <div class="row" v-if="errors && errors.length">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header bg-default">Text Analyser
-                        <button type="button" class="btn btn-outline-info btn-sm pull-right" v-on:click="fetchAnalysis()">Get Feedback</button>
+                <div  class="col-md-12 alert alert-danger" role="alert">
+                    <ul>
+                        <li v-for="error in errors">{{error.message}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- start content -->
+            <div id="content" class="col-md-12">
+                <div class="subheader shadow">
+                    <div class="subheader-title"><h4 v-if="preSetAssignment">{{preSetAssignment.name}}</h4></div>
+
+                    <div class="subheader-message">
+                        <div v-if="draftUpdate.message!=''">{{draftUpdate.message}}</div>
+                        <div class="small" v-if="auto!=''">{{auto}}</div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div id="editor">
-                                    <vue-editor v-model="editorContent" placeholder="Place your text here..."></vue-editor>
-                                </div>
-                            </div>
-                            <!-- Reflective feedback -->
-                            <div class="col-md-6" v-bind:class="this.attributes.grammar == 'reflective'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'reflective'">
-                                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
-                                    <ul>
-                                        <li v-for="error in errors">{{error.message}}</li>
-                                    </ul>
-                                </div>
-                                <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>Feedback <small>(Reflective)</small></h4></div>
-                                <div class="col-md-12 wrapper">
-                                    <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
-                                    <span v-for="(feed,idx) in feedback.final">
-                                        <span v-for="(expression, exp) in feed.expression.message">
-                                            <span v-bind:class="exp">&nbsp;</span>
-                                        </span>
-                                        <span v-if="feed.metrics.message.length==0"></span>
-                                        <span v-else class="metrics">&nbsp;</span>
-                                        <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span v-bind:class="mv">&nbsp;</span>
-                                        </span>
-                                        {{feed.str}}
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- end of reflective -->
 
+                    <div class="subheader-action">
+                            <a target="_blank" class="btn btn-primary" v-bind:href="getLink" v-if="feedback.rules" data-ga-action="download">Download PDF</a>
+                    </div>
+                </div>
 
-                            <!-- Analytic feedback -->
-                            <div class="col-md-6" v-bind:class="this.attributes.grammar == 'analytic'? 'activeClass' : 'nonactive'" v-if="this.attributes.grammar == 'analytic'">
-                                <div v-if="errors && errors.length" class="col-md-12 alert alert-danger" role="alert">
-                                    <ul>
-                                        <li v-for="error in errors">{{error.message}}</li>
-                                    </ul>
-                                </div>
-                                <span v-show="tapCalls.vocab" class="fa fa-spinner fa-spin"></span>
-                                <div class="col-md-12"><h4>Feedback <small>(Analytic)</small></h4></div>
-                                <div class="col-md-12 wrapper">
-                                    <span v-show="tapCalls.athanor" class="fa fa-spinner fa-spin"></span>
-                                    <span v-for="(feed,idx) in feedback.final">
-                                        <span v-if="feed.metrics.message.length==0"></span>
-                                        <span v-else class="metrics">&nbsp;</span>
-                                        <span v-for="(rmoves, mv) in feed.moves.message">
-                                            <span class="badge badge-info">{{rmoves}}</span>
-                                        </span>
-                                        {{feed.str}}
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- end of reflective -->
+                <div class="feedback">
+                    <div class="feedback-col" id="original">
+                        <p class="alert alert-success px-3">AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</p>
 
+                        <div id="editor">
+                            <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-12">
-                                Feedback <hr />
-                            </div>
+
+                    <div class="feedback-action">
+                        <button type="button" class="btn btn-primary" v-on:click="fetchFeedback('manual')">Get Feedback <i class="fa fa-angle-right"></i></button>
+                    </div>
+
+                    <!-- Reflective feedback -->
+                    <div class="feedback-col" id="parsed">
+                        <p class="alert alert-warning px-3">Computers don’t read writing like humans. So, if you’re sure your writing’s good, it's fine to disagree with AcaWriter's feedback, just like you’d ignore a poor grammar suggestion.</p>
+
+                        <div v-if="this.attributes.grammar == 'reflective'">
+                            <reflective-result></reflective-result>
                         </div>
-                        <div class="row">
-                            <div class="col-md-3" v-for="rule in feedback.rules">
-                                <h6 class="card-subtitle mb-2">{{rule.name}}</h6>
-                                <div v-for="msg in rule.message">
-                                    <span v-for="(m,id) in msg">
-                                        <span v-bind:class="id"></span> - <small>{{m}}</small><br />
-                                    </span>
-                                </div>
-                            </div>
+
+                        <div v-else-if="this.attributes.grammar == 'analytical'">
+                            <analytic-result></analytic-result>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 </template>
 
 <script>
-    import {VueEditor} from 'vue2-editor';
-    import {diff} from 'diff';
+    const EventBus = new Vue();
+    import { VueEditor } from 'vue2-editor';
+    import moment from 'moment';
+    import store from '../store';
+    import { mapState, mapActions, mapGetters} from 'vuex';
+    import  Reflective from './analyser/Reflective.vue';
+    import  Analytic from './analyser/Analytic.vue';
 
-   export default {
-       components: {
-           VueEditor
-       },
-       name: 'editor',
-       props:['assignment'],
-       data () {
-           return {
-               preview: '',
-               editLog : [],
-               editorContent: '',
-               tmp: 'More text',
-               viewer : {},
-               loading: 0,
-               tap:[],
-               qtap:[],
-               errors:[],
-               tapCalls:{
-                   'athanor': false,
-                   'vocab'  :false
-               },
-               vocab:'',
-               counter:0,
-               tempIds:[],
-               auto:'',
-               splitText:[],
-               quickTags:'',
-               feedback:[],
-               attributes:{
-                   feedbackOpt:'feedback',
-                   grammar:'reflective'
-               }
-           }
-       },
-       mounted () {
-           this.editLog.push(this.editorContent);
-           this.fetchAnalysis();
-       },
-       created() {
-           this.auto = 'every 5m';
-       },
-       watch :{
-           editorContent: function (newVal) {
-               this.$data.counter++;
-               if(this.$data.counter >= 10 ) {
-                   this.tokeniseTextInput();
-                   this.computeText(this.splitText, this.$data.tap);
-                   this.$data.counter = 0;
-               }
-           }
+    export default {
+        components: {
+            VueEditor,
+            reflectiveResult: Reflective,
+            analyticResult: Analytic
         },
-       methods: {
-           fetchAnalysis() {
-               this.$data.tapCalls.athanor =true;
-               this.$data.counter = 0;
-               axios.post('/processor', {'txt': this.editorContent, 'action': 'athanor', 'grammar':this.attributes.grammar})
-                   .then(response => {
-                       this.$data.tap = response.data.athanor;
-                       this.$data.tapCalls.athanor=false;
-                   })
-                   .catch(e => {
-                       this.$data.errors.push(e)
-                   });
-               this.$data.tapCalls.vacab =true;
-               axios.post('/processor', {'txt': this.editLog, 'action': 'vocab'})
-                   .then(response => {
-                       this.$data.tapCalls.vocab=false;
-                       this.$data.vocab = response.data.vocab.unique;
-                   })
-                   .catch(e => {
-                       this.$data.errors.push(e)
-                   });
-           },
-           computeText: function(nv, ov) {
-               var changedText='';
-               var self = this;
-               var newTap = [];
-               nv.forEach(function(item, idx) {
-                   var temp = {};
-                   var qt={};
-                   if(typeof ov[idx]!=='undefined') {
-                       if(ov[idx].str!= item) {
-                           changedText = item;
-                           temp['str'] = changedText;
-                           self.quickAnalyse(changedText, idx)
-                               .then(response => {
-                                   if(response.data) {
-                                       temp['str'] = response.data.athanor.str;
-                                       temp['tags'] = response.data.athanor.tags;
-                                       temp['raw_tags'] = response.data.athanor.raw_tags;
-                                   }
-                               })
-                               .catch(e => {
-                                   this.$data.errors.push(e)
-                               });
-                       } else if(ov[idx].str == item) {
-                           temp['str'] = ov[idx].str;
-                           temp['tags'] = ov[idx].tags;
-                           temp['raw_tags'] = ov[idx].raw_tags;
-                       }
-                   } else {
-                       changedText = item;
-                       self.quickAnalyse(changedText, idx)
-                           .then(response => {
-                               if(response.data) {
-                                   temp['str'] = response.data.athanor.str;
-                                   temp['tags'] = response.data.athanor.tags;
-                                   temp['raw_tags'] = response.data.athanor.raw_tags;
-                               }
-                           })
-                           .catch(e => {
-                               this.$data.errors.push(e)
-                           });
-                   }
-                   newTap.push(temp);
-               });
-               self.tap = newTap;
-           },
-           quickAnalyse(changedText, idx) {
-               this.$data.counter = 0;
-               var quickTags = {};
-               return axios.post('/processor', {'txt': changedText, 'action': 'qathanor'});
-           },
-           storeAnalysedDrafts() {
-               console.log("into auto store");
-               this.$data.auto='processing....';
-               var assignment_id=0;
-               if(this.assignment!=="") {assignment_id= this.assignment;}
-               axios.post('/processor', {'txt': this.editorContent, 'action': 'auto', 'assignment_id':assignment_id})
-                   .then(response => {
-                       this.$data.auto = 'Done';
-                   })
-                   .catch(e => {
-                       this.$data.errors.push(e)
-                   });
-           },
-           tokeniseTextInput() {
-               console.log("into tokenise");
-               this.$data.tapCalls.athanor =true;
-               this.$data.counter = 0;
-               axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
-                   .then(response => {
-                       this.splitText = response.data.tokenised;
-                       this.$data.tapCalls.athanor=false;
-                   })
-                   .catch(e => {
-                       this.$data.errors.push(e)
-                   });
-           },
-           fetchFeedback() {
-               this.errors=[];
-               if(this.feedbackOpt!=='') {
-                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
-                       .then(response => {
-                           this.feedback = response.data;
-                       })
-                       .catch(e => {
-                           this.$data.errors.push(e)
-                       });
-               } else {
-                   this.$data.errors.push({'message':'Please select feedback type'});
-               }
-           },
-           qfetchFeedback() {
-               this.errors=[];
-               if(this.feedbackOpt!=='') {
-                   axios.post('/feedback', {'tap': this.tap, 'action': 'fetch', 'extra': this.attributes})
-                       .then(response => {
-                           this.feedback = response.data;
-                       })
-                       .catch(e => {
-                           this.$data.errors.push(e)
-                       });
-               } else {
-                   this.$data.errors.push({'message':'Please select feedback type'});
-               }
-           }
-       },
-       computed: {
-           reflective: function() {
-              return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
-           },
-           analytic: function() {
-               return this.attributes.feedbackOpt == 'analytic' ? 'display:inline': '';
-           }
+        name: 'editor',
+        props:['document', 'userActivity'],
+        store,
+        data () {
+            return {
+                editorContent: '',
+                loading: 0,
+                tap: [],
+                errors: [],
+                counter: 0,
+                tempIds: [],
+                auto: '',
+                autosave: false,
+                autofeedback: false,
+                btnFeedback: false,
+                splitText: [],
+                quickTags: '',
+                customToolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ],
+                cssSpec: {
+                    inline :['link2me'],
+                    iconic :['context', 'challenge', 'change', 'metrics'],
+                    inText :['epistemic','modall']
+                },
+                analytic_xlator: [
+                    {'metrics': 'metrics'},
+                    {'emph': 'E'},
+                    {'vis': 'T'},
+                    {'contrast': 'C'},
+                    {'contribution': 'S'},
+                    {'nostat': 'N'},
+                    {'tempstat': 'B'},
+                    {'attitude': 'P'},
+                ],
+                initFeedback: false,
+                intervalId: 0,
+                editorStore: null
+            }
+        },
+        mounted () {
+             this.autoStore();
+        },
+        created() {
+            this.auto = '';
+        },
+        computed: {
+            reflective: function() {
+                return this.attributes.feedbackOpt == 'reflective' ? 'display:inline': '';
+            },
+            analytic: function() {
+                return this.attributes.feedbackOpt == 'analytical' ? 'display:inline': '';
+            },
+            ...mapGetters({
+                feedback: 'currentFeedback',
+                processing: 'loadingStatus'
+            }),
+            preSetAssignment: function() {
+                if(this.document) {
+                    return JSON.parse(this.document);
+                } else {
+                    return false;
+                }
+            },
+            attributes: function() {
+                if(this.preSetAssignment) {
+                    if(this.preSetAssignment.draft) {
+                        this.editorContent = this.preSetAssignment.draft.text_input;
+                        let data = {'savedFeed':JSON.parse(this.preSetAssignment.draft.raw_response)};
+                        this.$store.dispatch('PRELOAD_FEEDBACK',data);
+                        this.initFeedback = false;
+                    } else if(this.preSetAssignment.textDraft) {
+                        this.editorContent = this.preSetAssignment.textDraft.text_input;
+                        this.initFeedback = false;
+                    }
+                    let feature = this.preSetAssignment.feature[0];
+                    return {
+                        feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
+                        grammar: feature.grammar.toLocaleLowerCase(),
+                        feature: feature.id,
+                        storeDraftJobRef: Math.random().toString(36).substring(7),
+                        initFeedback:this.initFeedback
+                    };
+                } else {
+                   return {
+                        feedbackOpt:'a_01',
+                        grammar: 'analytical',
+                        feature:0,
+                        storeDraftJobRef: Math.random().toString(36).substring(7),
+                       initFeedback:this.initFeedback
+                   };
+                }
+            },
+            rulesClasses: function() {
+                let rules = [];
+                rules = this.feedback.rules.map(function(rule,idx){
+                    return rule.css.map(function(cl){
+                        return cl;
+                    });
+                });
+                let classes = [].concat(...rules);
+                return classes;
+            },
+            draftUpdate: function() {
+                let upd = {};
+                upd.message ='';
+                var s = this;;
+                if(this.userActivity && this.preSetAssignment){
+                    this.btnFeedback = false;
+                    this.userActivity.forEach(function(activity){
+                        if(activity.data) {
+                            if(activity.data.type==='Draft' && activity.data.ref === s.attributes.storeDraftJobRef) {
+                                upd.message = activity.data.msg;
+                                s.auto = moment().format('DD/MM/YYYY hh:mma');
+                            }
+                        }
+                    });
+                }
 
-       }
-   }
+                return upd;
+            },
+            getbtnStatus: function() {
+                if (this.btnFeedback) {
+                    return true;
+                }  else {
+                    return false;
+                }
+            },
+            getLink:function() {
+                let link='/generate-pdf/';
+                let data ={};
+
+                if(this.preSetAssignment) {
+                    data.id = (this.preSetAssignment.id * 123456); //this is the document id
+                    data.grammar = this.preSetAssignment.feature[0].grammar.toLocaleLowerCase();
+                    data.name= this.preSetAssignment.name;
+                }
+                return link+ JSON.stringify(data);
+            }
+        },
+        watch :{
+            'editorContent': function(val, oldVal) {
+            }
+        },
+        methods: {
+            computeText: function(nv, ov) {
+                var changedText='';
+                var self = this;
+                var feedbackQueue=[];
+                if(nv.length===0) return;
+                nv.forEach(function(item, idx) {
+                    if(typeof ov[idx]!=='undefined') {
+                        if(ov[idx].str!= item) {
+                            //str exits but str changed
+                            changedText = item;
+                            let a = idx;
+                            let data = {
+                                'send': {'txt': item, 'action': 'quick', 'extra': self.attributes},
+                                'idx': idx,
+                                'act': 'update'
+                            }
+                            self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
+                        } else if(ov[idx].str == item) {
+                        }
+                    } else {
+                        let b=idx;
+                        let data = {
+                            'send': {'txt': item, 'action': 'quick', 'extra': self.attributes},
+                            'idx': idx,
+                            'act': 'add'
+                        }
+                        self.$store.dispatch('FETCH_TOKENISED_FEEDBACK',data);
+                    }
+                });
+            },
+            fetchFeedback(type) {
+                this.errors=[];
+                this.attributes.initFeedback = true;
+                this.btnFeedback = true;
+                window.trackEvent('Feedback', 'get', this.preSetAssignment.assignment.code);
+                if(this.feedbackOpt!=='') {
+                    let data = {
+                        'txt':this.editorContent,
+                        'action': 'fetch',
+                        'extra': this.attributes,
+                        'type':type,
+                        'document':this.preSetAssignment.id,
+                        'currentFeedback': this.feedback
+                    };
+                    this.$store.dispatch('LOAD_FEEDBACK',data);
+                } else {
+                    this.$data.errors.push({'message':'Please select feedback type'});
+                }
+            },
+            quickCheck() {
+                if (this.editorContent !== '') {
+                    this.tokeniseTextInput();
+                }
+            },
+            storeAnalysedDrafts() {
+                if (this.editorStore !== this.editorContent) {
+                    this.editorStore = this.editorContent;
+                    let data = {
+                        'txt': this.editorContent,
+                        'action': 'store',
+                        'extra': this.attributes,
+                        'type': 'auto',
+                        'document': this.preSetAssignment.id
+                    };
+                    axios.post('/feedback/store', data)
+                        .then(response => {
+                        })
+                        .catch(e => {
+                            this.$data.errors.push(e)
+                        });
+                }
+
+            },
+            tokeniseTextInput() {
+                this.$data.counter = 0;
+                axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
+                    .then(response => {
+                        this.splitText = response.data.tokenised;
+                        this.computeText(this.splitText, this.feedback.final);
+                        this.$data.counter = 0;
+                    })
+                    .catch(e => {
+                        this.$data.errors.push(e)
+                    });
+            },
+            updateAutoFeedback(){
+                if(this.autofeedback) {
+                    this.intervalId = setInterval(this.quickCheck, 120000);
+                } else  {
+                    if(this.intervalId > 0) {
+                        clearInterval(this.intervalId);
+                        this.intervalId =0;
+                    }
+                }
+            },
+            autoStore() {
+                setInterval(this.storeAnalysedDrafts, 5000);
+            },
+
+        }
+    }
 </script>
