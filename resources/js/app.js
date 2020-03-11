@@ -30,6 +30,7 @@ Vue.component('documents', require('./components/Document.vue').default);
 Vue.component('edit-document', require('./components/modal/EditDocument.vue').default);
 Vue.component('example-text', require('./components/Example.vue').default);
 Vue.component('ex-doc-editor', require('./components/ExampleAnalyser.vue').default);
+Vue.component('diff-report', require('./components/DiffReport.vue').default);
 
 var socket = io.connect(window.location.protocol + '//' + window.location.hostname);
 
