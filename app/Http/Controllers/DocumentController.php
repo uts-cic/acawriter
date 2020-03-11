@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -78,19 +77,16 @@ class DocumentController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function create()
     {
-        $this->validate(request(), [
-            'doc_name' => 'required',
-            'doc_type' => 'required'
+        $input = $this->validate(request(), [
+            'doc_name' => ['required', 'string', 'max:255'],
+            'doc_type' => ['required', 'numeric', 'exists:features,id']
         ]);
 
-        $name = trim(htmlspecialchars($request->doc_name, ENT_QUOTES, 'UTF-8'));
-        $feature_id = intval($request->doc_type);
-
-        $assignment = $this->createAssignment('NA', $feature_id);
+        $assignment = $this->createAssignment('NA', $input['doc_type']);
         $subscribed = $assignment && $this->createSubscription($assignment);
-        $document = $subscribed ? $this->createDocument($assignment, $name) : null;
+        $document = $subscribed ? $this->createDocument($assignment, $input['doc_name']) : null;
 
         if (!$document) {
             return redirect()->back()->with('error', 'Sorry, the document could not be created. Please try again.');
@@ -99,24 +95,24 @@ class DocumentController extends Controller
         return redirect('/analyse/' . $document->slug);
     }
 
-    public function subscribe(Request $request)
+    public function subscribe()
     {
-        $this->validate(request(), [
-            'assignment_code' => 'required'
+        $input = $this->validate(request(), [
+            'assignment_code' => ['required', 'alpha_num', 'max:8']
         ]);
 
-        $code = trim(htmlspecialchars($request['assignment_code'], ENT_QUOTES, 'UTF-8'));
+        $code = $input['assignment_code'];
 
         $user_id = Auth::user()->id;
 
         $assignment = Assignment::where('code', 'ILIKE', $code)->first();
         if (!$assignment) {
-            return redirect()->back()->with('error', 'Sorry, assignment code <strong>' . $code . '</strong> could not be found.');
+            return redirect()->back()->with('error', 'Sorry, the assignment code ' . $code . ' could not be found.');
         }
 
         $subscribed = $this->createSubscription($assignment);
         if (!$subscribed) {
-            return redirect()->back()->with('error', 'Sorry, could not subscribe to assignment code <strong>' . $code . '</strong>. Please try again.');
+            return redirect()->back()->with('error', 'Sorry, could not subscribe to the assignment code ' . $code . '. Please try again.');
         }
 
         $document = $this->createDocument($assignment);
@@ -132,19 +128,18 @@ class DocumentController extends Controller
         return redirect('/analyse/' . $document->slug);
     }
 
-    public function update(Request $request)
+    public function update()
     {
-        $success = false;
-        $id = isset($request->id) ? $request->id : null;
-        $name = isset($request->name) ? $request->name : null;
+        $input = $this->validate(request(), [
+            'id' => ['required', 'numeric', 'exists:documents,id'],
+            'name' => ['required', 'string', 'max:255']
+        ]);
 
-        if (!empty($id) && !empty($name)) {
-            $user_id = Auth::user()->id;
-            $document = Document::where('user_id', $user_id)->find($id);
-            $document->name = $name;
-            $success = $document->save();
-        }
-        if ($success) {
+        $user_id = Auth::user()->id;
+        $document = Document::where('user_id', $user_id)->find($input['id']);
+        $document->name = $input['name'];
+
+        if ($document->save()) {
             $response = ['success' => true, 'message' => 'Document name has been updated.'];
         }
         else {
@@ -153,14 +148,16 @@ class DocumentController extends Controller
         return response()->json($response, 200);
     }
 
-    public function delete(Request $request)
+    public function delete()
     {
-        $success = false;
-        if (!empty($request->id)) {
-            $user_id = Auth::user()->id;
-            Draft::where('document_id', $request->id)->where('user_id', $user_id)->delete();
-            $success = Document::where('id', $request->id)->where('user_id', $user_id)->delete();
-        }
+        $input = $this->validate(request(), [
+            'id' => ['required', 'numeric', 'exists:documents,id']
+        ]);
+
+        $user_id = Auth::user()->id;
+        Draft::where('document_id', $input['id'])->where('user_id', $user_id)->delete();
+        $success = Document::where('id', $input['id'])->where('user_id', $user_id)->delete();
+
         if ($success) {
             $response = ['success' => true, 'message' => 'Document has been deleted.'];
         }

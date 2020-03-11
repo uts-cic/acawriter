@@ -23,7 +23,7 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Where to redirect users after login/logout.
      *
      * @var string
      */
@@ -39,27 +39,4 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    protected function login(Request $request)
-    {
-        //$request->email='x7xkql8v%c0%a7';
-
-        // dd($request->email);
-
-        $this->validate($request, [
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
-
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Authentication passed...
-            return redirect('/');
-        } else {
-            return redirect()->back()
-                ->withInput($request->only('login', 'remember'))
-                ->withErrors([
-                    'login' => "Your username and/or password do not match.",
-                ]);
-        }
-    }
 }

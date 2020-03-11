@@ -25,11 +25,7 @@
     </div>
     @endif
 
-    @if (\Session::has('error'))
-    <p class="alert alert-danger">
-        {!! \Session::get('error') !!}
-    </p>
-    @endif
+    @include('admin.flash')
 
     <div id="add" class="{{ $hasDocuments ? 'collapsible collapse' : '' }}">
 

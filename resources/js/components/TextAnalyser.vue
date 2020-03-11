@@ -22,7 +22,7 @@
                     </div>
 
                     <div class="subheader-action" v-if="preSetAssignment">
-                        <!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->
+                        <!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"> -->
                         <!-- <div class="btn-group pull-right" role="group" aria-label="Actions"> -->
                             <a target="_blank" class="btn btn-primary" v-if="preSetAssignment" v-bind:href="'/analyse/' + preSetAssignment.slug + '/pdf'" data-ga-action="download">Download PDF</a>
                             <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button> -->

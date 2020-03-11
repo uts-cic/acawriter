@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="form-group col-md-8">
                                     <label for="keywords">Short description <small>(optional)</small></label>
-                                    <input class="form-control" id="keywords" type="text" name="keywords" placeholder=""/>
+                                    <input class="form-control" id="keywords" type="text" name="keywords" placeholder="">
                                 </div>
                             </div>
                             <div class="row">
@@ -60,7 +60,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-8">
-                                    <label for="featureInfo">Information about the genre</label><br />
+                                    <label for="featureInfo">Information about the genre</label>
+                                    <br>
                                     @foreach ($features as $featureGroup)
                                         @foreach ($featureGroup as $feature)
                                             <div class="feature_info" data-index="{{ $feature->id }}"><small>{!! $feature->info !!}</small></div>
@@ -70,7 +71,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Create assignment</button>
                         </form>
-                        @if (count($errors))
+                        @if ($errors->any())
                         <div class="col-md-12">
                             <div class="alert alert-danger">
                                 <ul>

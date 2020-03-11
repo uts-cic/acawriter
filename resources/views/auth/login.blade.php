@@ -6,7 +6,9 @@
     @if ($errors->any())
         <div class="alert alert-danger alert-block">
             <button type="button" data-dismiss="alert" class="close">&times;</button>
-            {{ $errors->first() }}
+            @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+            @endforeach
         </div>
     @endif
 
@@ -23,11 +25,11 @@
         <div class="col-md-5 col-xs-12">
             <div class="alert alert-secondary p-4">
                 <strong>UTS</strong> isn’t here to tell you what to think, but to help you learn how to think. Similarly, <strong>AcaWriter</strong> won’t tell you what to write, but will help you learn how to say it in the most rigorous, effective way. Before you just jump in, please visit the <a href="https://www.uts.edu.au/acawriter" target="_blank">AcaWriter information website</a>. This will help maximise the impact that AcaWriter has on your academic and reflective writing. Once you are ready to use AcaWriter, please login below.
-                <br />All enquiries, requests, bug reports, please submit using the <a href="{{ url('contact') }}">contact form</a>.
+                <br>All enquiries, requests, bug reports, please submit using the <a href="{{ url('contact') }}">contact form</a>.
             </div>
         </div>
     </div>
-    <br />
+    <br>
     <div class="row">
         <div class="col-md-12 col-xs-12 align-self-center">
             <div class="card">
@@ -68,6 +70,6 @@
             </div>
         </div>
     </div>
-    <br />
+    <br>
 </div>
 @endsection

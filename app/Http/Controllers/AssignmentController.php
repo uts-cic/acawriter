@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -48,19 +47,20 @@ class AssignmentController extends Controller
         return view('assignment', ['assignments' => $assignments, 'features' => $features]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $this->validate(request(), [
-            'name' => 'required',
-            'grammar' => 'required'
+        $input = $this->validate(request(), [
+            'name' => ['required', 'string', 'max:255'],
+            'grammar' => ['required', 'numeric', 'exists:features,id'],
+            'keywords' => ['nullable', 'string'],
         ]);
 
         $assignment = new Assignment();
-        $assignment->name = $request->name;
-        $assignment->feature_id = $request->grammar;
+        $assignment->name = $input['name'];
+        $assignment->feature_id = $input['grammar'];
         $assignment->code = Str::random(8);
         $assignment->user_id = Auth::user()->id;
-        $assignment->keywords = $request->keywords;
+        $assignment->keywords = $input['keywords'];
         $assignment->published = 0;
 
         $assignment->save();
@@ -68,12 +68,13 @@ class AssignmentController extends Controller
         return redirect()->back()->with('success', 'Assignment added successfully!');
     }
 
-    public function delete(Request $request)
+    public function delete()
     {
-        $id = !empty($request->id) ? intval($request->id) : null;
+        $input = $this->validate(request(), [
+            'id' => ['required', 'numeric', 'exists:assignments,id']
+        ]);
         $user_id = Auth::user()->id;
-
-        $success = $id && Assignment::where('id', $id)->where('user_id', $user_id)->delete();
+        $success = Assignment::where('id', $input['id'])->where('user_id', $user_id)->delete();
 
         if ($success) {
             $response = array('success' => true, 'message' => 'Assignment is successfully deleted.');

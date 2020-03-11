@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Role;
 use App\Events\UserRegistered;
@@ -14,12 +12,15 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'can:manage-users']);
+        $this->middleware(['auth', 'can:administer-users']);
     }
 
-    public function showUsers(Request $request)
+    public function showUsers()
     {
-        $search = $request->input('search');
+        $input = $this->validate(request(), [
+            'search' => ['string', 'max:255'],
+        ]);
+        $search = isset($input['search']) ? filter_var($input['search'], FILTER_SANITIZE_STRING) : '';
         $users = $search ? User::whereLike(['name', 'email'], $search)->paginate(100) : User::paginate(100);
         $roles = Role::all();
         return view('admin.user', [
@@ -29,43 +30,30 @@ class AdminController extends Controller
         ]);
     }
 
-    public function updateUserRoles(Request $request)
+    public function updateUserRoles()
     {
-        $roles = array();
-        if (isset($request["roles"])) {
-            $roles = $request["roles"];
-        }
-        $user = User::find($request["user_id"]);
-        $user->roles()->sync($roles);
+        $input = $this->validate(request(), [
+            'user_id' => ['required', 'numeric', 'exists:users,id'],
+            'roles' => ['required', 'array'],
+            'roles.*' => ['integer', 'exists:roles,id'],
+        ]);
+
+        $user = User::find($input['user_id']);
+        $user->roles()->sync($input['roles']);
 
         return redirect()->back()->with('success', 'Roles updated successfully!');;
     }
 
-    public function addUser(Request $request)
+    public function addUser()
     {
-        $validator = Validator::make(Input::all(), [
+        $input = $this->validate(request(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:10', 'strong_password'],
         ]);
 
-        if ($validator->fails()) {
-            $messages = $validator->messages()->all();
-            return redirect()->back()->with('error', implode("\n", $messages));
-        }
-
-        $email = $request->input('email');
-        $name = $request->input('name');
-        $password = $request->input('password');
-        $role = 'user';
-
-        $user = $this->create([
-            'email' => $email,
-            'name' => $name,
-            'password' => $password,
-            'role' => $role
-        ]);
-
+        $input['role'] = 'user';
+        $user = $this->create($input);
         return redirect()->back()->with('success', 'User added successfully!');
     }
 

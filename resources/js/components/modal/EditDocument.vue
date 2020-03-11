@@ -9,8 +9,8 @@
         <div class="px-3 mt-4">
             <div class="form-group mb-4">
                 <label for="document-name">Document name</label>
-                <input type="text" class="form-control" id="document-name" v-model="document.name" />
-                <input type="hidden" name="document_id" v-model="document.id" />
+                <input type="text" class="form-control" id="document-name" v-model="document.name" maxlength="255">
+                <input type="hidden" name="document_id" v-model="document.id">
             </div>
             <button class="btn btn-primary" v-on:click="saveModalDocument()">Save</button>
             <button class="btn btn-secondary ml-2" v-on:click="close()">Cancel</button>

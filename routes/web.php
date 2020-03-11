@@ -48,7 +48,6 @@ Route::get('/example/analyse/{code}', 'ExampleController@analyse');
 
 // Examples API
 Route::get('/example/all', 'ExampleController@fetchExamples');
-Route::post('/example/store', 'ExampleController@store');
 
 // Staff & admin only pages
 Route::get('/assignments', 'AssignmentController@index');

@@ -12,10 +12,6 @@ use App\Mail\ContactMail;
 
 class ContactController extends Controller
 {
-    public function __construct()
-    {
-        //$this->middleware('guest')->except('logout');
-    }
 
     public function index()
     {
@@ -32,23 +28,23 @@ class ContactController extends Controller
     }
 
 
-    public function storeContact(Request $request)
+    public function storeContact()
     {
         $user = Auth::user();
         $fields = [
-            'name' => 'required',
-            'email' => 'required|email',
-            'comment' => 'required',
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'comment' => ['required', 'string'],
         ];
         if (!$user || $user->cannot('bypass-captcha')) {
             $fields['captcha'] = 'required|captcha';
         }
-        $this->validate($request, $fields);
+        $input = $this->validate(request(), $fields);
 
         $crm = new Crm();
-        $crm->name      = $request->name;
-        $crm->email     = $request->email;
-        $crm->comment   = $request->comment;
+        $crm->name      = $input['name'];
+        $crm->email     = $input['email'];
+        $crm->comment   = $input['comment'];
 
         if ($user) {
             $crm->user_id = $user->id;

@@ -62,7 +62,7 @@
 
 
                             <p class="card-text">
-                                <strong>General Enquiries and Technical Enquires </strong><br /><em>(including from academics wishing to use AcaWriter)</em><br /><br />
+                                <strong>General Enquiries and Technical Enquires </strong><br><em>(including from academics wishing to use AcaWriter)</em><br><br>
                                 Email: <a href="mailto:cic@uts.edu.au">cic@uts.edu.au </a>
 
                             </p>

@@ -2,8 +2,8 @@
     <form method="POST" action="/document/create" class="form" @submit="onSubmit" autocomplete="off">
         <input type="hidden" name="_token" :value="csrf">
         <div class="form-group">
-            <label for="doc_title">Document name</label>
-            <input type="text" id="doc_title" name="doc_name" class="form-control" v-model="doc_name">
+            <label for="doc_name">Document name</label>
+            <input type="text" id="doc_name" name="doc_name" class="form-control" v-model="doc_name" maxlength="255">
         </div>
         <div class="form-group">
             <div class="form-check" v-for="(type) in types">

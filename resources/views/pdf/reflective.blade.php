@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 <head>
-    <meta http-equiv="Content-Type" content="charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="charset=utf-8">
     <title>AcaWriter: PDF</title>
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -94,14 +94,14 @@
         </div>
     </div>
 
-    <hr />
+    <hr>
 
     <div class="row">
         <div class="col-md-12">
             @foreach ($draft->raw->rules as $rule)
                 @if (!isset($rule->tab))
                     @if (isset($rule->custom) )
-                        <strong>{!! $rule->custom !!}</strong><br />
+                        <strong>{!! $rule->custom !!}</strong><br>
                     @endif
                     @foreach ($rule->message as $msg)
                         @foreach ($msg as $key => $desc)
@@ -110,12 +110,12 @@
                     @endforeach
                 @elseif ($rule->tab == 1)
                     @if (isset($rule->custom) )
-                        <strong>{!! $rule->custom !!}</strong><br />
+                        <strong>{!! $rule->custom !!}</strong><br>
                     @endif
                     @foreach ($rule->message as $msg)
                         @foreach ($msg as $key => $desc)
                             @if (in_array($key, array('context', 'change', 'challenge')))
-                                <span class="{{ $key }}"></span> {!! $desc !!} <br />
+                                <span class="{{ $key }}"></span> {!! $desc !!} <br>
                             @else
                                 <p class="{{ $rule->name }}">{!! $desc !!}</p>
                             @endif
@@ -126,12 +126,12 @@
         </div>
     </div>
 
-    <hr />
+    <hr>
 
     <div class="row">
         <div class="col-md-12">
             <strong><u>Feedback with Annotations</u></strong>
-            <br />
+            <br>
         </div>
     </div>
 
@@ -141,12 +141,12 @@
         </div>
     </div>
 
-    <br />
+    <br>
 
     <div class="row">
         <div class="col-md-12">
             <strong><u>Feedback about your writing</u></strong>
-            <br />
+            <br>
         </div>
     </div>
 

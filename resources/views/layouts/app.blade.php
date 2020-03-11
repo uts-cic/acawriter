@@ -10,7 +10,7 @@
 
     <title>AcaWriter | University of Technology Sydney</title>
 
-    <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
+    <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet">
     <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
 
     <!-- Styles -->
@@ -67,7 +67,7 @@
                 @endcan
 
                 @can('manage-assignments')
-                <li class="nav-item"><a class="nav-link" href="{{ url('assignment') }}" data-ga-label="Manage assignments">Manage assignments</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('assignments') }}" data-ga-label="Manage assignments">Manage assignments</a></li>
                 @endcan
 
                 @canany(['administer-users', 'access-reports'])
