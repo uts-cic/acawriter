@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-5" data-ga-category="Feedback" v-bind:data-ga-label="preSetAssignment.assignment.code">
+    <div class="mb-5" data-ga-category="Feedback">
         <div class="row" v-if="errors && errors.length">
             <div class="col-md-12">
                 <div  class="col-md-12 alert alert-danger" role="alert">
@@ -252,7 +252,6 @@
                 this.errors=[];
                 this.attributes.initFeedback = true;
                 this.btnFeedback = true;
-                window.trackEvent('Feedback', 'get', this.preSetAssignment.assignment.code);
                 if(this.feedbackOpt!=='') {
                     let data = {
                         'txt':this.editorContent,
