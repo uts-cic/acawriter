@@ -12,6 +12,7 @@ use App\Document;
 use App\Draft;
 use App\User;
 use App\Role;
+use App\Feature;
 use App\Events\UserRegistered;
 
 class DiffController extends Controller 
@@ -28,10 +29,12 @@ class DiffController extends Controller
         $data->documents->drafts = array();
         $drafts = array();
         $drafts_users = array();
-        $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'text_input', 'user_id', 'created_at']);
+        $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'text_input', 'user_id', 'created_at', 'feature_id']);
         foreach ($drafts as $draft) {
         	$user = $this->showUsers($draft->user_id);
+            $feature = $this->getFeatures($draft->feature_id);
         	$draft->user = $user;
+            $draft->feature = $feature;
         	array_push($drafts_users, $draft);
         }
         $data->documents->drafts = $drafts_users;
@@ -46,15 +49,24 @@ class DiffController extends Controller
         return $data;
     }
 
+    public function getFeatures($id)
+    {
+        $data = new \stdClass;
+        $features = Feature::where('id', $id)->first(['name', 'grammar', 'rules']);
+        return $features;
+    }
+
     public function produceReport(Request $request)
     {
     	$draft_first = new \stdClass;
     	$draft_second = new \stdClass;
-    	$draft_first = Draft::where('id', '=', $request->id)->get(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at']);
-    	$draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at']);
+    	$draft_first = Draft::where('id', '=', $request->id)->get(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
+    	$draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
     	$data = new \stdClass;
     	$data->draft_first = $draft_first[0];
         $data->draft_second = $draft_second;
+        $data->draft_first->features = $this->getFeatures($data->draft_first->feature_id);
+        $data->draft_second->features = $this->getFeatures($data->draft_second->feature_id);
         $data->draft_first->raw_response = json_decode($draft_first[0]->raw_response);
     	$data->draft_second->raw_response = json_decode($draft_second->raw_response);
 
