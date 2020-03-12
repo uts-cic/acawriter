@@ -140,8 +140,8 @@
                                 @foreach($data->documents->drafts as $document)
                                     <tr>
                                         <th scope="row">{{$document->user->users->name}}</th>
-                                        <td>{{$document->document_id}}</td>
-                                        <td>1</td>
+                                        <td>{{$document->document_id}}</td> 
+                                        <td>1 <input type="checkbox" name="compare_select" value="selected"></td>
                                         <td><a href="/admin/diffreport/{{$document->id}}"><i class="fa fa-cogs"></i> Link</td>
                                     </tr>
                                 @endforeach
