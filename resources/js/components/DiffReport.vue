@@ -148,7 +148,7 @@
                         this.editorContent = this.preSetAssignment.textDraft.text_input;
                         this.initFeedback = false;
                     }
-                    let feature = this.preSetAssignment.feature[0];
+                    let feature = this.preSetAssignment.features;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
@@ -207,7 +207,7 @@
 
                 if(this.preSetAssignment) {
                     data.id = (this.preSetAssignment.id * 123456); //this is the document id
-                    data.grammar = this.preSetAssignment.feature[0].grammar.toLocaleLowerCase();
+                    data.grammar = this.preSetAssignment.features.grammar.toLocaleLowerCase();
                     data.name= this.preSetAssignment.name;
                 }
                 return link+ JSON.stringify(data);
