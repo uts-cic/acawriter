@@ -43,8 +43,8 @@
 
 <script>
     const EventBus = new Vue();
-    import { Diff } from 'diff';
     import { VueEditor } from 'vue2-editor';
+    import * as diff from 'diff';
     import moment from 'moment';
     import store from '../store';
     import { mapState, mapActions, mapGetters} from 'vuex';
@@ -131,6 +131,7 @@
                 }
             },
             attributes: function() {
+                console.log(this.computeDiff());
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
@@ -304,8 +305,12 @@
                 setInterval(this.storeAnalysedDrafts, 5000);
             },
             computeDiff() {
-                var diff = Diff.diffChars(preSetAssignment.text_input, compareDocument.text_input);
-                return diff;
+                var diff_array = [];
+                var diff_texts = diff.diffChars(this.preSetAssignment.text_input, this.compareDocument.text_input);
+                diff_texts.forEach(function(part){
+                    diff_array.push(part.added, part.value, part.deleted)
+                })
+                return diff_texts;
             },
 
         }
