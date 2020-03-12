@@ -43,6 +43,7 @@
 
 <script>
     const EventBus = new Vue();
+    import { Diff } from 'diff';
     import { VueEditor } from 'vue2-editor';
     import moment from 'moment';
     import store from '../store';
@@ -301,6 +302,10 @@
             },
             autoStore() {
                 setInterval(this.storeAnalysedDrafts, 5000);
+            },
+            computeDiff() {
+                var diff = Diff.diffChars(preSetAssignment.text_input, compareDocument.text_input);
+                return diff;
             },
 
         }
