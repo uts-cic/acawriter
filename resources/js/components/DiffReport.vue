@@ -139,15 +139,10 @@
             },
             attributes: function() {
                 if(this.preSetAssignment) {
-                    if(this.preSetAssignment.draft) {
-                        this.editorContent = this.preSetAssignment.draft.text_input;
-                        let data = {'savedFeed':JSON.parse(this.preSetAssignment.draft.raw_response)};
-                        this.$store.dispatch('PRELOAD_FEEDBACK',data);
-                        this.initFeedback = false;
-                    } else if(this.preSetAssignment.textDraft) {
-                        this.editorContent = this.preSetAssignment.textDraft.text_input;
-                        this.initFeedback = false;
-                    }
+                    this.editorContent = this.preSetAssignment.text_input;
+                    let data = {'savedFeed':this.preSetAssignment.raw_response};
+                    this.$store.dispatch('PRELOAD_FEEDBACK',data);
+                    this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
