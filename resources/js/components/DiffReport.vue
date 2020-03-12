@@ -13,37 +13,21 @@
         <div class="row">
             <!-- start content -->
             <div id="content" class="col-md-12">
-                <div class="subheader shadow">
-                    <div class="subheader-title"><h4 v-if="preSetAssignment">{{preSetAssignment.name}}</h4></div>
-
-                    <div class="subheader-message">
-                        <div v-if="draftUpdate.message!=''">{{draftUpdate.message}}</div>
-                        <div class="small" v-if="auto!=''">{{auto}}</div>
-                    </div>
-
-                    <div class="subheader-action">
-                            <a target="_blank" class="btn btn-primary" v-bind:href="getLink" v-if="feedback.rules" data-ga-action="download">Download PDF</a>
-                    </div>
-                </div>
 
                 <div class="feedback">
                     <div class="feedback-col" id="original">
-                        <p class="alert alert-success px-3">AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</p>
-
                         <div id="editor">
                             <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor>
                         </div>
                     </div>
 
                     <div class="feedback-action">
-                        <button type="button" class="btn btn-primary" v-on:click="fetchFeedback('manual')">Get Feedback <i class="fa fa-angle-right"></i></button>
+
                     </div>
 
                     <!-- Reflective feedback -->
                     <div class="feedback-col" id="parsed">
-                        <p class="alert alert-warning px-3">Computers don’t read writing like humans. So, if you’re sure your writing’s good, it's fine to disagree with AcaWriter's feedback, just like you’d ignore a poor grammar suggestion.</p>
-
-                        <div v-if="this.attributes.grammar == 'reflective'">
+                       <div v-if="this.attributes.grammar == 'reflective'">
                             <reflective-result></reflective-result>
                         </div>
 
@@ -73,11 +57,12 @@
             analyticResult: Analytic
         },
         name: 'editor',
-        props:['document', 'userActivity'],
+        props:['document', 'document_compare', 'userActivity'],
         store,
         data () {
             return {
                 editorContent: '',
+                compareContent: '',
                 loading: 0,
                 tap: [],
                 errors: [],
@@ -133,6 +118,13 @@
             preSetAssignment: function() {
                 if(this.document) {
                     return JSON.parse(this.document);
+                } else {
+                    return false;
+                }
+            },
+            compareDocument: function() {
+                if (this.document_compare) {
+                    return JSON.parse(this.document_compare)
                 } else {
                     return false;
                 }
