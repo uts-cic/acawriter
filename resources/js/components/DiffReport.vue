@@ -131,7 +131,8 @@
                 }
             },
             attributes: function() {
-                console.log(this.computeDiff());
+                console.log(this.computeDiffTexts());
+                console.log(this.computeDiffFeedback());
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
@@ -304,7 +305,7 @@
             autoStore() {
                 setInterval(this.storeAnalysedDrafts, 5000);
             },
-            computeDiff() {
+            computeDiffTexts() {
                 var diff_array = [];
                 var diff_texts = diff.diffChars(this.preSetAssignment.text_input, this.compareDocument.text_input);
                 diff_texts.forEach(function(part){
@@ -312,7 +313,14 @@
                 })
                 return diff_texts;
             },
+            computeDiffFeedback() {
+                var diff_array = [];
+                var diff_texts = diff.diffChars(JSON.stringify(this.preSetAssignment.raw_response), JSON.stringify(this.compareDocument.raw_response));
+                return diff_texts;
+            },
+            needHighlight() {
 
+            }
         }
     }
 </script>
