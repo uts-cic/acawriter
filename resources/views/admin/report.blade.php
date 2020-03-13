@@ -126,6 +126,7 @@
                                 @endif
                                 </tbody>
                             </table>
+                            <form role="form" method="POST" action="{{ url('/admin/diffreport') }}">
                             <table class="table">
                                 <thead class="thead-dark">
                                 <tr>
@@ -141,13 +142,16 @@
                                     <tr>
                                         <th scope="row">{{$document->user->users->name}}</th>
                                         <td>{{$document->document_id}}</td> 
-                                        <td>1 <input type="checkbox" name="compare_select" value="selected"></td>
-                                        <td><a href="/admin/diffreport/{{$document->id}}"><i class="fa fa-cogs"></i> Link</td>
+                                        <td>{{$document->version}} {{Form::radio('version', $document->created_at)}}</td>
+                                        <td><button type="submit" name="button_post" value="{{$document->id}}" class="btn-link">Link</button></td>
+                                        {{ csrf_field() }}
+                                        <!-- <td><a href="/admin/diffreport/{{$document->id}}"><i class="fa fa-cogs"></i> Link</td> -->
                                     </tr>
                                 @endforeach
                                 @endif
                                 </tbody>
                             </table>
+                        </form>
                         </div>
                     </div>
                 </div>
