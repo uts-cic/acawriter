@@ -131,14 +131,15 @@
                 }
             },
             attributes: function() {
-                console.log(this.computeDiffTexts());
-                console.log(this.computeDiffFeedback());
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
+                    let diff_texts = computeDiffTexts();
+                    highlighted_text = highlighText(diff_texts);
+                    this.editorContent = highlighted_text;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
@@ -318,8 +319,19 @@
                 var diff_texts = diff.diffChars(JSON.stringify(this.preSetAssignment.raw_response), JSON.stringify(this.compareDocument.raw_response));
                 return diff_texts;
             },
-            needHighlight() {
-
+            highlighText(diff_texts) {
+                var texts_with_diff = "";
+                diff_texts.forEach(function(part){
+                    if (part.added) {
+                        text_string = " <span \"class=added\">" + part.value + "</span> "
+                    } else if (part.removed) {
+                        text_string = " <span \"class=removed\">" + part.value + "</span> "
+                    } else {
+                        text_string = part.value
+                    }
+                texts_with_diff += text_string;
+                return texts_with_diff;
+                })
             }
         }
     }
