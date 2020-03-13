@@ -30,11 +30,14 @@ class DiffController extends Controller
         $drafts = array();
         $drafts_users = array();
         $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'text_input', 'user_id', 'created_at', 'feature_id']);
+        $version = 1;
         foreach ($drafts as $draft) {
         	$user = $this->showUsers($draft->user_id);
             $feature = $this->getFeatures($draft->feature_id);
         	$draft->user = $user;
             $draft->feature = $feature;
+            $draft->version = $version;
+            $version++;
         	array_push($drafts_users, $draft);
         }
         $data->documents->drafts = $drafts_users;
@@ -60,8 +63,10 @@ class DiffController extends Controller
     {
     	$draft_first = new \stdClass;
     	$draft_second = new \stdClass;
+        $version = $request->version;
     	$draft_first = Draft::where('id', '=', $request->id)->get(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
-    	$draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
+    	// $draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
+        $draft_second = Draft::where([['document_id', '=', $draft_first[0]->document_id], ['created_at', '=', $version]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
     	$data = new \stdClass;
     	$data->draft_first = $draft_first[0];
         $data->draft_second = $draft_second;
