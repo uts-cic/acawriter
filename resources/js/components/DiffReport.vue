@@ -323,6 +323,7 @@
                 var texts_with_diff = "";
                 var text_string = "";
                 diff_texts.forEach(function(part){
+                    text_string = "";
                     if (part.added) {
                         text_string = " <span \"class=added\">" + part.value + "</span> "
                     } else if (part.removed) {
@@ -331,8 +332,8 @@
                         text_string = part.value
                     }
                 texts_with_diff += text_string;
-                return texts_with_diff;
                 })
+                return texts_with_diff;
             }
         }
     }
