@@ -310,7 +310,7 @@
             },
             computeDiffTexts() {
                 var diff_array = [];
-                var diff_texts = diff.diffChars(this.preSetAssignment.text_input, this.compareDocument.text_input);
+                var diff_texts = diff.diffWords(this.preSetAssignment.text_input, this.compareDocument.text_input);
                 diff_texts.forEach(function(part){
                     diff_array.push(part.added, part.value, part.deleted)
                 })
@@ -327,9 +327,9 @@
                 diff_texts.forEach(function(part){
                     text_string = "";
                     if (part.added) {
-                        text_string = "<span style=\"background-color: green; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                        text_string = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value + "</span> "
                     } else if (part.removed) {
-                        text_string = "<span style=\"background-color: red; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                        text_string = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value + "</span> "
                     } else {
                         text_string = part.value
                     }
