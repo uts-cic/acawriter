@@ -327,9 +327,9 @@
                 diff_texts.forEach(function(part){
                     text_string = "";
                     if (part.added) {
-                        text_string = " <span \"class=added\">" + part.value + "</span> "
+                        text_string = "<span style=\"background-color: green; color: rgb(0, 0, 0);\">" + part.value + "</span> "
                     } else if (part.removed) {
-                        text_string = " <span \"class=removed\">" + part.value + "</span> "
+                        text_string = "<span style=\"background-color: red; color: rgb(0, 0, 0);\">" + part.value + "</span> "
                     } else {
                         text_string = part.value
                     }
