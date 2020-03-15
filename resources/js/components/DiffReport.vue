@@ -130,6 +130,10 @@
                     return false;
                 }
             },
+            diffDocument: function() {
+                let diff_texts = this.computeDiffTexts();
+                return this.highlighText(diff_texts);
+            },
             attributes: function() {
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
@@ -137,9 +141,7 @@
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
-                    let diff_texts = this.computeDiffTexts();
-                    let highlighted_text = this.highlighText(diff_texts);
-                    this.editorContent = highlighted_text;
+                    this.editorContent = this.diffDocument;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
