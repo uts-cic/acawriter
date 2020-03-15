@@ -65,8 +65,11 @@ class DiffController extends Controller
     	$draft_second = new \stdClass;
         $version = $request->version;
     	$draft_first = Draft::where('id', '=', $request->id)->get(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
-    	// $draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
-        $draft_second = Draft::where([['document_id', '=', $draft_first[0]->document_id], ['created_at', '=', $version]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
+        if ($version) {
+            $draft_second = Draft::where([['document_id', '=', $draft_first[0]->document_id], ['created_at', '=', $version]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
+        } else {
+            $draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
+        }
     	$data = new \stdClass;
     	$data->draft_first = $draft_first[0];
         $data->draft_second = $draft_second;
