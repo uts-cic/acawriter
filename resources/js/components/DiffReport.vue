@@ -137,8 +137,8 @@
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
-                    let diff_texts = computeDiffTexts();
-                    highlighted_text = highlighText(diff_texts);
+                    let diff_texts = this.computeDiffTexts();
+                    let highlighted_text = this.highlighText(diff_texts);
                     this.editorContent = highlighted_text;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
@@ -321,6 +321,7 @@
             },
             highlighText(diff_texts) {
                 var texts_with_diff = "";
+                var text_string = "";
                 diff_texts.forEach(function(part){
                     if (part.added) {
                         text_string = " <span \"class=added\">" + part.value + "</span> "
