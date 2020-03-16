@@ -309,11 +309,7 @@
                 setInterval(this.storeAnalysedDrafts, 5000);
             },
             computeDiffTexts() {
-                var diff_array = [];
                 var diff_texts = diff.diffWords(this.preSetAssignment.text_input, this.compareDocument.text_input);
-                diff_texts.forEach(function(part){
-                    diff_array.push(part.added, part.value, part.deleted)
-                })
                 return diff_texts;
             },
             computeDiffFeedback() {
