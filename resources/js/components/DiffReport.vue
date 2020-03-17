@@ -134,10 +134,16 @@
                 let diff_texts = this.computeDiffTexts();
                 return this.highlighText(diff_texts);
             },
+            diffFeedback: function() {
+                let diff_feedback = this.computeDiffFeedback();
+                return this.highlighTextFeedback(diff_feedback);
+            },
             attributes: function() {
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
+                    this.preSetAssignment.raw_response = this.diffFeedback;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
+                    console.log(this.preSetAssignment.raw_response.rules)
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
@@ -313,9 +319,39 @@
                 return diff_texts;
             },
             computeDiffFeedback() {
-                var diff_array = [];
-                var diff_texts = diff.diffChars(JSON.stringify(this.preSetAssignment.raw_response), JSON.stringify(this.compareDocument.raw_response));
-                return diff_texts;
+                var tags1 = "";
+                var tags2 = "";
+                let keys = Object.keys(this.preSetAssignment.raw_response);
+                keys.forEach(key => {
+                    if (this.preSetAssignment.raw_response[key].length > 0) {
+                        for (const [i] of this.preSetAssignment.raw_response[key].entries()) {
+                            if (this.preSetAssignment.raw_response[key][i].tags) {
+                                let tags = this.preSetAssignment.raw_response[key][i].tags.split(',');
+                                if (tags.length > 0) {
+                                    tags.forEach(tag => {
+                                        tags1 += tag;
+                                    })
+                                    tags1 += " ";
+                                }
+                            }
+                        }
+                    }
+                    if (this.compareDocument.raw_response[key].length > 0) {
+                        for (const [i] of this.compareDocument.raw_response[key].entries()) {
+                            if (this.compareDocument.raw_response[key][i].tags) {
+                                let tags = this.compareDocument.raw_response[key][i].tags.split(',');
+                                if (tags.length > 0) {
+                                    tags.forEach(tag => {
+                                        tags2 += tag;
+                                    })
+                                    tags2 += " ";
+                                }
+                            }
+                        }
+                    }
+                });
+                let diff_feedback = diff.diffWords(tags1, tags2);
+                return diff_feedback;
             },
             highlighText(diff_texts) {
                 var texts_with_diff = "";
@@ -336,6 +372,26 @@
                 texts_with_diff += text_string;
                 })
                 return texts_with_diff;
+            },
+            highlighTextFeedback(diff_feedback) {
+                var that = this;
+                diff_feedback.forEach(function(part) {
+                    if (part.added) {
+                        that.preSetAssignment.raw_response.rules[2].message.forEach((message, i) => {
+                            if (message[part.value.slice(0, -1)]) {
+                                that.preSetAssignment.raw_response.rules[2].message[i][part.value.slice(0, -1)] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + message[part.value.slice(0, -1)] + "</span> "
+                            }
+                        })
+                    }
+                    if (part.removed) {
+                        that.preSetAssignment.raw_response.rules[2].message.forEach((message, i) => {
+                            if (message[part.value.slice(0, -1)]) {
+                                that.preSetAssignment.raw_response.rules[2].message[i][part.value.slice(0, -1)] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + message[part.value.slice(0, -1)] + "</span> "
+                            }
+                        })
+                    }
+                })
+                return that.preSetAssignment.raw_response;
             }
         }
     }
