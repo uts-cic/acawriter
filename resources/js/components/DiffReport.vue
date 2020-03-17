@@ -28,11 +28,134 @@
                     <!-- Reflective feedback -->
                     <div class="feedback-col" id="parsed">
                        <div v-if="this.attributes.grammar == 'reflective'">
-                            <reflective-result></reflective-result>
+                            <div v-if="vtabs">
+        <ul class="nav nav-tabs nav-fill awa-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#analysed" data-toggle="tab" data-ga-action="tab:report">Reflective Report</a>
+            </li>
+            <template v-for="tab in vtabs">
+                <li class="nav-item">
+                    <a class="nav-link" v-bind:href="'#'+getLowerCase(tab.tabName)" data-toggle="tab" v-bind:data-ga-action="'tab:' + getLowerCase(tab.tabName)">{{tab.tabName}}</a>
+                </li>
+            </template>
+        </ul>
+
+        <div class="tab-content ref" id="legend">
+            <div class="tab-pane active" id="analysed" role="tabpanel">
+                <template v-for="rule in this.preSetAssignment.raw_response.rules">
+                    <div class="ref_chk" v-if="rule.tab==1 || !rule.tab">
+                        <span class="card-subtitle" v-if="rule.custom" v-html="rule.custom"></span>
+                        <ul class="list-unstyled">
+                            <template v-for="msg in rule.message">
+                                <li v-for="(m,id) in msg">
+                                    <input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;
+                                    <span v-bind:class="id"></span>&nbsp;<span v-html="m"></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+
+                <hr>
+
+                <div class="wrapper">
+                    <span v-for="(feed,idx) in this.preSetAssignment.raw_response.final">
+                        <span v-for="ic in feed.css">
+                            <!-- AI/2019-06-25: Removing affect analysis -->
+                            <!-- <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'"> -->
+                            <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics'">
+                                <span v-bind:class="getIcons(ic)"></span>
+                            </template>
+                        </span>
+                        <span v-html="inText(feed)" v-bind:class="[inLineClasses(feed.css)]"></span>&nbsp;
+                    </span>
+                </div>
+            </div>
+
+            <template v-for="tab in vtabs">
+                <div class="tab-pane" v-bind:id="getLowerCase(tab.tabName)" role="tabpanel">
+                    <span v-for="(ref, idc) in feedback.tabs">
+                        <template v-if="idc==tab.tab" v-for="(msg, idm) in ref">
+                            <div class="bd-callout bd-callout-info" v-for="feed in msg">
+                                <span v-for="a in feed">
+                                    <ul class="list-unstyled">
+                                        <li class="list-group-flush" v-for="b in a" v-html="b"></li>
+                                    </ul>
+                                </span>
+                            </div>
+                        </template>
+                    </span>
+                </div>
+            </template>
+        </div>
+    </div>
+    <div v-else class="feedback-placeholder"></div>
                         </div>
 
                         <div v-else-if="this.attributes.grammar == 'analytical'">
-                            <analytic-result></analytic-result>
+                             <div v-if="this.preSetAssignment.raw_response.rules">
+        <ul class="nav nav-tabs nav-fill awa-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#analysed" data-toggle="tab" data-ga-action="tab:report">Analytical Report</a>
+            </li>
+            <template v-for="tab in vtabs">
+                <li class="nav-item">
+                    <a class="nav-link" v-bind:href="'#'+getLowerCase(tab.tabName)" data-toggle="tab" v-bind:data-ga-action="'tab:' + getLowerCase(tab.tabName)">{{tab.tabName}}</a>
+                </li>
+            </template>
+        </ul>
+
+        <div class="tab-content ana" id="legend">
+            <div class="tab-pane active" id="analysed" role="tabpanel">
+                <template v-for="rule in this.preSetAssignment.raw_response.rules">
+                    <div v-if="rule.tab==1 || !rule.tab">
+                        <span class="card-subtitle" v-if="rule.custom" v-html="rule.custom"></span>
+                        <ul class="rules-list" v-bind:class="rule.name">
+                            <template v-for="msg in rule.message">
+                                <li v-for="(m,id) in msg" v-html="m"></li>
+                                <!--<input type="checkbox" v-bind:id="id" v-bind:value="id" checked="checked"> &nbsp;-->
+                                <!--<span v-bind:class="id"></span>-->
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+
+                <hr>
+
+                <div class="wrapper">
+                    <span v-for="(feed,idx) in this.preSetAssignment.raw_response.final">
+                        <span v-for="ic in feed.css">
+                            <template v-if="ic=='contribution'">
+                                <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
+                            </template>
+                            <template v-else-if="ic=='metrics' || ic=='background'">
+                                <span v-bind:class="ic"></span>
+                            </template>
+                            <template v-else>
+                                <span class="badge badge-pill badge-analytic" v-bind:class="ic" v-html="getAnnotation(ic)"></span>
+                            </template>
+                        </span>
+                        <span v-html="feed.str" v-bind:class="[inLineAnaClasses(feed.css)]"></span>&nbsp;
+                    </span>
+                </div>
+            </div>
+
+            <template v-for="tab in vtabs">
+                <div class="tab-pane" v-bind:id="getLowerCase(tab.tabName)" role="tabpanel">
+                    <div v-for="(ref, idc) in feedback.tabs">
+                        <template v-if="idc==tab.tab" v-for="msg in ref">
+                            <span v-for="feed in msg">
+                                <span v-for="a in feed">
+                                    <div class="bd-callout bd-callout-info" v-for="b in a" v-html="b"></div>
+                                </span>
+                            </span>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+    <div v-else class="feedback-placeholder"></div>
                         </div>
                     </div>
                 </div>
@@ -116,6 +239,20 @@
                 feedback: 'currentFeedback',
                 processing: 'loadingStatus'
             }),
+            vtabs() {
+                if(this.feedback.rules) {
+                    let tabs = [];
+                    let rtabs = [];
+                    let rules = this.feedback.rules;
+                    tabs = rules.filter(rule => rule.tab  > 1);
+                    let curr = 0;
+                    tabs.forEach(function(item) {
+                        if(curr != item.tab)  rtabs.push(item);
+                        curr = item.tab;
+                    });
+                    return rtabs;
+                }
+            },
             preSetAssignment: function() {
                 if(this.document) {
                     return JSON.parse(this.document);
@@ -147,6 +284,7 @@
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
+                    console.log(this.preSetAssignment)
                     this.editorContent = this.diffDocument;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
@@ -167,7 +305,7 @@
             },
             rulesClasses: function() {
                 let rules = [];
-                rules = this.feedback.rules.map(function(rule,idx){
+                rules = this.this.preSetAssignment.raw_response.rules.map(function(rule,idx){
                     return rule.css.map(function(cl){
                         return cl;
                     });
@@ -258,7 +396,7 @@
                         'extra': this.attributes,
                         'type':type,
                         'document':this.preSetAssignment.id,
-                        'currentFeedback': this.feedback
+                        'currentFeedback': this.preSetAssignment.raw_response
                     };
                     this.$store.dispatch('LOAD_FEEDBACK',data);
                 } else {
@@ -269,6 +407,70 @@
                 if (this.editorContent !== '') {
                     this.tokeniseTextInput();
                 }
+            },
+            getAnnotation(ic) {
+                let tg = typeof this.analytic_xlator[ic]!=='undefined' ? this.analytic_xlator[ic] : '';
+                return tg;
+            },
+            inLineAnaClasses: function(data) {
+                var temp=  '';
+                let rname = '';
+                var out =this;
+                data.forEach(function( obj ) {
+                    //let a = outer.getAnnotation(g);
+                    /** all this hack jus tto harcode moves bg colors!!!! **/
+                    rname  = out.getRuleName(obj);
+                    if(rname !== '') {
+                        temp = rname;
+                    } else {
+                        if (obj === 'contribution') {
+                            temp = 'ana_bg_green';
+                        } else if (obj != 'metrics') {
+                            temp = 'ana_bg_yellow';
+                        }
+                    }
+                });
+                return temp;
+            },
+            getTitle(css) {
+                var outer= this;
+                let title = '';
+                css.forEach(function(g){
+                    let a = outer.getAnnotation(g);
+                    let tab = 1;
+                    //console.log(a);
+                    outer.preSetAssignment.raw_response.rules.forEach(function(t) {
+                        if(typeof t.tab !== 'undefined') tab = t.tab;
+                        if(t.css.indexOf(a)!== -1 && tab === 1) {
+                            //console.log(t.custom);
+                            title = t.custom ? t.custom:'Sorry nothing defined in the rule';
+                        }
+                    });
+                });
+
+                return title;
+            },
+            getLowerCase(str) {
+                return str.toLowerCase();
+            },
+            getRuleName(tag) {
+                let tabs = [];
+                let mv = [];
+                let name ='';
+                let rules = this.preSetAssignment.raw_response.rules;
+
+                tabs = rules.filter(rule => rule.tab  == 1);
+
+                tabs.forEach(function(item) {
+                    if(item.check.tags.indexOf(tag)!== -1) mv.push(item.name);
+                });
+                //console.log(mv);
+                if(mv.indexOf('moves3')!== -1) name = 'moves3';
+                else if(mv.indexOf('moves2')!== -1) name = 'moves2';
+                else if(mv.indexOf('moves1')!== -1) name = 'moves1';
+                else name ='';
+
+                return name;
             },
             storeAnalysedDrafts() {
                 if (this.editorStore !== this.editorContent) {
@@ -294,7 +496,7 @@
                 axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
                     .then(response => {
                         this.splitText = response.data.tokenised;
-                        this.computeText(this.splitText, this.feedback.final);
+                        this.computeText(this.splitText, this.this.preSetAssignment.raw_response.final);
                         this.$data.counter = 0;
                     })
                     .catch(e => {
