@@ -585,16 +585,6 @@
                                     }
                                     this.preSetAssignment.raw_response.tabs[key][i][a_key]
                                 })
-                            } 
-                            if (this.preSetAssignment.raw_response.tabs[2][key]) {
-                                text1 = this.preSetAssignment.raw_response.tabs[2][key];
-                            } else {
-                                text1 = ""
-                            }
-                            if (this.compareDocument.raw_response.tabs[2][key]) {
-                                text2 = this.compareDocument.raw_response.tabs[2][key];
-                            } else {
-                                text2 = ""
                             }
                         })
                     }
