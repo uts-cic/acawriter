@@ -473,6 +473,7 @@
                 let diff_json = diff.diffJson(this.preSetAssignment.raw_response.tabs, this.compareDocument.raw_response.tabs);
                 diff_json.forEach(part => {
                     console.log(part.value)
+                    console.log("teasdasd")
                 })
             },
             computeDiffFeedback() {
