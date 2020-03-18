@@ -277,7 +277,8 @@
             attributes: function() {
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
-                    this.preSetAssignment.raw_response = this.diffFeedback;
+                    // this.preSetAssignment.raw_response = this.diffFeedback;
+                    this.computeDiffFeedbackLibrary()
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
@@ -468,6 +469,12 @@
                 var diff_texts = diff.diffWords(this.preSetAssignment.text_input, this.compareDocument.text_input);
                 return diff_texts;
             },
+            computeDiffFeedbackLibrary() {
+                let diff_json = diff.diffJson(this.preSetAssignment.raw_response.tabs, this.compareDocument.raw_response.tabs);
+                diff_json.forEach(part => {
+                    console.log(part.value)
+                })
+            },
             computeDiffFeedback() {
                 var tags1 = "";
                 var tags2 = "";
@@ -522,12 +529,12 @@
                                             text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
                                         }
                                         let diff_tabs = diff.diffWords(text1, text2);
-                                        diff_tabs.forEach(part => {
+                                        diff_tabs.forEach(part_feedback1 => {
                                             let text_string = ""
-                                            if (part.added) {
+                                            if (part_feedback1.added) {
                                                 this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] + "</span> "
-                                            } else if (part.removed) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                                            } else if (part_feedback1.removed) {
+                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part_feedback1.value + "</span> "
                                             }
                                         })
                                     }
@@ -548,12 +555,12 @@
                                             text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
                                         }
                                         let diff_tabs = diff.diffWords(text1, text2);
-                                        diff_tabs.forEach(part => {
+                                        diff_tabs.forEach(part_feedback2 => {
                                             let text_string = ""
-                                            if (part.added) {
+                                            if (part_feedback2.added) {
                                                 this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + this.compareDocument.raw_response.tabs[key][i][a_key][0][0] + "</span> "
-                                            } else if (part.removed) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                                            } else if (part_feedback2.removed) {
+                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part_feedback2.value + "</span> "
                                             }
                                         })
                                     }
