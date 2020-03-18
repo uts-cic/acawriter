@@ -142,7 +142,7 @@
 
             <template v-for="tab in vtabs">
                 <div class="tab-pane" v-bind:id="getLowerCase(tab.tabName)" role="tabpanel">
-                    <div v-for="(ref, idc) in feedback.tabs">
+                    <div v-for="(ref, idc) in preSetAssignment.raw_response.tabs">
                         <template v-if="idc==tab.tab" v-for="msg in ref">
                             <span v-for="feed in msg">
                                 <span v-for="a in feed">
@@ -236,14 +236,14 @@
                 return this.attributes.feedbackOpt == 'analytical' ? 'display:inline': '';
             },
             ...mapGetters({
-                feedback: 'currentFeedback',
+                // feedback: 'currentFeedback',
                 processing: 'loadingStatus'
             }),
             vtabs() {
-                if(this.feedback.rules) {
+                if(this.preSetAssignment.raw_response.rules) {
                     let tabs = [];
                     let rtabs = [];
-                    let rules = this.feedback.rules;
+                    let rules = this.preSetAssignment.raw_response.rules;
                     tabs = rules.filter(rule => rule.tab  > 1);
                     let curr = 0;
                     tabs.forEach(function(item) {
@@ -303,7 +303,7 @@
             },
             rulesClasses: function() {
                 let rules = [];
-                rules = this.this.preSetAssignment.raw_response.rules.map(function(rule,idx){
+                rules = this.preSetAssignment.raw_response.rules.map(function(rule,idx){
                     return rule.css.map(function(cl){
                         return cl;
                     });
