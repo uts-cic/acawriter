@@ -280,11 +280,9 @@
                     this.editorContent = this.preSetAssignment.text_input;
                     this.preSetAssignment.raw_response = this.diffFeedback;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
-                    console.log(this.preSetAssignment.raw_response.rules)
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
-                    console.log(this.preSetAssignment)
                     this.editorContent = this.diffDocument;
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
