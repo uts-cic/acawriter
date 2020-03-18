@@ -511,26 +511,23 @@
                                 let another_keys = Object.keys(this.preSetAssignment.raw_response.tabs[key][i])
                                 another_keys.forEach(a_key => {
                                     if (this.preSetAssignment.raw_response.tabs[key][i][a_key]) {
-                                        console.log(this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0])
-                                        if (this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0]) {
+                                        if (!this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0]) {
                                             text1 = ""
                                         } else {
                                             text1 = this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0]
                                         }
-                                        if (this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
-                                            text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
-                                        } else {
+                                        if (!this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
                                             text2 = ""
+                                        } else {
+                                            text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
                                         }
                                         let diff_tabs = diff.diffWords(text1, text2);
                                         diff_tabs.forEach(part => {
                                             let text_string = ""
                                             if (part.added) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] + "</span> "
                                             } else if (part.removed) {
                                                 this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value + "</span> "
-                                            } else {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = part.value
                                             }
                                         })
                                     }
@@ -540,29 +537,26 @@
                                 let another_keys = Object.keys(this.compareDocument.raw_response.tabs[key][i])
                                 another_keys.forEach(a_key => {
                                     if (this.compareDocument.raw_response.tabs[key][i][a_key]) {
-                                        if (this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] == "") {
+                                        if (!this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
                                             text1 = ""
                                         } else {
-                                            text1 = this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0]
+                                            text1 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
                                         }
-                                        if (this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
-                                            text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
-                                        } else {
+                                        if (!this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
                                             text2 = ""
+                                        } else {
+                                            text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
                                         }
                                         let diff_tabs = diff.diffWords(text1, text2);
                                         diff_tabs.forEach(part => {
                                             let text_string = ""
                                             if (part.added) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + this.compareDocument.raw_response.tabs[key][i][a_key][0][0] + "</span> "
                                             } else if (part.removed) {
                                                 this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value + "</span> "
-                                            } else {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = part.value
                                             }
                                         })
                                     }
-                                    this.preSetAssignment.raw_response.tabs[key][i][a_key]
                                 })
                             }
                         })
