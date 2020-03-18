@@ -223,7 +223,6 @@
             }
         },
         mounted () {
-             this.autoStore();
         },
         created() {
             this.auto = '';
@@ -401,11 +400,6 @@
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
             },
-            quickCheck() {
-                if (this.editorContent !== '') {
-                    this.tokeniseTextInput();
-                }
-            },
             getAnnotation(ic) {
                 let tg = typeof this.analytic_xlator[ic]!=='undefined' ? this.analytic_xlator[ic] : '';
                 return tg;
@@ -469,50 +463,6 @@
                 else name ='';
 
                 return name;
-            },
-            storeAnalysedDrafts() {
-                if (this.editorStore !== this.editorContent) {
-                    this.editorStore = this.editorContent;
-                    let data = {
-                        'txt': this.editorContent,
-                        'action': 'store',
-                        'extra': this.attributes,
-                        'type': 'auto',
-                        'document': this.preSetAssignment.id
-                    };
-                    axios.post('/feedback/store', data)
-                        .then(response => {
-                        })
-                        .catch(e => {
-                            this.$data.errors.push(e)
-                        });
-                }
-
-            },
-            tokeniseTextInput() {
-                this.$data.counter = 0;
-                axios.post('/processor', {'txt': this.editorContent, 'action': 'tokenise'})
-                    .then(response => {
-                        this.splitText = response.data.tokenised;
-                        this.computeText(this.splitText, this.this.preSetAssignment.raw_response.final);
-                        this.$data.counter = 0;
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
-            },
-            updateAutoFeedback(){
-                if(this.autofeedback) {
-                    this.intervalId = setInterval(this.quickCheck, 120000);
-                } else  {
-                    if(this.intervalId > 0) {
-                        clearInterval(this.intervalId);
-                        this.intervalId =0;
-                    }
-                }
-            },
-            autoStore() {
-                setInterval(this.storeAnalysedDrafts, 5000);
             },
             computeDiffTexts() {
                 var diff_texts = diff.diffWords(this.preSetAssignment.text_input, this.compareDocument.text_input);
