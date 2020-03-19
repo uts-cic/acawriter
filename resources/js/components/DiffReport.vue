@@ -271,7 +271,7 @@
                 return this.highlighText(diff_texts);
             },
             diffFeedback: function() {
-                let diff_feedback = this.computeDiffFeedback();
+                let diff_feedback = this.computeDiffFeedbackLibrary();
                 return this.highlighTextFeedback(diff_feedback);
             },
             attributes: function() {
@@ -466,113 +466,40 @@
                 return name;
             },
             computeDiffTexts() {
-                var diff_texts = diff.diffWords(this.preSetAssignment.text_input, this.compareDocument.text_input);
+                var diff_texts = diff.diffWordsWithSpace(this.preSetAssignment.text_input, this.compareDocument.text_input);
                 return diff_texts;
             },
             computeDiffFeedbackLibrary() {
-                let diff_json = diff.diffJson(this.preSetAssignment.raw_response.tabs, this.compareDocument.raw_response.tabs);
+                let re = /<\/.+?>/;
+                let re2 = /]/;
+                let diff_json = diff.diffJson(this.preSetAssignment.raw_response.tabs[2], this.compareDocument.raw_response.tabs[2]);
+                let updated_string = ""
                 diff_json.forEach(part => {
-                    console.log(part.value)
-                    console.log("teasdasd")
-                })
-            },
-            computeDiffFeedback() {
-                var tags1 = "";
-                var tags2 = "";
-                let keys = Object.keys(this.preSetAssignment.raw_response);
-                keys.forEach(key => {
-                    if (this.preSetAssignment.raw_response[key].length > 0) {
-                        for (const [i] of this.preSetAssignment.raw_response[key].entries()) {
-                            if (this.preSetAssignment.raw_response[key][i].tags) {
-                                let tags = this.preSetAssignment.raw_response[key][i].tags.split(',');
-                                if (tags.length > 0) {
-                                    tags.forEach(tag => {
-                                        tags1 += tag;
-                                    })
-                                    tags1 += " ";
-                                }
-                            }
+                    let match_tag = re.exec(part.value)
+                    let match_bracket = re2.exec(part.value)
+                    if (match_tag) {
+                        let split_index = match_tag.index+4
+                        let const_text = part.value.slice(0, split_index)
+                        let text = part.value.slice(split_index, match_bracket.index-1)
+                        let const_text2 = part.value.slice(match_bracket.index)
+                        if (part.added) {
+                            text = "<span style=\\\"background-color: #F00; color: rgb(0, 0, 0);\\\">" + text.replace(/"/g, '\\"').trim() + "</span>\" "
+                            updated_string += const_text + text + const_text2
+                        } else if (part.removed) {
+                            text = "<span style=\\\"background-color: #0C0; color: rgb(0, 0, 0);\\\">" + text.replace(/"/g, '\\"').trim() + "</span>\" "
+                            updated_string += const_text + text + const_text2
+                        } else {
+                            updated_string += part.value.trim() 
+                        }
+                    } else {
+                        let re_square_brackers = /\[]/
+                        if (!re_square_brackers.exec(part.value)) {
+                            updated_string += part.value.trim()
                         }
                     }
-                    if (this.compareDocument.raw_response[key].length > 0) {
-                        for (const [i] of this.compareDocument.raw_response[key].entries()) {
-                            if (this.compareDocument.raw_response[key][i].tags) {
-                                let tags = this.compareDocument.raw_response[key][i].tags.split(',');
-                                if (tags.length > 0) {
-                                    tags.forEach(tag => {
-                                        tags2 += tag;
-                                    })
-                                    tags2 += " ";
-                                }
-                            }
-                        }
-                    }
-                });
-                let key_tabs = Object.keys(this.preSetAssignment.raw_response.tabs)
-                key_tabs.forEach(key => {
-                    for (const [i, value] of this.preSetAssignment.raw_response.tabs[key].entries()) {
-                        var text1 = "";
-                        var text2 = "";
-                        let key_value = Object.keys(value);
-                        key_value.forEach(key_small =>  {
-                            for (const [i] of this.preSetAssignment.raw_response.tabs[key].entries()) {
-                                let another_keys = Object.keys(this.preSetAssignment.raw_response.tabs[key][i])
-                                another_keys.forEach(a_key => {
-                                    if (this.preSetAssignment.raw_response.tabs[key][i][a_key]) {
-                                        if (!this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0]) {
-                                            text1 = ""
-                                        } else {
-                                            text1 = this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0]
-                                        }
-                                        if (!this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
-                                            text2 = ""
-                                        } else {
-                                            text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
-                                        }
-                                        let diff_tabs = diff.diffWords(text1, text2);
-                                        diff_tabs.forEach(part_feedback1 => {
-                                            let text_string = ""
-                                            if (part_feedback1.added) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] + "</span> "
-                                            } else if (part_feedback1.removed) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part_feedback1.value + "</span> "
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                            for (const [i] of this.compareDocument.raw_response.tabs[key].entries()) {
-                                let another_keys = Object.keys(this.compareDocument.raw_response.tabs[key][i])
-                                another_keys.forEach(a_key => {
-                                    if (this.compareDocument.raw_response.tabs[key][i][a_key]) {
-                                        if (!this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
-                                            text1 = ""
-                                        } else {
-                                            text1 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
-                                        }
-                                        if (!this.compareDocument.raw_response.tabs[key][i][a_key][0][0]) {
-                                            text2 = ""
-                                        } else {
-                                            text2 = this.compareDocument.raw_response.tabs[key][i][a_key][0][0]
-                                        }
-                                        let diff_tabs = diff.diffWords(text1, text2);
-                                        diff_tabs.forEach(part_feedback2 => {
-                                            let text_string = ""
-                                            if (part_feedback2.added) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + this.compareDocument.raw_response.tabs[key][i][a_key][0][0] + "</span> "
-                                            } else if (part_feedback2.removed) {
-                                                this.preSetAssignment.raw_response.tabs[key][i][a_key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part_feedback2.value + "</span> "
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                        })
-                    }
                 })
+                this.preSetAssignment.raw_response.tabs[2] = JSON.parse(updated_string)
 
-                let diff_feedback = diff.diffWords(tags1, tags2);
-                return diff_feedback;
             },
             highlighText(diff_texts) {
                 var texts_with_diff = "";
