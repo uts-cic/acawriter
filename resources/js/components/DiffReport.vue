@@ -18,6 +18,11 @@
                     <div class="feedback-col" id="original">
                         <div id="editor">
                             <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor>
+                          <!--   <textarea
+                                  id="textarea"
+                                  v-model="editorContent"
+                                  placeholder="Enter something..."
+                                ></textarea> -->
                         </div>
                     </div>
 
@@ -284,6 +289,7 @@
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
                     this.editorContent = this.diffDocument;
+                    // console.log(this.editorContent)
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
@@ -466,8 +472,22 @@
                 return name;
             },
             computeDiffTexts() {
-                var diff_texts = diff.diffWordsWithSpace(this.preSetAssignment.text_input, this.compareDocument.text_input);
+                var diff_texts = diff.diffWords(this.removeHTMLTags(this.preSetAssignment.text_input), this.removeHTMLTags(this.compareDocument.text_input));
                 return diff_texts;
+            },
+            removePTags(text) {
+                fixed_text = "";
+                let re = /<[^>]*>/g;
+                sentences = text.split(".")
+                sentences.forEach(sentence => {
+                    let match = re.exec(sentence);
+                })
+            },
+            removeHTMLTags(text) {
+                var tmp = document.createElement('div');
+                tmp.innerHTML = text;
+    
+                return tmp.textContent || tmp.innerText;
             },
             computeDiffFeedbackLibrary() {
                 let re = /<\/.+?>/;
@@ -511,14 +531,15 @@
                     // it works in a reverse way. So, added will be coloured in RED (#F00)
                     // and removed will be coloured in GREEN (#0C0)  
                     if (part.added) {
-                        text_string = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                        text_string = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
                     } else if (part.removed) {
-                        text_string = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value + "</span> "
+                        text_string = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
                     } else {
                         text_string = part.value
                     }
                 texts_with_diff += text_string;
                 })
+                console.log(texts_with_diff)
                 return texts_with_diff;
             },
             highlighTextFeedback(diff_feedback) {
