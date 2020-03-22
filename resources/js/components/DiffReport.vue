@@ -276,20 +276,18 @@
                 return this.highlighText(diff_texts);
             },
             diffFeedback: function() {
-                let diff_feedback = this.computeDiffFeedbackLibrary();
-                return this.highlighTextFeedback(diff_feedback);
+                let diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary());
+                return diff_feedback;
             },
             attributes: function() {
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
-                    // this.preSetAssignment.raw_response = this.diffFeedback;
-                    this.computeDiffFeedbackLibrary()
+                    this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
                     let feature = this.preSetAssignment.features;
                     this.editorContent = this.diffDocument;
-                    // console.log(this.editorContent)
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
@@ -518,7 +516,8 @@
                         }
                     }
                 })
-                this.preSetAssignment.raw_response.tabs[2] = JSON.parse(updated_string)
+                return updated_string;
+                // this.preSetAssignment.raw_response.tabs[2] = JSON.parse(updated_string)
 
             },
             highlighText(diff_texts) {
@@ -539,7 +538,6 @@
                     }
                 texts_with_diff += text_string;
                 })
-                console.log(texts_with_diff)
                 return texts_with_diff;
             },
             highlighTextFeedback(diff_feedback) {
