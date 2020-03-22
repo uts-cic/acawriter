@@ -30,14 +30,14 @@ class DiffController extends Controller
         $drafts = array();
         $drafts_users = array();
         $drafts = Draft::where('document_id', $request->document_id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'text_input', 'user_id', 'created_at', 'feature_id']);
-        $version = 1;
+        $version = count($drafts);
         foreach ($drafts as $draft) {
         	$user = $this->showUsers($draft->user_id);
             $feature = $this->getFeatures($draft->feature_id);
         	$draft->user = $user;
             $draft->feature = $feature;
             $draft->version = $version;
-            $version++;
+            $version--;
         	array_push($drafts_users, $draft);
         }
         $data->documents->drafts = $drafts_users;
