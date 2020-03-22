@@ -17,12 +17,8 @@
                 <div class="feedback">
                     <div class="feedback-col" id="original">
                         <div id="editor">
-                            <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor>
-                          <!--   <textarea
-                                  id="textarea"
-                                  v-model="editorContent"
-                                  placeholder="Enter something..."
-                                ></textarea> -->
+                            <!-- <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor> -->
+                            <div class="bd-callout bd-callout-info" v-html="editorContent"></div>
                         </div>
                     </div>
 
