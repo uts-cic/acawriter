@@ -11,10 +11,10 @@
       },
       "message": [
         {
-          "emph": "<span class=\"badge badge-pill badge-analytic\">E<\/span>Emphasis of a significant or an important idea "
+          "emph": "<span class=\"badge badge-moves1\">E<\/span> Emphasis of a significant or an important idea "
         },
         {
-          "tempstat": "<span class=\"badge badge-pill badge-analytic\">B<\/span>Background information and reviewing previous work"
+          "tempstat": "<span class=\"badge badge-moves1\">B<\/span> Background information and reviewing previous work"
         }
       ],
       "css": [
@@ -36,10 +36,10 @@
       },
       "message": [
         {
-          "contrast": "<span class=\"badge badge-pill badge-analytic\">C<\/span>Contrasting idea, tension, disagreement or critical insight "
+          "contrast": "<span class=\"badge badge-moves2\">C<\/span> Contrasting idea, tension, disagreement or critical insight "
         },
         {
-          "nostat": "<span class=\"badge badge-pill badge-analytic\">Q<\/span>Question or gap in previous knowledge"
+          "nostat": "<span class=\"badge badge-moves2\">Q<\/span> Question or gap in previous knowledge"
         }
       ],
       "css": [
@@ -61,10 +61,10 @@
       },
       "message": [
         {
-          "novstat": "<span class=\"badge badge-pill badge-analytic\">N<\/span>Novelty and value of your research "
+          "novstat": "<span class=\"badge badge-moves3\">N<\/span>Novelty and value of your research "
         },
         {
-          "contribution": "<span class=\"badge badge-pill badge-analytic-green\">S<\/span>Summary of the author’s goal or nature of the research, or structure of the paper"
+          "contribution": "<span class=\"badge badge-moves3\">S<\/span>Summary of the author’s goal or nature of the research, or structure of the paper"
         }
       ],
       "css": [
@@ -173,7 +173,7 @@
       },
       "message": [
         {
-          "txt": "An effective way to introduce your research is by using the Creating a Research Space (C.A.R.S) framework developed by linguist John Swales (1990). Swales (1990) analysed journal articles from a variety of disciplines and found that researchers follow a particular organisational pattern of moves when writing the introduction. The <strong>CARS<\/strong> moves are as follows:<br \/><br \/><i class=\"fa fa-angle-double-right\"><\/i><strong>Establish a research territory<\/strong> to show how the research area is important and worth investigating, by introducing and reviewing previous research <br \/><i class=\"fa fa-angle-double-right\"><\/i><strong>Establish a niche<\/strong> by indicating a gap in previous research or raising questions about it<br \/><i class=\"fa fa-angle-double-right\"><\/i><strong>Occupy the niche <\/strong> by stating how one’s own research seeks to close\/fill the gap. <br \/><br \/>Following CARS will help set the scene of your research and will make it easier for others to understand your research.<br \/>For more information on how to apply CARS in your research writing please <a target=\"_blank\" href=\"http:\/\/heta.io\/resources\/wawa-improving-research-abstracts-intros\/?target=resources\">click<\/a> here."
+          "txt": "<p>An effective way to introduce your research is by using the Creating a Research Space (C.A.R.S) framework developed by linguist John Swales (1990). Swales (1990) analysed journal articles from a variety of disciplines and found that researchers follow a particular organisational pattern of moves when writing the introduction. The <strong>CARS<\/strong> moves are as follows:<\/p><ul><li><strong>Establish a research territory<\/strong> to show how the research area is important and worth investigating, by introducing and reviewing previous research<\/li><li><strong>Establish a niche<\/strong> by indicating a gap in previous research or raising questions about it<\/li><li><strong>Occupy the niche<\/strong> by stating how one’s own research seeks to close\/fill the gap<\/li><\/ul><p>Following CARS will help set the scene of your research and will make it easier for others to understand your research.<\/p><p>For more information on how to apply CARS in your research writing please read <a target=\"_blank\" href=\"http:\/\/heta.io\/resources\/wawa-improving-research-introductions\/?target=resources\">Improving research introductions<\/a>.<\/p>"
         }
       ],
       "css": [

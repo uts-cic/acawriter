@@ -5,31 +5,61 @@
       "method": "moves",
       "check": {
         "tags": [
+          "tempstat",
           "emph",
-          "tempstat"
+          "grow"
         ]
       },
       "message": [
         {
-          "emph": "<span class=\"badge badge-pill badge-analytic\">E<\/span> Emphasis of a significant or an important idea "
+          "tempstat": "<span class=\"badge badge-moves1\">B<\/span> Background information"
         },
         {
-          "tempstat": "<span class=\"badge badge-pill badge-analytic\">B<\/span> Background information and previous work"
+          "emph": "<span class=\"badge badge-moves1\">E<\/span> Emphasis of a significant or an important idea"
         },
         {
-          "contribution": "<span class=\"badge badge-pill badge-analytic-green\">S<\/span> Summary of the author’s goal or stating the nature of the research"
+          "grow": "<span class=\"badge badge-moves1\">T<\/span> Trend"
         }
       ],
       "css": [
+        "B",
         "E",
-        "B"
+        "T"
       ],
-      "custom": "Background\/Context\/Purpose of research move",
+      "custom": "Background \/ Context move",
       "tab": 1,
       "tabName": "Analytical Feedback"
     },
     {
       "name": "moves2",
+      "method": "moves",
+      "check": {
+        "tags": [
+          "contribution"
+        ],
+        "conditions": [
+          {
+            "terms": [
+              "top"
+            ],
+            "num_chk": "-3"
+          }
+        ]
+      },
+      "message": [
+        {
+          "contribution": "<span class=\"badge badge-moves2\">S<\/span> Summary of the author’s goal or stating the nature of the research"
+        }
+      ],
+      "css": [
+        "S"
+      ],
+      "custom": "Purpose of the Paper \/ Present Research move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "moves3",
       "method": "moves",
       "check": {
         "tags": [
@@ -39,42 +69,50 @@
       },
       "message": [
         {
-          "contrast": "<span class=\"badge badge-pill badge-analytic\">C<\/span> Contrasting idea, issues, disagreement or critical insight "
+          "contrast": "<span class=\"badge badge-moves3\">C<\/span> Contrasting idea, issues, disagreement or critical insight "
         },
         {
-          "nostat": "<span class=\"badge badge-pill badge-analytic\">Q<\/span> Question or gap in previous knowledge"
+          "nostat": "<span class=\"badge badge-moves3\">Q<\/span> Question or gap in previous knowledge"
         }
       ],
       "css": [
         "C",
         "Q"
       ],
-      "custom": "Problem\/ Gap in the literature move",
+      "custom": "Research Problem \/ Issues \/ Gap in the literature move",
       "tab": 1,
       "tabName": "Analytical Feedback"
     },
     {
-      "name": "moves3",
+      "name": "moves4",
       "method": "moves",
       "check": {
         "tags": [
           "novstat",
           "contribution"
+        ],
+        "conditions": [
+          {
+            "terms": [
+              "bottom"
+            ],
+            "num_chk": "3"
+          }
         ]
       },
       "message": [
         {
-          "novstat": "<span class=\"badge badge-pill badge-analytic\">N<\/span> Novelty and value of the research "
+          "novstat": "<span class=\"badge badge-moves4\">N<\/span> Novelty and value of the research "
         },
         {
-          "contribution": "<span class=\"badge badge-pill badge-analytic-green\">S<\/span>Summary of the author’s goal or stating the nature of the research"
+          "contribution": "<span class=\"badge badge-moves4\">S<\/span>Summary of the author’s goal or stating the nature of the research"
         }
       ],
       "css": [
         "N",
         "S"
       ],
-      "custom": "Purpose of research\/ Results move",
+      "custom": "Results \/ Findings move",
       "tab": 1,
       "tabName": "Analytical Feedback"
     },
@@ -87,7 +125,7 @@
       },
       "message": [
         {
-          "txt": "<i class=\"fa fa-2x fa-info-circle text-success\"><\/i> Thank you for submitting your draft to AcaWriter. Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing. <br />Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all the moves in your abstract."
+          "txt": "<i class=\"fa fa-2x fa-info-circle text-success\"><\/i> Thank you for submitting your draft to AcaWriter. Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing. <br>Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all the moves in your abstract."
         }
       ],
       "css": [
@@ -106,40 +144,107 @@
         "tags": [
           "emph",
           "tempstat",
+          "grow"
+        ],
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": [
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "top"
+                ],
+                "num_chk": "-3"
+              }
+            ]
+          },
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
+          },
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Well done, it looks like you have <strong>Background \/ Context<\/strong> moves in your abstract.<br>You have provided background information on your research topic and\/or explained why your research topic is important which will help readers understand why your research is significant."
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "Move 1",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
           "contribution"
         ],
         "conditions": [
           {
             "terms": [
               "top"
-            ]
+            ],
+            "num_chk": "-3"
+          }
+        ],
+        "exclude": [
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
           },
           {
-            "per_chk": "10"
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
           }
         ]
       },
       "message": [
         {
-          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you’re missing Background / Purpose sentences in the beginning of your abstract. Here you explain why your research is important <span class=\"badge badge-pill badge-analytic\">E<\/span> or provide background information on your research <span class=\"badge badge-pill badge-analytic\">B<\/span> or state the purpose of your research <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. To achieve this move try including <span class=\"badge badge-pill badge-analytic\">E<\/span> sentences, for example: x is an important feature in y., Substantial evidence in x suggests that…, The study of x is important because x impacts y. Or <span class=\"badge badge-pill badge-analytic\">B<\/span> sentences: X has been previously proposed…, Recent, literature concerning x has reported that…, Recent studies indicate that…, It is widely agreed that… Or <span class=\"badge badge-pill badge-analytic-green\">S<\/span> sentences: The purpose of this paper is to…, In this study we focus on…, The aim of this research is to... Check if you have included these sentences near the start of your abstract. "
-        },
-        {
-          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Context, Background and Purpose / Summary, sentences in your abstract. You have explained why your research topic is important <span class=\"badge badge-pill badge-analytic\">E<\/span>, provided background information <span class=\"badge badge-pill badge-analytic\">B<\/span> and stated the purpose of your research <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. These sentences will make it easier for your reader to understand why your research is significant and the goal of your research."
-        },
-        {
-          "emph_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Significance sentences in the beginning of your abstract. You have explained why your research topic is important  <span class=\"badge badge-pill badge-analytic\">E<\/span>. This will help readers understand why your research is significant. "
-        },
-        {
-          "tempstat_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Background sentences in the beginning of your abstract. You have provided background information on your research topic <span class=\"badge badge-pill badge-analytic\">B<\/span>. This will help readers understand the context of your research."
-        },
-        {
-          "contribution_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Purpose / Summary sentences in the beginning of your abstract. You have stated the purpose of your research, and/or what the paper will contribute <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. This will make it easier for your reader to understand the goal of your research."
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Well done, it looks like you have <strong>Purpose of the Paper \/ Present Research<\/strong> moves in your abstract.<br>You have stated the purpose of your research, and\/or presented what your research is about which will make it easier for your reader to understand the goal of your research."
         }
       ],
       "css": [
         "mtags"
       ],
-      "custom": "top text",
+      "custom": "Move 2",
       "tab": 2,
       "tabName": "Feedback",
       "tabEval": "dynamic"
@@ -152,31 +257,33 @@
           "contrast",
           "nostat"
         ],
-        "conditions": [
+        "conditions": [],
+        "exclude": [
           {
-            "terms": [
-              "middle_range",
-              "10",
-              "5"
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
             ]
-          },
-          {
-            "per_chk": "0"
           }
         ]
       },
       "message": [
         {
-          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you’re missing Problem / Gap sentences in the middle of your abstract. Here you indicate a gap in knowledge, or identify issues in the literature: <span class=\"badge badge-pill badge-analytic\">C<\/span> and <span class=\"badge badge-pill badge-analytic\">Q<\/span> sentences. To achieve this move try including sentences like these: The problem of x has not been widely studied., This approach fails to address the issue of x., However, limited research has been conducted in x., Despite earlier studies x remains unknown. Check if you have included these sentences in your abstract. "
-        },
-        {
-          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Problem / Gap sentences in your abstract. You have indicated a gap in knowledge <span class=\"badge badge-pill badge-analytic\">Q<\/span> or identified issues in the literature <span class=\"badge badge-pill badge-analytic\">C<\/span> By including these sentences your readers will know what problem you are trying to solve. "
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Well done, it looks like you have <strong>Research Problem \/ Issues \/ Gap in the literature<\/strong> moves in your abstract.<br>You have highlighted the research problem, identified issues or indicated a gap in the literature. By including this move your readers will know what problem you’re trying to solve."
         }
       ],
       "css": [
         "mtags"
       ],
-      "custom": "bottom text",
+      "custom": "Move 3",
       "tab": 2,
       "tabName": "Feedback",
       "tabEval": "dynamic"
@@ -193,31 +300,201 @@
           {
             "terms": [
               "bottom"
-            ]
-          },
-          {
-            "per_chk": "5"
+            ],
+            "num_chk": "3"
           }
         ]
       },
       "message": [
         {
-          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> It looks like you’re missing  Summary / Novelty sentences towards the end. Here you summarise your research <span class=\"badge badge-pill badge-analytic-green\">S<\/span>, and/or explain a new finding, approach, or insight in your research <span class=\"badge badge-pill badge-analytic\">N<\/span>. To achieve this move try including <span class=\"badge badge-pill badge-analytic-green\">S<\/span> sentences, for example: In  this paper, we have…, In this study we..., The aim of this research was to... Or <span class=\"badge badge-pill badge-analytic\">N<\/span>  sentences: Significant improvements in x have been developed, This paper builds on previously published work in this area by adding new insight/data..., We present a new method/approach/model/framework…, X reveals major improvements in y. The major innovation of x is its ability to identify/detect y. Check if you have included these sentences at the end of your abstract. "
-        },
-        {
-          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i>  Great work, it looks like you have Summary / Novelty sentences towards the end of your abstract. You have stated what the purpose of your research and/or paper is <span class=\"badge badge-pill badge-analytic-green\">S<\/span> and explained a new finding, approach, and/or insight in your research <span class=\"badge badge-pill badge-analytic\">N<\/span>. "
-        },
-        {
-          "novstat_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Novelty sentences towards the end of your abstract. You have explained a new finding, approach, and/or insight in your research <span class=\"badge badge-pill badge-analytic\">N<\/span>."
-        },
-        {
-          "contribution_e": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Great work, it looks like you have Summary sentences towards the end of your abstract. You have stated what the purpose of your research and/or paper is <span class=\"badge badge-pill badge-analytic-green\">S<\/span>. This will make it easier for your reader to understand the goal of your research. "
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> Well done, it looks like you have <strong>Results\/Findings<\/strong> moves in your abstract. You have explained your findings and\/or answered your research problem. This move will help readers understand what you have discovered."
         }
       ],
       "css": [
         "mtags"
       ],
-      "custom": "top text",
+      "custom": "Move 4",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
+          "emph",
+          "tempstat",
+          "grow"
+        ],
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": [
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "top"
+                ],
+                "num_chk": "-3"
+              }
+            ]
+          },
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
+          },
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> AcaWriter didn't identify any <strong>Background \/ Context<\/strong> moves in your abstract.<br>Here you explain why your research is important, or provide background information on your research. To achieve this move try including these sentences: <em>x is an important feature in y., Substantial evidence in x suggests that..., The study of x is important because x impacts y.,  x has been previously proposed..., Recent, literature concerning x has reported that..., Recent studies indicate that..., It is widely agreed that...<\/em><br>Check if you have included these sentences in your abstract."
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "Move 1",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
+          "contribution"
+        ],
+        "conditions": [
+          {
+            "terms": [
+              "top"
+            ],
+            "num_chk": "-3"
+          }
+        ],
+        "exclude": [
+          {
+            "tags": [
+              "contrast",
+              "nostat"
+            ],
+            "conditions": []
+          },
+          {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> AcaWriter didn't identify any <strong>Purpose of the Paper / Present Research<\/strong> moves in your abstract. Here you explain the purpose of your research, and/or explain what your research is about.<br>To achieve this move try including these sentences: <em>The purpose of this paper is to..., In this study we focus on..., The aim of this research is to....,We explore x, Our study investigates..., We analyse x...<\/em><br>Check if you have included these sentences in your abstract."
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "Move 2",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
+          "contrast",
+          "nostat"
+        ],
+        "conditions": [],
+        "exclude": [
+            {
+            "tags": [
+              "novstat",
+              "contribution"
+            ],
+            "conditions": [
+              {
+                "terms": [
+                  "bottom"
+                ],
+                "num_chk": "3"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> AcaWriter didn't identify any <strong>Research Problem / Issues / Gap in the literature<\/strong> moves in your abstract.<br>Here you state your research problem,  indicate a gap in knowledge, or identify issues in the literature. To achieve this move try including sentences like these: <em>The problem of x has not been widely studied., This approach fails to address the issue of x., However, limited research has been conducted in x., Despite earlier studies x remains unknown, Previous studies have only looked at x.<\/em><br>Check if you have included these sentences in your abstract."
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "Move 3",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": [
+          "novstat",
+          "contribution"
+        ],
+        "conditions": [
+          {
+            "terms": [
+              "bottom"
+            ],
+            "num_chk": "3"
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> AcaWriter didn't identify any <strong>Results/Findings<\/strong> moves in your abstract. Here you state what you found and/or your answer to the research problem.<br><em>Our evidence confirms that..., The analysis shows... Our review found... Significant improvements in x have been developed., We present a new method/approach/model/framework..., The major innovation of x is its ability to identify/detect y.<\/em><br>Check if you have included these sentences in your abstract."
+        }
+      ],
+      "css": [
+        "mtags"
+      ],
+      "custom": "Move 4",
       "tab": 2,
       "tabName": "Feedback",
       "tabEval": "dynamic"
@@ -231,7 +508,10 @@
       },
       "message": [
         {
-          "txt": "Abstracts are important standalone texts that provide readers an overview of your research project. Although an abstract is quite brief (between 150-300 words) it must concisely explain to the reader what your research is about, its findings and contribution to your field. Abstracts contain certain ‘moves’  which helps guide the reader. These resources will provide more information on the moves that are often found in Abstracts. <a target=\"_blank\" href=\"http:\/\/sophieabel.net\/resources\/\">Click here<\/a> for an explanation of the moves and sentence stems to help you with your Abstract writing!"
+          "txt": "Wondering why AcaWriter is highlighting your sentences as specific moves? The table below shows how the moves you make are identified by AcaWriter’s tags."
+        },
+        {
+          "txt": "<table class=\"table table-bordered\"><thead><tr class=\"table-secondary\"><th scope=\"col\">Move<\/th><th scope=\"col\">AcaWriter tags<\/th><th scope=\"col\">Sentence examples<\/th><\/tr><\/thead><tbody><tr><td scope=\"row\" rowspan=\"3\">Background \/ Context<\/td><td>Emphasis<\/td><td><span class=\"badge badge-moves1\">E<\/span> High level literacy and written communication skills are critical for Higher Degree Research (HDR) students, as publishing <strong>is a significant<\/strong> factor when pursuing a career in academia.<\/td><\/tr><tr><td>Trend<\/td><td><span class=\"badge badge-moves1\">T<\/span> The 5:2 diet was introduced in 2012 and its popularity <strong>is growing<\/strong> worldwide.<\/td><\/tr><tr><td>Background<\/td><td><span class=\"badge badge-moves1\">B<\/span> <strong>Recent studies indicate<\/strong> that the Earth's climate is changing rapidly.<\/td><\/tr><tr><td scope=\"row\">Purpose of the Paper \/ Present Research<\/td><td>Summary<\/td><td><span class=\"badge badge-moves2\">S<\/span> The <strong>aim of this study<\/strong> is to examine the effects of physical activity in children and adolescents.<br><br><span class=\"badge badge-moves2\">S<\/span> <strong>We present<\/strong> a pilot study on users' habits.<\/td><\/tr><tr><td scope=\"row\" rowspan=\"2\">Research Problem \/ Issues \/ Gap in the literature<\/td><td>Contrast<\/td><td><span class=\"badge badge-moves3\">C<\/span> This approach <strong>fails to address the issue<\/strong> of bullying outside the classroom and schools.<\/td><\/tr><tr><td>Question<\/td><td><span class=\"badge badge-moves3\">Q<\/span> However, <strong>little research<\/strong> has been conducted on students' writing practices.<\/td><\/tr><tr><td scope=\"row\" rowspan=\"2\">Results \/ Findings <\/td><td>Summary<\/td><td><span class=\"badge badge-moves4\">S<\/span> The <strong>data also show<\/strong> that there was a correspondence between the two methods of data collection used.<\/td><\/tr><tr><td>Novelty<\/td><td><span class=\"badge badge-moves4\">N<\/span> This framework provides <strong>an innovative approach<\/strong> to address childhood obesity.<\/td><\/tr><\/tbody><\/table>"
         }
       ],
       "css": [

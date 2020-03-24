@@ -6,7 +6,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-default"><h2>Contact</h2> <small>Feel free to drop us a line if you have any questions.</small></div>
+                <div class="card-header bg-default">
+                    <h2>Contact</h2>
+                    <small>Feel free to drop us a line if you have any questions.</small>
+                </div>
                 <div class="card-block p-5">
                     <div class="row">
                         <div class="col-md-6">
@@ -14,7 +17,7 @@
                                 How well did AcaWriter do? We want to hear from you!
                             </p>
 
-                            <form class="form-horizontal" method="POST" action="/page/contact">
+                            <form class="form-horizontal" method="POST" action="/contact" autocomplete="off">
                                 {{ csrf_field() }}
 
                                 <div class="form-group">
@@ -31,6 +34,7 @@
                                     <textarea id="comment" class="form-control" name="comment" required></textarea>
                                 </div>
 
+                                @cannot('bypass-captcha')
                                 <div class="form-group">
                                     <div class="captcha">
                                         <span>{!! captcha_img() !!}</span>
@@ -41,6 +45,7 @@
                                 <div class="form-group">
                                     <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
                                 </div>
+                                @endcannot
 
                                 <div class="form-group">
                                     <div class="row">
@@ -57,7 +62,7 @@
 
 
                             <p class="card-text">
-                                <strong>General Enquiries and Technical Enquires </strong><br /><em>(including from academics wishing to use AcaWriter)</em><br /><br />
+                                <strong>General Enquiries and Technical Enquires </strong><br><em>(including from academics wishing to use AcaWriter)</em><br><br>
                                 Email: <a href="mailto:cic@uts.edu.au">cic@uts.edu.au </a>
 
                             </p>

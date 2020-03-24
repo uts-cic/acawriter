@@ -6,6 +6,7 @@
 /vendor
 .env
 .env.backup
+.env.local
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -16,3 +17,4 @@ yarn-error.log
 /.idea
 /.vagrant
 /.vscode
+ssh.bat

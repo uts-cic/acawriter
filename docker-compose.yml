@@ -33,6 +33,7 @@ services:
       QUEUE_CONNECTION: ${QUEUE_CONNECTION}
       SESSION_DRIVER: ${SESSION_DRIVER}
       SESSION_LIFETIME: ${SESSION_LIFETIME}
+      SESSION_SECURE_COOKIE: ${SESSION_SECURE_COOKIE}
 
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
@@ -97,8 +98,8 @@ services:
   redis:
     container_name: redis
     image: redis
-    # volumes:
-    #     - ${DATA_PATH_HOST}/redis:/data
+    volumes:
+        - ${DATA_PATH_HOST}/redis:/data
     networks:
       - app-network
       - socket-network
@@ -106,10 +107,10 @@ services:
   postgres:
     container_name: postgres
     image: postgres
-    # volumes:
-    #     - ${DATA_PATH_HOST}/postgres:/data
     ports:
       - "5433:5432"
+    volumes:
+        - ${DATA_PATH_HOST}/postgres:/data
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}

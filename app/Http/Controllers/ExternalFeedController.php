@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Used in demo site - not this codebase
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

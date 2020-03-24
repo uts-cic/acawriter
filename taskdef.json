@@ -193,6 +193,10 @@
           "value": "$SESSION_LIFETIME"
         },
         {
+          "name": "SESSION_SECURE_COOKIE",
+          "value": "$SESSION_SECURE_COOKIE"
+        },
+        {
           "name": "TAP_API",
           "value": "$TAP_API"
         },

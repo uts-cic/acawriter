@@ -15,6 +15,10 @@
   height: 60px;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .btn-group {
   line-height: 38px;
 }
@@ -366,23 +370,20 @@ table .sort-desc:before {
 
   .wrapper {
     text-align: justify;
+
+    .moves1, .moves2, .moves3, .moves4 {
+      padding: 0.1875rem 0.625rem;
+      border-radius: 0.75rem;
+    }
   }
 }
 
-.moves1,
 .ana_bg_yellow {
   padding: 3px 4px 4px 4px;
   border-radius: 20px;
   background-color: #f9d3c0;
 }
 
-.moves2 {
-  padding: 3px 4px 4px 4px;
-  border-radius: 20px;
-  background-color: #cbe3f5;
-}
-
-.moves3,
 .ana_bg_green {
   border-radius: 20px;
   padding: 3px 4px 4px 4px;
@@ -468,4 +469,15 @@ table .sort-desc:before {
 
 #assignment input+button.btn.btn-dark {
   margin-top: 20px
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
 }

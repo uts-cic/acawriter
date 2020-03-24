@@ -21,10 +21,10 @@
                         <div class="small" v-if="auto!=''">{{auto}}</div>
                     </div>
 
-                    <div class="subheader-action">
-                        <!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"/> -->
+                    <div class="subheader-action" v-if="preSetAssignment">
+                        <!-- Auto feedback: <input type="checkbox" v-model="autofeedback" v-on:change="updateAutoFeedback()"> -->
                         <!-- <div class="btn-group pull-right" role="group" aria-label="Actions"> -->
-                            <a target="_blank" class="btn btn-primary" v-bind:href="getLink" v-if="feedback.rules" data-ga-action="download">Download PDF</a>
+                            <a target="_blank" class="btn btn-primary" v-if="preSetAssignment" v-bind:href="'/analyse/' + preSetAssignment.slug + '/pdf'" data-ga-action="download">Download PDF</a>
                             <!-- <button type="button" class="btn brand-btn-outline-secondary btn-sm" v-on:click="storeAnalysedDrafts('manual')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button> -->
                             <!-- <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i> Key</button> -->
                         <!-- </div> -->
@@ -49,7 +49,11 @@
                     <div class="feedback-col" id="parsed">
                         <p class="alert alert-warning px-3">Computers don’t read writing like humans. So, if you’re sure your writing’s good, it's fine to disagree with AcaWriter's feedback, just like you’d ignore a poor grammar suggestion.</p>
 
-                        <div v-if="this.attributes.grammar == 'reflective'">
+                        <div v-if="this.attributes.isResearch">
+                            <research-result></research-result>
+                        </div>
+
+                        <div v-else-if="this.attributes.grammar == 'reflective'">
                             <reflective-result></reflective-result>
                         </div>
 
@@ -77,12 +81,14 @@
     import { mapState, mapActions, mapGetters} from 'vuex';
     import  Reflective from './analyser/Reflective.vue';
     import  Analytic from './analyser/Analytic.vue';
+    import  Research from './analyser/Research.vue';
 
     export default {
         components: {
             VueEditor,
             reflectiveResult: Reflective,
-            analyticResult: Analytic
+            analyticResult: Analytic,
+            researchResult: Research
         },
         name: 'editor',
         props:['document', 'userActivity'],
@@ -173,17 +179,19 @@
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
+                        isResearch: feature.id === 10 || feature.id === 5,
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
-                        initFeedback:this.initFeedback
+                        initFeedback: this.initFeedback
                     };
                 } else {
                    return {
                         feedbackOpt:'a_01',
                         grammar: 'analytical',
-                        feature:0,
+                        isResearch: false,
+                        feature: 0,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
-                       initFeedback:this.initFeedback
+                        initFeedback: this.initFeedback
                    };
                 }
             },
@@ -212,26 +220,7 @@
                         }
                     });
                 }
-
                 return upd;
-            },
-            getbtnStatus: function() {
-                if (this.btnFeedback) {
-                    return true;
-                }  else {
-                    return false;
-                }
-            },
-            getLink:function() {
-                let link='/generate-pdf/';
-                let data ={};
-
-                if(this.preSetAssignment) {
-                    data.id = (this.preSetAssignment.id * 123456); //this is the document id
-                    data.grammar = this.preSetAssignment.feature[0].grammar.toLocaleLowerCase();
-                    data.name= this.preSetAssignment.name;
-                }
-                return link+ JSON.stringify(data);
             }
         },
         watch :{

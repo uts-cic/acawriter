@@ -8,15 +8,9 @@ use Illuminate\Support\Facades\Response;
 
 class ReportController extends Controller
 {
-    //
-    private $ui;
-
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->ui = new \stdClass();
-        $this->ui->general = new \stdClass();
-        $this->ui->documents = new \stdClass();
+        $this->middleware(['auth', 'can:access-reports']);
     }
 
     public function index()
@@ -25,24 +19,27 @@ class ReportController extends Controller
         //$this->ui->general->m_new_users = User::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
         //$this->ui->general->m_feedback = Draft::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
         //$this->ui->general->m_user_activity = Activity::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
-        return view('admin.report', ['data' => $this->ui]);
+        return view('admin.report', ['data' => []]);
     }
 
-    public function fetchDocs(Request $request)
+    public function fetchDocs()
     {
+        $input = $this->validate(request(), [
+            'assignment_code' => ['required', 'alpha_num', 'max:8'],
+            'action' => ['required'],
+        ]);
 
-        if (!isset($request->assignment_code)) {
-            return redirect()->back()->with('error', 'Please enter an assignment code');
-        }
+        $code = $input['assignment_code'];
+
         //$this->ui->general->total_users = User::all()->count();
 
         //$this->ui->general->m_new_users = User::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
         //$this->ui->general->m_feedback = Draft::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
         //$this->ui->general->m_user_activity = Activity::whereRaw('created_at between  date_trunc(\'month\', current_date) and date_trunc(\'day\', current_date + INTERVAL \'1 day\' )')->get()->count();
 
-        switch ($request->input('action')) {
+        switch ($input['action']) {
             case 'show':
-                $this->ui->documents->list = DB::table('documents')
+                $documents = DB::table('documents')
                     ->select(DB::raw('
                                     (select count(id) from drafts drf where drf.document_id= documents.id) as dCount,
                                     documents.id as docId,
@@ -56,7 +53,7 @@ class ReportController extends Controller
                     ->leftJoin('drafts', 'drafts.document_id', '=', 'documents.id')
                     ->leftJoin('text_drafts', 'text_drafts.document_id', '=', 'documents.id')
                     ->join('users', 'users.id', '=', 'drafts.user_id')
-                    ->where('assignments.code', '=', $request->assignment_code)
+                    ->where('assignments.code', '=', $code)
                     ->groupBy('documents.id', 'assignments.code', 'users.id')
                     ->get();
 
@@ -74,18 +71,18 @@ class ReportController extends Controller
                 //     ->join('drafts', 'drafts.document_id', '=', 'documents.id')
                 //     ->join('text_drafts', 'text_drafts.document_id', '=', 'documents.id')
                 //     ->join('users', 'users.id', '=', 'drafts.user_id')
-                //     ->where('assignments.code', '=', $request->assignment_code)
+                //     ->where('assignments.code', '=', $code)
                 //     ->groupBy('documents.id', 'assignments.code', 'users.id')
                 //     ->toSql();
 
-                return view('admin.report', ['data' => $this->ui]);
+                return view('admin.report', ['documents' => $documents]);
                 break;
 
             case 'download_feed':
                 // download all feedback with the code
                 $dump = array();
                 $help = new \stdClass();
-                $help->code = $request->assignment_code;
+                $help->code = $code;
                 $help->which = 'feed';
                 $data = $this->getExportData($help);
                 if (count($data) === 0) return redirect()->back()->with('error', 'No records found');
@@ -102,7 +99,7 @@ class ReportController extends Controller
             case 'download_text':
                 $dump = array();
                 $help = new \stdClass();
-                $help->code = $request->assignment_code;
+                $help->code = $code;
                 $help->which = 'txt';
                 $data = $this->getExportData($help);
                 if (count($data) === 0) return redirect()->back()->with('error', 'No records found');

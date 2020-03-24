@@ -22,7 +22,7 @@
                 <div v-if="auto!=''"><small>{{auto}}</small></div>
                 <p>This is an example piece of writing to experiment with. You can edit this text (nothing is saved).
                     Click Get Feedback to see the automatic feedback on the right.
-                    <br>When you're ready, go to <a href="/home">My documents</a> and create your own document.</p>
+                    <br>When you're ready, go to <a href="/">My documents</a> and create your own document.</p>
 
                 <div class="feedback">
                     <div class="feedback-col" id="original">
@@ -38,7 +38,11 @@
 
                     <!-- Reflective feedback -->
                     <div class="feedback-col" id="parsed">
-                        <div v-if="this.attributes.grammar == 'reflective'">
+                        <div v-if="this.attributes.isResearch">
+                            <research-result></research-result>
+                        </div>
+
+                        <div v-else-if="this.attributes.grammar == 'reflective'">
                             <reflective-result></reflective-result>
                         </div>
 
@@ -65,12 +69,14 @@
     import { mapState, mapActions, mapGetters} from 'vuex';
     import  Reflective from './analyser/Reflective.vue';
     import  Analytic from './analyser/Analytic.vue';
+    import  Research from './analyser/Research.vue';
 
     export default {
         components: {
             VueEditor,
             reflectiveResult: Reflective,
-            analyticResult: Analytic
+            analyticResult: Analytic,
+            researchResult: Research
         },
         name: 'editor',
         props:['ex', 'role', 'ext'],
@@ -115,8 +121,6 @@
         },
         created() {
             this.auto = '';
-            //setInterval(this.storeAnalysedDrafts, 900000);
-            // setInterval(this.quickCheck, 300000);
         },
         computed: {
             reflective: function() {
@@ -168,6 +172,7 @@
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
+                        isResearch: feature.id === 10 || feature.id === 5,
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
                         initFeedback:this.initFeedback
@@ -175,12 +180,12 @@
                     };
                 } else {
                     return {
-                        feedbackOpt:this.example.genre== 1 ? 'a_01' : 'r_01',
-                       // grammar: this.example.genre == 1 ? 'analytic' : 'reflective',
-                        grammar: this.grammar,
-                        feature:this.example.genre,
+                        feedbackOpt:'a_01',
+                        grammar: 'analytical',
+                        isResearch: false,
+                        feature: 0,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
-                        initFeedback:this.initFeedback
+                        initFeedback: this.initFeedback
                     };
                 }
                 //setInterval(this.storeAnalysedDrafts('auto'), 900000);
@@ -212,17 +217,6 @@
                 } else {
                     this.$data.errors.push({'message':'Please select feedback type'});
                 }
-            },storeAnalysedDrafts() {
-                this.$data.auto='processing....';
-                this.attributes.initFeedback = true;
-                let data = {'txt':this.editorContent, 'action': 'store', 'extra': this.attributes,'feedback':this.feedback, 'other':this.example};
-                axios.post('/example/store', data)
-                    .then(response => {
-                        this.$data.auto = 'Stored : '+ moment().format('DD/MM/YYYY hh:mma');
-                    })
-                    .catch(e => {
-                        this.$data.errors.push(e)
-                    });
             },
             getGrammar: function(idx) {
                 for( var [k ,v] of Object.entries(this.features)) {
