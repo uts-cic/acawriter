@@ -144,6 +144,8 @@
                                         <td>{{$document->document_id}}</td> 
                                         <td>{{$document->version}} {{Form::radio('version', $document->created_at)}}</td>
                                         <td><button type="submit" name="id" value="{{$document->id}}" class="btn-link">Link</button></td>
+                                        {{ $document->id }}
+                                        {{ $document->version }}
                                         {{ csrf_field() }}
                                     </tr>
                                 @endforeach
