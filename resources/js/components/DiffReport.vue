@@ -466,7 +466,7 @@
                 return name;
             },
             computeDiffTexts() {
-                var diff_texts = diff.diffWords(this.removeHTMLTags(this.preSetAssignment.text_input), this.removeHTMLTags(this.compareDocument.text_input));
+                var diff_texts = diff.diffWordsWithSpace(this.removeHTMLTags(this.preSetAssignment.text_input), this.removeHTMLTags(this.compareDocument.text_input));
                 return diff_texts;
             },
             removePTags(text) {
@@ -494,8 +494,14 @@
                     if (match_tag) {
                         let split_index = match_tag.index+4
                         let const_text = part.value.slice(0, split_index)
-                        let text = part.value.slice(split_index, match_bracket.index-1)
-                        let const_text2 = part.value.slice(match_bracket.index)
+                        let bracket_index = 0
+                        if (match_bracket) {
+                            bracket_index = match_bracket.index
+                        } else {
+                            bracket_index = part.value.length
+                        }
+                        let text = part.value.slice(split_index, bracket_index-1)
+                        let const_text2 = part.value.slice(bracket_index)
                         if (part.added) {
                             text = "<span style=\\\"background-color: #F00; color: rgb(0, 0, 0);\\\">" + text.replace(/"/g, '\\"').trim() + "</span>\" "
                             updated_string += const_text + text + const_text2
@@ -512,8 +518,9 @@
                         }
                     }
                 })
-                return updated_string;
-                // this.preSetAssignment.raw_response.tabs[2] = JSON.parse(updated_string)
+                let re_comma_brackets = /]\n      \[/g
+                let regex_string = updated_string.replace(re_comma_brackets, '],[')
+                return regex_string;
 
             },
             highlighText(diff_texts) {
