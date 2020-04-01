@@ -126,6 +126,26 @@
                                     @endif
                                 </tbody>
                             </table>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Document Name</th>
+                                        <th scope="col">Document ID</th>
+                                        <th scope="col">Student</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (isset($user_documents))
+                                    @foreach ($user_documents as $u_doc)
+                                    <tr>
+                                        <th scope="row">{{ $u_doc->name }}</th>
+                                        <td>{{ $u_doc->id }}</td>
+                                        <td>{{ $u_doc->user_id }}</td>
+                                    </tr>
+                                    @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
                             <form role="form" method="POST" action="{{ url('/admin/diffreport') }}">
                             <table class="table">
                                 <thead class="thead-dark">

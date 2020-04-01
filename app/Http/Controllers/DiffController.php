@@ -41,7 +41,11 @@ class DiffController extends Controller
         	array_push($drafts_users, $draft);
         }
         $data->documents->drafts = $drafts_users;
-        return view('admin.report', ['data' => $data]);
+
+        $user_documents = new \stdClass;
+        $user_documents = $this->getDocuments();
+
+        return view('admin.report', ['data' => $data, 'user_documents' => $user_documents]);
     }
 
     public function showUsers($id)
@@ -50,6 +54,12 @@ class DiffController extends Controller
         $users = User::where('id', $id)->first('name');
         $data->users = $users;
         return $data;
+    }
+
+    public function getDocuments()
+    {
+        $user_documents = Document::get(['id', 'user_id', 'name']);
+        return $user_documents;
     }
 
     public function getFeatures($id)
