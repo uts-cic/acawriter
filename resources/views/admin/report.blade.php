@@ -163,8 +163,8 @@
                                     <tr>
                                         <th scope="row">{{$document->user->users->name}}</th>
                                         <td>{{$document->document_id}}</td> 
-                                        <td>{{$document->version}} {{Form::radio('version', $document->created_at)}}</td>
-                                        <td>{{$document->version}} {{Form::radio('version_to', $document->created_at)}}</td>
+                                        <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('version', $document->created_at)}}</td>
+                                        <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('version_to', $document->created_at)}}</td>
                                         <td><button type="submit" name="id" value="{{$document->id}}" class="btn-link">Link</button></td>
                                         {{ csrf_field() }}
                                     </tr>
