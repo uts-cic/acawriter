@@ -34,9 +34,11 @@ class DiffController extends Controller
         foreach ($drafts as $draft) {
         	$user = $this->showUsers($draft->user_id);
             $feature = $this->getFeatures($draft->feature_id);
+            $document = $this->getDocument($draft->document_id);
         	$draft->user = $user;
             $draft->feature = $feature;
             $draft->version = $version;
+            $draft->document = $document;
             $version--;
         	array_push($drafts_users, $draft);
         }
@@ -54,6 +56,12 @@ class DiffController extends Controller
         $users = User::where('id', $id)->first('name');
         $data->users = $users;
         return $data;
+    }
+
+    public function getDocument($id)
+    {
+        $document = Document::where('id', $id)->first(['id', 'name']);
+        return $document;
     }
 
     public function getDocuments()

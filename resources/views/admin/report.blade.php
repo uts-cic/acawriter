@@ -151,6 +151,7 @@
                                 <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">User</th>
+                                    <th scope="col">Document Name</th>
                                     <th scope="col">Document Id</th>
                                     <th score="col">Version (From)</th>
                                     <th score="col">Version (To)</th>
@@ -162,6 +163,7 @@
                                 @foreach($data->documents->drafts as $document)
                                     <tr>
                                         <th scope="row">{{$document->user->users->name}}</th>
+                                        <td>{{$document->document->name}}</td> 
                                         <td>{{$document->document_id}}</td> 
                                         <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('version', $document->created_at)}}</td>
                                         <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('version_to', $document->created_at)}}</td>
