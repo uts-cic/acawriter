@@ -44,10 +44,7 @@ class DiffController extends Controller
         }
         $data->documents->drafts = $drafts_users;
 
-        $user_documents = new \stdClass;
-        $user_documents = $this->getDocuments();
-
-        return view('admin.report', ['data' => $data, 'user_documents' => $user_documents]);
+        return view('admin.report', ['data' => $data]);
     }
 
     public function showUsers($id)
@@ -64,10 +61,15 @@ class DiffController extends Controller
         return $document;
     }
 
-    public function getDocuments()
+    public function getDocuments(Request $request)
     {
-        $user_documents = Document::get(['id', 'user_id', 'name']);
-        return $user_documents;
+        $user_documents = new \stdClass;
+        $user = User::where('name', $request->username)->first(['id', 'name']);
+        if ($user) {
+            $user_documents = Document::where('user_id', $user->id)->get(['id', 'user_id', 'name']);
+            $user_documents->user = $user;
+        }
+        return view('admin.report', ['user_documents' => $user_documents]);
     }
 
     public function getFeatures($id)
