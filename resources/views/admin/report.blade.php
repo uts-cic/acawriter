@@ -78,6 +78,29 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
+                            <div class="card-header">Search Documents by Username</div>
+                            <div class="card-body">
+                                <form action="/admin/documentsByUser" method="post">
+                                    <div class="row">
+                                        <div class="form-group col-sm-12 col-md-3">
+                                            <input type="text"  class="form-control" name="username" placeholder="enter username" />
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-9">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button href="#" class="btn btn-primary" type="submit" name="action" value="show"><i class="fa fa-search" aria-hidden="true"></i> Users</button>
+                                            </div>
+                                        </div>
+
+                                        {{ csrf_field() }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
                             <div class="card-header">Search Documents</div>
                             <div class="card-body">
                                 <form action="/admin/diffDocuments" method="post">
@@ -140,7 +163,7 @@
                                     <tr>
                                         <th scope="row">{{ $u_doc->name }}</th>
                                         <td>{{ $u_doc->id }}</td>
-                                        <td>{{ $u_doc->user_id }}</td>
+                                        <td>{{ $u_doc->user->name }}</td>
                                     </tr>
                                     @endforeach
                                     @endif
