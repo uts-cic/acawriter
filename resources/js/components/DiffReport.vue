@@ -18,6 +18,7 @@
                     <div class="feedback-col" id="original">
                         <div id="editor">
                             <!-- <vue-editor v-model="editorContent" :editorToolbar="customToolbar" placeholder="Place your text here..."></vue-editor> -->
+                            <div v-html="versionHeaders"></div><br/>
                             <div class="bd-callout bd-callout-info" v-html="editorContent"></div>
                         </div>
                     </div>
@@ -188,6 +189,7 @@
             return {
                 editorContent: '',
                 compareContent: '',
+                versionHeaders: '',
                 loading: 0,
                 tap: [],
                 errors: [],
@@ -278,6 +280,9 @@
             attributes: function() {
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
+                    this.versionHeaders = "Comparing version: " + this.preSetAssignment.created_at + " to version: " + this.compareDocument.created_at
+                    console.log(this.preSetAssignment.created_at)
+                    console.log(this.compareDocument.created_at)
                     this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
