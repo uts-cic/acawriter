@@ -59,6 +59,7 @@ Route::get('/admin/users', 'AdminController@showUsers');
 Route::post('/admin/users', 'AdminController@updateUserRoles');
 Route::post('/admin/addUser', 'AdminController@addUser');
 Route::post('/admin/report', 'ReportController@fetchDocs');
+Route::post('/admin/documentsByUser', 'DiffController@getDocuments');
 Route::post('/admin/diffDocuments', 'DiffController@showDrafts');
 Route::post('/admin/diffreport', 'DiffController@produceReport');
 Route::get('/admin/reports', 'ReportController@index');
