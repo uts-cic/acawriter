@@ -178,7 +178,7 @@
                                     <th scope="col">Document Id</th>
                                     <th score="col">Version (From)</th>
                                     <th score="col">Version (To)</th>
-                                    <th scope="col">Text</th>
+                                    <!-- <th scope="col">Text</th> -->
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -189,11 +189,16 @@
                                         <td>{{$document->document->name}}</td> 
                                         <td>{{$document->document_id}}</td> 
                                         <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('version', $document->created_at)}}</td>
-                                        <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('version_to', $document->created_at)}}</td>
-                                        <td><button type="submit" name="id" value="{{$document->id}}" class="btn-link">Link</button></td>
+                                        <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('id', $document->id)}}</td>
+                                        <!-- <td><button type="submit" name="id" value="{{$document->id}}" class="btn-link">Link</button></td> -->
                                         {{ csrf_field() }}
                                     </tr>
                                 @endforeach
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td align='center'><button type="submit">Submit</button></td>
                                 @endif
                                 </tbody>
                             </table>
