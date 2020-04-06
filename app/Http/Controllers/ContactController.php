@@ -15,16 +15,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        $contact = new \stdClass();
-        if (Auth::user()) {
-            $contact->name = Auth::user()->name;
-            $contact->email = Auth::user()->email;
-        }
-        else {
-            $contact->name = '';
-            $contact->email = '';
-        }
-        return view('contact', ['contact' => $contact]);
+        return redirect()->to('/help');
     }
 
 
@@ -50,7 +41,7 @@ class ContactController extends Controller
             $crm->user_id = $user->id;
         }
 
-        $crm->ref = '/contact';
+        $crm->ref = '/help';
 
         $crm->save();
 

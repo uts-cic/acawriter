@@ -23,8 +23,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="app">
-    <div class="container">
+<main id="app" class="container">
+    <div>
         @include('admin.flash')
          <div class="row">
             <div class="col-12 col-lg-6 col-xl-3 text-center">
@@ -109,9 +109,5 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 @endsection
-
-@section('footer')
-
-@stop

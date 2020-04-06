@@ -12,9 +12,9 @@
                     </div>
 
                     <div class="card-body collapse" id="a">
-                        <p class="card-text">
-                        <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br>
-                        <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
+                        <p>
+                            <i class="fa fa-globe"></i> TAP <small>next updated after : {{10- counter}} changes.</small><br>
+                            <i class="fa fa-database" aria-hidden="true"></i> <small>Save: {{auto}} </small>
                         </p>
                     </div>
                     <div class="collapse" id="b">

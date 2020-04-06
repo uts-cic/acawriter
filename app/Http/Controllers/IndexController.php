@@ -33,4 +33,18 @@ class IndexController extends Controller
     {
         return view('terms');
     }
+
+    public function help()
+    {
+        $contact = new \stdClass();
+        if (Auth::user()) {
+            $contact->name = Auth::user()->name;
+            $contact->email = Auth::user()->email;
+        }
+        else {
+            $contact->name = '';
+            $contact->email = '';
+        }
+        return view('help', ['contact' => $contact]);
+    }
 }
