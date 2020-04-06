@@ -43,21 +43,19 @@
                 </div>
             </div>
 
-            <template v-for="tab in vtabs">
-                <div class="tab-pane" v-bind:id="getLowerCase(tab.tabName)" role="tabpanel">
-                    <span v-for="(ref, idc) in feedback.tabs">
-                        <template v-if="idc==tab.tab" v-for="(msg, idm) in ref">
-                            <div class="bd-callout bd-callout-info" v-for="feed in msg">
-                                <span v-for="a in feed">
-                                    <ul class="list-unstyled">
-                                        <li class="list-group-flush" v-for="b in a" v-html="b"></li>
-                                    </ul>
-                                </span>
-                            </div>
-                        </template>
-                    </span>
-                </div>
-            </template>
+            <div class="tab-pane" v-bind:id="getLowerCase(tab.tabName)" role="tabpanel" v-for="tab in vtabs">
+                <template v-for="(ref, idc) in feedback.tabs">
+                    <template v-if="idc == tab.tab" v-for="(msg, idm) in ref">
+                        <div class="feedback-item" v-for="feed in msg">
+                            <template v-for="a in feed">
+                                <ul class="list-unstyled">
+                                    <li class="feedback-list-item" v-for="b in a" v-html="b"></li>
+                                </ul>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </div>
         </div>
     </div>
     <div v-else class="feedback-placeholder"></div>
