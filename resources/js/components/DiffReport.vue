@@ -316,31 +316,6 @@
                 let classes = [].concat(...rules);
                 return classes;
             },
-            draftUpdate: function() {
-                let upd = {};
-                upd.message ='';
-                var s = this;;
-                if(this.userActivity && this.preSetAssignment){
-                    this.btnFeedback = false;
-                    this.userActivity.forEach(function(activity){
-                        if(activity.data) {
-                            if(activity.data.type==='Draft' && activity.data.ref === s.attributes.storeDraftJobRef) {
-                                upd.message = activity.data.msg;
-                                s.auto = moment().format('DD/MM/YYYY hh:mma');
-                            }
-                        }
-                    });
-                }
-
-                return upd;
-            },
-            getbtnStatus: function() {
-                if (this.btnFeedback) {
-                    return true;
-                }  else {
-                    return false;
-                }
-            },
             getLink:function() {
                 let link='/generate-pdf/';
                 let data ={};
