@@ -55,6 +55,19 @@ class DiffController extends Controller
         return $data;
     }
 
+    public function getVersions($id)
+    {
+        $data = new \stdClass;
+        $drafts = Draft::where('document_id', $id)->orderBy('created_at')->get(['id', 'document_id', 'created_at', 'updated_at']);
+        $version = count($drafts);
+        foreach ($drafts as $draft) {
+            $draft->version = $version;
+            $version--;
+        }
+
+        return $drafts;
+    }
+
     public function getDocument($id)
     {
         $document = Document::where('id', $id)->first(['id', 'name']);
@@ -102,7 +115,10 @@ class DiffController extends Controller
         $data->draft_first->raw_response = json_decode($draft_first[0]->raw_response);
     	$data->draft_second->raw_response = json_decode($draft_second->raw_response);
 
-    	return view('admin.diffreport', ['data' => $data]);
+        $draft_version = new \stdClass;
+        $draft_version = $this->getVersions($data->draft_first->document_id);
+
+    	return view('admin.diffreport', ['data' => $data, 'versions' => $draft_version]);
     }
 }
 ?>
