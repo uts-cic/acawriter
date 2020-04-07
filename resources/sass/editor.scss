@@ -1,12 +1,3 @@
-/*.wrapper {
-  max-height:40rem;
-  overflow-y: scroll;
-}
-
-.ql-container {
-  max-height:40rem;
-  overflow-y: scroll;
-}*/
 #original .ql-editor {
   min-height: calc(100vh - 433px);
 }
@@ -19,14 +10,14 @@
   background: #F3F5FE;
 }
 
-.vocab , .context, .challenge, .wordcount, .metrics, .change, .background{
+.vocab , .context, .challenge, .wordcount, .metrics, .change, .background {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding:1px;
+  padding: 1px;
 }
 
 

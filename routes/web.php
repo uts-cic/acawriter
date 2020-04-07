@@ -16,10 +16,11 @@ Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/', 'IndexController@index');
 Route::get('/about', 'IndexController@about');
 Route::get('/terms', 'IndexController@terms');
+Route::get('/help', 'IndexController@help');
 
 Route::get('/contact', 'ContactController@index');
-Route::post('/contact', 'ContactController@storeContact');
-Route::get('/contact/refreshcaptcha', 'ContactController@refreshCaptcha');
+Route::post('/help', 'ContactController@storeContact');
+Route::get('/help/refreshcaptcha', 'ContactController@refreshCaptcha');
 
 Route::post('/auth/jwt', 'Auth\RegisterController@awt');
 Route::post('/auth/lti', 'Auth\RegisterController@lti');

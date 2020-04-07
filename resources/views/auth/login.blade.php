@@ -12,24 +12,23 @@
         </div>
     @endif
 
-    <div class="row">
-        <div class="col-md-12">
-            <h1>AcaWriter</h1>
-            <h3 class="text-secondary">AcaWriter is a software tool that helps you develop your academic and reflective writing by providing you with automatic feedback. It is available to all UTS staff and students.</h3>
-        </div>
-    </div>
-    <div class="row">
+    <h1 class="font-weight-normal mt-5 mb-3">Welcome to AcaWriter!</h1>
+    <p class="lead text-muted mt-3 mb-5">AcaWriter is a software tool that helps you develop your academic and reflective writing by providing you with automatic feedback. It is available to all UTS staff and students.</p>
+
+    <p><strong>UTS</strong> isn’t here to tell you what to think, but to help you learn how to think. Similarly, <strong>AcaWriter</strong> won’t tell you what to write, but will help you learn how to say it in the most rigorous, effective way. Before you just jump in, please visit the <a href="https://www.uts.edu.au/acawriter" target="_blank">AcaWriter information website</a>. This will help maximise the impact that AcaWriter has on your academic and reflective writing. Once you are ready to use AcaWriter, please login below.
+                <br>All enquiries, requests, bug reports, please submit using the <a href="{{ url('help') }}">contact form</a>.</p>
+    <!-- <div class="row">
         <div class="col-md-7 col-xs-12">
             <a href="https://www.uts.edu.au/acawriter" target="_blank"><img src="/images/acaWriter.jpg" alt="Visit the information website to find out more!"></a>
         </div>
         <div class="col-md-5 col-xs-12">
             <div class="alert alert-secondary p-4">
                 <strong>UTS</strong> isn’t here to tell you what to think, but to help you learn how to think. Similarly, <strong>AcaWriter</strong> won’t tell you what to write, but will help you learn how to say it in the most rigorous, effective way. Before you just jump in, please visit the <a href="https://www.uts.edu.au/acawriter" target="_blank">AcaWriter information website</a>. This will help maximise the impact that AcaWriter has on your academic and reflective writing. Once you are ready to use AcaWriter, please login below.
-                <br>All enquiries, requests, bug reports, please submit using the <a href="{{ url('contact') }}">contact form</a>.
+                <br>All enquiries, requests, bug reports, please submit using the <a href="{{ url('help') }}">contact form</a>.
             </div>
         </div>
-    </div>
-    <br>
+    </div> -->
+
     <div class="row">
         <div class="col-md-12 col-xs-12 align-self-center">
             <div class="card">

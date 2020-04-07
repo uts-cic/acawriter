@@ -20,14 +20,12 @@
         </thead>
         <tbody>
             <tr v-for= "doc in documents" v-bind:id="'doc-' + doc.id">
-                <th scope="row">
-                    <a v-bind:href="'analyse/' + doc.slug" v-on:click="action('analyse', doc)">{{doc.name}}</a>
-                </th>
+                <td><a v-bind:href="'analyse/' + doc.slug" v-on:click="action('analyse', doc)">{{doc.name}}</a></td>
                 <td>{{doc.grammar}} ({{doc.feature_name}})</td>
-                <td v-html="getCreated(doc.created_at)"></td>
-                <td v-html="getLastUpdated(doc.draft_last_updated_at)"></td>
-                <td v-html="getAssignment(doc.assignment)"></td>
-                <td>
+                <td v-html="getCreated(doc.created_at)" class="text-nowrap"></td>
+                <td v-html="getLastUpdated(doc.draft_last_updated_at)" class="text-nowrap"></td>
+                <td v-html="getAssignment(doc.assignment)" class="text-nowrap"></td>
+                <td class="text-nowrap">
                     <a href="#" v-on:click="action('edit', doc)"><i class="fa fa-edit"></i></a> &nbsp;
                     <a href="#" v-on:click="action('delete', doc)"><i class="fa fa-trash"></i></a>
                 </td>
