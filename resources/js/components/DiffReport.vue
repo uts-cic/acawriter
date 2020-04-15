@@ -498,6 +498,8 @@
                 })
                 let re_comma_brackets = /]\n      \[/g
                 let regex_string = updated_string.replace(re_comma_brackets, '],[')
+                console.log(regex_string[regex_string.length - 1])
+                console.log(regex_string[regex_string.length - 3])
                 if (regex_string[regex_string.length - 1] == ']' && regex_string[regex_string.length-3] != '}') {
                     regex_string += ']}]'
                 }
