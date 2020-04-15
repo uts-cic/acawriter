@@ -281,7 +281,6 @@
                 if(this.preSetAssignment) {
                     this.editorContent = this.preSetAssignment.text_input;
                     this.versionHeaders = "Comparing version: " + this.preSetAssignment.created_at + " to version: " + this.compareDocument.created_at
-                    console.log(this.diffFeedback)
                     this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
@@ -499,6 +498,7 @@
                 })
                 let re_comma_brackets = /]\n      \[/g
                 let regex_string = updated_string.replace(re_comma_brackets, '],[')
+                console.log(regex_string)
                 return regex_string;
 
             },
