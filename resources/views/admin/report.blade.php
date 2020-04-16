@@ -169,7 +169,7 @@
                                     @endif
                                 </tbody>
                             </table>
-                            <form role="form" method="GET" action="{{ url('/admin/diffreport') }}">
+                            <form role="form" method="GET" action="{{ url('/admin/diffreport/') }}">
                             <table class="table">
                                 <thead class="thead-dark">
                                 <tr>
