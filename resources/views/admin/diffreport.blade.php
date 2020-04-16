@@ -3,7 +3,7 @@
 @section('content')
 <div id="app" class="container-fluid">
 	@if (isset($versions))
-	<form action="{{ url('/admin/diffreport') }}" method="post">
+	<form action="{{ url('/admin/diffreport') }}" method="get">
 		<div>
 			<label>Version From:</label>
 	    	<select id = "id" name = "id">
@@ -12,14 +12,13 @@
 	    		@endforeach
 	    	</select>
 	    	<label>Version To:</label>
-	    	<select id = "version">
+	    	<select id = "id_to" name  = "id_to">
 	    		@foreach($versions as $version)
-	    		<option value = "{{$version->created_at}}">{{$version->version}} ({{$version->created_at}})</option>
+	    		<option value = "{{$version->id}}">{{$version->version}} ({{$version->created_at}})</option>
 	    		@endforeach
 	    	</select>
 	    	<button type="submit">Go</button>
 	    </div>
-	    {{ csrf_field() }}
 	</form>
 	@endif
     @if (isset($data->draft_first))

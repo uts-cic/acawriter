@@ -58,7 +58,7 @@ class DiffController extends Controller
     public function getVersions($id)
     {
         $data = new \stdClass;
-        $drafts = Draft::where('document_id', $id)->orderBy('created_at')->get(['id', 'document_id', 'created_at', 'updated_at']);
+        $drafts = Draft::where('document_id', $id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'created_at', 'updated_at']);
         $version = count($drafts);
         foreach ($drafts as $draft) {
             $draft->version = $version;
@@ -96,14 +96,13 @@ class DiffController extends Controller
     {
     	$draft_first = new \stdClass;
     	$draft_second = new \stdClass;
-        $version = $request->version;
         if ($request->id) {
             $draft_first = Draft::where('id', '=', $request->id)->get(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
         } else {
             $draft_first = Draft::where('id', '=', '1')->get(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id']);
         }
-        if ($version) {
-            $draft_second = Draft::where([['document_id', '=', $draft_first[0]->document_id], ['created_at', '=', $version]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id', 'updated_at']);
+        if ($request->id_to) {
+            $draft_second = Draft::where([['document_id', '=', $draft_first[0]->document_id], ['id', '=', $request->id_to]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id', 'updated_at']);
         } else {
             $draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id', 'updated_at']);
         }

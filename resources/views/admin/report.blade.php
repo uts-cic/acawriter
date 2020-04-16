@@ -169,7 +169,7 @@
                                     @endif
                                 </tbody>
                             </table>
-                            <form role="form" method="POST" action="{{ url('/admin/diffreport') }}">
+                            <form role="form" method="GET" action="{{ url('/admin/diffreport') }}">
                             <table class="table">
                                 <thead class="thead-dark">
                                 <tr>
@@ -188,10 +188,9 @@
                                         <th scope="row">{{$document->user->users->name}}</th>
                                         <td>{{$document->document->name}}</td> 
                                         <td>{{$document->document_id}}</td> 
-                                        <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('version', $document->created_at)}}</td>
                                         <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('id', $document->id)}}</td>
+                                        <td>{{$document->version}} ({{$document->updated_at}}) {{Form::radio('id_to', $document->id)}}</td>
                                         <!-- <td><button type="submit" name="id" value="{{$document->id}}" class="btn-link">Link</button></td> -->
-                                        {{ csrf_field() }}
                                     </tr>
                                 @endforeach
                                 <td></td>
