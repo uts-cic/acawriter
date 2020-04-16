@@ -47,6 +47,12 @@ class DiffController extends Controller
         return view('admin.report', ['data' => $data]);
     }
 
+    public function showDocuments(Request $request) 
+    {
+        Document::where('user_id', $user->id)->get(['id', 'user_id', 'name']);
+        return view('admin.result_documents', ['user_documents' => $user_documents]);
+    }
+
     public function showUsers($id)
     {
     	$data = new \stdClass;
