@@ -28,6 +28,12 @@
 	    	<button type="submit">Go</button>
 	    </div>
 	</form>
+	<div align = 'center'>
+		<form action="{{ url('/admin/diffreport') }}" method="get">
+    			<button type = "submit"><- Prev</button>
+    			<button type = "submit">Next -></button>
+		</form>
+	</div>
 	@endif
     @if (isset($data->draft_first))
     <diff-report document="{{json_encode($data->draft_first)}}" document_compare="{{json_encode($data->draft_second)}}" :user-activity="userActivity"></diff-report>
