@@ -49,8 +49,14 @@ class DiffController extends Controller
 
     public function showDocuments(Request $request) 
     {
-        Document::where('user_id', $user->id)->get(['id', 'user_id', 'name']);
-        return view('admin.result_documents', ['user_documents' => $user_documents]);
+        $result_documents = array();
+        $documents = Document::orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+        foreach ($documents as $document) {
+            $user = $this->showUsers($document->user_id);
+            $document->user = $user;
+            array_push($result_documents, $document);
+        }
+        return view('admin.result_documents', ['documents' => $result_documents]);
     }
 
     public function showUsers($id)
