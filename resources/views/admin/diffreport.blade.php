@@ -30,8 +30,22 @@
 	</form>
 	<div align = 'center'>
 		<form action="{{ url('/admin/diffreport') }}" method="get">
+			@foreach($versions as $key=>$version)
+				@if ($version->created_at == $data->draft_first->created_at && $version->version == 1)
+    			<button type = "submit" disabled><- Prev</button>
+    			@elseif ($version->created_at == $data->draft_first->created_at)
+    			<input hidden name="id" value="{{ $versions[$key+1]->id }}"></input>
+    			<input hidden name="id_to" value="{{ $versions[$key]->id}}"></input>
     			<button type = "submit"><- Prev</button>
+    			@endif
+    			@if ($version->created_at == $data->draft_second->created_at && $version->version == count($versions))
+    			<button type = "submit" disabled>Next -></button>
+    			@elseif ($version->created_at == $data->draft_second->created_at)
+    			<input hidden name="id" value="{{ $versions[$key]->id }}"></input>
+    			<input hidden name="id_to" value="{{ $versions[$key-1]->id}}"></input>
     			<button type = "submit">Next -></button>
+    			@endif
+    		@endforeach
 		</form>
 	</div>
 	@endif
