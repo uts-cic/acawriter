@@ -47,10 +47,10 @@
                                     @if (isset($documents))
                                     @foreach ($documents as $document)
                                     <tr>
-                                        <th scope="row"><button type="submit" name="id" value="{{$document->id}}" class="btn-link">{{ $document->name }}</button></th>
+                                        <td scope="row"><button type="submit" name="id" value="{{$document->id}}" class="btn-link">{{ $document->name }}</button></td>
                                         <td>{{ $document->id }}</td>
                                         <td>{{ $document->updated_at}}</td>
-                                        <td>{{ $document->user->users->name }}</td>
+                                        <td>{{ $document->user }}</td>
                                     </tr>
                                     @endforeach
                                     @endif
