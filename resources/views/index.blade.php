@@ -50,6 +50,7 @@
                                 <p class="font-italic mb-0">What is my assignment code?..</p>
                                 <p>An assignment code is usually provided by your lecturer/tutor, and takes you to the right version of AcaWriter for your assignment.</p>
                                 <p>If you don't have an assignment code, then use the tab <a href="javascript:document.getElementById('tab_new').click()" data-ga-label="Create a new document [link]">Create a new document</a> where you’ll tell AcaWriter which kind of writing you’re working on.</p>
+                                <iframe width="560" height="400" src="https://www.youtube.com/embed/BeAIt_oVecQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen" style="width: 100%;"></iframe>
                             </div>
                         </div>
                     </div>
