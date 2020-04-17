@@ -57,6 +57,7 @@ Route::post('/assignment/delete', 'AssignmentController@delete');
 
 // Admin only pages
 Route::get('/admin/users', 'AdminController@showUsers');
+Route::get('/admin/documents', 'DiffController@showDocuments');
 Route::post('/admin/users', 'AdminController@updateUserRoles');
 Route::post('/admin/addUser', 'AdminController@addUser');
 Route::post('/admin/report', 'ReportController@fetchDocs');
