@@ -47,7 +47,7 @@
                                     @if (isset($documents))
                                     @foreach ($documents as $document)
                                     <tr>
-                                        <td scope="row"><button type="submit" name="id" value="{{$document->id}}" class="btn-link">{{ substr($document->name, 0, 20) }}</button></td>
+                                        <td scope="row"><button type="submit" name="id" value="{{$document->id}}" class="btn-link">{{ substr($document->name, 0, 10) }}</button></td>
                                         <td>{{ $document->id }}</td>
                                         <td>{{ $document->updated_at}}</td>
                                         <td>{{ $document->user }}</td>
