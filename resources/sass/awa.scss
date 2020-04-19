@@ -93,7 +93,7 @@ footer {
 }
 
 
-a[target="_blank"]:not(.btn):after {
+a[target="_blank"]:not(.btn):not(.img-link):after {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   text-rendering: auto;
