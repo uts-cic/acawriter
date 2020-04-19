@@ -33,7 +33,6 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">Results</div>
-                            <form role="form" method="GET" action="{{ url('/admin/diffreport/') }}">
                             <table class="table">
                                 <thead class="thead-dark">
                                     <tr>
@@ -47,7 +46,7 @@
                                     @if (isset($documents))
                                     @foreach ($documents as $document)
                                     <tr>
-                                        <td scope="row"><button type="submit" name="id" value="{{$document->id}}" class="btn-link">{{ substr($document->name, 0, 10) }}</button></td>
+                                        <td><a href="/admin/document/{{$document->id}}"><i class="fa fa-cogs"></i>{{ substr($document->name, 0, 10) }}</td>
                                         <td>{{ $document->id }}</td>
                                         <td>{{ $document->updated_at}}</td>
                                         <td>{{ $document->user }}</td>
@@ -56,7 +55,6 @@
                                     @endif
                                 </tbody>
                             </table>
-                        	</form>
                             <form role="form" method="GET" action="{{ url('/admin/diffreport/') }}">
                             <table class="table">
                                 <thead class="thead-dark">
