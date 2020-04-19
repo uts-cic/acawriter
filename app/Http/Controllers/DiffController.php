@@ -47,6 +47,31 @@ class DiffController extends Controller
         return view('admin.report', ['data' => $data]);
     }
 
+    public function showDraftsByDocId(Request $request)
+    {
+        $data = new \stdClass;
+        $data->documents = new \stdClass;
+        $data->documents->drafts = array();
+        $drafts = array();
+        $drafts_users = array();
+        $drafts = Draft::where('document_id', $request->id)->orderBy('created_at', 'desc')->get(['id', 'document_id', 'text_input', 'user_id', 'created_at', 'feature_id', 'updated_at']);
+        $version = count($drafts);
+        foreach ($drafts as $draft) {
+            $user = $this->showUsers($draft->user_id);
+            $feature = $this->getFeatures($draft->feature_id);
+            $document = $this->getDocument($draft->document_id);
+            $draft->user = $user;
+            $draft->feature = $feature;
+            $draft->version = $version;
+            $draft->document = $document;
+            $version--;
+            array_push($drafts_users, $draft);
+        }
+        $data->documents->drafts = $drafts_users;
+
+        return view('admin.drafts_by_id', ['data' => $data]);
+    }
+
     public function showDocuments(Request $request) 
     {
         $users = User::get(['id', 'name']);
