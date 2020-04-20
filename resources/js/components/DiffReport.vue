@@ -444,7 +444,7 @@
                 return name;
             },
             computeDiffTexts() {
-                var diff_texts = diff.diffWordsWithSpace(this.removeHTMLTags(this.preSetAssignment.text_input), this.removeHTMLTags(this.compareDocument.text_input));
+                var diff_texts = diff.diffSentences(this.removeHTMLTags(this.preSetAssignment.text_input), this.removeHTMLTags(this.compareDocument.text_input));
                 return diff_texts;
             },
             removePTags(text) {
