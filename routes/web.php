@@ -63,6 +63,7 @@ Route::post('/admin/addUser', 'AdminController@addUser');
 Route::post('/admin/report', 'ReportController@fetchDocs');
 Route::post('/admin/documentsByUser', 'DiffController@getDocuments');
 Route::post('/admin/diffDocuments', 'DiffController@showDrafts');
+Route::get('/admin/document/{id}', 'DiffController@showDraftsByDocId');
 Route::get('/admin/diffreport', 'DiffController@produceReport');
 Route::get('/admin/reports', 'ReportController@index');
 Route::get('/admin/download/{type}/{what}/{did}/{uid}', 'ReportController@export');

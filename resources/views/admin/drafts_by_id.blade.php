@@ -33,28 +33,6 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">Results</div>
-                            <table class="table">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Document Name</th>
-                                        <th scope="col">Document ID</th>
-                                        <th scope="col">Updated at</th>
-                                        <th scope="col">Student</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($documents))
-                                    @foreach ($documents as $document)
-                                    <tr>
-                                        <td><a href="/admin/document/{{$document->id}}"><i class="fa fa-cogs"></i>{{ substr($document->name, 0, 10) }}</td>
-                                        <td>{{ $document->id }}</td>
-                                        <td>{{ $document->updated_at}}</td>
-                                        <td>{{ $document->user }}</td>
-                                    </tr>
-                                    @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
                             <form role="form" method="GET" action="{{ url('/admin/diffreport/') }}">
                             <table class="table">
                                 <thead class="thead-dark">
