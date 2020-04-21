@@ -1,5 +1,5 @@
 main {
-  min-height: calc(100vh - 350px);
+  min-height: calc(100vh - 354px);
   padding-top: 1px;
   padding-bottom: 1px;
 }
@@ -112,7 +112,7 @@ a[target="_blank"]:not(.btn):not(.img-link):after {
 
 #nprogress {
   .bar {
-    background: $brand-primary;
+    background: $primary;
 
     position: fixed;
     z-index: 1031;
@@ -124,46 +124,12 @@ a[target="_blank"]:not(.btn):not(.img-link):after {
   }
 
   .peg {
-    box-shadow: 0 0 10px $brand-primary, 0 0 5px $brand-primary;
+    box-shadow: 0 0 10px $primary, 0 0 5px $primary;
   }
 
   .spinner-icon {
-    border-top-color: $brand-primary;
-    border-left-color: $brand-primary;
-  }
-}
-
-table .sort {
-  cursor: pointer;
-
-  &:hover {
-    color: #ebecee;
-  }
-}
-table .sort-asc:before {
-  content: "\F0DD";
-  transform: translateY(-2px);
-}
-table .sort-desc:before {
-  content: "\F0DE";
-  transform: translateY(4px);
-}
-table .sort-asc:before,
-table .sort-desc:before {
-  display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-right: 6px;
-}
-
-@include media-breakpoint-up(xl) {
-  .navbar,
-  main.container-fluid {
-    padding-left: 30px;
-    padding-right: 30px;
+    border-top-color: $primary;
+    border-left-color: $primary;
   }
 }
 
@@ -172,7 +138,6 @@ table .sort-desc:before {
   flex-wrap: wrap;
   margin-left: -15px;
   margin-right: -15px;
-  margin-top: -1.5rem;
   margin-bottom: 1rem;
   padding: 15px;
   min-height: 75px;
@@ -184,7 +149,7 @@ table .sort-desc:before {
     padding-right: 30px;
   }
 
-  h4 {
+  h3 {
     margin: 0;
   }
 
@@ -194,7 +159,7 @@ table .sort-desc:before {
     margin-bottom: 15px;
 
     @include media-breakpoint-up(lg) {
-      width: calc(50% - 70px);
+      width: calc(75% - 70px);
       margin: 0;
     }
   }
@@ -215,10 +180,10 @@ table .sort-desc:before {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 50%;
+    width: 25%;
 
     @include media-breakpoint-up(lg) {
-      width: calc(50% - 70px);
+      width: calc(25% - 70px);
     }
   }
 }
@@ -258,6 +223,7 @@ table .sort-desc:before {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      padding: 1.25rem 0.75rem;
     }
   }
 
@@ -294,7 +260,9 @@ table .sort-desc:before {
 
 #original > .alert,
 #parsed > .alert {
-  font-size: 14px;
+    background: #f1f1f1;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
 }
 
 .awa-tabs {
@@ -309,9 +277,13 @@ table .sort-desc:before {
     color: #212529;
     background-color: #f3f5fe;
     border-color: transparent transparent $nav-tabs-border-color;
+    color: #0f4beb;
+    font-size: 1.375rem;
+    padding: 1rem 2rem;
 
     &.active, &:hover {
       border-color: $nav-tabs-border-color $nav-tabs-border-color transparent;
+      color: #0f4beb;
     }
 
     &:hover {
@@ -388,14 +360,15 @@ table .sort-desc:before {
     margin-right: 20px;
   }
 
-  .wrapper {
-    text-align: justify;
+    .wrapper {
+        font-family: Helvetica, Arial, sans-serif;
+        text-align: justify;
 
-    .moves1, .moves2, .moves3, .moves4 {
-      padding: 0.1875rem 0.625rem;
-      border-radius: 0.75rem;
+        .moves1, .moves2, .moves3, .moves4 {
+            padding: 0.1875rem 0.625rem;
+            border-radius: 0.75rem;
+        }
     }
-  }
 }
 
 .ana_bg_yellow {
@@ -471,18 +444,6 @@ table .sort-desc:before {
   color: #ccc;
 }
 
-#utslogin {
-  margin-left: -20px;
-}
-
-#otherlogin label {
-  padding-left: 0px;
-}
-
-#assignment input+button.btn.btn-dark {
-  margin-top: 20px
-}
-
 .slide-fade-enter-active {
   transition: all .3s ease;
 }
@@ -507,26 +468,4 @@ table .sort-desc:before {
       top: 3px;
     }
   }
-}
-
-.table th[scope="col"] {
-  white-space: nowrap;
-}
-
-.bg-dark {
-  background-color: #0f4beb !important;
-}
-
-.table .thead-dark th {
-  background-color: #e9ecef;
-  border-color: #ebebeb;
-  font-family: "NB International", Arial, sans-serif;
-  font-weight: normal;
-  text-transform: uppercase;
-  color: #767676;
-  padding: 1.25rem 0.9375rem;
-  vertical-align: top;
-  text-align: left;
-  border-bottom: 1px solid #ebebeb;
-  font-size: 0.875rem;
 }

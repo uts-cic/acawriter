@@ -7,8 +7,8 @@
         </button>
     </div>
 
-    <table class="table">
-        <thead class="thead-dark">
+    <table class="table table-hover">
+        <thead>
             <tr>
                 <th scope="col" v-on:click="sort('name')" v-bind:class="sortcol === 'name' ? 'sort sort-' + sortdir : 'sort'">Document name</th>
                 <th scope="col" v-on:click="sort('genre')" v-bind:class="sortcol === 'genre' ? 'sort sort-' + sortdir : 'sort'">Genre</th>
@@ -26,8 +26,8 @@
                 <td v-html="getLastUpdated(doc.draft_last_updated_at)" class="text-nowrap"></td>
                 <td v-html="getAssignment(doc.assignment)" class="text-nowrap"></td>
                 <td class="text-nowrap">
-                    <a href="#" v-on:click="action('edit', doc)"><i class="fa fa-edit"></i></a> &nbsp;
-                    <a href="#" v-on:click="action('delete', doc)"><i class="fa fa-trash"></i></a>
+                    <button class="btn btn-link p-1 mt-1" v-on:click="action('edit', doc)"><i class="fa fa-edit"></i></button>
+                    <button class="btn btn-link p-1" v-on:click="action('delete', doc)"><i class="fa fa-trash"></i></button>
                 </td>
             </tr>
         </tbody>

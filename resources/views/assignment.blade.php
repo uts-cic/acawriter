@@ -3,7 +3,7 @@
 @section('content')
 <main id="app" class="container">
 
-    <h1 class="font-weight-normal mt-5 mb-5">Assignments</h1>
+    <h1>Assignments</h1>
 
     <div class="jumbotron mb-5">
         <div class="row">

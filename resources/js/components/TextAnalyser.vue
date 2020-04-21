@@ -14,7 +14,7 @@
             <!-- start content -->
             <div id="content" class="col-md-12">
                 <div class="subheader shadow">
-                    <div class="subheader-title"><h4 v-if="preSetAssignment">{{preSetAssignment.name}}</h4></div>
+                    <div class="subheader-title"><h3 v-if="preSetAssignment">{{preSetAssignment.name}}</h3></div>
 
                     <div class="subheader-message">
                         <div v-if="draftUpdate.message!=''">{{draftUpdate.message}}</div>
@@ -32,7 +32,7 @@
 
                 <div class="feedback">
                     <div class="feedback-col" id="original">
-                        <p class="alert alert-success px-3">AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</p>
+                        <p class="alert">AcaWriter works fastest with short texts, so if you're only working on a specific section, don't paste in the whole document. It still processes long texts, but it may take a few minutes to get your feedback to you.</p>
 
                         <div id="editor">
                             <!-- <froala :tag="'textarea'" :config="config" v-model="editorContent"></froala> -->
@@ -46,7 +46,7 @@
 
                     <!-- Reflective feedback -->
                     <div class="feedback-col" id="parsed">
-                        <p class="alert alert-warning px-3">Computers don’t read writing like humans. So, if you’re sure your writing’s good, it's fine to disagree with AcaWriter's feedback, just like you’d ignore a poor grammar suggestion.</p>
+                        <p class="alert">Computers don’t read writing like humans. So, if you’re sure your writing’s good, it's fine to disagree with AcaWriter's feedback, just like you’d ignore a poor grammar suggestion.</p>
 
                         <div v-if="this.attributes.isResearch">
                             <research-result></research-result>

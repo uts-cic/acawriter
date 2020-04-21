@@ -4,8 +4,8 @@
 <main id="app" class="container">
     @include('admin.flash')
 
-    <h1 class="font-weight-normal mt-5 mb-3">Help & Support</h1>
-    <p class="lead text-muted mt-3 mb-5">AcaWriter is developed and maintained by the UTS Connected Intelligence Centre (CIC).<br>Feel free to drop us a line if you have any questions.</p>
+    <h1>Help & Support</h1>
+    <p class="lead">AcaWriter is developed and maintained by the UTS Connected Intelligence Centre (CIC). Feel free to drop us a line if you have any questions.</p>
 
     <div class="card-deck">
         <div class="card mb-5 bg-light shadow-sm">
@@ -45,7 +45,7 @@
                     </div>
                     @endcannot
 
-                    <button type="submit" class="btn btn-outline-secondary">Send feedback</button>
+                    <button type="submit" class="btn btn-secondary">Send feedback</button>
                 </form>
             </div>
         </div>
@@ -63,7 +63,7 @@
                     <li>URL of the page where the issue is occuring</li>
                     <li>Screenshots (if applicable)</li>
                 </ul>
-                <a class="btn btn-outline-secondary mt-3" href="https://uts.service-now.com/serviceconnect?id=sc_cat_item&sys_id=1ca488bddbcf8010e56c1c0e0496199c&sysparm_category=5c2864a6db178050e56c1c0e04961954" title="Service Connect - AcaWriter Support">Get technical support</a>
+                <a class="btn btn-secondary mt-3" href="https://uts.service-now.com/serviceconnect?id=sc_cat_item&sys_id=1ca488bddbcf8010e56c1c0e0496199c&sysparm_category=5c2864a6db178050e56c1c0e04961954" title="Service Connect - AcaWriter Support">Get technical support</a>
             </div>
         </div>
 

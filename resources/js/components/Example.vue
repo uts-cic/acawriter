@@ -1,6 +1,6 @@
 <template>
-    <table class="table">
-        <thead class="thead-dark">
+    <table class="table table-hover">
+        <thead>
             <tr>
                 <th scope="col">Document name</th>
                 <th scope="col">Genre</th>

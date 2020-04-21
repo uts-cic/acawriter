@@ -1,13 +1,15 @@
-#original .ql-editor {
-  min-height: calc(100vh - 433px);
+#editor .ql-editor {
+    min-height: calc(100vh - 433px);
+    padding: 1rem;
 }
 .ql-editor p {
   line-height: 1.6;
   text-align: justify;
 }
 
-.quillWrapper .ql-snow.ql-toolbar {
+#editor .quillWrapper .ql-snow.ql-toolbar {
   background: #F3F5FE;
+  padding: 1rem;
 }
 
 .vocab , .context, .challenge, .wordcount, .metrics, .change, .background {
