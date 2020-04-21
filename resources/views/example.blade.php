@@ -2,7 +2,7 @@
 
 @section('content')
 <main id="app" class="container">
-    <h1 class="font-weight-normal mt-5 mb-5">Examples</h1>
+    <h1>Examples</h1>
 
     <p>
         Here are some example pieces of writing to experiment with. They’re either Analytical or Reflective writing, and come from different disciplines.

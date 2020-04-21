@@ -15,13 +15,13 @@ class IndexController extends Controller
     public function index()
     {
         if (Auth::guest()) {
-            return view('auth.login');
+            return view('index');
         }
 
         $this->authorize('manage-documents');
 
         $hasDocuments = Document::where('user_id', Auth::id())->count();
-        return view('index', ['hasDocuments' => $hasDocuments]);
+        return view('dashboard', ['hasDocuments' => $hasDocuments]);
     }
 
     public function about()

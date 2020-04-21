@@ -1,7 +1,7 @@
 <template>
     <modal name="edit-document" transition="pop-out" :width="modalWidth" :height="300" @before-open="beforeOpen">
 
-        <div class="shadow p-3"><h5>Update document</h5></div>
+        <div class="p-3"><h3 class="mb-0">Update document</h3></div>
         <div v-if="errors && errors.length" role="alert" class="alert alert-danger px-3">
             <button type="button" class="close" data-dismiss="alert">×</button>
             <span v-for="error in errors">{{error.message}}</span>
