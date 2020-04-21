@@ -33,7 +33,7 @@
         @if (Route::has('password.request'))
         <div class="row">
             <div class="col-md-6">
-                <button type="submit" class="btn btn-dark">
+                <button type="submit" class="btn btn-primary">
                     Login
                 </button>
             </div>
@@ -44,7 +44,7 @@
             </div>
         </div>
         @else
-        <button type="submit" class="btn btn-dark">Login</button>
+        <button type="submit" class="btn btn-primary">Log in</button>
         @endif
     </div>
 

@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4" data-ga-category="Navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" data-ga-category="Navbar">
         <div class="container">
 
             <a class="navbar-brand" href="{{ url('/') }}" data-ga-label="AcaWriter">
@@ -53,7 +53,7 @@
                                 <span class="h4 text-nowrap">{{ Auth::user()->name }}</span>
                                 <span class="text-muted text-nowrap">{{ Auth::user()->email }}</span>
                             </div>
-                            <a class="btn btn-outline-primary" href="{{ route('logout') }}"
+                            <a class="btn btn-primary" href="{{ route('logout') }}"
                                 data-ga-label="Logout"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 Log out
