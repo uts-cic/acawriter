@@ -106,13 +106,14 @@ a[target="_blank"]:not(.btn):not(.img-link):after {
   vertical-align: super;
 }
 
-.card-header h2 {
+.card h2 {
   font-size: 1.4rem;
 }
 
+$progressColor: #ff2305;
 #nprogress {
   .bar {
-    background: $primary;
+    background: $progressColor;
 
     position: fixed;
     z-index: 1031;
@@ -124,12 +125,12 @@ a[target="_blank"]:not(.btn):not(.img-link):after {
   }
 
   .peg {
-    box-shadow: 0 0 10px $primary, 0 0 5px $primary;
+    box-shadow: 0 0 10px $primary, 0 0 5px $progressColor;
   }
 
   .spinner-icon {
-    border-top-color: $primary;
-    border-left-color: $primary;
+    border-top-color: $progressColor;
+    border-left-color: $progressColor;
   }
 }
 
