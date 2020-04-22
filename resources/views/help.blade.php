@@ -9,10 +9,8 @@
 
     <div class="card-deck">
         <div class="card mb-5 bg-light shadow-sm">
-            <div class="card-header">
-                <h2 class="my-0">Send us feedback</h2>
-            </div>
             <div class="card-body p-4">
+                <h2>Send us feedback</h2>
                 <p>How well did AcaWriter do? We want to hear from you!</p>
 
                 <form method="POST" action="/help" autocomplete="off">
@@ -51,10 +49,8 @@
         </div>
 
         <div class="card mb-5 bg-light shadow-sm">
-            <div class="card-header">
-                <h2 class="my-0">Technical support</h2>
-            </div>
             <div class="card-body p-4">
+                <h2>Technical support</h2>
                 <p>UTS staff and students may get in touch with our technical team by submitting a request in Service Connect.</p>
                 <p>To help us solve your issue in a timely manner, please provide us with:</p>
                 <ul>
@@ -68,10 +64,8 @@
         </div>
 
         <div class="card mb-5 bg-light shadow-sm">
-            <div class="card-header">
-                <h2 class="my-0">Other UTS writing support</h2>
-            </div>
             <div class="card-body p-4">
+                <h2>Other UTS writing support</h2>
                 <p>AcaWriter is part of the rich support for academic writing UTS offers you, so we encourage you visit these:</p>
                 <p><strong>The Library has online resources</strong> to help with</p>
                 <ul class="list-inline">

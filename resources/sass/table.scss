@@ -1,20 +1,20 @@
 .table {
     margin: 1.5rem 0 3rem;
 
-    th {
+    thead th,
+    th[scope="col"] {
         font-family: "NB International", Arial, sans-serif;
         font-size: 0.875rem;
         font-weight: normal;
         text-transform: uppercase;
         color: #767676;
-    }
-
-    th[scope="col"] {
         white-space: nowrap;
     }
 
-    td:first-child a {
+    tbody th,
+    th[scope="row"] {
         font-size: 1.125rem;
+        font-weight: normal;
     }
 
     .sort {
