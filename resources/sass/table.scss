@@ -1,0 +1,45 @@
+.table {
+    margin: 1.5rem 0 3rem;
+
+    th {
+        font-family: "NB International", Arial, sans-serif;
+        font-size: 0.875rem;
+        font-weight: normal;
+        text-transform: uppercase;
+        color: #767676;
+    }
+
+    th[scope="col"] {
+        white-space: nowrap;
+    }
+
+    td:first-child a {
+        font-size: 1.125rem;
+    }
+
+    .sort {
+        cursor: pointer;
+
+        &:hover {
+            color: #0f4beb;
+        }
+    }
+    .sort-asc:before {
+        content: "\F0DD";
+        transform: translateY(-2px);
+    }
+    .sort-desc:before {
+        content: "\F0DE";
+        transform: translateY(4px);
+    }
+    .sort-asc:before,
+    .sort-desc:before {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        margin-right: 6px;
+    }
+}
