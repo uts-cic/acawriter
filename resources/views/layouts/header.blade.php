@@ -51,7 +51,7 @@
                         <div class="dropdown-menu dropdown-menu-lg-right" id="user-menu" aria-label="User menu">
                             <div class="user-details">
                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                <span class="h4 text-nowrap">{{ Auth::user()->name }}</span>
+                                <span class="h4 text-nowrap">{{ Auth::user()->name }}</span><br>
                                 <span class="text-muted text-nowrap">{{ Auth::user()->email }}</span>
                             </div>
                             <a class="btn btn-primary" href="{{ route('logout') }}"
