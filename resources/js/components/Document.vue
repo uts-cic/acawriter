@@ -7,6 +7,7 @@
         </button>
     </div>
 
+    <div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -32,6 +33,7 @@
             </tr>
         </tbody>
     </table>
+    </div>
 
     <edit-document></edit-document>
 </div>
