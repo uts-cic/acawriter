@@ -1,0 +1,66 @@
+.tiles {
+    display: flex;
+}
+.tile {
+    height: 370px;
+    padding: 3rem;
+}
+.tile-1 {
+    width: 33.33333%;
+}
+.tile-2 {
+    width: 66.66666%;
+}
+.tile-bg {
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.2);
+        border: 0 !important;
+        text-decoration: none !important;
+    }
+
+    &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background-color: #ebebeb;
+        background-image: url("https://uts.edu.au/sites/default/files/styles/tile_2x/public/2018-09/Section_Titles20.png?itok=JplSuo-P");
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: -1;
+    }
+
+    &:after {
+        display: none !important;
+    }
+
+    .tile-content {
+        h3 {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+
+        p {
+            color: #000;
+            margin-bottom: 0;
+        }
+    }
+}
+
+.tile-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.tile-bordered {
+    border: 1px solid #ebebeb;
+}
