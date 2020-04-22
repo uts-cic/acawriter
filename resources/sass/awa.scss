@@ -339,6 +339,10 @@ a[target="_blank"]:not(.btn):not(.img-link):after {
 
   .ref_chk {
     font-size: 14px;
+
+    .list-unstyled li {
+        padding-bottom: 0.5rem;
+    }
   }
 
   .badge-pill {
