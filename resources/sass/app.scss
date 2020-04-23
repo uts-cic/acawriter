@@ -6,11 +6,17 @@
 @import "node_modules/bootstrap/scss/bootstrap";
 
 //fontawesome
-@import "node_modules/font-awesome/scss/font-awesome.scss";
+@import "node_modules/font-awesome/scss/font-awesome";
 
+@import "fonts";
+@import "elements";
+@import "table";
+@import "form";
+
+@import "tiles";
 
 //customised css for complete app
-@import "awa.scss";
+@import "awa";
 
 //customised text editor
-@import "editor.scss";
+@import "editor";

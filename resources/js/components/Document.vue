@@ -7,8 +7,9 @@
         </button>
     </div>
 
-    <table class="table">
-        <thead class="thead-dark">
+    <div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
             <tr>
                 <th scope="col" v-on:click="sort('name')" v-bind:class="sortcol === 'name' ? 'sort sort-' + sortdir : 'sort'">Document name</th>
                 <th scope="col" v-on:click="sort('genre')" v-bind:class="sortcol === 'genre' ? 'sort sort-' + sortdir : 'sort'">Genre</th>
@@ -20,18 +21,19 @@
         </thead>
         <tbody>
             <tr v-for= "doc in documents" v-bind:id="'doc-' + doc.id">
-                <td><a v-bind:href="'analyse/' + doc.slug" v-on:click="action('analyse', doc)">{{doc.name}}</a></td>
+                <th scope="row"><a v-bind:href="'analyse/' + doc.slug" v-on:click="action('analyse', doc)">{{doc.name}}</a></th>
                 <td>{{doc.grammar}} ({{doc.feature_name}})</td>
                 <td v-html="getCreated(doc.created_at)" class="text-nowrap"></td>
                 <td v-html="getLastUpdated(doc.draft_last_updated_at)" class="text-nowrap"></td>
                 <td v-html="getAssignment(doc.assignment)" class="text-nowrap"></td>
                 <td class="text-nowrap">
-                    <a href="#" v-on:click="action('edit', doc)"><i class="fa fa-edit"></i></a> &nbsp;
-                    <a href="#" v-on:click="action('delete', doc)"><i class="fa fa-trash"></i></a>
+                    <button class="btn btn-link p-1 mt-1" v-on:click="action('edit', doc)"><i class="fa fa-edit"></i></button>
+                    <button class="btn btn-link p-1" v-on:click="action('delete', doc)"><i class="fa fa-trash"></i></button>
                 </td>
             </tr>
         </tbody>
     </table>
+    </div>
 
     <edit-document></edit-document>
 </div>
