@@ -28,6 +28,37 @@
         @include('admin.flash')
         <hr>
         <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">Filter Documents</div>
+                            <div class="card-body">
+                                <form action="/admin/documents" method="GET">
+                                    <div class="row">
+                                        <div class="form-group col-sm-12 col-md-3">
+                                            <input type="text"  class="form-control" name="email" placeholder="enter email" />
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3">
+                                            <label>From Date:</label>
+                                            <input type="date"  class="form-control" value="2000-01-01" name="from_date"/>
+                                            <input type="time"  class="form-control" value ="00:00:00" name="from_date_time"/>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3">
+                                            <label>To Date:</label>
+                                            <input type="date"  class="form-control" value="2050-01-01" name="to_date"/>
+                                            <input type="time"  class="form-control" value ="00:00:00" name="to_date_time"/>
+                                        </div><br/>
+                                        <div class="form-group col-sm-12 col-md-9">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button href="#" class="btn btn-primary" type="submit" name="action" value="show"><i class="fa fa-search" aria-hidden="true"></i> Documents</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <div class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
