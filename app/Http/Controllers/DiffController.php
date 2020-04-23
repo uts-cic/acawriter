@@ -84,7 +84,6 @@ class DiffController extends Controller
             $user = User::where('email', $request->email)->first();
             $from_date = $request->from_date. ' ' .$request->from_date_time;
             $to_date = $request->to_date. ' ' .$request->to_date_time;
-            var_dump($to_date);
             if ($user) {
                 $documents = Document::where([['user_id', $user->id],['updated_at', '>', $from_date], ['updated_at', '<', $to_date]])->orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
             } else {
