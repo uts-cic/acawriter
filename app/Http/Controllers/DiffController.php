@@ -80,7 +80,19 @@ class DiffController extends Controller
             $user_list[$value->id] = $value->name;
         }
         $result_documents = array();
-        $documents = Document::orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+        if ($_GET) {
+            $user = User::where('email', $request->email)->first();
+            $from_date = $request->from_date. ' ' .$request->from_date_time;
+            $to_date = $request->to_date. ' ' .$request->to_date_time;
+            var_dump($to_date);
+            if ($user) {
+                $documents = Document::where([['user_id', $user->id],['updated_at', '>', $from_date], ['updated_at', '<', $to_date]])->orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+            } else {
+                $documents = Document::where([['updated_at', '>', $from_date], ['updated_at', '<', $to_date]])->orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+            }
+        } else {
+            $documents = Document::orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+        }
         foreach ($documents as $document) {
             $document->user = $user_list[$document->user_id];
             array_push($result_documents, $document);
