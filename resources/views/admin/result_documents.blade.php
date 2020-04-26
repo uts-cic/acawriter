@@ -69,6 +69,7 @@
                                     <tr>
                                         <th scope="col">Document Name</th>
                                         <th scope="col">Document ID</th>
+                                        <th scope="col">Document Type</th>
                                         <th scope="col">Updated at</th>
                                         <th scope="col">Student</th>
                                     </tr>
@@ -79,6 +80,7 @@
                                     <tr>
                                         <td><a href="/admin/document/{{$document->id}}"><i class="fa fa-cogs"></i>{{ substr($document->name, 0, 10) }}</td>
                                         <td>{{ $document->id }}</td>
+                                        <td>{{ $document->type }}</td>
                                         <td>{{ $document->updated_at}}</td>
                                         <td>{{ $document->user }}</td>
                                     </tr>
