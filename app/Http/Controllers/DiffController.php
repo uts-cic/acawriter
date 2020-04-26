@@ -76,6 +76,16 @@ class DiffController extends Controller
     {
         $users = User::get(['id', 'name']);
         $user_list = array();
+        $feature_list = array();
+        $draftid_featureid_list = array();
+        $features = Feature::get(['id', 'name']);
+        $draft_feature = Draft::get(['id', 'document_id', 'feature_id']);
+        foreach ($features as $key => $value) {
+            $feature_list[$value->id] = $value->name;
+        }
+        foreach ($draft_feature as $key => $value) {
+            $draftid_featureid_list[$value->document_id] = $feature_list[$value->feature_id];
+        }
         foreach ($users as $key => $value) {
             $user_list[$value->id] = $value->name;
         }
@@ -94,6 +104,9 @@ class DiffController extends Controller
         }
         foreach ($documents as $document) {
             $document->user = $user_list[$document->user_id];
+            if (array_key_exists($document->id, $draftid_featureid_list)) {
+                $document->type = $draftid_featureid_list[$document->id];
+            }
             array_push($result_documents, $document);
         }
         return view('admin.result_documents', ['documents' => $result_documents]);
