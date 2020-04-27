@@ -57,6 +57,14 @@
                             </div>
                         </div>
                     </div>
+                    <select name = "document_type">
+                        <option value="None" selected>None</option> 
+                        @if (isset($types))
+                        @foreach($types as $key=>$value)
+                        <option value="{{$key}}">{{$key}}</option>
+                        @endforeach
+                        @endif
+                    </select>
                 </div>
         <div class="row">
             <div class="col-md-12">
