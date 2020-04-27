@@ -113,7 +113,7 @@ class DiffController extends Controller
             }
             array_push($result_documents, $document);
         }
-        if ($_GET['document_type_select']) {
+        if (array_key_exists('document_type_select', $_GET)) {
             if ($_GET['document_type_select'] != "None") {
                 foreach ($result_documents as $key=>$document) {
                     if ($document->type != $_GET['document_type_select']) {
