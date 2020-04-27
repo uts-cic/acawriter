@@ -85,7 +85,7 @@ class DiffController extends Controller
             $feature_list[$value->id] = $value->name;
         }
         foreach ($features as $key => $value) {
-            $types[$value->name] = 1;
+            $types[$value->name] = $value->id;
         }
         foreach ($draft_feature as $key => $value) {
             $draftid_featureid_list[$value->document_id] = $feature_list[$value->feature_id];
@@ -112,6 +112,15 @@ class DiffController extends Controller
                 $document->type = $draftid_featureid_list[$document->id];
             }
             array_push($result_documents, $document);
+        }
+        if ($_GET['document_type_select']) {
+            if ($_GET['document_type_select'] != "None") {
+                foreach ($result_documents as $key=>$document) {
+                    if ($document->type != $_GET['document_type_select']) {
+                        unset($result_documents[$key]);
+                    }
+                }
+            }
         }
         return view('admin.result_documents', ['documents' => $result_documents, 'types' => $types]);
     }
