@@ -52,19 +52,19 @@
                                                 <button href="#" class="btn btn-primary" type="submit" name="action" value="show"><i class="fa fa-search" aria-hidden="true"></i> Documents</button>
                                             </div>
                                         </div>
+                                        <select name = "document_type_select">
+                                            <option value="None" selected>None</option> 
+                                            @if (isset($types))
+                                            @foreach($types as $key=>$value)
+                                            <option value="{{$key}}">{{$key}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <select name = "document_type">
-                        <option value="None" selected>None</option> 
-                        @if (isset($types))
-                        @foreach($types as $key=>$value)
-                        <option value="{{$key}}">{{$key}}</option>
-                        @endforeach
-                        @endif
-                    </select>
                 </div>
         <div class="row">
             <div class="col-md-12">
