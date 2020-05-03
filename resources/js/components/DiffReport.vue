@@ -274,7 +274,12 @@
                 return this.highlighText(diff_texts);
             },
             diffFeedback: function() {
-                let diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary());
+                try {
+                   let diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary()); 
+                } catch(e) {
+                    alert("Something wrong");
+                    console.log(this.computeDiffFeedbackLibrary());
+                }
                 return diff_feedback;
             },
             attributes: function() {
@@ -501,7 +506,6 @@
                 if (regex_string[regex_string.length - 1] != ']') {
                     regex_string += ']}]'
                 }
-                console.log(regex_string)
                 return regex_string;
 
             },
