@@ -277,8 +277,9 @@
                 try {
                    let diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary()); 
                 } catch(e) {
-                    alert("Something wrong");
+                    alert(e);
                     console.log(this.computeDiffFeedbackLibrary());
+                    return ""
                 }
                 return diff_feedback;
             },
