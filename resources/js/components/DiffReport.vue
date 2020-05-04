@@ -534,6 +534,27 @@
                 })
                 return texts_with_diff;
             },
+            createHashDict(messages) {
+                let hash_dict = {}
+                messages.forEach((message, i) => {
+                    let keys = Object.keys(message)
+                    keys.forEach(key => {
+                        if (message[key][0][0]) {
+                            let hash_message = require('crypto').createHash('md5').update(message[key][0][0]).digest('base64');
+                            hash_dict[hash_message] = i;
+                        }
+                    })
+                })
+                return hash_dict;
+            },
+            createSets(hash_dict) {
+                let hash_set = new Set();
+                let hash_keys = Object.keys(hash_dict);
+                hash_keys.forEach(key => {
+                    hash_set.add(key)
+                })
+                console.log(hash_keys);
+            },
             highlighTextFeedback(diff_feedback) {
                 var that = this;
                 diff_feedback.forEach(function(part) {
