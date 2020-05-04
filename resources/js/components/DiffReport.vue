@@ -274,17 +274,21 @@
                 return this.highlighText(diff_texts);
             },
             diffFeedback: function() {
+                let diff_feedback = "";
                 try {
-                   let diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary()); 
+                   diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary()); 
                 } catch(e) {
                     alert(e);
                     console.log(this.computeDiffFeedbackLibrary());
-                    return ""
                 }
                 return diff_feedback;
             },
             attributes: function() {
                 if(this.preSetAssignment) {
+                    let hash_preset = this.createHashDict(this.preSetAssignment.raw_response.tabs[2]);
+                    let hash_compare = this.createHashDict(this.compareDocument.raw_response.tabs[2]);
+                    this.createSets(hash_preset);
+                    this.createSets(hash_compare);
                     this.editorContent = this.preSetAssignment.text_input;
                     this.versionHeaders = "Comparing version: " + this.preSetAssignment.created_at + " to version: " + this.compareDocument.created_at
                     this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
