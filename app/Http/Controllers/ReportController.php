@@ -148,6 +148,14 @@ class ReportController extends Controller
                         foreach ($data as $row) {
                             $dump[] = array($row->email, $row->text_input, $row->created_at);
                         }
+                    } elseif ($request->what === 'maj') {
+                        $filename = 'major_drafts_dump_student';
+                        $columns = array('email', 'original', 'created_at');
+
+                        //make the data ready for csv aka convert them to array
+                        foreach ($data as $row) {
+                            $dump[] = array($row->email, $row->text_input, $row->created_at);
+                        }
                     }
 
                     return $this->downloadCSV($filename, $dump, $columns);
