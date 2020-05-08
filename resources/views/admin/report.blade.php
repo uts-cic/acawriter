@@ -98,10 +98,11 @@
                                         <td>{{ $document->name }}</td>
                                         <td>
                                             <a href="/admin/download/csv/txt/{{ $document->docid }}/{{ $document->uid }}" class="text-nowrap"><i class="fa fa-download"></i> Auto ({{ $document->txtcount }})</a>
+                                            <br>
                                             <a href="/admin/download/csv/maj/{{ $document->docid }}/{{ $document->uid }}" class="text-nowrap"><i class="fa fa-download"></i> Major ({{ $document->dcount }})</a>
                                         </td>
                                         <td>
-                                            <a href="/admin/download/csv/feed/{{ $document->docid }}/{{ $document->uid }}"><i class="fa fa-download"></i> Feed ({{ $document->dcount }})</a>
+                                            <a href="/admin/download/csv/feed/{{ $document->docid }}/{{ $document->uid }}" class="text-nowrap"><i class="fa fa-download"></i> Feed ({{ $document->dcount }})</a>
                                         </td>
                                     </tr>
                                     @endforeach

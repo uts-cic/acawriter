@@ -212,6 +212,13 @@ class ReportController extends Controller
                     ->where('text_drafts.document_id', '=', $docId)
                     ->where('text_drafts.user_id', '=', $uid)
                     ->get();
+            } elseif ($data->what === 'maj') {
+                $list = DB::table('drafts')
+                    ->select('users.email', 'drafts.text_input', 'drafts.created_at')
+                    ->join('users', 'users.id', '=', 'drafts.user_id')
+                    ->where('drafts.document_id', '=', $docId)
+                    ->where('drafts.user_id', '=', $uid)
+                    ->get();
             }
         } elseif (isset($data->code)) {
             if ($data->which === 'feed') {
