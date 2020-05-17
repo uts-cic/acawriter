@@ -291,9 +291,9 @@
                     let set_compare = this.createSets(hash_compare);
                     let set_diff = this.differenceSets(set_preset, set_compare);
                     this.getDiffValues(set_diff, hash_preset);
-                    // this.getDiffValues(set_diff, hash_compare);
+                    this.getDiffValues(set_diff, hash_compare);
                     set_diff = this.differenceSets(set_compare, set_preset);
-                    // this.getDiffValues(set_diff, hash_preset);
+                    this.getDiffValues(set_diff, hash_preset);
                     this.getDiffValues(set_diff, hash_compare);
                     this.editorContent = this.preSetAssignment.text_input;
                     this.versionHeaders = "Comparing version: " + this.preSetAssignment.created_at + " to version: " + this.compareDocument.created_at
