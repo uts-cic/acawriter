@@ -287,11 +287,14 @@
                 if(this.preSetAssignment) {
                     let hash_preset = this.createHashDict(this.preSetAssignment.raw_response.tabs[2]);
                     let hash_compare = this.createHashDict(this.compareDocument.raw_response.tabs[2]);
-                    this.createSets(hash_preset);
-                    this.createSets(hash_compare);
+                    let set_preset = this.createSets(hash_preset);
+                    let set_compare = this.createSets(hash_compare);
+                    let set_diff = this.differenceSets(set_preset, set_compare);
+                    this.getDiffValues(set_diff, hash_preset);
+                    this.getDiffValues(set_diff, hash_compare);
                     this.editorContent = this.preSetAssignment.text_input;
                     this.versionHeaders = "Comparing version: " + this.preSetAssignment.created_at + " to version: " + this.compareDocument.created_at
-                    this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
+                    // this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
@@ -553,7 +556,29 @@
                 hash_keys.forEach(key => {
                     hash_set.add(key)
                 })
-                console.log(hash_keys);
+                return hash_set;
+            },
+            differenceSets(setA, setB) {
+                // reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+                let _difference = new Set(setA)
+                for (let elem of setB) {
+                    _difference.delete(elem)
+                }
+                return _difference
+            },
+            getDiffValues(set_diff, hash_orig) {
+                let hash_diff = {};
+                set_diff.forEach(diff => {
+                    if (hash_orig[diff]) {
+                        this.highlightFeedback(hash_orig[diff]);
+                    }
+                })
+            },
+            highlightFeedback(sentence_id) {
+                let keys = Object.keys(this.preSetAssignment.raw_response.tabs[2][sentence_id]);
+                keys.forEach(key => {
+                    this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" +  this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] + "</span> "
+                })
             },
             highlighTextFeedback(diff_feedback) {
                 var that = this;
