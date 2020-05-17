@@ -569,16 +569,24 @@
             getDiffValues(set_diff, hash_orig) {
                 let hash_diff = {};
                 set_diff.forEach(diff => {
-                    if (hash_orig[diff]) {
-                        this.highlightFeedback(hash_orig[diff]);
-                    }
+                    this.highlightFeedback(hash_orig[diff]);
                 })
             },
             highlightFeedback(sentence_id) {
-                let keys = Object.keys(this.preSetAssignment.raw_response.tabs[2][sentence_id]);
-                keys.forEach(key => {
-                    this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" +  this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] + "</span> "
-                })
+                if (this.preSetAssignment.raw_response.tabs[2][sentence_id]) {
+                    let keys = Object.keys(this.preSetAssignment.raw_response.tabs[2][sentence_id]);
+                    keys.forEach(key => {
+                        this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" +  this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " 
+                    })
+                } else if (this.compareDocument.raw_response.tabs[2][sentence_id]) {
+                    let keys = Object.keys(this.compareDocument.raw_response.tabs[2][sentence_id]);
+                    keys.forEach(key => {
+                        let message = [["<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" +  this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " ]]
+                        this.preSetAssignment.raw_response.tabs[2][sentence_id] = {}
+                        this.preSetAssignment.raw_response.tabs[2][sentence_id][key] = message;
+                        console.log(message)
+                    })
+                }
             },
             highlighTextFeedback(diff_feedback) {
                 var that = this;
