@@ -585,7 +585,10 @@
                 keys = Object.keys(this.compareDocument.raw_response.tabs[2][sentence_id]);
                 keys.forEach(key => {
                     if (this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0]) {
-                        this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" +  this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " 
+                        message = [["<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" +  this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " ]]
+                        this.preSetAssignment.raw_response.tabs[2][sentence_id] = {}
+                        this.preSetAssignment.raw_response.tabs[2][sentence_id][key] = message
+                        console.log(this.preSetAssignment.raw_response.tabs[2][sentence_id])
                     }
                 })
             },
