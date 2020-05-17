@@ -292,9 +292,9 @@
                     let set_diff = this.differenceSets(set_preset, set_compare);
                     this.getDiffValues(set_diff, hash_preset);
                     this.getDiffValues(set_diff, hash_compare);
-                    // set_diff = this.differenceSets(set_compare, set_preset);
-                    // this.getDiffValues(set_diff, hash_preset);
-                    // this.getDiffValues(set_diff, hash_compare);
+                    set_diff = this.differenceSets(set_compare, set_preset);
+                    this.getDiffValues(set_diff, hash_preset);
+                    this.getDiffValues(set_diff, hash_compare);
                     this.editorContent = this.preSetAssignment.text_input;
                     this.versionHeaders = "Comparing version: " + this.preSetAssignment.created_at + " to version: " + this.compareDocument.created_at
                     // this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
@@ -576,21 +576,24 @@
                 })
             },
             highlightFeedback(sentence_id) {
-                let keys = Object.keys(this.preSetAssignment.raw_response.tabs[2][sentence_id]);
-                keys.forEach(key => {
-                    if (this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0]) {
-                        this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" +  this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " 
-                    }
-                })
-                keys = Object.keys(this.compareDocument.raw_response.tabs[2][sentence_id]);
-                keys.forEach(key => {
-                    if (this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0]) {
-                        message = [["<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" +  this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " ]]
-                        this.preSetAssignment.raw_response.tabs[2][sentence_id] = {}
-                        this.preSetAssignment.raw_response.tabs[2][sentence_id][key] = message
-                        console.log(this.preSetAssignment.raw_response.tabs[2][sentence_id])
-                    }
-                })
+                if (this.preSetAssignment.raw_response.tabs[2][sentence_id]) {
+                    let keys = Object.keys(this.preSetAssignment.raw_response.tabs[2][sentence_id]);
+                    keys.forEach(key => {
+                        if (this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0]) {
+                            this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" +  this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " 
+                        }
+                    })
+                } 
+                if (this.compareDocument.raw_response.tabs[2][sentence_id]) {
+                    let keys = Object.keys(this.compareDocument.raw_response.tabs[2][sentence_id]);
+                    keys.forEach(key => {
+                        if (this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0]) {
+                            let message = [["<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" +  this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0] + "</span> "]]
+                            this.preSetAssignment.raw_response.tabs[2][sentence_id]={key: message}
+                            console.log(this.preSetAssignment.raw_response.tabs[2][sentence_id])
+                        }
+                    })
+                }
             },
             highlighTextFeedback(diff_feedback) {
                 var that = this;
