@@ -589,7 +589,7 @@
                     keys.forEach(key => {
                         if (this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0]) {
                             let message = [["<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" +  this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0] + "</span> "]]
-                            this.preSetAssignment.raw_response.tabs[2][sentence_id]={key: message}
+                            this.preSetAssignment.raw_response.tabs[2].push({key: message})
                         }
                     })
                 }
