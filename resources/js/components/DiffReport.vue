@@ -530,9 +530,9 @@
                     // it works in a reverse way. So, added will be coloured in RED (#F00)
                     // and removed will be coloured in GREEN (#0C0)  
                     if (part.added) {
-                        text_string = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
-                    } else if (part.removed) {
                         text_string = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
+                    } else if (part.removed) {
+                        text_string = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
                     } else {
                         text_string = part.value
                     }
