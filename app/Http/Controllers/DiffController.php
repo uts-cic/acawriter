@@ -193,7 +193,7 @@ class DiffController extends Controller
     	$data->draft_first->raw_response = json_decode($draft_second->raw_response);
 
         $draft_version = new \stdClass;
-        $draft_version = $this->getVersions($data->draft_second->document_id);
+        $draft_version = $this->getVersions($data->draft_first->document_id);
 
     	return view('admin.diffreport', ['data' => $data, 'versions' => $draft_version]);
     }
