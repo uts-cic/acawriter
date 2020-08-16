@@ -8,7 +8,7 @@
 			<label>Version From:</label>
 	    	<select id = "id" name = "id">
 	    		@foreach($versions as $version)
-	    			@if ($version->created_at == $data->draft_first->created_at)
+	    			@if ($version->created_at == $data->draft_second->created_at)
 	    			<option value ="{{$version->id}}" selected>{{$version->version}} ({{$version->created_at}})</option>
 	    			@else
 	    			<option value ="{{$version->id}}">{{$version->version}} ({{$version->created_at}})</option>
@@ -18,7 +18,7 @@
 	    	<label>Version To:</label>
 	    	<select id = "id_to" name  = "id_to">
 	    		@foreach($versions as $version)
-		    		@if ($version->created_at == $data->draft_second->created_at)
+		    		@if ($version->created_at == $data->draft_first->created_at)
 		    		<option value = "{{$version->id}}" selected>{{$version->version}} ({{$version->created_at}})</option>
 		    		@else
 		    		<option value = "{{$version->id}}">{{$version->version}} ({{$version->created_at}})</option>
@@ -31,16 +31,16 @@
 	<div align = 'center'>
 		<form action="{{ url('/admin/diffreport') }}" method="get">
 			@foreach($versions as $key=>$version)
-				@if ($version->created_at == $data->draft_first->created_at && $version->version == 1)
+				@if ($version->created_at == $data->draft_second->created_at && $version->version == 1)
     			<button type = "submit" disabled><- Prev</button>
-    			@elseif ($version->created_at == $data->draft_first->created_at)
+    			@elseif ($version->created_at == $data->draft_second->created_at)
     			<input hidden name="id" value="{{ $versions[$key+1]->id }}"></input>
     			<input hidden name="id_to" value="{{ $versions[$key]->id}}"></input>
     			<button type = "submit"><- Prev</button>
     			@endif
-    			@if ($version->created_at == $data->draft_second->created_at && $version->version == count($versions))
+    			@if ($version->created_at == $data->draft_first->created_at && $version->version == count($versions))
     			<button type = "submit" disabled>Next -></button>
-    			@elseif ($version->created_at == $data->draft_second->created_at)
+    			@elseif ($version->created_at == $data->draft_first->created_at)
     			<input hidden name="id" value="{{ $versions[$key]->id }}"></input>
     			<input hidden name="id_to" value="{{ $versions[$key-1]->id}}"></input>
     			<button type = "submit">Next -></button>
