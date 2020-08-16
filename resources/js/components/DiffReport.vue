@@ -44,7 +44,7 @@
 
         <div class="tab-content ref" id="legend">
             <div class="tab-pane active" id="analysed" role="tabpanel">
-                <template v-for="rule in this.compareDocument.raw_response.rules">
+                <template v-for="rule in this.preSetAssignment.raw_response.rules">
                     <div class="ref_chk" v-if="rule.tab==1 || !rule.tab">
                         <span class="card-subtitle" v-if="rule.custom" v-html="rule.custom"></span>
                         <ul class="list-unstyled">
@@ -61,7 +61,7 @@
                 <hr>
 
                 <div class="wrapper">
-                    <span v-for="(feed,idx) in this.compareDocument.raw_response.final">
+                    <span v-for="(feed,idx) in this.preSetAssignment.raw_response.final">
                         <span v-for="ic in feed.css">
                             <!-- AI/2019-06-25: Removing affect analysis -->
                             <!-- <template v-if="ic==='context' || ic==='challenge' || ic==='change' || ic==='metrics' || ic==='affect'"> -->
@@ -95,7 +95,7 @@
                         </div>
 
                         <div v-else-if="this.attributes.grammar == 'analytical'">
-                             <div v-if="this.compareDocument.raw_response.rules">
+                             <div v-if="this.preSetAssignment.raw_response.rules">
         <ul class="nav nav-tabs nav-fill awa-tabs">
             <li class="nav-item">
                 <a class="nav-link active" href="#analysed" data-toggle="tab" data-ga-action="tab:report">Analytical Report</a>
@@ -109,7 +109,7 @@
 
         <div class="tab-content ana" id="legend">
             <div class="tab-pane active" id="analysed" role="tabpanel">
-                <template v-for="rule in this.compareDocument.raw_response.rules">
+                <template v-for="rule in this.preSetAssignment.raw_response.rules">
                     <div v-if="rule.tab==1 || !rule.tab">
                         <span class="card-subtitle" v-if="rule.custom" v-html="rule.custom"></span>
                         <ul class="rules-list" v-bind:class="rule.name">
@@ -125,7 +125,7 @@
                 <hr>
 
                 <div class="wrapper">
-                    <span v-for="(feed,idx) in this.compareDocument.raw_response.final">
+                    <span v-for="(feed,idx) in this.preSetAssignment.raw_response.final">
                         <span v-for="ic in feed.css">
                             <template v-if="ic=='contribution'">
                                 <span class="badge badge-pill badge-analytic-green" v-bind:class="ic">S</span>
@@ -144,7 +144,7 @@
 
             <template v-for="tab in vtabs">
                 <div class="tab-pane" v-bind:id="getLowerCase(tab.tabName)" role="tabpanel">
-                    <div v-for="(ref, idc) in compareDocument.raw_response.tabs">
+                    <div v-for="(ref, idc) in preSetAssignment.raw_response.tabs">
                         <template v-if="idc==tab.tab" v-for="msg in ref">
                             <span v-for="feed in msg">
                                 <span v-for="a in feed">
@@ -530,9 +530,9 @@
                     // it works in a reverse way. So, added will be coloured in RED (#F00)
                     // and removed will be coloured in GREEN (#0C0)  
                     if (part.added) {
-                        text_string = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
-                    } else if (part.removed) {
                         text_string = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
+                    } else if (part.removed) {
+                        text_string = "<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" + part.value.trim() + "</span> "
                     } else {
                         text_string = part.value
                     }
