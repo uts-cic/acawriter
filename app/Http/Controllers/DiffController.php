@@ -185,15 +185,15 @@ class DiffController extends Controller
             $draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id', 'updated_at']);
         }
     	$data = new \stdClass;
-    	$data->draft_first = $draft_first[0];
-        $data->draft_second = $draft_second;
-        $data->draft_first->features = $this->getFeatures($data->draft_first->feature_id);
+    	$data->draft_second = $draft_first[0];
+        $data->draft_first = $draft_second;
         $data->draft_second->features = $this->getFeatures($data->draft_second->feature_id);
-        $data->draft_first->raw_response = json_decode($draft_first[0]->raw_response);
-    	$data->draft_second->raw_response = json_decode($draft_second->raw_response);
+        $data->draft_first->features = $this->getFeatures($data->draft_first->feature_id);
+        $data->draft_second->raw_response = json_decode($draft_first[0]->raw_response);
+    	$data->draft_first->raw_response = json_decode($draft_second->raw_response);
 
         $draft_version = new \stdClass;
-        $draft_version = $this->getVersions($data->draft_first->document_id);
+        $draft_version = $this->getVersions($data->draft_second->document_id);
 
     	return view('admin.diffreport', ['data' => $data, 'versions' => $draft_version]);
     }
