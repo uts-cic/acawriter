@@ -2,7 +2,7 @@
     {{ csrf_field() }}
 
     <div class="form-group">
-        <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+        <label for="email" class="control-label">Email address</label>
         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
         @error('email')
         <div class="invalid-feedback">
@@ -12,7 +12,7 @@
     </div>
 
     <div class="form-group">
-        <label for="password" class="col-md-4 control-label">Password</label>
+        <label for="password" class="control-label">Password</label>
         <input id="password" type="password" class="form-control @error('email') is-invalid @enderror" name="password" required>
         @error('password')
         <div class="invalid-feedback">

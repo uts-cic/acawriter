@@ -148,6 +148,14 @@ class ReportController extends Controller
                         foreach ($data as $row) {
                             $dump[] = array($row->email, $row->text_input, $row->created_at);
                         }
+                    } elseif ($request->what === 'maj') {
+                        $filename = 'major_drafts_dump_student';
+                        $columns = array('email', 'original', 'created_at');
+
+                        //make the data ready for csv aka convert them to array
+                        foreach ($data as $row) {
+                            $dump[] = array($row->email, $row->text_input, $row->created_at);
+                        }
                     }
 
                     return $this->downloadCSV($filename, $dump, $columns);
@@ -203,6 +211,13 @@ class ReportController extends Controller
                     ->join('users', 'users.id', '=', 'text_drafts.user_id')
                     ->where('text_drafts.document_id', '=', $docId)
                     ->where('text_drafts.user_id', '=', $uid)
+                    ->get();
+            } elseif ($data->what === 'maj') {
+                $list = DB::table('drafts')
+                    ->select('users.email', 'drafts.text_input', 'drafts.created_at')
+                    ->join('users', 'users.id', '=', 'drafts.user_id')
+                    ->where('drafts.document_id', '=', $docId)
+                    ->where('drafts.user_id', '=', $uid)
                     ->get();
             }
         } elseif (isset($data->code)) {

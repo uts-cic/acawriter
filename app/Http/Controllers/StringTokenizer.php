@@ -193,7 +193,7 @@ class StringTokenizer extends Controller
             $draft->feature = '1';
             $draft->document_id = $request["document_id"];
             $draft->user_id = Auth::user()->id;
-            StoreDrafts::dispatch($draft)->onConnection('redis');
+            StoreDrafts::dispatchNow($draft);
         }
         return response()->json($results);
     }

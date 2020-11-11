@@ -192,7 +192,7 @@ class FeedbackController extends Controller
     {
         $data = $request->all();
         $user = Auth::user();
-        StoreDraftWithoutFeedback::dispatch($data, $user)->onConnection('redis');
+        StoreDraftWithoutFeedback::dispatchNow($data, $user);
     }
 
     protected function getFeedbackSchema($path, $id)
