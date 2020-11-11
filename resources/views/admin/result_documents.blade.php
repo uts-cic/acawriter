@@ -28,6 +28,45 @@
         @include('admin.flash')
         <hr>
         <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">Filter Documents</div>
+                            <div class="card-body">
+                                <form action="/admin/documents" method="GET">
+                                    <div class="row">
+                                        <div class="form-group col-sm-12 col-md-3">
+                                            <input type="text"  class="form-control" name="email" placeholder="enter email" />
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3">
+                                            <label>From Date:</label>
+                                            <input type="date"  class="form-control" value="2000-01-01" name="from_date"/>
+                                            <input type="time"  class="form-control" value ="00:00:00" name="from_date_time"/>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3">
+                                            <label>To Date:</label>
+                                            <input type="date"  class="form-control" value="2050-01-01" name="to_date"/>
+                                            <input type="time"  class="form-control" value ="00:00:00" name="to_date_time"/>
+                                        </div><br/>
+                                        <div class="form-group col-sm-12 col-md-9">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button href="#" class="btn btn-primary" type="submit" name="action" value="show"><i class="fa fa-search" aria-hidden="true"></i> Documents</button>
+                                            </div>
+                                        </div>
+                                        <select name = "document_type_select">
+                                            <option value="None" selected>None</option> 
+                                            @if (isset($types))
+                                            @foreach($types as $key=>$value)
+                                            <option value="{{$key}}">{{$key}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <div class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
@@ -38,6 +77,7 @@
                                     <tr>
                                         <th scope="col">Document Name</th>
                                         <th scope="col">Document ID</th>
+                                        <th scope="col">Document Type</th>
                                         <th scope="col">Updated at</th>
                                         <th scope="col">Student</th>
                                     </tr>
@@ -48,6 +88,7 @@
                                     <tr>
                                         <td><a href="/admin/document/{{$document->id}}"><i class="fa fa-cogs"></i>{{ substr($document->name, 0, 10) }}</td>
                                         <td>{{ $document->id }}</td>
+                                        <td>{{ $document->type }}</td>
                                         <td>{{ $document->updated_at}}</td>
                                         <td>{{ $document->user }}</td>
                                     </tr>

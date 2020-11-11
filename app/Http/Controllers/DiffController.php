@@ -76,16 +76,53 @@ class DiffController extends Controller
     {
         $users = User::get(['id', 'name']);
         $user_list = array();
+        $feature_list = array();
+        $types = array();
+        $draftid_featureid_list = array();
+        $features = Feature::get(['id', 'name']);
+        $draft_feature = Draft::get(['id', 'document_id', 'feature_id']);
+        foreach ($features as $key => $value) {
+            $feature_list[$value->id] = $value->name;
+        }
+        foreach ($features as $key => $value) {
+            $types[$value->name] = $value->id;
+        }
+        foreach ($draft_feature as $key => $value) {
+            $draftid_featureid_list[$value->document_id] = $feature_list[$value->feature_id];
+        }
         foreach ($users as $key => $value) {
             $user_list[$value->id] = $value->name;
         }
         $result_documents = array();
-        $documents = Document::orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+        if ($_GET) {
+            $user = User::where('email', $request->email)->first();
+            $from_date = $request->from_date. ' ' .$request->from_date_time;
+            $to_date = $request->to_date. ' ' .$request->to_date_time;
+            if ($user) {
+                $documents = Document::where([['user_id', $user->id],['updated_at', '>', $from_date], ['updated_at', '<', $to_date]])->orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+            } else {
+                $documents = Document::where([['updated_at', '>', $from_date], ['updated_at', '<', $to_date]])->orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+            }
+        } else {
+            $documents = Document::orderBy('updated_at', 'desc')->get(['id', 'user_id', 'name', 'updated_at']);
+        }
         foreach ($documents as $document) {
             $document->user = $user_list[$document->user_id];
+            if (array_key_exists($document->id, $draftid_featureid_list)) {
+                $document->type = $draftid_featureid_list[$document->id];
+            }
             array_push($result_documents, $document);
         }
-        return view('admin.result_documents', ['documents' => $result_documents]);
+        if (array_key_exists('document_type_select', $_GET)) {
+            if ($_GET['document_type_select'] != "None") {
+                foreach ($result_documents as $key=>$document) {
+                    if ($document->type != $_GET['document_type_select']) {
+                        unset($result_documents[$key]);
+                    }
+                }
+            }
+        }
+        return view('admin.result_documents', ['documents' => $result_documents, 'types' => $types]);
     }
 
     public function showUsers($id)
@@ -148,12 +185,12 @@ class DiffController extends Controller
             $draft_second = Draft::where([['id', '!=', $request->id], ['document_id', '=', $draft_first[0]->document_id]])->orderBy('created_at', 'desc')->first(['id', 'document_id', 'raw_response', 'text_input', 'user_id', 'created_at', 'feature_id', 'updated_at']);
         }
     	$data = new \stdClass;
-    	$data->draft_first = $draft_first[0];
-        $data->draft_second = $draft_second;
-        $data->draft_first->features = $this->getFeatures($data->draft_first->feature_id);
+    	$data->draft_second = $draft_first[0];
+        $data->draft_first = $draft_second;
         $data->draft_second->features = $this->getFeatures($data->draft_second->feature_id);
-        $data->draft_first->raw_response = json_decode($draft_first[0]->raw_response);
-    	$data->draft_second->raw_response = json_decode($draft_second->raw_response);
+        $data->draft_first->features = $this->getFeatures($data->draft_first->feature_id);
+        $data->draft_second->raw_response = json_decode($draft_first[0]->raw_response);
+    	$data->draft_first->raw_response = json_decode($draft_second->raw_response);
 
         $draft_version = new \stdClass;
         $draft_version = $this->getVersions($data->draft_first->document_id);

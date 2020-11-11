@@ -274,14 +274,30 @@
                 return this.highlighText(diff_texts);
             },
             diffFeedback: function() {
-                let diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary());
+                let diff_feedback = "";
+                try {
+                   diff_feedback = JSON.parse(this.computeDiffFeedbackLibrary()); 
+                } catch(e) {
+                    alert(e);
+                    console.log(this.computeDiffFeedbackLibrary());
+                }
                 return diff_feedback;
             },
             attributes: function() {
                 if(this.preSetAssignment) {
+                    let hash_preset = this.createHashDict(this.preSetAssignment.raw_response.tabs[2]);
+                    let hash_compare = this.createHashDict(this.compareDocument.raw_response.tabs[2]);
+                    let set_preset = this.createSets(hash_preset);
+                    let set_compare = this.createSets(hash_compare);
+                    let set_diff = this.differenceSets(set_preset, set_compare);
+                    this.getDiffValues(set_diff, hash_preset);
+                    this.getDiffValues(set_diff, hash_compare);
+                    set_diff = this.differenceSets(set_compare, set_preset);
+                    this.getDiffValues(set_diff, hash_preset);
+                    this.getDiffValues(set_diff, hash_compare);
                     this.editorContent = this.preSetAssignment.text_input;
                     this.versionHeaders = "Comparing version: " + this.preSetAssignment.created_at + " to version: " + this.compareDocument.created_at
-                    this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
+                    // this.preSetAssignment.raw_response.tabs[2] = this.diffFeedback;
                     let data = {'savedFeed':this.preSetAssignment.raw_response};
                     this.$store.dispatch('PRELOAD_FEEDBACK',data);
                     this.initFeedback = false;
@@ -444,7 +460,7 @@
                 return name;
             },
             computeDiffTexts() {
-                var diff_texts = diff.diffWordsWithSpace(this.removeHTMLTags(this.preSetAssignment.text_input), this.removeHTMLTags(this.compareDocument.text_input));
+                var diff_texts = diff.diffSentences(this.removeHTMLTags(this.preSetAssignment.text_input), this.removeHTMLTags(this.compareDocument.text_input));
                 return diff_texts;
             },
             removePTags(text) {
@@ -501,7 +517,6 @@
                 if (regex_string[regex_string.length - 1] != ']') {
                     regex_string += ']}]'
                 }
-                console.log(regex_string)
                 return regex_string;
 
             },
@@ -524,6 +539,60 @@
                 texts_with_diff += text_string;
                 })
                 return texts_with_diff;
+            },
+            createHashDict(messages) {
+                let hash_dict = {}
+                messages.forEach((message, i) => {
+                    let keys = Object.keys(message)
+                    keys.forEach(key => {
+                        if (message[key][0][0]) {
+                            let hash_message = require('crypto').createHash('md5').update(message[key][0][0]).digest('base64');
+                            hash_dict[hash_message] = i;
+                        }
+                    })
+                })
+                return hash_dict;
+            },
+            createSets(hash_dict) {
+                let hash_set = new Set();
+                let hash_keys = Object.keys(hash_dict);
+                hash_keys.forEach(key => {
+                    hash_set.add(key)
+                })
+                return hash_set;
+            },
+            differenceSets(setA, setB) {
+                // reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+                let _difference = new Set(setA)
+                for (let elem of setB) {
+                    _difference.delete(elem)
+                }
+                return _difference
+            },
+            getDiffValues(set_diff, hash_orig) {
+                let hash_diff = {};
+                set_diff.forEach(diff => {
+                    this.highlightFeedback(hash_orig[diff]);
+                })
+            },
+            highlightFeedback(sentence_id) {
+                if (this.preSetAssignment.raw_response.tabs[2][sentence_id]) {
+                    let keys = Object.keys(this.preSetAssignment.raw_response.tabs[2][sentence_id]);
+                    keys.forEach(key => {
+                        if (this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0]) {
+                            this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] = "<span style=\"background-color: #F00; color: rgb(0, 0, 0);\">" +  this.preSetAssignment.raw_response.tabs[2][sentence_id][key][0][0] + "</span> " 
+                        }
+                    })
+                } 
+                if (this.compareDocument.raw_response.tabs[2][sentence_id]) {
+                    let keys = Object.keys(this.compareDocument.raw_response.tabs[2][sentence_id]);
+                    keys.forEach(key => {
+                        if (this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0]) {
+                            let message = [["<span style=\"background-color: #0C0; color: rgb(0, 0, 0);\">" +  this.compareDocument.raw_response.tabs[2][sentence_id][key][0][0] + "</span> "]]
+                            this.preSetAssignment.raw_response.tabs[2].push({key: message})
+                        }
+                    })
+                }
             },
             highlighTextFeedback(diff_feedback) {
                 var that = this;
