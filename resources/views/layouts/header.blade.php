@@ -36,6 +36,7 @@
                         <div class="dropdown-menu">
                             @can('administer-users')<a class="dropdown-item" href="{{ url('admin/users') }}">Users</a>@endcan
                             @can('access-reports')<a class="dropdown-item" href="{{ url('admin/reports') }}">Reports</a>@endcan
+                            @can('access-reports')<a class="dropdown-item" href="{{ url('admin/documents') }}">Documents</a>@endcan
                         </div>
                     </li>
                     @endcanany
