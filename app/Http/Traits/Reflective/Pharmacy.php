@@ -19,7 +19,7 @@
  *
  */
 
-namespace App\Traits\Reflective;
+namespace App\Http\Traits\Reflective;
 
 trait Pharmacy
 {

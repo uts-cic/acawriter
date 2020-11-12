@@ -20,7 +20,7 @@
  *  UTS Connected Intelligence Centre
  */
 
-namespace App\Traits\Analytical;
+namespace App\Http\Traits\Analytical;
 
 trait Accounts
 {

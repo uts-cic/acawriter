@@ -20,7 +20,7 @@
  *  UTS Connected Intelligence Centre
  */
 
-namespace App\Traits;
+namespace App\Http\Traits;
 
 trait Profiler
 {
