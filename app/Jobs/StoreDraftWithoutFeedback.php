@@ -37,7 +37,7 @@ class StoreDraftWithoutFeedback implements ShouldQueue
     public function handle()
     {
         $textDraft = new TextDraft();
-        $textDraft->text_input = '' . $this->data['txt'];
+        $textDraft->text_input = $this->data['txt'];
         $textDraft->feature_id = $this->data['extra']['feature'];
         $textDraft->document_id = $this->data['document'];
         $textDraft->user_id = $this->user->id;
