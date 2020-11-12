@@ -24,7 +24,7 @@
  * all other function calls still getting used from Pharmacy Trait
  */
 
-namespace App\Traits\Reflective;
+namespace App\Http\Traits\Reflective;
 
 trait IntlStudies
 {

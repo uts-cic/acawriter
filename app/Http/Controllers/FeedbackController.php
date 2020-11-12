@@ -32,13 +32,13 @@ use App\Services\Analyser;
 use App\Feature;
 use App\Draft;
 use App\Events\UserActivity;
-use App\Traits\Profiler;
-use App\Traits\Analytical\Cars;
-use App\Traits\Analytical\Accounts;
-use App\Traits\Analytical\Law;
-use App\Traits\Reflective\Pharmacy;
-use App\Traits\Reflective\IntlStudies;
-use App\Traits\Analytical\CarsAbs;
+use App\Http\Traits\Profiler;
+use App\Http\Traits\Analytical\Cars;
+use App\Http\Traits\Analytical\Accounts;
+use App\Http\Traits\Analytical\Law;
+use App\Http\Traits\Reflective\Pharmacy;
+use App\Http\Traits\Reflective\IntlStudies;
+use App\Http\Traits\Analytical\CarsAbs;
 
 
 class FeedbackController extends Controller

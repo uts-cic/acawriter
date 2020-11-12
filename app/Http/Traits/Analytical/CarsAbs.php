@@ -26,7 +26,7 @@
  * Time: 15:34
  */
 
-namespace App\Traits\Analytical;
+namespace App\Http\Traits\Analytical;
 
 trait CarsAbs
 {
