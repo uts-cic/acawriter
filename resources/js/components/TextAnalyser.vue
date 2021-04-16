@@ -178,7 +178,7 @@
                     return {
                         feedbackOpt:feature.grammar.toLowerCase() == 'analytical' ? 'a_01': 'r_01',
                         grammar: feature.grammar.toLocaleLowerCase(),
-                        isResearch: feature.id === 10 || feature.id === 5,
+                        isResearch: [5, 10, 12].includes(feature.id),
                         feature: feature.id,
                         storeDraftJobRef: Math.random().toString(36).substring(7),
                         initFeedback: this.initFeedback
