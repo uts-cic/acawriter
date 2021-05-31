@@ -67,11 +67,8 @@
             <div class="card-body p-4">
                 <h2>Other UTS writing support</h2>
                 <p>AcaWriter is part of the rich support for academic writing UTS offers you, so we encourage you visit these:</p>
-                <p><strong>The Library has online resources</strong> to help with</p>
-                <ul class="list-inline">
-                    <li class="list-inline-item"><a href="https://www.lib.uts.edu.au/help/academic-language" title="UTS:Library - Academic Language">Academic Language</a></li>
-                    <li class="list-inline-item"><a href="https://www.lib.uts.edu.au/help/english-language" title="UTS:Library - English Language">English Language</a></li>
-                </ul>
+                <p><a href="https://www.lib.uts.edu.au/services/services-for-students" title="UTS Library: Services for Students">UTS Library</a> provides advice, training, workshops, and assistance for students throughout their studies. Services are available online and on-campus.</p>
+
                 <p><strong>Visit HELPS</strong> to discuss your writing with someone friendly, who can give you feedback on an assignment:</p>
                 <ul class="list-inline">
                     <li class="list-inline-item"><a href="https://www.uts.edu.au/current-students/support/helps/writing-support" title="HELPS - Writing Support">Writing Support</a></li>
