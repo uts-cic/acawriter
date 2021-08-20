@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
             $attributes = is_array($attributes) ? $attributes : [$attributes];
             $this->where(function (Builder $query) use ($attributes, $searchTerm) {
                 foreach ($attributes as $attribute) {
-                    $query->orWhere($attribute, 'LIKE', "%{$searchTerm}%");
+                    $query->orWhere($attribute, 'ILIKE', "%{$searchTerm}%");
                 }
             });
 
