@@ -114,15 +114,6 @@ trait Pharmacy
             }
         }
 
-        //check triangle has a preceding circle
-        $fixture = $this->orderOfTags($tap);
-        if ($fixture) {
-            foreach ($messages as $msg) {
-                $err = 'order_tag_err';
-                if (isset($msg[$err])) array_push($issues, $msg[$err]);
-            }
-        }
-
         array_push($result, $issues);
         //print_r($result);
         return $result;
@@ -258,37 +249,5 @@ trait Pharmacy
         }
 
         return $cnt;
-    }
-
-    /**
-     * @param $tap
-     * @return bool check if each triangle has a preceding circle
-     */
-
-    private function orderOfTags($tap)
-    {
-        $sequence = array();
-        //this function gets consecutive strings that have challenge/change
-
-        $tag = 'change';
-        $c = 'challenge';
-        foreach ($tap as $key => $data) {
-            //if (count(preg_grep("[^" . $tag . "]", $data->raw_tags)) > 0) $sequence[] = $key;
-
-            if (count(preg_grep("[^" . $tag . "]", $data->raw_tags)) > 0 && count(preg_grep("[^" . $c . "]", $data->raw_tags)) == 0) {
-                $sequence[] = $key;
-            }
-        }
-
-        $cnt = 0;
-        foreach ($sequence as $id) {
-            $s = ($id == 0) ? 0 : ($id - 1);
-            if ($s > 0) {
-                $te = $tap[$s];
-
-                if (count(preg_grep("[^" . $c . "]", $te->raw_tags)) == 0) $cnt++;
-            }
-        }
-        return ($cnt > 0) ? true : false;
     }
 }

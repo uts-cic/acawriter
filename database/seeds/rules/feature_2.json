@@ -187,9 +187,6 @@
                 },
                 {
                     "double_change": "<i class=\"fa fa-2x fa-check-circle-o text-success\"><\/i> It appears that you have expanded the detail on how you would change\/prepare for the future. (#cnt)"
-                },
-                {
-                    "order_tag_err": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"><\/i> While it appears that you’ve reported on how you would change\/prepare for the future, you don’t seem to have reported first on what you found challenging. Perhaps you’ve reflected only on the positive aspects in your report?. "
                 }
             ],
             "css": [
