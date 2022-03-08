@@ -14,7 +14,7 @@
 
     <h1>Login</h1>
     <p class="lead">AcaWriter is available to all UTS staff and students.</p>
-    <p class="mb-5"><a class="btn btn-primary" href="{{ env('AAF_LINK', '') }}">UTS Staff and Students Login</a></p>
+    <p class="mb-5"><a class="btn btn-primary" href="{{ url('auth') }}">UTS Staff and Students Login</a></p>
 
     <h2>Authorised non-UTS users only</h2>
     <div>

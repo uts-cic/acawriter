@@ -153,6 +153,18 @@
           "value": "$MIX_PUSHER_APP_KEY"
         },
         {
+            "name": "OKTA_CLIENT_ID",
+            "value": "$OKTA_CLIENT_ID"
+        },
+        {
+            "name": "OKTA_CLIENT_SECRET",
+            "value": "$OKTA_CLIENT_SECRET"
+        },
+        {
+            "name": "OKTA_ISSUER",
+            "value": "$OKTA_ISSUER"
+        },
+        {
           "name": "PUSHER_APP_ID",
           "value": "$PUSHER_APP_ID"
         },

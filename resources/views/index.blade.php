@@ -27,7 +27,7 @@
             <p><strong>UTS</strong> isn’t here to tell you what to think, but to help you learn how to think. Similarly, <strong>AcaWriter</strong> won’t tell you what to write, but will help you learn how to say it in the most rigorous, effective way.</p>
             <p>Before you just jump in, please visit the <a href="https://www.uts.edu.au/acawriter" target="_blank">AcaWriter information website</a>. This will help maximise the impact that AcaWriter has on your academic and reflective writing.</p>
             <p>AcaWriter is available to all UTS staff and students.</p>
-            <a class="btn btn-primary" href="{{ env('AAF_LINK', '') }}">Login to AcaWriter</a>
+            <a class="btn btn-primary" href="{{ url('auth') }}">Login to AcaWriter</a>
         </div>
     </div>
 </main>
