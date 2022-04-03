@@ -14,8 +14,11 @@ use JWT\Authentication\JWT;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OperationLog;
+use League\OAuth2\Client\Provider\GenericProvider as OAuth2Provider;
 
 use OAuthProvider;
+
+define('AUTH_ERROR_MESSAGE', 'Authentication failed. Please try again.');
 
 class RegisterController extends Controller
 {
@@ -45,6 +48,29 @@ class RegisterController extends Controller
     /**
      * AAF callback
      */
+    public function auth(Request $request)
+    {
+        if (env('OKTA_ISSUER')) {
+            return $this->okta($request);
+        }
+        elseif (env('AAF_LINK')) {
+            return $this->aaf($request);
+        }
+        return redirect()->intended('/login');
+    }
+
+    /**
+     * AAF auth
+     */
+    public function aaf(Request $request)
+    {
+        $url = env('AAF_LINK');
+        return redirect()->to($url);
+    }
+
+    /**
+     * AAF callback
+     */
     public function awt(Request $request)
     {
         $jwt = JWT::decode($request->assertion, env('AAF_SECRET', ''));
@@ -55,7 +81,7 @@ class RegisterController extends Controller
             case $jwt->nbf > $now:
             case $jwt->exp <= $now:
             #TODO: case jtiExists($jwt->jti):
-                return redirect()->to('/')->withErrors(['AAF authentication failed.']);
+                return redirect()->to('/')->withErrors([AUTH_ERROR_MESSAGE]);
         }
 
         $attr = $jwt->{'https://aaf.edu.au/attributes'};
@@ -132,6 +158,61 @@ class RegisterController extends Controller
             $this->create(['name' => $name, 'email' => $email, 'role' => $role]);
         }
 
+        return redirect()->intended('/');
+    }
+
+    /**
+     * Okta callback
+     */
+    public function okta(Request $request)
+    {
+        $issuer = 'https://uts-preprod.okta.com/oauth2/default';
+        $provider = new OAuth2Provider([
+            'clientId' => env('OKTA_CLIENT_ID'),
+            'clientSecret' => env('OKTA_CLIENT_SECRET'),
+            'redirectUri' => env('APP_URL') . '/auth/okta',
+            'urlAuthorize' => env('OKTA_ISSUER') . '/v1/authorize',
+            'urlAccessToken' => env('OKTA_ISSUER') . '/v1/token',
+            'urlResourceOwnerDetails' => env('OKTA_ISSUER') . '/v1/userinfo',
+            'scopeSeparator' => ' ',
+            'scopes' => ['openid', 'profile', 'email']
+        ]);
+
+        if (!isset($request->code) && !isset($request->state)) {
+            $authorizationUrl = $provider->getAuthorizationUrl();
+            $request->session()->put('oauth2state', $provider->getState());
+            return redirect()->to($authorizationUrl);
+        }
+
+        $state = $request->session()->get('oauth2state');
+
+        if (!$state || !$request->state || $state !== $request->state) {
+            return redirect()->to('/')->withErrors([AUTH_ERROR_MESSAGE]);
+        }
+
+        if ($request->error) {
+            $error = $request->error_description ? $request->error_description : AUTH_ERROR_MESSAGE;
+            return redirect()->to('/')->withErrors([$error]);
+        }
+
+        try {
+            $accessToken = $provider->getAccessToken('authorization_code', [
+                'code' => $request->code,
+            ]);
+            $attrs = $provider->getResourceOwner($accessToken)->toArray();
+
+            $name = $attrs['name'];
+            $email = $attrs['email'];
+
+            if (!$this->authenticate($name, $email)) {
+                $role = Str::is('*@uts.edu.au', $email) ? 'staff' : 'user';
+                $this->create(['name' => $name, 'email' => $email, 'role' => $role]);
+            }
+        } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+            return redirect()->to('/')->withErrors([$e->getMessage()]);
+        } catch (Exception $e) {
+            return redirect()->to('/')->withErrors([$e->getMessage()]);
+        }
         return redirect()->intended('/');
     }
 

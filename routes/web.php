@@ -22,6 +22,8 @@ Route::get('/contact', 'ContactController@index');
 Route::post('/help', 'ContactController@storeContact');
 Route::get('/help/refreshcaptcha', 'ContactController@refreshCaptcha');
 
+Route::get('/auth', 'Auth\RegisterController@auth');
+Route::get('/auth/okta', 'Auth\RegisterController@okta');
 Route::post('/auth/jwt', 'Auth\RegisterController@awt');
 Route::post('/auth/lti', 'Auth\RegisterController@lti');
 
