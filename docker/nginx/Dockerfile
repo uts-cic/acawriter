@@ -11,8 +11,9 @@ FROM nginx:1.17-alpine
 WORKDIR /var/www
 ARG network_mode
 COPY docker/nginx/nginx.$network_mode.conf /etc/nginx/conf.d/default.conf
-COPY acawriter.crt /etc/nginx/acawriter.crt
-COPY acawriter.key /etc/nginx/acawriter.key
+# /etc/nginx/nginx.awsvpc.conf will not be used. This is only an override to copy crt files only if they exist
+# https://stackoverflow.com/questions/31528384/conditional-copy-add-in-dockerfile
+COPY docker/nginx/nginx.awsvpc.conf *acawriter.crt *acawriter.key /etc/nginx
 COPY public/favicon.ico ./
 COPY public/robots.txt ./
 COPY public/images ./images
