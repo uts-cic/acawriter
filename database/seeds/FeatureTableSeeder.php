@@ -81,7 +81,7 @@ class FeatureTableSeeder extends Seeder
             ),
             array(
                 'id' => 14,
-                'name' => 'Analytical [570002 Application Implementation with Microsoft Dynamics]',
+                'name' => 'Analytical [570005 Emergent Communication Practices]',
                 'grammar' => 'Analytical',
                 'info' => '',
             ),
