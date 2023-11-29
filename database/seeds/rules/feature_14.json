@@ -1,0 +1,372 @@
+{
+  "rules": [
+    {
+      "name": "moves1",
+      "method": "moves",
+      "check": {
+        "tags": ["tempstat", "emph", "grow"]
+      },
+      "message": [
+        {
+          "tempstat": "<span class=\"badge badge-moves1\">B</span> Background information"
+        },
+        {
+          "emph": "<span class=\"badge badge-moves1\">E</span> Emphasis of a significant or an important idea"
+        },
+        {
+          "grow": "<span class=\"badge badge-moves1\">T</span> Trend"
+        }
+      ],
+      "css": ["B", "E", "T"],
+      "custom": "Background / Context move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "moves2",
+      "method": "moves",
+      "check": {
+        "tags": ["contribution"],
+        "conditions": [
+          {
+            "terms": ["top"],
+            "num_chk": "-6"
+          }
+        ]
+      },
+      "message": [
+        {
+          "contribution": "<span class=\"badge badge-moves2\">S</span> Summary of the author’s goal or stating the nature of the research"
+        }
+      ],
+      "css": ["S"],
+      "custom": "Purpose of the Paper / Present Research move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "moves3",
+      "method": "moves",
+      "check": {
+        "tags": ["contrast", "nostat"]
+      },
+      "message": [
+        {
+          "contrast": "<span class=\"badge badge-moves3\">C</span> Contrasting idea, issues, disagreement or critical insight "
+        },
+        {
+          "nostat": "<span class=\"badge badge-moves3\">Q</span> Question or gap in previous knowledge"
+        }
+      ],
+      "css": ["C", "Q"],
+      "custom": "Research Problem / Issues / Critiques / Gap in the literature move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "moves4",
+      "method": "moves",
+      "check": {
+        "tags": ["novstat", "contribution"],
+        "conditions": [
+          {
+            "terms": ["bottom"],
+            "num_chk": "6"
+          }
+        ]
+      },
+      "message": [
+        {
+          "novstat": "<span class=\"badge badge-moves4\">N</span> Novelty and value of the research "
+        },
+        {
+          "contribution": "<span class=\"badge badge-moves4\">S</span>Summary of the author’s goal or stating the nature of the research"
+        }
+      ],
+      "css": ["N", "S"],
+      "custom": "Results / Findings move",
+      "tab": 1,
+      "tabName": "Analytical Feedback"
+    },
+    {
+      "name": "alerts",
+      "method": "staticFeed",
+      "check": {
+        "tags": [],
+        "conditions": []
+      },
+      "message": [
+        {
+          "txt": "<i class=\"fa fa-2x fa-info-circle text-success\"></i> Thank you for submitting your draft to AcaWriter. Quality writing comes from revision. Research shows that writing drafts and revising your text helps improve the quality of your writing. <br>Remember AcaWriter is a machine – so it may not highlight all your moves correctly and could give you incorrect feedback. So, don’t be afraid to disagree with the feedback, if you believe you have included all the moves in your introduction."
+        }
+      ],
+      "css": ["msg1", "msg2"],
+      "custom": "more feedback",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "static"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": ["emph", "tempstat", "grow"],
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": ["contribution"],
+            "conditions": [
+              {
+                "terms": ["top"],
+                "num_chk": "-6"
+              }
+            ]
+          },
+          {
+            "tags": ["contrast", "nostat"],
+            "conditions": []
+          },
+          {
+            "tags": ["novstat", "contribution"],
+            "conditions": [
+              {
+                "terms": ["bottom"],
+                "num_chk": "6"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"></i> Well done, it looks like you have <strong>Background / Context</strong> moves in your introduction.<br>You have provided background information on your research topic and/or explained why your research topic is important which will help readers understand why your research is significant."
+        }
+      ],
+      "css": ["mtags"],
+      "custom": "Move 1",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": ["contribution"],
+        "conditions": [
+          {
+            "terms": ["top"],
+            "num_chk": "-6"
+          }
+        ],
+        "exclude": [
+          {
+            "tags": ["contrast", "nostat"],
+            "conditions": []
+          },
+          {
+            "tags": ["novstat", "contribution"],
+            "conditions": [
+              {
+                "terms": ["bottom"],
+                "num_chk": "6"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"></i> Well done, it looks like you have <strong>Purpose of the Paper / Present Research</strong> moves in your introduction.<br>You have stated the purpose of your research, and/or presented what your research is about which will make it easier for your reader to understand the goal of your research."
+        }
+      ],
+      "css": ["mtags"],
+      "custom": "Move 2",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": ["contrast", "nostat"],
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": ["novstat", "contribution"],
+            "conditions": [
+              {
+                "terms": ["bottom"],
+                "num_chk": "6"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "exists": "<i class=\"fa fa-2x fa-check-circle-o text-success\"></i> Well done, it looks like you have <strong>Research Problem / Issues / Critiques / Gap in the literature</strong> moves.<br>You have highlighted the research problem, identified issues or indicated a gap in the literature. By including this move your readers will know what problem you’re trying to solve."
+        }
+      ],
+      "css": ["mtags"],
+      "custom": "Move 3",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": ["emph", "tempstat", "grow"],
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": ["contribution"],
+            "conditions": [
+              {
+                "terms": ["top"],
+                "num_chk": "-6"
+              }
+            ]
+          },
+          {
+            "tags": ["contrast", "nostat"],
+            "conditions": []
+          },
+          {
+            "tags": ["novstat", "contribution"],
+            "conditions": [
+              {
+                "terms": ["bottom"],
+                "num_chk": "6"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"></i> AcaWriter didn't identify any <strong>Background / Context</strong> moves in your introduction.<br>Here you explain why your research is important, or provide background information on your research. To achieve this move try including these sentences: <em>x is an important feature in y., Substantial evidence in x suggests that..., The study of x is important because x impacts y.,  x has been previously proposed..., Recent, literature concerning x has reported that..., Recent studies indicate that..., It is widely agreed that...</em><br>Check if you have included these sentences in your introduction."
+        }
+      ],
+      "css": ["mtags"],
+      "custom": "Move 1",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": ["contribution"],
+        "conditions": [
+          {
+            "terms": ["top"],
+            "num_chk": "-6"
+          }
+        ],
+        "exclude": [
+          {
+            "tags": ["contrast", "nostat"],
+            "conditions": []
+          },
+          {
+            "tags": ["novstat", "contribution"],
+            "conditions": [
+              {
+                "terms": ["bottom"],
+                "num_chk": "6"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"></i> AcaWriter didn't identify any <strong>Purpose of the Paper / Present Research</strong> moves in your introduction. Here you explain the purpose of your research, and/or explain what your research is about.<br>To achieve this move try including these sentences: <em>The purpose of this paper is to..., In this study I focus on..., The aim of this research is to...., I explore x, I analyse x...</em><br>Check if you have included these sentences in your introduction."
+        }
+      ],
+      "css": ["mtags"],
+      "custom": "Move 2",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": ["contrast", "nostat"],
+        "conditions": [],
+        "exclude": [
+          {
+            "tags": ["novstat", "contribution"],
+            "conditions": [
+              {
+                "terms": ["bottom"],
+                "num_chk": "6"
+              }
+            ]
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"></i> AcaWriter didn't identify any <strong>Research Problem / Issues / Critiques / Gap in the literature</strong> moves in your essay.<br>Here you state your research problem, indicate a gap in knowledge, or identify issues in the literature. You may also use these moves to critique theories or examples. To achieve this move try including sentences like these: <em>The problem of x has not been widely studied., This approach fails to address the issue of x., However, limited research has been conducted in x., Despite earlier studies x remains unknown, Previous studies have only looked at x.</em><br>Check if you have included these sentences in your essay."
+        }
+      ],
+      "css": ["mtags"],
+      "custom": "Move 3",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "customised",
+      "method": "percentFeedback",
+      "check": {
+        "tags": ["novstat", "contribution"],
+        "conditions": [
+          {
+            "terms": ["bottom"],
+            "num_chk": "6"
+          }
+        ]
+      },
+      "message": [
+        {
+          "tag_m": "<i class=\"fa fa-2x fa-exclamation-circle text-danger\"></i> AcaWriter didn't identify any <strong>Results/Findings</strong> moves in your conclusion. Here you state what you found and/or your answer to the essay question.<br><em>My evidence confirms that..., The analysis shows... My review found... Significant improvements in x have been developed., The major innovation of x is its ability to identify/detect y.</em><br>Check if you have included these sentences in your conclusion."
+        }
+      ],
+      "css": ["mtags"],
+      "custom": "Move 4",
+      "tab": 2,
+      "tabName": "Feedback",
+      "tabEval": "dynamic"
+    },
+    {
+      "name": "faq",
+      "method": "staticFeed",
+      "check": {
+        "tags": [],
+        "conditions": []
+      },
+      "message": [
+        {
+          "txt": "<p>Here are the key rhetorical moves to consider in your PESTLE analysis.</p><h4>Background/Context</h4><p>Where does your report provide contextual <strong>background</strong> information about the political, economic, and social context in which the organisation operates?</p><h4>Trends/Analysis</h4><p>Where does your report provide <strong>emphasis</strong> to highlight the most important political, economic, social, technological, legal, and environmental trends and propose novel or critical insights about why those dynamics are important?</p><h4>Implication</h4><p>Where in your report do you use appropriate <strong>summary</strong> statements to signal the key aspects of the PESTLE analysis will be a factor in the analysis of the communication products being reviewed in the rest of your A2 report?</p><p>Here are some example sentences aligned to these rhetorical moves for your reference:</p>"
+        },
+        {
+          "txt": "<table class=\"table table-bordered\"><thead><tr class=\"table-secondary\"><th scope=\"col\">Move</th><th scope=\"col\">Sentence example</th></tr></thead><tbody><tr><td>Background information and previous work</td><td>Qantas has been a major element of Australia’s transport system for a century and so has played a significant social, cultural and at times political role.</td></tr><tr><td>Trend or tendency related to ideas</td><td>While Qantas has been facing political and economic challenges over how it operates and the role it plays a symbol of the community, it is also coming under further pressure to change as , demand is growing for more sustainable and efficient point to point travel. This has resulted in turning away from the trunk routes that service major hub airports like London Heathrow. This provides another challenge to Qantas’ previous role as the “gateway” for Australians heading overseas.</td></tr><tr><td>Novel insights, contrasting ideas or tensions</td><td>Qantas was initially positioned to exemplify the “spirit of Australia”. However the initial branding approach is insufficient in current times, as indicated by current public perceptions, highlighting that the operational, technological, political and social perceptions faced by the airline have critically eroded community faith in the brand.</td></tr><tr><td>Summarises or signals the author’s goals (in the analysis)</td><td><strong>From this analysis, it may be concluded that</strong> Qantas faces a very difficult context caused fundamental technological and environmental challenges faced by all long-haul airlines exacerbated by the political and social challenges they face uniquely, and which together are undermining the brand’s status as “the Spirit of Australia”.</td></tr></tbody></table>"
+        }
+      ],
+      "css": ["msg1", "msg2"],
+      "custom": "more feedback",
+      "tab": 3,
+      "tabName": "Hints",
+      "tabEval": "static"
+    }
+  ]
+}

@@ -73,6 +73,24 @@ class FeatureTableSeeder extends Seeder
                 'grammar' => 'Analytical',
                 'info' => '',
             ),
+            array(
+                'id' => 13,
+                'name' => 'Critical Analysis Essay Feedback - 21129 (2021 SPR)',
+                'grammar' => 'Analytical',
+                'info' => '',
+            ),
+            array(
+                'id' => 14,
+                'name' => 'Analytical [570002 Application Implementation with Microsoft Dynamics]',
+                'grammar' => 'Analytical',
+                'info' => '',
+            ),
+            array(
+                'id' => 15,
+                'name' => 'Reflective [570002 Application Implementation with Microsoft Dynamics]',
+                'grammar' => 'Reflective',
+                'info' => '',
+            ),
         );
 
         foreach ($features as $data) {
