@@ -1,7 +1,7 @@
 FROM node:13-alpine AS webpack
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY webpack.mix.js ./
 COPY resources/js ./resources/js
 COPY resources/sass ./resources/sass
