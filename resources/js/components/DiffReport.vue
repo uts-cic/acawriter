@@ -540,13 +540,20 @@
                 })
                 return texts_with_diff;
             },
+            hashMessage(message) {
+                const msgUint8 = new TextEncoder().encode(message);
+                const hashBuffer = crypto.subtle.digestSync('MD5', msgUint8);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashBase64 = btoa(String.fromCharCode(...hashArray));
+                return hashBase64;
+            },
             createHashDict(messages) {
                 let hash_dict = {}
                 messages.forEach((message, i) => {
                     let keys = Object.keys(message)
                     keys.forEach(key => {
                         if (message[key][0][0]) {
-                            let hash_message = require('crypto').createHash('md5').update(message[key][0][0]).digest('base64');
+                            let hash_message = this.hashMessage(message[key][0][0]);
                             hash_dict[hash_message] = i;
                         }
                     })
