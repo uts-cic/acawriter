@@ -43,7 +43,6 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.min.js"></script>
     <script src="{{ asset('js/app.js') }}{{ env('CACHE_BUST', '') ? '?' . env('CACHE_BUST', '') : '' }}"></script>
 </body>
 </html>
