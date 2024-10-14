@@ -7,7 +7,7 @@ COPY resources/js ./resources/js
 COPY resources/sass ./resources/sass
 RUN npm run prod
 
-FROM nginx:1.17-alpine
+FROM nginx:1.27-alpine
 WORKDIR /var/www
 ARG network_mode
 COPY docker/nginx/nginx.$network_mode.conf /etc/nginx/conf.d/default.conf
