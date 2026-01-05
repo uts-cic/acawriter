@@ -15,3 +15,12 @@ mix.js("resources/js/app.js", "public/js").sass(
     "resources/sass/app.scss",
     "public/css"
 );
+
+// Use Vue runtime-only build to avoid CSP 'unsafe-eval' requirement
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            vue$: "vue/dist/vue.runtime.esm.js",
+        },
+    },
+});
