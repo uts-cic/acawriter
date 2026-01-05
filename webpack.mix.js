@@ -20,7 +20,7 @@ mix.js("resources/js/app.js", "public/js").sass(
 mix.webpackConfig({
     resolve: {
         alias: {
-            vue$: "vue/dist/vue.runtime.esm.js",
+            vue$: "vue/dist/vue.runtime.common.js",
         },
     },
 });
